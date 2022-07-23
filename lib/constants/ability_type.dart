@@ -1,0 +1,4 @@
+enum AbilityType{
+  active,
+  passive
+}
