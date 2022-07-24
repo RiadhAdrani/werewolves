@@ -31,4 +31,5 @@ class Role<T> {
   String getName() {
     return getRoleName(id);
   }
+
 }

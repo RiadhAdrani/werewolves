@@ -7,11 +7,14 @@ const uuid = Uuid();
 
 class Player {
   late String name;
-  
+
   Teams team = Teams.solo;
   String id = uuid.v4();
   List<StatusEffect> effects = [];
+
   Player(this.name);
+
+  Player.nameIdTeam(this.name, this.id, this.team);
 
   void addStatusEffect(StatusEffect effect) {
     effects.add(effect);
@@ -19,5 +22,17 @@ class Player {
 
   void removeStatusEffect(StatusEffects effect) {
     effects = effects.where((element) => element.type != effect).toList();
+  }
+
+  Player.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    team = json['team'];
+    id = json['id'];
+  }
+
+  toJson() {
+    return {
+      name,team,id
+    };
   }
 }

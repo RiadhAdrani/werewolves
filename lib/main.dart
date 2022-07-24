@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/views/select_roles.dart';
+import 'package:provider/provider.dart';
+import 'package:werewolves/models/selected_model.dart';
+import 'package:werewolves/views/distribute_view.dart';
+import 'package:werewolves/views/home_view.dart';
+import 'package:werewolves/views/select_view.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => SelectedModel(),
+    child : const MyApp()) , 
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,10 +19,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/select',
+      initialRoute: '/',
       routes: {
-        '/': (context) => const Home(title: 'Home'),
-        '/select': (context) => const SelectRoles(),
+        '/': (context) => const HomeView(),
+        '/select': (context) => const SelectRolesView(),
+        '/distribute': (context) => const DistributeView()
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -24,47 +32,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/select');
-                },
-                child: const Text('Go to Role selection'))
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
