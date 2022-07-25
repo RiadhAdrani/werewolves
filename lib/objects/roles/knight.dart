@@ -1,9 +1,10 @@
+import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
-import 'package:werewolves/models/player.dart';
-import 'package:werewolves/models/role.dart';
+import 'package:werewolves/models/role_single.dart';
 
-class Knight extends Role<Player> {
+class Knight extends RoleSingular {
   Knight(super.player) {
     id = RoleId.knight;
+    callingPriority = knightCallPriority;
   }
 }

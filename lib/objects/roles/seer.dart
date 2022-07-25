@@ -1,9 +1,10 @@
+import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
-import 'package:werewolves/models/player.dart';
-import 'package:werewolves/models/role.dart';
+import 'package:werewolves/models/role_single.dart';
 
-class Seer extends Role<Player> {
+class Seer extends RoleSingular {
   Seer(super.player) {
     id = RoleId.seer;
+    callingPriority = seerCallPriority;
   }
 }

@@ -5,18 +5,19 @@ import 'package:werewolves/transformers/strings/get_role_name.dart';
 
 const uuid = Uuid();
 
-class Role<T> {
+abstract class Role<T> {
   late T player;
 
   RoleId id = RoleId.villager;
   String instanceId = uuid.v4();
 
-  int callingPriority = 0;
+  int callingPriority = -1;
 
   List<Ability> abilities = [];
 
-  bool isVillager = false;
   bool isWolf = false;
+
+  bool isGroupRole = false;
 
   Role(this.player);
 
@@ -32,4 +33,5 @@ class Role<T> {
     return getRoleName(id);
   }
 
+  String getPlayerName();
 }

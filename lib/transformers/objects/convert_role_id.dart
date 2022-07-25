@@ -45,6 +45,8 @@ List<Role> makeListFromId(List<RoleId> listOfUid) {
       case RoleId.villager:
         list.add(Villager(player));
         break;
+      case RoleId.wolfpack:
+        break;
     }
   }
 

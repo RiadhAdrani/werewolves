@@ -10,9 +10,6 @@ class Ability {
   late AbilityType type;
   late AbilityUseCount useCount;
   late Function call;
-  late Function checkShouldBeUsedOnPassive = () {
-    return false;
-  };
   late Function checkIsTarget = () {
     return true;
   };
@@ -28,7 +25,7 @@ class Ability {
       this.call,
       this.checkCanUseAbility,
       this.checkIsTarget,
-      this.checkShouldBeUsedOnPassive);
+);
 
   void use(Role owner,List<Player> targets) {
     if (checkCanUseAbility(owner) && useCount != AbilityUseCount.none){

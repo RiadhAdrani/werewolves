@@ -8,4 +8,5 @@ enum RoleId{
   hunter,
   captain,
   villager,
+  wolfpack
 }

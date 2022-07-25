@@ -7,9 +7,7 @@ class SelectedModel extends ChangeNotifier {
   final List<Role> _items = [];
   final List<Role> _available = makeAvailableList();
 
-  SelectedModel() {
-    // getCurrentlySelectedRoles();
-  }
+  SelectedModel();
 
   UnmodifiableListView<Role> get items => UnmodifiableListView(_items);
 

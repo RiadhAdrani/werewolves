@@ -1,6 +1,5 @@
-import 'package:werewolves/models/player.dart';
-import 'package:werewolves/models/role.dart';
+import 'package:werewolves/models/role_single.dart';
 
-class Villager extends Role<Player> {
+class Villager extends RoleSingular {
   Villager(super.player);
 }

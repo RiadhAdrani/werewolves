@@ -16,7 +16,5 @@ Ability protectAbility(Protector role) {
     (){}, 
      // check is target
     (){},
-    // check should be used on passive
-    (){} 
     );
 }

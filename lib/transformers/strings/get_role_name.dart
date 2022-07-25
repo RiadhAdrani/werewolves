@@ -20,5 +20,8 @@ String getRoleName(RoleId role) {
       return "Captain";
     case RoleId.villager:
       return "Villager";
+    case RoleId.wolfpack:
+      return "Wolfpack";
+      break;
   }
 }

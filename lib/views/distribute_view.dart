@@ -2,10 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/models/game_arguments.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/utils/check_player_name.dart';
+import 'package:werewolves/widgets/cards/role_with_name_card.dart';
+import 'package:werewolves/widgets/select/select_set_name_dialog.dart';
 
 class DistributeView extends StatefulWidget {
   const DistributeView({Key? key}) : super(key: key);
@@ -29,9 +32,9 @@ class _DistributeViewState extends State<DistributeView> {
 
     Role temp = _initial[index];
 
-    void commit(name) {
+    void commit(String name) {
       setState(() {
-        if (temp.player is Player){
+        if (temp.player is Player) {
           temp.player = Player(name);
         }
         _pickedRole = temp;
@@ -47,50 +50,54 @@ class _DistributeViewState extends State<DistributeView> {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (BuildContext context) => AlertDialog(
-              title: Text(
-                temp.getName(),
-                style: const TextStyle(fontSize: 20),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: controller,
-                    decoration:
-                        const InputDecoration(hintText: 'Enter player name'),
-                  ),
-                  const Padding(padding: EdgeInsets.all(5)),
-                  const Text('No duplicate name allowed',
-                      style: TextStyle(fontSize: 14)),
-                  const Text('Minimum size is 3',
-                      style: TextStyle(fontSize: 14))
-                ],
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      String name = controller.text.trim();
+        builder: (BuildContext context) =>
+            setPlayerNameDialog(temp, controller, context, () {
+              String name = controller.text.trim();
 
-                      if (!checkPlayerName(name, _picked)) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(content: Text('Entered name is invalid.')));
-                        return;
-                      }
+              if (!checkPlayerName(name, _picked)) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Name is too short or already exits !')));
+                return;
+              }
 
-                      commit(name);
+              commit(name);
 
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Done')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Cancel'))
-              ],
-            ));
+              Navigator.pop(context);
+            }, () {
+              Navigator.pop(context);
+            }));
+  }
+
+  AlertDialog confirmDistributedList(
+      List<Role> list, Function onConfirm, Function onCancel) {
+    return AlertDialog(
+      title: Text('Review players list (${list.length})'),
+      contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      content: SizedBox(
+        width: 350,
+        height: 450,
+        child: ListView(
+          children: list.map((role) {
+            return roleWithPlayerName(role);
+          }).toList(),
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => onConfirm(), child: const Text('Confirm')),
+        TextButton(onPressed: () => onCancel(), child: const Text('Cancel'))
+      ],
+    );
+  }
+
+  void reviewAndConfirmList() {
+    showDialog(
+        context: context,
+        builder: (BuildContext builder) => confirmDistributedList(_picked, () {
+              Navigator.pushNamed(context, '/game',
+                  arguments: GameArguments(_picked));
+            }, () {
+              Navigator.pop(context);
+            }));
   }
 
   @override
@@ -111,7 +118,7 @@ class _DistributeViewState extends State<DistributeView> {
       floatingActionButton: _initial.isEmpty
           ? FloatingActionButton(
               onPressed: () {
-                print(_picked.map((e) => e.player.name).toString());
+                reviewAndConfirmList();
               },
               child: const Icon(Icons.done),
             )
@@ -138,7 +145,7 @@ class _DistributeViewState extends State<DistributeView> {
                 ),
                 Text(
                   '${_initial.length} left',
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 20),
                 )
               ],
             ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/models/game_model.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/views/distribute_view.dart';
 import 'package:werewolves/views/home_view.dart';
 import 'package:werewolves/views/select_view.dart';
+import 'package:werewolves/widgets/game/game_arguments_extractor.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -23,7 +25,11 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeView(),
         '/select': (context) => const SelectRolesView(),
-        '/distribute': (context) => const DistributeView()
+        '/distribute': (context) => const DistributeView(),
+        '/game': (context) => ChangeNotifierProvider(
+          create: (context) => GameModel(),
+          child: const GameArgumentsExtractor()
+        )
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
