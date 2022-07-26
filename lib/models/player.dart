@@ -8,31 +8,35 @@ const uuid = Uuid();
 class Player {
   late String name;
 
+  bool isAlive = true;
   Teams team = Teams.solo;
   String id = uuid.v4();
   List<StatusEffect> effects = [];
 
   Player(this.name);
-
   Player.nameIdTeam(this.name, this.id, this.team);
 
   void addStatusEffect(StatusEffect effect) {
     effects.add(effect);
   }
 
-  void removeStatusEffect(StatusEffects effect) {
+  void removeStatusEffect(StatusEffectType effect) {
     effects = effects.where((element) => element.type != effect).toList();
   }
 
-  Player.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    team = json['team'];
-    id = json['id'];
+  bool hasEffect(StatusEffectType effect) {
+    for (var e in effects) {
+      if (e.type == effect) return true;
+    }
+
+    return false;
   }
 
-  toJson() {
-    return {
-      name,team,id
-    };
+  bool hasFatalEffect(){
+    for (var e in effects) {
+      if (fatalStatusEffects.contains(e.type)) return true;
+    }
+
+    return false;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/game_arguments.dart';
 import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/widgets/game/game_leave_dialog.dart';
 
 class GameView extends StatefulWidget {
   final GameArguments arguments;
@@ -19,23 +20,7 @@ class _GameViewState extends State<GameView> {
   bool _initialized = false;
 
   void _onBackPressed() {
-    showDialog(
-        context: context,
-        builder: ((context) => AlertDialog(
-              title: const Text('Game in progress'),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/');
-                    },
-                    child: const Text('Leave game')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Continure playing'))
-              ],
-            )));
+    onGameExit(context);
   }
 
   @override
@@ -56,7 +41,7 @@ class _GameViewState extends State<GameView> {
           _onBackPressed();
           return false;
         },
-        child: Scaffold(body: value.viewToDisplay()),
+        child: Scaffold(body: value.viewToDisplay(context)),
       );
     });
   }

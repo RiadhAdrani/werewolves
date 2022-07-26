@@ -22,6 +22,5 @@ String getRoleName(RoleId role) {
       return "Villager";
     case RoleId.wolfpack:
       return "Wolfpack";
-      break;
   }
 }

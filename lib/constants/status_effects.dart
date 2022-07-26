@@ -1,4 +1,4 @@
-enum StatusEffects {
+enum StatusEffectType {
   isProtected,
   wasProtected,
   isDevoured,
@@ -8,12 +8,17 @@ enum StatusEffects {
   isSeen,
   isCountered,
   isHunted,
+  isExecuted,
+  isSubstitue,
+  hasCallsign,
+  hasInheritedCaptaincy,
   shouldTalkFirst
 }
 
-const List<StatusEffects> fatalStatusEffects = [
-  StatusEffects.isCursed,
-  StatusEffects.isDevoured,
-  StatusEffects.isHunted,
-  StatusEffects.isCountered
+const List<StatusEffectType> fatalStatusEffects = [
+  StatusEffectType.isCursed,
+  StatusEffectType.isDevoured,
+  StatusEffectType.isHunted,
+  StatusEffectType.isCountered,
+  StatusEffectType.isExecuted
 ];

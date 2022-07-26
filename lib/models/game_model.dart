@@ -13,16 +13,16 @@ class GameModel extends ChangeNotifier {
   int _currentIndex = 0;
   int _currentTurn = 0;
 
-  Widget viewToDisplay() {
+  Widget viewToDisplay(BuildContext context) {
     switch (_state) {
       case GameState.empty:
         return const Text('Loading...');
       case GameState.initialized:
-        return gameInitView(this);
+        return gameInitView(this,context);
       case GameState.night:
-        return gameNightView(this);
+        return gameNightView(this,context);
       case GameState.day:
-        return gameDayView(this);
+        return gameDayView(this,context);
     }
   }
 
@@ -46,6 +46,10 @@ class GameModel extends ChangeNotifier {
     return _roles[_currentIndex];
   }
 
+  int getCurrentTurn() {
+    return _currentTurn;
+  }
+
   void _setNextIndex() {
     if (_roles.isEmpty) return;
 
@@ -54,6 +58,7 @@ class GameModel extends ChangeNotifier {
     for (var role in _roles) {
       if (role.callingPriority > _roles[_currentIndex].callingPriority &&
           role.callingPriority > -1 &&
+          role.shouldBeCalledAtNight(this) &&
           role.callingPriority < next) {
         next = role.callingPriority;
       }
@@ -103,7 +108,7 @@ class GameModel extends ChangeNotifier {
     _state = GameState.night;
 
     _initCurrentIndex();
-    
+
     notifyListeners();
   }
 

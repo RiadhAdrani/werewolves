@@ -7,9 +7,10 @@ enum AbilityId{
   curse,
   counter,
   hunt,
+  callsign,
 
   // captain
-  order,
+  talker,
   execute,
   substitute,
   inherit

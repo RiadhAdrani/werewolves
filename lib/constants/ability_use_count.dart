@@ -1,3 +1,3 @@
 enum AbilityUseCount{
-  one,infinite,none
+  once,infinite,none
 }

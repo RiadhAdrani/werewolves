@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/game_model.dart';
 
-Widget gameInitView(GameModel game) {
+Widget gameInitView(GameModel game, BuildContext context) {
   return Center(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,

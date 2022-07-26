@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/game_model.dart';
 
-Widget gameDayView(GameModel game) {
+Widget gameDayView(GameModel game, BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       automaticallyImplyLeading: false,

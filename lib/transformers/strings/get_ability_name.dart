@@ -18,7 +18,7 @@ String getAbilityName(AbilityId id) {
       return "Counter";
     case AbilityId.hunt:
       return "Hunt";
-    case AbilityId.order:
+    case AbilityId.talker:
       return "Order";
     case AbilityId.execute:
       return "Execute";
@@ -26,5 +26,7 @@ String getAbilityName(AbilityId id) {
       return "Substitue";
     case AbilityId.inherit:
       return "Inherit";
+    case AbilityId.callsign:
+      return "Call sign";
   }
 }
