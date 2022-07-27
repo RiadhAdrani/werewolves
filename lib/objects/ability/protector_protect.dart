@@ -4,6 +4,7 @@ import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/models/game_model.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/protected_effect.dart';
@@ -34,7 +35,22 @@ class ProtectAbility extends Ability {
   }
 
   @override
-  bool shouldAbilityBeAvailable() {
+  bool shouldBeAvailable() {
+    return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'No body was protected.';
+
+    return '${targets[0].name} is protected.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
     return true;
   }
 }

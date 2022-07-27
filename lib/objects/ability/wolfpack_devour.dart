@@ -4,6 +4,7 @@ import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/models/game_model.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/devoured_effect.dart';
@@ -34,7 +35,22 @@ class DevourAbility extends Ability {
   }
 
   @override
-  bool shouldAbilityBeAvailable() {
+  bool shouldBeAvailable() {
     return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'No body has been devoured';
+
+    return '${targets[0].name} has been devoured.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
+    return false;
   }
 }

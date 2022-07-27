@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:werewolves/models/game_model.dart';
 import 'package:werewolves/widgets/cards/ability_card_view.dart';
 import 'package:werewolves/widgets/game/game_leave_dialog.dart';
+import 'package:werewolves/widgets/game/game_use_ability.dart';
 
 Widget gameNightView(GameModel game, BuildContext context) {
   return Column(
@@ -48,17 +49,17 @@ Widget gameNightView(GameModel game, BuildContext context) {
             children: game
                 .getCurrent()!
                 .abilities
-                .where((ability) =>
-                    ability.isNightAbility() &&
-                    ability.shouldAbilityBeAvailable())
-                .map((ability) => abilityCardView(ability, () {}))
+                .where((ability) => game.isAbilityAvailableAtNight(ability))
+                .map((ability) => abilityCardView(ability, () {
+                      showUseAbilityDialog(context, game, ability);
+                    }))
                 .toList(),
           ),
         ),
       ),
       TextButton(
           onPressed: () {
-            game.next();
+            game.next(context);
           },
           child: const Text(
             'Next',

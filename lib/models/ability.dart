@@ -2,12 +2,15 @@ import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
+import 'package:werewolves/models/game_model.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/transformers/strings/get_ability_name.dart';
 
 abstract class Ability {
-  int targetCount = 0;
+  List<int> turnsUsedIn = [];
+
+  late int targetCount;
 
   late Role owner;
   late AbilityId name;
@@ -16,10 +19,17 @@ abstract class Ability {
   late AbilityTime time;
 
   /// Execute the ability on targets.
-  void use(List<Player> targets) {
-    if (isUsable()) {
+  List<Player> use(List<Player> targets, int turn) {
+    List<Player> appliedTo = [];
+
+    if (isUsable() && targets.isNotEmpty) {
+
+      turnsUsedIn.add(turn);
+
       targets.sublist(0, targetCount).forEach((target) {
         if (shouldBeAppliedSurely(target)) {
+          appliedTo.add(target);
+
           callOnTarget(target);
 
           if (useCount == AbilityUseCount.once) {
@@ -28,6 +38,8 @@ abstract class Ability {
         }
       });
     }
+
+    return appliedTo;
   }
 
   String getName() {
@@ -39,13 +51,21 @@ abstract class Ability {
   }
 
   /// Check if the ability is used during the night
-  bool isNightAbility() {
+  bool isNightOnly() {
     return [AbilityTime.both, AbilityTime.night].contains(time);
   }
 
   /// Check if the ability is used during the day
-  bool isDayAbility() {
+  bool isDayOnly() {
     return [AbilityTime.both, AbilityTime.day].contains(time);
+  }
+
+  bool wasUsedInCurrentTurn(int turn) {
+    return turnsUsedIn.contains(turn);
+  }
+
+  List<Player> createListOfTargetPlayers(GameModel game) {
+    return game.getPlayersList().where((player) => isTarget(player)).toList();
   }
 
   /// Check if the given target is valid or not.
@@ -63,9 +83,18 @@ abstract class Ability {
   bool shouldBeAppliedSurely(Player target);
 
   /// Check if the ability could be used in the general scope.
-  bool shouldAbilityBeAvailable();
+  bool shouldBeAvailable();
+
+  /// Check if the ability should be used during the night phase and cannot be skipped.
+  bool isUnskippable();
 
   /// Called internally by `use()` method
   /// to execute the ability on each target.
   void callOnTarget(Player target);
+
+  /// Return the appropriate message according to the number of affected players (target).
+  String onAppliedMessage(List<Player> targets);
+
+  /// Effect launched after the ability has applied successfully;
+  void usePostEffect(GameModel game, List<Player> affected);
 }

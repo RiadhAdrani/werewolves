@@ -35,7 +35,7 @@ class _DistributeViewState extends State<DistributeView> {
     void commit(String name) {
       setState(() {
         if (temp.player is Player) {
-          temp.player = Player(name);
+          temp.setPlayer(Player(name));
         }
         _pickedRole = temp;
         _picked = [..._picked, _pickedRole!];

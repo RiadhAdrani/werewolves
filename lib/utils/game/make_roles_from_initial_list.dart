@@ -4,22 +4,22 @@ import 'package:werewolves/objects/roles/wolfpack.dart';
 
 List<Role> makeRolesFromInitialList(List<Role> input) {
   // role Groups to be added
-  var wolfpack = Wolfpack([]);
+  var wolfpack = <Player>[];
 
   // output
   var output = <Role>[];
 
-  for (var element in input) {
-    if (element.isWolf) {
-      wolfpack.player.add(element.player as Player);
+  for (var role in input) {
+    if (role.isWolf) {
+      wolfpack.add(role.player as Player);
     }
 
-    if (!element.isGroupRole){
-      output.add(element);
-    } 
+    if (!role.isGroup()) {
+      output.add(role);
+    }
   }
 
-  output.add(wolfpack);
+  output.add(Wolfpack(wolfpack));
 
   return output;
 }

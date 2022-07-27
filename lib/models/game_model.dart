@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/constants/game_states.dart';
+import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/utils/game/make_roles_from_initial_list.dart';
 import 'package:werewolves/widgets/game/game_day_view.dart';
 import 'package:werewolves/widgets/game/game_init_view.dart';
 import 'package:werewolves/widgets/game/game_night_view.dart';
+import 'package:werewolves/widgets/game/game_standard_alert.dart';
 
 class GameModel extends ChangeNotifier {
   final List<Role> _roles = [];
+  
   GameState _state = GameState.empty;
 
   int _currentIndex = 0;
@@ -18,12 +25,26 @@ class GameModel extends ChangeNotifier {
       case GameState.empty:
         return const Text('Loading...');
       case GameState.initialized:
-        return gameInitView(this,context);
+        return gameInitView(this, context);
       case GameState.night:
-        return gameNightView(this,context);
+        return gameNightView(this, context);
       case GameState.day:
-        return gameDayView(this,context);
+        return gameDayView(this, context);
     }
+  }
+
+  List<Player> getPlayersList() {
+    List<Player> output = [];
+
+    for (var role in _roles) {
+      if (!role.isGroup()) {
+        if (!output.contains(role.player as Player)) {
+          output.add(role.player);
+        }
+      }
+    }
+
+    return output;
   }
 
   void init(List<Role> list) {
@@ -34,9 +55,17 @@ class GameModel extends ChangeNotifier {
     _gameTransitionToNight();
   }
 
-  void next() {
+  void next(BuildContext context) {
     if (_state == GameState.night) {
-      _setNextIndex();
+      if (_checkAllUnskippableAbilitiesUse()) {
+        _setNextIndex();
+      } else {
+        showStandardAlert(
+          'Unable to proceed', 
+          'At least one mandatory ability was not used during this turn.', 
+          context
+        );
+      }
     }
   }
 
@@ -48,6 +77,46 @@ class GameModel extends ChangeNotifier {
 
   int getCurrentTurn() {
     return _currentTurn;
+  }
+
+  bool isAbilityAvailableAtNight(Ability ability) {
+    return ability.isNightOnly() &&
+        ability.useCount != AbilityUseCount.none &&
+        !ability.wasUsedInCurrentTurn(_currentTurn) &&
+        ability.shouldBeAvailable();
+  }
+
+  List<Player> useAbility(Ability ability, List<Player> targets) {
+    List<Player> affected = ability.use(targets, _currentTurn);
+
+    ability.usePostEffect(this, affected);
+
+    notifyListeners();
+
+    return affected;
+  }
+
+  String getAbilityAppliedMessage(Ability ability, List<Player> affected) {
+    return ability.onAppliedMessage(affected);
+  }
+
+  void addMemberToGroup(Player newMember, RoleId roleId) {
+    for (var role in _roles) {
+      if (role.id == roleId && role.isGroup()) {
+        (role as RoleGroup).setPlayer([...role.player, newMember]);
+      }
+    }
+  }
+
+  bool _checkAllUnskippableAbilitiesUse() {
+    for (var ability in getCurrent()!.abilities) {
+      if (ability.wasUsedInCurrentTurn(_currentTurn) == false &&
+          ability.isUnskippable()) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   void _setNextIndex() {

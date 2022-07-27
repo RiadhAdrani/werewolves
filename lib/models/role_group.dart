@@ -4,6 +4,10 @@ import 'package:werewolves/models/role.dart';
 abstract class RoleGroup extends Role<List<Player>> {
   RoleGroup(super.player) {
     isGroupRole = true;
+
+    for (var member in player) {
+      member.roles.add(this);
+    }
   }
 
   @override
@@ -19,5 +23,32 @@ abstract class RoleGroup extends Role<List<Player>> {
     }
 
     return false;
+  }
+
+  @override
+  bool playerIsDead() {
+    return !hasAtLeastOneSurvivingMember();
+  }
+
+  @override
+  bool playerIsFatallyWounded() {
+    bool result = true;
+
+    for (var member in player) {
+      if (!member.hasFatalEffect()) {
+        return false;
+      }
+    }
+
+    return result;
+  }
+
+  @override
+  void setPlayer(List<Player> player) {
+    this.player = player;
+
+    for (var member in this.player) {
+      member.roles.add(this);
+    }
   }
 }

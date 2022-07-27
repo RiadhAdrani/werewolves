@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:werewolves/models/ability.dart';
 
 Widget abilityCardView(Ability ability, Function onClick) {
-  String canBeUsed = ability.owner.canUseAbilities()
-      ? "Usable"
-      : "Cannot be used at the moment";
-  Color canBeUsedColor = ability.owner.canUseAbilities()
-      ? Colors.black
-      : Colors.red;
+  String shouldBeUsed = ability.isUnskippable()
+      ? "Mandatory"
+      : "Optional";
+  Color shouldBeUsedColor = ability.isUnskippable()
+      ? Colors.red
+      : Colors.black;
 
   return Card(
     child: InkWell(
@@ -29,10 +29,10 @@ Widget abilityCardView(Ability ability, Function onClick) {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Text(
-                canBeUsed,
+                shouldBeUsed,
                 style: TextStyle(
                     fontSize: 14, 
-                    color: canBeUsedColor
+                    color: shouldBeUsedColor
                 ),
               ),
             ),

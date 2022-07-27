@@ -3,6 +3,7 @@ import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/models/game_model.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/clairvoyance_effect.dart';
@@ -33,7 +34,22 @@ class ClairvoyanceAbility extends Ability {
   }
 
   @override
-  bool shouldAbilityBeAvailable() {
+  bool shouldBeAvailable() {
+    return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'No body was targeted.';
+
+    return '${targets[0].name} true form has been revealed to the Seer.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
     return true;
   }
 }

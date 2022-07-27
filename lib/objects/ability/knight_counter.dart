@@ -3,6 +3,7 @@ import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/models/game_model.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/counter_effect.dart';
@@ -19,6 +20,7 @@ class CounterAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
+    (owner.player as Player).removeFatalEffects([]);
     target.addStatusEffect(CounterStatusEffect(owner));
   }
 
@@ -33,7 +35,22 @@ class CounterAbility extends Ability {
   }
 
   @override
-  bool shouldAbilityBeAvailable() {
+  bool shouldBeAvailable() {
     return (owner.player as Player).hasFatalEffect();
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'No body was designed to take the fatal blow.';
+
+    return '${targets[0].name} has been killed.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
+    return owner.playerIsFatallyWounded();
   }
 }

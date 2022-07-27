@@ -5,6 +5,7 @@ void onGameExit(BuildContext context){
         context: context,
         builder: ((context) => AlertDialog(
               title: const Text('Game in progress'),
+              content: const Text('Are you sure you want to abandon the game ?'),
               actions: [
                 TextButton(
                     onPressed: () {
