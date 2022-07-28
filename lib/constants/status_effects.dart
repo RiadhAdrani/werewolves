@@ -22,3 +22,7 @@ const List<StatusEffectType> fatalStatusEffects = [
   StatusEffectType.isCountered,
   StatusEffectType.isExecuted
 ];
+
+bool isFatalEffect(StatusEffectType effect) {
+  return fatalStatusEffects.contains(effect);
+}

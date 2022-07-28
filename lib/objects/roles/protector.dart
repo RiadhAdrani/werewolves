@@ -1,6 +1,8 @@
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/protector_protect.dart';
 
@@ -24,5 +26,27 @@ class Protector extends RoleSingular {
   @override
   bool canUseSignWithNarrator() {
     return false;
+  }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    final output = <String>[
+      'Choose a target to protect with your shield.',
+      'The chosen target will be immune to the strikes of the wolves.'
+    ];
+
+    List<Player> protected =
+        game.getPlayersWithStatusEffects([StatusEffectType.wasProtected]);
+
+    if (protected.isNotEmpty) {
+      output.add('You cannot protect (${protected[0].getName()}) in this night.');
+    }
+
+    return output;
   }
 }

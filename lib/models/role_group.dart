@@ -10,11 +10,15 @@ abstract class RoleGroup extends Role<List<Player>> {
     }
   }
 
+  List<Player> getCurrentPlayers(){
+    return player.where((player) => !player.isDead()).toList();
+  }
+
   @override
   String getPlayerName() {
     if (player.isEmpty) return 'There is no one in this group.';
 
-    return player.map((player) => player.name).join(", ");
+    return getCurrentPlayers().map((player) => player.name).join(", ");
   }
 
   bool hasAtLeastOneSurvivingMember() {
@@ -26,7 +30,7 @@ abstract class RoleGroup extends Role<List<Player>> {
   }
 
   @override
-  bool playerIsDead() {
+  bool isObsolete() {
     return !hasAtLeastOneSurvivingMember();
   }
 

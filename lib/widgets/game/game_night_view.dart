@@ -1,72 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/game_model.dart';
-import 'package:werewolves/widgets/cards/ability_card_view.dart';
-import 'package:werewolves/widgets/game/game_leave_dialog.dart';
-import 'package:werewolves/widgets/game/game_use_ability.dart';
+import 'package:werewolves/widgets/game/game_app_bar.dart';
+import 'package:werewolves/widgets/game/game_night_view_important_info.dart';
+import 'package:werewolves/widgets/game/game_night_view_abilities.dart';
+import 'package:werewolves/widgets/game/game_night_view_role_info.dart';
 
 Widget gameNightView(GameModel game, BuildContext context) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      AppBar(
-        title: Text('Night (${game.getCurrentTurn()})'),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.blueGrey[900],
-        actions: [
+  return Scaffold(
+    appBar: gameAppBar('Night (${game.getCurrentTurn()})', context,
+        backgroundColor: Colors.blueGrey[900]!, textColor: Colors.white),
+    body: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          roleInfoIconNamePlayer(game.getCurrent()!),
+          Divider(color: Colors.blueGrey[100],),
+          importantInformationsView(game.getCurrent()!.getInformations(game)),
+          Divider(color: Colors.blueGrey[100],),
+          abilitiesView(game, context),
           TextButton(
               onPressed: () {
-                onGameExit(context);
+                game.next(context);
               },
               child: const Text(
-                'Leave',
-                style: TextStyle(color: Colors.white),
+                'Next',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ))
         ],
       ),
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.person,
-              size: 50,
-            ),
-            Text(
-              game.getCurrent()!.getName(),
-              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              game.getCurrent()!.getPlayerName(),
-              style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
-            ),
-          ],
-        ),
-      ),
-      Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: ListView(
-            children: game
-                .getCurrent()!
-                .abilities
-                .where((ability) => game.isAbilityAvailableAtNight(ability))
-                .map((ability) => abilityCardView(ability, () {
-                      showUseAbilityDialog(context, game, ability);
-                    }))
-                .toList(),
-          ),
-        ),
-      ),
-      TextButton(
-          onPressed: () {
-            game.next(context);
-          },
-          child: const Text(
-            'Next',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ))
-    ],
+    ),
   );
 }

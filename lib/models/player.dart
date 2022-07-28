@@ -18,7 +18,13 @@ class Player {
 
   Player(this.name);
 
-  Player.nameIdTeam(this.name, this.id, this.team);
+  String getName() {
+    return name;
+  }
+
+  void changeTeam(Teams newTeam) {
+    team = newTeam;
+  }
 
   void addStatusEffect(StatusEffect effect) {
     effects.add(effect);
@@ -29,12 +35,16 @@ class Player {
   }
 
   void removeFatalEffects(List<StatusEffectType> exception) {
+    final newList = <StatusEffect>[];
+
     for (var effect in effects) {
-      if (!exception.contains(effect.type) &&
-          fatalStatusEffects.contains(effect.type)) {
-        effects.remove(effect);
+      if (exception.contains(effect.type) ||
+          !fatalStatusEffects.contains(effect.type)) {
+        newList.add(effect);
       }
     }
+
+    effects = newList;
   }
 
   bool hasEffect(StatusEffectType effect) {
@@ -61,11 +71,23 @@ class Player {
     return false;
   }
 
+  bool hasGroupRole() {
+    for (var role in roles) {
+      if (role.isGroupRole) return true;
+    }
+
+    return false;
+  }
+
   bool hasWolfRole() {
     for (var role in roles) {
       if (role.isWolf) return true;
     }
 
     return false;
+  }
+
+  bool isDead() {
+    return !isAlive;
   }
 }

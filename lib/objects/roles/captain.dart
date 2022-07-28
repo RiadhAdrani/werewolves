@@ -34,4 +34,23 @@ class Captain extends RoleSingular {
   bool shouldBeCalledAtNight(GameModel game) {
     return true;
   }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    final output = <String>[];
+
+    if (player.hasFatalEffect()) {
+      output.add(
+          'You are dead, choose another fellow player to inherit your capitaincy.');
+    }
+
+    output.add('Choose a player whom will start the discussion.');
+
+    return output;
+  }
 }

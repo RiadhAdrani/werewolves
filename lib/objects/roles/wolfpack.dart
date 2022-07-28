@@ -25,4 +25,14 @@ class Wolfpack extends RoleGroup {
   bool shouldBeCalledAtNight(GameModel game) {
     return hasAtLeastOneSurvivingMember();
   }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    return ['Assembe wolfpack.','Choose your victim.'];
+  }
 }

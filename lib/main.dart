@@ -8,9 +8,9 @@ import 'package:werewolves/views/select_view.dart';
 import 'package:werewolves/widgets/game/game_arguments_extractor.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => SelectedModel(),
-    child : const MyApp()) , 
+  runApp(
+    ChangeNotifierProvider(
+        create: (context) => SelectedModel(), child: const MyApp()),
   );
 }
 
@@ -27,9 +27,8 @@ class MyApp extends StatelessWidget {
         '/select': (context) => const SelectRolesView(),
         '/distribute': (context) => const DistributeView(),
         '/game': (context) => ChangeNotifierProvider(
-          create: (context) => GameModel(),
-          child: const GameArgumentsExtractor()
-        )
+            create: (context) => GameModel(),
+            child: const GameArgumentsExtractor())
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -37,4 +36,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

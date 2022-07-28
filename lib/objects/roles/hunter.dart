@@ -18,7 +18,8 @@ class Hunter extends RoleSingular {
 
   @override
   bool canUseAbilities() {
-    return player.hasFatalEffect() || !player.hasEffect(StatusEffectType.hasCallsign);
+    return player.hasFatalEffect() ||
+        !player.hasEffect(StatusEffectType.hasCallsign);
   }
 
   @override
@@ -28,6 +29,28 @@ class Hunter extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(GameModel game) {
-    return player.hasFatalEffect() || !player.hasEffect(StatusEffectType.hasCallsign);
+    return player.hasFatalEffect() ||
+        !player.hasEffect(StatusEffectType.hasCallsign);
+  }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    if (player.hasFatalEffect()) {
+      return ['You have become a Hunter! Choose someone to kill.'];
+    }
+
+    if (!player.hasEffect(StatusEffectType.hasCallsign)) {
+      return [
+        'You should tell the narrator a call sign that you may use during the day phase to kill a werewolf.',
+        'Missing the target and slaying an innocent villager will cause you to die too.'
+      ];
+    }
+
+    return [];
   }
 }

@@ -9,7 +9,7 @@ class Witch extends RoleSingular {
   Witch(super.player) {
     id = RoleId.witch;
     callingPriority = witchCallPriority;
-    abilities = [CurseAbility(this),ReviveAbility(this)];
+    abilities = [CurseAbility(this), ReviveAbility(this)];
   }
 
   @override
@@ -25,5 +25,30 @@ class Witch extends RoleSingular {
   @override
   bool shouldBeCalledAtNight(GameModel game) {
     return true;
+  }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    final output = <String>[];
+
+    final wounded = game.getPlayersWithFatalEffects();
+
+    if (wounded.isEmpty) {
+      output.add('(Nobody) was killed.');
+    } else {
+      output.add('(${wounded.map((e) => e.getName()).join(', ')}) was killed.');
+    }
+
+    output.addAll([
+      'Would you like to revive?',
+      'Do you want to curse someone?'
+    ]);
+
+    return output;
   }
 }

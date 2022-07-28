@@ -25,4 +25,21 @@ class Knight extends RoleSingular {
   bool shouldBeCalledAtNight(GameModel game) {
     return true;
   }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    if (player.hasFatalEffect()) {
+      return [
+        'A player dared to strike you during the night!',
+        'Choose a target to counter this attack and redirect it towards him.'
+      ];
+    }
+
+    return [];
+  }
 }

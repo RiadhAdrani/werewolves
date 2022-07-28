@@ -19,7 +19,7 @@ abstract class RoleSingular extends Role<Player> {
   }
 
   @override
-  bool playerIsDead() {
+  bool isObsolete() {
     return !player.isAlive;
   }
 

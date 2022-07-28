@@ -23,11 +23,10 @@ abstract class Ability {
     List<Player> appliedTo = [];
 
     if (isUsable() && targets.isNotEmpty) {
-
-      turnsUsedIn.add(turn);
-
       targets.sublist(0, targetCount).forEach((target) {
         if (shouldBeAppliedSurely(target)) {
+          turnsUsedIn.add(turn);
+
           appliedTo.add(target);
 
           callOnTarget(target);
@@ -97,4 +96,7 @@ abstract class Ability {
 
   /// Effect launched after the ability has applied successfully;
   void usePostEffect(GameModel game, List<Player> affected);
+
+  /// Generate ability detailed description;
+  String getDescription();
 }

@@ -26,4 +26,14 @@ class FatherOfWolves extends RoleSingular {
   bool shouldBeCalledAtNight(GameModel game) {
     return game.getCurrentTurn() > 1;
   }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    return ['Do you want to infect the player that you killed wth the wolfpack ?'];
+  }
 }

@@ -49,11 +49,18 @@ class InheritAbility extends Ability {
 
   @override
   void usePostEffect(GameModel game, List<Player> affected) {
-    // TODO: switch the captain player with the new one;
+    if (affected.isEmpty) return;
+    
+    game.replaceCaptainPlayer(affected[0]);
   }
 
   @override
   bool isUnskippable() {
     return owner.playerIsFatallyWounded();
+  }
+
+  @override
+  String getDescription() {
+    return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
   }
 }

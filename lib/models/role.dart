@@ -18,6 +18,10 @@ abstract class Role<T> {
 
   Role(this.player);
 
+  T getPlayer() {
+    return player;
+  }
+
   /// Get the name of the role
   String getName() {
     return getRoleName(id);
@@ -44,10 +48,17 @@ abstract class Role<T> {
   void setPlayer(T player);
 
   /// Check if the player `isAlive` equals false.
-  /// `isAlive` is updated between phases, and not during the night.
-  bool playerIsDead();
+  /// `isAlive` is updated between phases, and not during the night,
+  /// except by a dead captain.
+  bool isObsolete();
 
   /// Check if the player has been affected by a fatal status effect.
   /// Used to check is primarily dead during the night.
   bool playerIsFatallyWounded();
+
+  /// Get the informations that the role needs to know.
+  List<String> getInformations(GameModel game);
+
+  /// Get the instructions ,advices and tips for the narrator.
+  List<String> getAdvices(GameModel game);
 }

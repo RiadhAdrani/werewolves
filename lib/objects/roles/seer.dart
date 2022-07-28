@@ -25,4 +25,14 @@ class Seer extends RoleSingular {
   bool shouldBeCalledAtNight(GameModel game) {
     return true;
   }
+
+  @override
+  List<String> getAdvices(GameModel game) {
+    return [];
+  }
+
+  @override
+  List<String> getInformations(GameModel game) {
+    return ['Pick a target to reveale his true role.'];
+  }
 }
