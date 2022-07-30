@@ -12,17 +12,17 @@ import 'package:werewolves/objects/roles/witch.dart';
 
 List<Role> makeAvailableList() {
 
-  Player player = Player("Placeholder_Player");
+  Player player () => Player("Placeholder_Player");
 
   return [
-    Captain(player),
-    FatherOfWolves(player),
-    Hunter(player),
-    Knight(player),
-    Protector(player),
-    Seer(player),
-    Villager(player),
-    Werewolf(player),
-    Witch(player)
+    Captain(player()),
+    FatherOfWolves(player()),
+    Hunter(player()),
+    Knight(player()),
+    Protector(player()),
+    Seer(player()),
+    Villager(player()),
+    Werewolf(player()),
+    Witch(player())
   ];
 }

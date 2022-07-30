@@ -3,7 +3,9 @@ import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
+import 'package:werewolves/transformers/strings/get_role_description.dart';
 import 'package:werewolves/transformers/strings/get_role_name.dart';
+import 'package:werewolves/transformers/strings/get_role_icon.dart';
 
 const uuid = Uuid();
 
@@ -26,6 +28,11 @@ abstract class Role<T> {
   /// Get the name of the role
   String getName() {
     return getRoleName(id);
+  }
+
+  /// Return the icon path in assets
+  String getIcon() {
+    return getRoleIconPath(id);
   }
 
   /// Check if the role is meant to be treated as a group.
@@ -71,4 +78,9 @@ abstract class Role<T> {
   /// and prgrammatically assign initial team
   /// for players.
   Teams getSupposedInitialTeam();
+
+  /// Get role description
+  String getDescription() {
+    return getRoleDescription(id);
+  }
 }

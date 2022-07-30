@@ -4,9 +4,18 @@ import 'package:werewolves/models/role.dart';
 AlertDialog setPlayerNameDialog(Role temp, TextEditingController controller,
     BuildContext context, Function onDone, Function onCancel) {
   return AlertDialog(
-    title: Text(
-      temp.getName(),
-      style: const TextStyle(fontSize: 20),
+    title: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Image.asset(temp.getIcon()),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            temp.getName(),
+            style: const TextStyle(fontSize: 22),
+          ),
+        ),
+      ],
     ),
     content: Column(
       mainAxisSize: MainAxisSize.min,
@@ -19,15 +28,22 @@ AlertDialog setPlayerNameDialog(Role temp, TextEditingController controller,
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.words,
         ),
-        const Padding(padding: EdgeInsets.all(5)),
-        const Text('• No duplicate name allowed',
-            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-        const Text('• Minimum size is 3',
-            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-        const Text('• Maximum size is 25',
-            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-        const Text('• Only alphanumerical characters and space are allowed.',
-            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))
+        SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:const  [
+            Text('• No duplicate name allowed',
+              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+          Text('• Minimum size is 3',
+              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+          Text('• Maximum size is 25',
+              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+          Text('• Only alphanumerical characters and space are allowed.',
+              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))
+          ],),
+        )
+        
+        
       ],
     ),
     actions: [
