@@ -11,7 +11,7 @@ class Player {
   late String name;
 
   bool isAlive = true;
-  Teams team = Teams.solo;
+  Teams team = Teams.village;
   String id = uuid.v4();
   List<StatusEffect> effects = [];
   List<Role> roles = [];

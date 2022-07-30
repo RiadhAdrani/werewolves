@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 
 Widget gameInitView(GameModel game, BuildContext context) {
   return Center(

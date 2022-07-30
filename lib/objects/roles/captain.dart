@@ -1,6 +1,7 @@
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/captain_execute.dart';
 import 'package:werewolves/objects/ability/captain_inherit.dart';
@@ -21,7 +22,7 @@ class Captain extends RoleSingular {
   }
 
   @override
-  bool canUseAbilities() {
+  bool canUseAbilitiesDuringNight() {
     return true;
   }
 
@@ -52,5 +53,15 @@ class Captain extends RoleSingular {
     output.add('Choose a player whom will start the discussion.');
 
     return output;
+  }
+
+  @override
+  bool canUseAbilitiesDuringDay() {
+    return true;
+  }
+
+  @override
+  Teams getSupposedInitialTeam() {
+    return Teams.village;
   }
 }

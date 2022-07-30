@@ -26,7 +26,7 @@ Widget targetPlayerCard(
                 fontWeight: FontWeight.w500
               ),
             ),
-            if (isSelected) const Icon(Icons.donut_large_sharp,size: 20,)
+            if (isSelected) const Icon(Icons.done,size: 20,)
           ]
         ),
       ),

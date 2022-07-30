@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/widgets/game/game_app_bar.dart';
 import 'package:werewolves/widgets/game/game_night_view_important_info.dart';
 import 'package:werewolves/widgets/game/game_night_view_abilities.dart';

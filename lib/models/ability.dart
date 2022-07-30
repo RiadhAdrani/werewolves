@@ -2,7 +2,7 @@ import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/transformers/strings/get_ability_name.dart';
@@ -24,9 +24,9 @@ abstract class Ability {
 
     if (isUsable() && targets.isNotEmpty) {
       targets.sublist(0, targetCount).forEach((target) {
-        if (shouldBeAppliedSurely(target)) {
-          turnsUsedIn.add(turn);
+        turnsUsedIn.add(turn);
 
+        if (shouldBeAppliedSurely(target)) {
           appliedTo.add(target);
 
           callOnTarget(target);
@@ -50,12 +50,12 @@ abstract class Ability {
   }
 
   /// Check if the ability is used during the night
-  bool isNightOnly() {
+  bool isForNight() {
     return [AbilityTime.both, AbilityTime.night].contains(time);
   }
 
   /// Check if the ability is used during the day
-  bool isDayOnly() {
+  bool isForDay() {
     return [AbilityTime.both, AbilityTime.day].contains(time);
   }
 
@@ -99,4 +99,7 @@ abstract class Ability {
 
   /// Generate ability detailed description;
   String getDescription();
+
+  /// Check if this ability should be used when the owner is dead.
+  bool shouldBeUsedOnOwnerDeath();
 }

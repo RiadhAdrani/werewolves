@@ -1,6 +1,7 @@
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/knight_counter.dart';
 
@@ -12,7 +13,7 @@ class Knight extends RoleSingular {
   }
 
   @override
-  bool canUseAbilities() {
+  bool canUseAbilitiesDuringNight() {
     return player.hasFatalEffect();
   }
 
@@ -41,5 +42,15 @@ class Knight extends RoleSingular {
     }
 
     return [];
+  }
+
+  @override
+  bool canUseAbilitiesDuringDay() {
+    return false;
+  }
+
+  @override
+  Teams getSupposedInitialTeam() {
+    return Teams.village;
   }
 }

@@ -3,9 +3,10 @@ import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/models/ability.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/effects/hunt_effect.dart';
 
 class HuntAbility extends Ability {
@@ -21,6 +22,10 @@ class HuntAbility extends Ability {
   @override
   void callOnTarget(Player target) {
     target.addStatusEffect(HuntStatusEffect(owner));
+
+    if (!target.hasWolfRole()) {
+      (owner as RoleSingular).player.addStatusEffect(HuntStatusEffect(owner));
+    }
   }
 
   @override
@@ -56,5 +61,10 @@ class HuntAbility extends Ability {
   @override
   String getDescription() {
     return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
+    return true;
   }
 }

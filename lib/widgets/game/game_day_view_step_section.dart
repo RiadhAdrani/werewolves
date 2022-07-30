@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/widgets/text/title_with_icon.dart';
 
-Widget dayInfoSectionView(GameModel game) {
-  final list =
-      game.getCurrentTurnSummary().map((item) => item.getText()).toList();
-
+Widget daySectionView(String title,IconData icon, List<String> list, {bool expanded = false}) {
   return ExpansionTile(
-    initiallyExpanded: true,
+    initiallyExpanded: expanded,
     expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+    backgroundColor: Colors.grey[350],
     title: titleWithIcon(
-      'Happened last night', 
-      Icons.list_alt_outlined,
+      title, 
+      icon,
       alignment: MainAxisAlignment.start
     ),
     children: list
         .map((item) => Card(
                 child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(8.0),
               child: Text(
                 item,
                 textAlign: TextAlign.left,

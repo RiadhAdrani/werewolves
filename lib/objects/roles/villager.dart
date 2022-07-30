@@ -1,11 +1,12 @@
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
 
 class Villager extends RoleSingular {
   Villager(super.player);
 
   @override
-  bool canUseAbilities() {
+  bool canUseAbilitiesDuringNight() {
     return false;
   }
 
@@ -27,5 +28,15 @@ class Villager extends RoleSingular {
   @override
   List<String> getInformations(GameModel game) {
     return [];
+  }
+
+  @override
+  bool canUseAbilitiesDuringDay() {
+    return false;
+  }
+
+  @override
+  Teams getSupposedInitialTeam() {
+    return Teams.village;
   }
 }

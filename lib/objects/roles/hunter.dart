@@ -1,7 +1,8 @@
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/hunter_callsign.dart';
 import 'package:werewolves/objects/ability/hunter_hunt.dart';
@@ -17,7 +18,7 @@ class Hunter extends RoleSingular {
   }
 
   @override
-  bool canUseAbilities() {
+  bool canUseAbilitiesDuringNight() {
     return player.hasFatalEffect() ||
         !player.hasEffect(StatusEffectType.hasCallsign);
   }
@@ -46,11 +47,21 @@ class Hunter extends RoleSingular {
 
     if (!player.hasEffect(StatusEffectType.hasCallsign)) {
       return [
-        'You should tell the narrator a call sign that you may use during the day phase to kill a werewolf.',
-        'Missing the target and slaying an innocent villager will cause you to die too.'
+        'You should give the narrator a call sign that you may use during the day phase to kill a werewolf.',
       ];
     }
 
     return [];
   }
+
+  @override
+  bool canUseAbilitiesDuringDay() {
+    return true;
+  }
+
+  @override
+  Teams getSupposedInitialTeam() {
+    return Teams.village;
+  }
+  
 }

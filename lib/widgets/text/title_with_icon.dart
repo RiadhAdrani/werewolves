@@ -54,6 +54,7 @@ Widget titleWithIcon(
         Text(
           title,
           textAlign: TextAlign.center,
+          overflow: TextOverflow.fade,
           style: TextStyle(
               color: color,
               fontSize: 18,

@@ -1,7 +1,8 @@
 import 'package:uuid/uuid.dart';
 import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/transformers/strings/get_role_name.dart';
 
 const uuid = Uuid();
@@ -36,7 +37,10 @@ abstract class Role<T> {
   bool shouldBeCalledAtNight(GameModel game);
 
   /// Can the role use its abilities
-  bool canUseAbilities();
+  bool canUseAbilitiesDuringNight();
+
+  /// Can the role use its abilities
+  bool canUseAbilitiesDuringDay();
 
   /// Can the role use signs to communicate with the narrator during the dary.
   bool canUseSignWithNarrator();
@@ -61,4 +65,10 @@ abstract class Role<T> {
 
   /// Get the instructions ,advices and tips for the narrator.
   List<String> getAdvices(GameModel game);
+
+  /// Return the supposed initial role team.
+  /// This is used when distributing roles
+  /// and prgrammatically assign initial team
+  /// for players.
+  Teams getSupposedInitialTeam();
 }

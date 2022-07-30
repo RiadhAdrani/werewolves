@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/transformers/objects/convert_role_id.dart';
 import 'package:werewolves/utils/make_available_list.dart';
 
 class SelectedModel extends ChangeNotifier {
@@ -19,6 +20,10 @@ class SelectedModel extends ChangeNotifier {
 
   void remove(Role item) {
     _items.remove(item);
+  }
+
+  List<Role> generateList() {
+    return makeListFromId(_items.map((role) => role.id).toList()) ;
   }
 
   bool isSelected(Role item) {

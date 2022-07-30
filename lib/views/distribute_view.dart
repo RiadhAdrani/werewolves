@@ -34,9 +34,17 @@ class _DistributeViewState extends State<DistributeView> {
 
     void commit(String name) {
       setState(() {
+        /// We check if the typed paramter T is Player
+        /// We should not assign players to Team roles
+        /// It is the job of the game model to prepare.
         if (temp.player is Player) {
-          temp.setPlayer(Player(name));
+          var playerToAssign = Player(name);
+
+          playerToAssign.team = temp.getSupposedInitialTeam();
+
+          temp.setPlayer(playerToAssign);
         }
+
         _pickedRole = temp;
         _picked = [..._picked, _pickedRole!];
         _initial = _initial
@@ -55,8 +63,6 @@ class _DistributeViewState extends State<DistributeView> {
               String name = controller.text.trim();
 
               if (!checkPlayerName(name, _picked)) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Name is too short or already exits !')));
                 return;
               }
 
@@ -105,7 +111,7 @@ class _DistributeViewState extends State<DistributeView> {
     if (!_initialized) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {
-          _initial = Provider.of<SelectedModel>(context, listen: false).items;
+          _initial = Provider.of<SelectedModel>(context, listen: false).generateList();
           _initialized = true;
         });
       });

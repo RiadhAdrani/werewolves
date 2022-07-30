@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/views/distribute_view.dart';
 import 'package:werewolves/views/home_view.dart';

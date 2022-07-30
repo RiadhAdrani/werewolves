@@ -1,13 +1,14 @@
+import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/game_info.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/effects/was_protected_effect.dart';
 import 'package:werewolves/utils/game/resolve_seen_role.dart';
 
-void resolveStatusEffects(GameModel game) {
+void resolveEffectsAndCollectInfosOfNight(GameModel game) {
   game.getPlayersList().forEach((player) {
     final newEffects = <StatusEffect>[];
 
@@ -47,6 +48,14 @@ void resolveStatusEffects(GameModel game) {
 
           break;
 
+        ///
+        case StatusEffectType.shouldTalkFirst:
+          game.addGameInfo(GameInformation.talkInformation(
+              player, game.getState(), game.getCurrentTurn()));
+
+          player.removeStatusEffect(effect.type);
+          break;
+
         /// Common effects.
         /// Should only be removed.
         case StatusEffectType.wasProtected:
@@ -58,7 +67,6 @@ void resolveStatusEffects(GameModel game) {
         case StatusEffectType.isExecuted:
         case StatusEffectType.isSubstitue:
         case StatusEffectType.hasInheritedCaptaincy:
-        case StatusEffectType.shouldTalkFirst:
           player.removeStatusEffect(effect.type);
           break;
 
@@ -72,6 +80,20 @@ void resolveStatusEffects(GameModel game) {
     /// Apply new effects
     for (var effect in newEffects) {
       player.addStatusEffect(effect);
+    }
+  });
+}
+
+void resolveEffectsAndCollectInfosOfDay(GameModel game) {
+  game.getPlayersList().forEach((player) {
+    if (player.hasFatalEffect()) {
+      game.addGameInfo(
+        GameInformation.deathInformation(
+          player, 
+          GameState.day, 
+          game.getCurrentTurn()
+        )
+      );
     }
   });
 }

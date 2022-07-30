@@ -14,7 +14,7 @@ void showConfirmAlert(
           title: Text(title),
           content: Text(text),
           actions: [
-            standardTextButton('Nope', () => Navigator.pop(context)),
+            standardTextButton('Cancel', () => Navigator.pop(context)),
             standardTextButton('Confirm', () {
               Navigator.pop(context);
               onConfirm();

@@ -4,7 +4,7 @@ import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/ability.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/callsign_effect.dart';
@@ -36,7 +36,8 @@ class CallSignAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign);
+    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+        !(owner.player as Player).hasFatalEffect();
   }
 
   @override
@@ -51,11 +52,17 @@ class CallSignAbility extends Ability {
 
   @override
   bool isUnskippable() {
-    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign);
+    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+        !(owner.player as Player).hasFatalEffect();
   }
 
   @override
   String getDescription() {
     return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
+    return false;
   }
 }

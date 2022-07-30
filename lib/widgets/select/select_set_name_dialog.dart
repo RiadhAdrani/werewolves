@@ -14,11 +14,20 @@ AlertDialog setPlayerNameDialog(Role temp, TextEditingController controller,
       children: [
         TextField(
           controller: controller,
+          maxLength: 25,
           decoration: const InputDecoration(hintText: 'Enter player name'),
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.words,
         ),
         const Padding(padding: EdgeInsets.all(5)),
-        const Text('No duplicate name allowed', style: TextStyle(fontSize: 14)),
-        const Text('Minimum size is 3', style: TextStyle(fontSize: 14))
+        const Text('• No duplicate name allowed',
+            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+        const Text('• Minimum size is 3',
+            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+        const Text('• Maximum size is 25',
+            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+        const Text('• Only alphanumerical characters and space are allowed.',
+            style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))
       ],
     ),
     actions: [

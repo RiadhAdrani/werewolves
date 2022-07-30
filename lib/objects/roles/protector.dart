@@ -1,7 +1,8 @@
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/models/game_model.dart';
+import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/protector_protect.dart';
@@ -19,7 +20,7 @@ class Protector extends RoleSingular {
   }
 
   @override
-  bool canUseAbilities() {
+  bool canUseAbilitiesDuringNight() {
     return true;
   }
 
@@ -44,9 +45,20 @@ class Protector extends RoleSingular {
         game.getPlayersWithStatusEffects([StatusEffectType.wasProtected]);
 
     if (protected.isNotEmpty) {
-      output.add('You cannot protect (${protected[0].getName()}) in this night.');
+      output
+          .add('You cannot protect (${protected[0].getName()}) in this night.');
     }
 
     return output;
+  }
+
+  @override
+  bool canUseAbilitiesDuringDay() {
+    return false;
+  }
+
+  @override
+  Teams getSupposedInitialTeam() {
+    return Teams.village;
   }
 }

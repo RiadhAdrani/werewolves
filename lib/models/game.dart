@@ -1,29 +1,40 @@
 import 'package:flutter/cupertino.dart';
+import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
-import 'package:werewolves/constants/day_states.dart';
 import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/status_effects.dart';
+import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game_info.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/utils/check_game_balance.dart';
+import 'package:werewolves/utils/count_wolf_team.dart';
 import 'package:werewolves/utils/game/clear_status_effects.dart';
+import 'package:werewolves/utils/count_village_team.dart';
 import 'package:werewolves/utils/game/make_roles_from_initial_list.dart';
+import 'package:werewolves/widgets/alert/game_confirm_ability_use.dart';
+import 'package:werewolves/widgets/alert/game_over_alert.dart';
+import 'package:werewolves/widgets/alert/game_step_alert.dart';
 import 'package:werewolves/widgets/game/game_day_view.dart';
 import 'package:werewolves/widgets/game/game_init_view.dart';
 import 'package:werewolves/widgets/game/game_night_view.dart';
 import 'package:werewolves/widgets/game/game_standard_alert.dart';
+import 'package:werewolves/widgets/game/game_use_ability.dart';
+import 'package:werewolves/widgets/game/game_use_ability_done.dart';
 
 class GameModel extends ChangeNotifier {
   final List<Role> _roles = [];
   final List<Player> _graveyard = [];
   final List<GameInformation> _infos = [];
+  final List<Ability> _pendingAbilities = [];
+
+  bool gameOver = false;
 
   GameState _state = GameState.empty;
-  DayState _dayState = DayState.information;
 
   int _currentIndex = 0;
   int _currentTurn = 0;
@@ -43,12 +54,19 @@ class GameModel extends ChangeNotifier {
     }
   }
 
+  bool hasPendingAbilities() {
+    return _pendingAbilities.isNotEmpty;
+  }
+
   /// Return the current state.
   GameState getState() {
     return _state;
   }
 
   /// Return a list of alive players.
+  /// TODO: add an optional boolean for the addition of dead players
+  /// Used for possible future role `CHAMAN`
+  /// Add add them to the output list.
   List<Player> getPlayersList() {
     List<Player> output = [];
 
@@ -63,10 +81,11 @@ class GameModel extends ChangeNotifier {
       }
     }
 
-    // TODO: add an optional boolean for the addition of dead players
-    // Add add them to the output list.
-
     return output;
+  }
+
+  void addPendingAbility(Ability ability) {
+    _pendingAbilities.add(ability);
   }
 
   /// Initialize the game.
@@ -105,6 +124,62 @@ class GameModel extends ChangeNotifier {
   /// Use the given ability against the provided targets.
   List<Player> useAbility(Ability ability, List<Player> targets) {
     return _useAbility(ability, targets);
+  }
+
+  /// Specific use case for [useAbility] during the night
+  void useAbilitInNight(
+      Ability ability, List<Player> targets, BuildContext context) {
+    if (!ability.isForNight()) return;
+
+    var affected = useAbility(ability, targets);
+
+    Navigator.pop(context);
+
+    showAbilityAppliedMessage(
+        context, getAbilityAppliedMessage(ability, affected));
+  }
+
+  /// Specific use case for [useAbility] during the night
+  void useAbilityInDay(
+      Ability ability, List<Player> targets, BuildContext context) {
+    if (!ability.isForDay()) return;
+
+    _useAbility(ability, targets);
+
+    Navigator.pop(context);
+
+    notifyListeners();
+
+    _resolveRolesInteractionsAfterAbilityUsedInDay();
+
+    _collectPendingAbilityInDay();
+
+    if (_pendingAbilities.isNotEmpty) {
+      Ability currentPendingAbility = _pendingAbilities[0];
+
+      _pendingAbilities.removeAt(0);
+
+      notifyListeners();
+
+      showStepAlert(
+          '${currentPendingAbility.owner.getName()} should use his ability',
+          'Make sure everyone else is asleep!',
+          context, () {
+        showUseAbilityDialog(context, this, currentPendingAbility,
+            (List<Player> currentAbilityTargets) {
+          useAbilityInDay(
+              currentPendingAbility, currentAbilityTargets, context);
+        }, cancelable: false);
+      });
+    } else {
+      // resolveEffectsAndCollectInfosOfDay(this);
+
+      _eleminateDeadPlayers();
+
+      notifyListeners();
+
+      _gameOverCheck(context);
+    }
   }
 
   /// Return the appropriate message depending on the affected list.
@@ -158,12 +233,49 @@ class GameModel extends ChangeNotifier {
   }
 
   /// Return the list of the last night informations.
-  List<GameInformation> getEndOfNightSummary() {
+  List<GameInformation> getCurrentTurnSummary() {
     return _infos
         .where((item) =>
-            item.getPeriod() == GameState.night &&
-            item.getTurn() == _currentTurn)
+            item.getTurn() == _currentTurn &&
+            item.getPeriod() == GameState.night)
         .toList();
+  }
+
+  /// Return the list of the current day informations.
+  List<GameInformation> getCurrentDaySummary() {
+    return _infos
+        .where((item) =>
+            item.getTurn() == _currentTurn && item.getPeriod() == GameState.day)
+        .toList();
+  }
+
+  /// Return the abilities that could be used, by sign callers or others during the day phase.
+  List<Ability> getDayAbilities() {
+    final output = <Ability>[];
+
+    /// Fetch role that can use abilities and has a callsign
+    for (var role in _roles) {
+      if (role.canUseSignWithNarrator() && role.canUseAbilitiesDuringDay()) {
+        for (var ability in role.abilities) {
+          if (ability.isForDay() && ability.isUsable()) {
+            output.add(ability);
+          }
+        }
+      }
+    }
+
+    /// Add captain execution ability
+    for (var role in _roles) {
+      if (role.id == RoleId.captain) {
+        for (var ability in role.abilities) {
+          if (ability.name == AbilityId.execute) {
+            output.add(ability);
+          }
+        }
+      }
+    }
+
+    return output;
   }
 
   // PRIVATE METHODS
@@ -196,9 +308,11 @@ class GameModel extends ChangeNotifier {
   /// resolving status effects
   /// and eleminating dead souls.
   /// When everything is done, we transition into the day phase.
-  void _performPostNightProcessing() {
-    resolveStatusEffects(this);
+  void _performPostNightProcessing(BuildContext context) {
+    resolveEffectsAndCollectInfosOfNight(this);
     _eleminateDeadPlayers();
+
+    _gameOverCheck(context);
 
     _gameTransitionToDay();
   }
@@ -225,7 +339,7 @@ class GameModel extends ChangeNotifier {
   /// it means, in theory, that we exhausted all possible roles
   /// and so we perform night processing
   /// which will transition the game into the day phase.
-  void _setNextIndex() {
+  void _setNextIndex(BuildContext context) {
     if (_roles.isEmpty) return;
 
     int next = 999999;
@@ -247,7 +361,7 @@ class GameModel extends ChangeNotifier {
       _currentIndex = probablyNextIndex;
       notifyListeners();
     } else {
-      _performPostNightProcessing();
+      _performPostNightProcessing(context);
     }
   }
 
@@ -302,7 +416,6 @@ class GameModel extends ChangeNotifier {
   /// Transition into the day phase.
   void _gameTransitionToDay() {
     _state = GameState.day;
-    _dayState = DayState.information;
 
     notifyListeners();
   }
@@ -314,7 +427,7 @@ class GameModel extends ChangeNotifier {
   void _next(BuildContext context) {
     if (_state == GameState.night) {
       if (_checkAllUnskippableAbilitiesUse()) {
-        _setNextIndex();
+        _setNextIndex(context);
       } else {
         showStandardAlert(
             'Unable to proceed',
@@ -326,7 +439,7 @@ class GameModel extends ChangeNotifier {
 
   /// Check if the ability is available at the current night.
   bool _isAbilityAvailableAtNight(Ability ability) {
-    return ability.isNightOnly() &&
+    return ability.isForNight() &&
         ability.useCount != AbilityUseCount.none &&
         !ability.wasUsedInCurrentTurn(_currentTurn) &&
         ability.shouldBeAvailable();
@@ -372,6 +485,42 @@ class GameModel extends ChangeNotifier {
         role.setPlayer(player);
         return;
       }
+    }
+  }
+
+  /// Resolve specific roles interactions
+  /// after a day ability has been executed.
+  ///
+  /// If a lover is dead, make sure that the other lover is dead too.
+  void _resolveRolesInteractionsAfterAbilityUsedInDay() {
+    if (_state != GameState.day) return;
+
+    getPlayersList().forEach((player) {});
+  }
+
+  /// Collect pending abilities
+  void _collectPendingAbilityInDay() {
+    if (_state != GameState.day) return;
+
+    getPlayersList().forEach((player) {
+      if (player.hasFatalEffect()) {
+        for (var role in player.roles) {
+          for (var ability in role.abilities) {
+            if (ability.isUsable() && ability.shouldBeUsedOnOwnerDeath()) {
+              _pendingAbilities.add(ability);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  void _gameOverCheck(BuildContext context) {
+    dynamic result = checkTeamsAreBalanced(getPlayersList(), _roles);
+
+    if (result is Teams) {
+      gameOver = true;
+      showGameOverAlert(result, this, context);
     }
   }
 }
