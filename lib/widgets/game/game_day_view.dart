@@ -17,8 +17,14 @@ Widget gameDayView(GameModel game, BuildContext context) {
   List<String> dayInformations =
       game.getCurrentDaySummary().map((info) => info.getText()).toList();
 
-  List<String> alivePlayers =
-      game.getPlayersList().map((player) => player.getName()).toList();
+  List<String> alivePlayers = game
+      .getPlayersList()
+      .map((player) =>
+          '${player.getName()} (as ${player.getMainRole().getName()})')
+      .toList();
+
+  List<String> deadPlayers =
+      game.getDeadPlayers().map((player) => player.getName()).toList();
 
   return Scaffold(
     appBar: gameAppBar('Day (${game.getCurrentTurn()})', context,
@@ -46,18 +52,22 @@ Widget gameDayView(GameModel game, BuildContext context) {
                         nightInformations,
                         expanded: true),
                     daySectionView(
-                        'Day events', Icons.wb_sunny_outlined, dayInformations,
-                        expanded: true),
+                      'Day events',
+                      Icons.wb_sunny_outlined,
+                      dayInformations,
+                    ),
                     daySectionView(
                         'Alive Players', Icons.group_outlined, alivePlayers),
-                    daySectionView(
-                        'Phase 1 : Discussion', Icons.message_outlined, discussionSteps),
-                    daySectionView(
-                        'Phase 2 : Vote', Icons.how_to_vote_outlined, voteSteps),
-                    daySectionView(
-                        'Phase 3 : Defense', Icons.shield_outlined, defenseSteps),
-                    daySectionView(
-                        'Phase 4 : Execution', Icons.cancel_outlined, executionSteps),
+                    daySectionView('Dead Players', Icons.no_accounts_outlined,
+                        deadPlayers),
+                    daySectionView('Phase 1 : Discussion',
+                        Icons.message_outlined, discussionSteps),
+                    daySectionView('Phase 2 : Vote', Icons.how_to_vote_outlined,
+                        voteSteps),
+                    daySectionView('Phase 3 : Defense', Icons.shield_outlined,
+                        defenseSteps),
+                    daySectionView('Phase 4 : Execution', Icons.cancel_outlined,
+                        executionSteps),
                   ]),
                 ),
               )),

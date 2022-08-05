@@ -12,7 +12,9 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/utils/check_game_balance.dart';
+import 'package:werewolves/utils/game/calculate_new_team_for_servant.dart';
 import 'package:werewolves/utils/game/clear_status_effects.dart';
+import 'package:werewolves/utils/game/create_role_for_servant.dart';
 import 'package:werewolves/utils/game/make_roles_from_initial_list.dart';
 import 'package:werewolves/widgets/alert/game_over_alert.dart';
 import 'package:werewolves/widgets/alert/game_step_alert.dart';
@@ -79,6 +81,14 @@ class GameModel extends ChangeNotifier {
     }
 
     return output;
+  }
+
+  List<Player> getDeadPlayers() {
+    return _graveyard;
+  }
+
+  Role? getRole(RoleId id) {
+    return getRoleInGame(id, _roles);
   }
 
   void addPendingAbility(Ability ability) {
@@ -161,6 +171,7 @@ class GameModel extends ChangeNotifier {
       showStepAlert(
           '${currentPendingAbility.owner.getName()} should use his ability',
           'Make sure everyone else is asleep!',
+          getCurrentDaySummary().map((item) => item.getText()).toList(),
           context, () {
         showUseAbilityDialog(context, this, currentPendingAbility,
             (List<Player> currentAbilityTargets) {
@@ -252,7 +263,9 @@ class GameModel extends ChangeNotifier {
 
     /// Fetch role that can use abilities and has a callsign
     for (var role in _roles) {
-      if (role.canUseSignWithNarrator() && role.canUseAbilitiesDuringDay()) {
+      if (role.isObsolete() == false &&
+          role.canUseSignWithNarrator() &&
+          role.canUseAbilitiesDuringDay()) {
         for (var ability in role.abilities) {
           if (ability.isForDay() && ability.isUsable()) {
             output.add(ability);
@@ -263,7 +276,11 @@ class GameModel extends ChangeNotifier {
 
     /// Add captain execution ability
     for (var role in _roles) {
-      if (role.id == RoleId.captain) {
+      /// We check the captain is obsolete.
+      /// kinda useless but
+      /// There should only one instance of captain
+      /// within the list of roles.
+      if (role.isObsolete() == false && role.id == RoleId.captain) {
         for (var ability in role.abilities) {
           if (ability.name == AbilityId.execute) {
             output.add(ability);
@@ -275,6 +292,68 @@ class GameModel extends ChangeNotifier {
     return output;
   }
 
+  void skipCurrentRole(BuildContext context) {
+    _setNextIndex(context);
+  }
+
+  /// Perform needed tasks to transform the servant into its new role.
+  /// We create a new role from the first one,
+  /// and assign the [servant.player] as its player.
+  void onServedDeath(Role deadRole, Function useSituationalPostEffect) {
+    var servant = getRoleInGame(RoleId.servant, _roles);
+
+    /// The servant does not exist.
+    if (servant == null) {
+      return;
+    }
+
+    /// The servant is dead.
+    if (servant.isObsolete()) {
+      return;
+    }
+
+    /// Create a new role for the servant
+    var newRole = createRoleForServant(deadRole, servant.player);
+
+    /// A possible new team
+    var maybeNewTeam = calculateNewTeamForServant(newRole);
+
+    if (maybeNewTeam is Teams &&
+        maybeNewTeam != (servant.player as Player).team) {
+      (servant.player as Player).team = maybeNewTeam;
+    }
+
+    _roles.add(newRole);
+
+    /// Remove the [serving] effect from the servant player;
+    /// No need to remove the [served] effects
+    /// because the dead player will be sent to the graveyard.
+    (servant.player as Player).removeEffectsOfType(StatusEffectType.isServing);
+
+    /// Add the new role to the servant player.
+    (servant.player as Player).addRole(newRole);
+
+    /// check if the new role is a wolf role.
+    /// and add it to the wolfpack
+    if (newRole.isWolf) {
+      addMemberToGroup(servant.player, RoleId.wolfpack);
+    }
+
+    /// Remove the servant role from the servant player
+    /// This should come after the player have been added to the
+    /// wolfpack (if the dead role is a wolf)
+    /// because we use the [servant.player] which will be overriden
+    /// by [removeRoleOfType] and will be set to a dead player.
+    (servant.player as Player).removeRoleOfType(RoleId.servant);
+
+    /// Add to the game info.
+    addGameInfo(GameInformation.servantInformation(
+        deadRole.id, getState(), getCurrentTurn()));
+
+    /// Used to perform additional processing.
+    useSituationalPostEffect();
+  }
+
   // PRIVATE METHODS
   // DO NOT EXPOSE DIRECTLY
   // --------------------------------------------------------------------------
@@ -282,7 +361,7 @@ class GameModel extends ChangeNotifier {
   /// We assume that the player `hasFatalEffect()`.
   /// we set the status of survivability to false,
   /// add the player to the graveyard (r.i.p)
-  /// and finally add a game info
+  /// add a game info
   void _killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
     _graveyard.add(player);
@@ -356,6 +435,9 @@ class GameModel extends ChangeNotifier {
 
     if (probablyNextIndex != -1) {
       _currentIndex = probablyNextIndex;
+
+      getCurrent()!.beforeCallEffect(context, this);
+
       notifyListeners();
     } else {
       _performPostNightProcessing(context);
@@ -402,6 +484,8 @@ class GameModel extends ChangeNotifier {
   /// Increment the current turn
   /// and initialize the current index.
   void _gameTransitionToNight() {
+    _removeObsoleteRoles();
+
     _currentTurn = _currentTurn + 1;
     _state = GameState.night;
 
@@ -492,7 +576,45 @@ class GameModel extends ChangeNotifier {
   void _resolveRolesInteractionsAfterAbilityUsedInDay() {
     if (_state != GameState.day) return;
 
-    getPlayersList().forEach((player) {});
+    getPlayersList().forEach((player) {
+      /// If the captain is dead.
+      if (player.hasFatalEffect() &&
+          player.hasEffect(StatusEffectType.isServed)) {
+        Role theOldRole = getRole(player.getMainRole().id)!;
+
+        onServedDeath(theOldRole, () {
+          /// If the main role is captain,
+          /// we send the bastard to the graveyard.
+          /// Otherwise, we will be unable to use
+          /// the captain's abilities which
+          /// should not happen.
+          if (player.getMainRole().id == RoleId.captain) {
+            _killAndMovePlayerToGraveyard(theOldRole.player);
+          }
+
+          /// We should search for pending abilities manually.
+          /// We ignore the captain.
+          _collectPendingAbilityOfPlayer(player, ignored: [RoleId.captain]);
+
+          player.removeRoleOfType(theOldRole.id);
+        });
+      }
+    });
+  }
+
+  void _collectPendingAbilityOfPlayer(Player player,
+      {List<RoleId> ignored = const []}) {
+    for (var role in player.roles) {
+      if (ignored.contains(role.id)) continue;
+
+      for (var ability in role.abilities) {
+        if (ability.isUsable() &&
+            ability.shouldBeUsedOnOwnerDeath() &&
+            !_pendingAbilities.contains(ability)) {
+          _pendingAbilities.add(ability);
+        }
+      }
+    }
   }
 
   /// Collect pending abilities
@@ -501,13 +623,7 @@ class GameModel extends ChangeNotifier {
 
     getPlayersList().forEach((player) {
       if (player.hasFatalEffect()) {
-        for (var role in player.roles) {
-          for (var ability in role.abilities) {
-            if (ability.isUsable() && ability.shouldBeUsedOnOwnerDeath()) {
-              _pendingAbilities.add(ability);
-            }
-          }
-        }
+        _collectPendingAbilityOfPlayer(player);
       }
     });
   }
@@ -518,6 +634,20 @@ class GameModel extends ChangeNotifier {
     if (result is Teams) {
       gameOver = true;
       showGameOverAlert(result, this, context);
+    }
+  }
+
+  void _removeObsoleteRoles() {
+    var toRemove = <Role>[];
+
+    for (var role in _roles) {
+      if (role.isObsolete()) {
+        toRemove.add(role);
+      }
+    }
+
+    for (var role in toRemove) {
+      _roles.remove(role);
     }
   }
 }

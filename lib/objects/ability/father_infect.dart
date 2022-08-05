@@ -23,7 +23,7 @@ class InfectAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.removeStatusEffect(StatusEffectType.isDevoured);
+    target.removeEffectsOfType(StatusEffectType.isDevoured);
     target.addStatusEffect(InfectStatusEffect(owner));
   }
 
@@ -66,11 +66,6 @@ class InfectAbility extends Ability {
   @override
   bool isUnskippable() {
     return false;
-  }
-
-  @override
-  String getDescription() {
-    return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
   }
 
   @override

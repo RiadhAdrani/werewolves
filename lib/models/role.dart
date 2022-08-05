@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
@@ -83,4 +84,14 @@ abstract class Role<T> {
   String getDescription() {
     return getRoleDescription(id);
   }
+
+  /// Effects that will be executed
+  /// before the call of the player.
+  ///
+  /// Used mainly with a dead captain
+  /// chosen by the servant.
+  bool beforeCallEffect(BuildContext context, GameModel gameModel);
+
+  /// Force the role into an obsolete state.
+  void setObsolete();
 }

@@ -10,6 +10,10 @@ enum StatusEffectType {
   isHunted,
   isExecuted,
   isSubstitue,
+  isServed,
+  isServing,
+  isJudged,
+  wasJudged,
   hasCallsign,
   hasInheritedCaptaincy,
   shouldTalkFirst

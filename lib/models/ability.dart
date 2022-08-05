@@ -98,7 +98,9 @@ abstract class Ability {
   void usePostEffect(GameModel game, List<Player> affected);
 
   /// Generate ability detailed description;
-  String getDescription();
+  String getDescription() {
+    return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
+  }
 
   /// Check if this ability should be used when the owner is dead.
   bool shouldBeUsedOnOwnerDeath();

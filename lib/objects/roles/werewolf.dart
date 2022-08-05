@@ -1,3 +1,5 @@
+// ignore: implementation_imports
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/game.dart';
@@ -5,7 +7,7 @@ import 'package:werewolves/models/role_single.dart';
 
 class Werewolf extends RoleSingular {
   Werewolf(super.player) {
-    id = RoleId.werewolves;
+    id = RoleId.werewolf;
     isWolf = true;
 
     /// TODO : check for these cases when adding new roles
@@ -49,5 +51,10 @@ class Werewolf extends RoleSingular {
   @override
   Teams getSupposedInitialTeam() {
     return Teams.wolves;
+  }
+
+  @override
+  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+    return false;
   }
 }

@@ -28,5 +28,9 @@ String getAbilityName(AbilityId id) {
       return "Inherit";
     case AbilityId.callsign:
       return "Call sign";
+    case AbilityId.serve:
+      return "Serve";
+    case AbilityId.judgement:
+      return "Judge";
   }
 }

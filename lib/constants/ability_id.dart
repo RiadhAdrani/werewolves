@@ -1,4 +1,4 @@
-enum AbilityId{
+enum AbilityId {
   protect,
   devour,
   infect,
@@ -8,6 +8,8 @@ enum AbilityId{
   counter,
   hunt,
   callsign,
+  serve,
+  judgement,
 
   // captain
   talker,

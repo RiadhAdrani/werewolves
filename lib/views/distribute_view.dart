@@ -25,6 +25,22 @@ class _DistributeViewState extends State<DistributeView> {
 
   Role? _pickedRole;
 
+  void _fastCommitForTesting() {
+    setState(() {
+      _picked = _initial.map((item) {
+        var player = Player(item.getName());
+
+        player.team = item.getSupposedInitialTeam();
+
+        item.setPlayer(player);
+
+        return item;
+      }).toList();
+
+      _initial = [];
+    });
+  }
+
   void _pick(BuildContext context) {
     if (_initial.isEmpty) return;
 
@@ -111,7 +127,8 @@ class _DistributeViewState extends State<DistributeView> {
     if (!_initialized) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {
-          _initial = Provider.of<SelectedModel>(context, listen: false).generateList();
+          _initial =
+              Provider.of<SelectedModel>(context, listen: false).generateList();
           _initialized = true;
         });
       });
@@ -132,6 +149,9 @@ class _DistributeViewState extends State<DistributeView> {
       body: InkWell(
         onTap: () {
           _pick(context);
+        },
+        onLongPress: () {
+          _fastCommitForTesting();
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

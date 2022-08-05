@@ -20,11 +20,21 @@ abstract class RoleSingular extends Role<Player> {
 
   @override
   bool isObsolete() {
-    return !player.isAlive;
+    return player.isAlive == false;
   }
 
   @override
   bool playerIsFatallyWounded() {
     return player.hasFatalEffect();
+  }
+
+  @override
+  void setObsolete() {
+    var deadPlayer =
+        Player('this_is_a_dummy_dead_player_should_not_appear_in_game');
+
+    deadPlayer.isAlive = false;
+
+    player = deadPlayer;
   }
 }

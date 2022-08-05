@@ -24,16 +24,28 @@ class GameInformation {
 
   static GameInformation deathInformation(
       Player player, GameState period, int turn) {
-    return GameInformation('${player.getName()} has died.', turn, period);
+    return GameInformation('${player.getName()} died.', turn, period);
   }
 
   static GameInformation talkInformation(
       Player player, GameState period, int turn) {
-    return GameInformation('${player.getName()} start the discussion.', turn, period);
+    return GameInformation(
+        '${player.getName()} starts the discussion.', turn, period);
   }
 
   static GameInformation clairvoyanceInformation(
       RoleId role, GameState period, int turn) {
-    return GameInformation('${getRoleName(role)} true nature was revealed.', turn, period);
+    return GameInformation('The seer saw : ${getRoleName(role)}', turn, period);
+  }
+
+  static GameInformation servantInformation(
+      RoleId role, GameState period, int turn) {
+    return GameInformation(
+        'The servant became ${getRoleName(role)}.', turn, period);
+  }
+
+  static GameInformation judgeInformation(Player player, int turn) {
+    return GameInformation(
+        'The Judge portected ${player.getName()}.', turn, GameState.night);
   }
 }

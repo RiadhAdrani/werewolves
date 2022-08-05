@@ -1,3 +1,5 @@
+// ignore: implementation_imports
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
@@ -55,5 +57,10 @@ class FatherOfWolves extends RoleSingular {
   @override
   Teams getSupposedInitialTeam() {
     return Teams.wolves;
+  }
+
+  @override
+  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+    return false;
   }
 }

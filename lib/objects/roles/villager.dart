@@ -1,3 +1,5 @@
+// ignore: implementation_imports
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
@@ -38,5 +40,10 @@ class Villager extends RoleSingular {
   @override
   Teams getSupposedInitialTeam() {
     return Teams.village;
+  }
+
+  @override
+  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+    return false;
   }
 }

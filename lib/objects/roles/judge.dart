@@ -5,13 +5,13 @@ import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
-import 'package:werewolves/objects/ability/seer_clairvoyance.dart';
+import 'package:werewolves/objects/ability/judge_judgement.dart';
 
-class Seer extends RoleSingular {
-  Seer(super.player) {
-    id = RoleId.seer;
-    callingPriority = seerCallPriority;
-    abilities = [ClairvoyanceAbility(this)];
+class Judge extends RoleSingular {
+  Judge(super.player) {
+    id = RoleId.judge;
+    callingPriority = judgeCallPriority;
+    abilities = [JudgementAbility(this)];
   }
 
   @override
@@ -36,7 +36,11 @@ class Seer extends RoleSingular {
 
   @override
   List<String> getInformations(GameModel game) {
-    return ['Pick a target to reveale his true role.'];
+    return [
+      "The judge choose a player to protect.",
+      "The protected player cannot be voted on by the villagers.",
+      "The judge cannot choose the same player twice in a row."
+    ];
   }
 
   @override

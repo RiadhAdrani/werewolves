@@ -3,6 +3,7 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/father_of_wolves.dart';
 import 'package:werewolves/objects/roles/hunter.dart';
+import 'package:werewolves/objects/roles/judge.dart';
 import 'package:werewolves/objects/roles/knight.dart';
 import 'package:werewolves/objects/roles/protector.dart';
 import 'package:werewolves/objects/roles/seer.dart';
@@ -11,8 +12,7 @@ import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/objects/roles/witch.dart';
 
 List<Role> makeAvailableList() {
-
-  Player player () => Player("Placeholder_Player");
+  Player player() => Player("Placeholder_Player");
 
   return [
     Captain(player()),
@@ -23,6 +23,7 @@ List<Role> makeAvailableList() {
     Seer(player()),
     Villager(player()),
     Werewolf(player()),
-    Witch(player())
+    Witch(player()),
+    Judge(player())
   ];
 }

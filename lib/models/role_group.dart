@@ -10,7 +10,7 @@ abstract class RoleGroup extends Role<List<Player>> {
     }
   }
 
-  List<Player> getCurrentPlayers(){
+  List<Player> getCurrentPlayers() {
     return player.where((player) => !player.isDead()).toList();
   }
 
@@ -54,5 +54,10 @@ abstract class RoleGroup extends Role<List<Player>> {
     for (var member in this.player) {
       member.roles.add(this);
     }
+  }
+
+  @override
+  void setObsolete() {
+    player = [];
   }
 }

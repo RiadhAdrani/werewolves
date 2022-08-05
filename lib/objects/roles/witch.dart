@@ -1,3 +1,5 @@
+// ignore: implementation_imports
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
@@ -61,5 +63,10 @@ class Witch extends RoleSingular {
   @override
   Teams getSupposedInitialTeam() {
     return Teams.village;
+  }
+
+  @override
+  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+    return false;
   }
 }

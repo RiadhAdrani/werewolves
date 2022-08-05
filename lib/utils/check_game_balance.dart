@@ -30,7 +30,7 @@ dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
 
 Role? getRoleInGame(RoleId id, List<Role> roles) {
   for (var role in roles) {
-    if (role.id == id) {
+    if (role.id == id && !role.isObsolete()) {
       return role;
     }
   }

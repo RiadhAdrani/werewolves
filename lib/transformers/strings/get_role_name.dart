@@ -4,7 +4,7 @@ String getRoleName(RoleId role) {
   switch (role) {
     case RoleId.protector:
       return "Protector";
-    case RoleId.werewolves:
+    case RoleId.werewolf:
       return "Werewolf";
     case RoleId.fatherOfWolves:
       return "Infect, Father of wolves";
@@ -22,5 +22,9 @@ String getRoleName(RoleId role) {
       return "Villager";
     case RoleId.wolfpack:
       return "Wolfpack";
+    case RoleId.servant:
+      return "Servant";
+    case RoleId.judge:
+      return "Judge";
   }
 }

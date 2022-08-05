@@ -50,13 +50,16 @@ class _SelectRolesViewState extends State<SelectRolesView> {
             onPressed: (() => {_next(context)}),
             child: const Icon(Icons.done),
           ),
-          body: ListView(
-            children: value.available
-                .map((role) =>
-                    selectRoleButtonView(role, value.isSelected(role), () {
-                      value.toggleSelected(role);
-                    }))
-                .toList(),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              children: value.available
+                  .map((role) =>
+                      selectRoleButtonView(role, value.isSelected(role), () {
+                        value.toggleSelected(role);
+                      }))
+                  .toList(),
+            ),
           ),
         );
       }),

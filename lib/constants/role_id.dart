@@ -1,6 +1,6 @@
-enum RoleId{
+enum RoleId {
   protector,
-  werewolves,
+  werewolf,
   fatherOfWolves,
   witch,
   seer,
@@ -8,5 +8,7 @@ enum RoleId{
   hunter,
   captain,
   villager,
-  wolfpack
+  wolfpack,
+  servant,
+  judge
 }

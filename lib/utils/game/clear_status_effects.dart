@@ -5,12 +5,22 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/objects/effects/was_judged_effect.dart';
 import 'package:werewolves/objects/effects/was_protected_effect.dart';
 import 'package:werewolves/utils/game/resolve_seen_role.dart';
 
 void resolveEffectsAndCollectInfosOfNight(GameModel game) {
   game.getPlayersList().forEach((player) {
     final newEffects = <StatusEffect>[];
+
+    // if (player.hasFatalEffect() &&
+    //     player.hasEffect(StatusEffectType.isServed)) {
+    //   if (player.hasEffect(StatusEffectType.isServed)) {
+    //     var mainRole = player.getMainRole();
+
+    //     game.onServedDeath(mainRole, () {});
+    //   }
+    // }
 
     for (var effect in player.effects) {
       /// do not remove premanent or fatal effects.
@@ -28,13 +38,13 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
         /// add [wasProtected] effect
         /// so he won't be targeted by the protector in the next turn.
         case StatusEffectType.isProtected:
-          player.removeStatusEffect(effect.type);
+          player.removeEffectsOfType(effect.type);
           newEffects.add(WasProtectedStatusEffect(effect.source));
           break;
 
         /// Add seen role and add a game info.
         case StatusEffectType.isSeen:
-          player.removeStatusEffect(effect.type);
+          player.removeEffectsOfType(effect.type);
 
           /// If the seer is dead, we do not report anything
           if ((effect.source as RoleSingular).player.hasFatalEffect()) {
@@ -48,12 +58,22 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
 
           break;
 
-        ///
+        /// Judge protection
+        /// Role cannot be protected by the judge two consecutive rounds.
+        case StatusEffectType.isJudged:
+          player.removeEffectsOfType(effect.type);
+          newEffects.add(WasJudgedStatusEffect(effect.source));
+
+          game.addGameInfo(
+              GameInformation.judgeInformation(player, game.getCurrentTurn()));
+          break;
+
+        /// Captain order
         case StatusEffectType.shouldTalkFirst:
           game.addGameInfo(GameInformation.talkInformation(
               player, game.getState(), game.getCurrentTurn()));
 
-          player.removeStatusEffect(effect.type);
+          player.removeEffectsOfType(effect.type);
           break;
 
         /// Common effects.
@@ -67,12 +87,15 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
         case StatusEffectType.isExecuted:
         case StatusEffectType.isSubstitue:
         case StatusEffectType.hasInheritedCaptaincy:
-          player.removeStatusEffect(effect.type);
+        case StatusEffectType.wasJudged:
+          player.removeEffectsOfType(effect.type);
           break;
 
         /// Unreachable code because these effects are premanent.
         case StatusEffectType.hasCallsign:
         case StatusEffectType.isInfected:
+        case StatusEffectType.isServed:
+        case StatusEffectType.isServing:
           break;
       }
     }
@@ -87,13 +110,8 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
 void resolveEffectsAndCollectInfosOfDay(GameModel game) {
   game.getPlayersList().forEach((player) {
     if (player.hasFatalEffect()) {
-      game.addGameInfo(
-        GameInformation.deathInformation(
-          player, 
-          GameState.day, 
-          game.getCurrentTurn()
-        )
-      );
+      game.addGameInfo(GameInformation.deathInformation(
+          player, GameState.day, game.getCurrentTurn()));
     }
   });
 }
