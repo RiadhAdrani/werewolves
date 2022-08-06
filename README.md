@@ -1,16 +1,26 @@
-# werewolves
+# Werewolves
 
-A new Flutter project.
+An app to manage your game of `Loup garous de thiercelieu` also known as `The Werewolves of Millers Hollow`.
 
-## Getting Started
+Read about the game [here](https://en.wikipedia.org/wiki/The_Werewolves_of_Millers_Hollow).
 
-This project is a starting point for a Flutter application.
+## Why ?
 
-A few resources to get you started if this is your first Flutter project:
+Managing a game of `Werewolves` is a complicated task for the `narrator` (The game master), it requires memorizing the role of each player, the weird interactions and the actions performed by each one of them. It could be manageable for a small group of players (7-10), but when we cranck up the number, we need to have a pen and a paper to avoid messing up the game, and for this reason, I decided to create an application.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Roles
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The currently verified working roles:
+
+-   `Protector (Salvateur)`
+-   `Werewolf (Loup garou simple)`
+-   `Father of Wolves (Loup père infecte)`
+-   `Witch (Sorcière)`
+-   `Seer (Voyante)`
+-   `Knight (Chevalier)`
+-   `Hunter (Chasseur/Barbier)`
+-   `Judge (Juge)`
+-   `Captain (Capitaine)`
+-   `Villager (Simple villageois)`
+
+_Note : This version of the game does not inherit all the rules of the original one._
