@@ -13,6 +13,8 @@ enum StatusEffectType {
   isServed,
   isServing,
   isJudged,
+  isMuted,
+  wasMuted,
   wasJudged,
   hasCallsign,
   hasInheritedCaptaincy,

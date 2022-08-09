@@ -26,5 +26,7 @@ String getRoleName(RoleId role) {
       return "Servant";
     case RoleId.judge:
       return "Judge";
+    case RoleId.blackWolf:
+      return "Black Wolf";
   }
 }

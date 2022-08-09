@@ -1,6 +1,7 @@
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/father_of_wolves.dart';
 import 'package:werewolves/objects/roles/hunter.dart';
@@ -54,6 +55,9 @@ List<Role> makeListFromId(List<RoleId> listOfUid) {
         break;
       case RoleId.judge:
         list.add(Judge(player));
+        break;
+      case RoleId.blackWolf:
+        list.add(BlackWolf(player));
         break;
     }
   }

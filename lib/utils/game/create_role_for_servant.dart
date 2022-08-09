@@ -1,6 +1,7 @@
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/father_of_wolves.dart';
 import 'package:werewolves/objects/roles/hunter.dart';
@@ -51,6 +52,9 @@ Role createRoleForServant(Role oldRole, Player servantPlayer) {
       break;
     case RoleId.judge:
       role = Judge(dummy);
+      break;
+    case RoleId.blackWolf:
+      role = BlackWolf(dummy);
       break;
   }
 

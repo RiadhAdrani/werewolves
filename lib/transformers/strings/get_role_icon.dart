@@ -30,5 +30,7 @@ String getRoleIconPath(RoleId role) {
       return base('simple_villager');
     case RoleId.judge:
       return base('simple_villager');
+    case RoleId.blackWolf:
+      return base('werewolf');
   }
 }

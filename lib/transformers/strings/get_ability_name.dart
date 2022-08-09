@@ -32,5 +32,7 @@ String getAbilityName(AbilityId id) {
       return "Serve";
     case AbilityId.judgement:
       return "Judge";
+    case AbilityId.mute:
+      return "Mute";
   }
 }

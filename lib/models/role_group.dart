@@ -18,7 +18,7 @@ abstract class RoleGroup extends Role<List<Player>> {
   String getPlayerName() {
     if (player.isEmpty) return 'There is no one in this group.';
 
-    return getCurrentPlayers().map((player) => player.name).join(", ");
+    return getCurrentPlayers().map((player) => player.name).join(" | ");
   }
 
   bool hasAtLeastOneSurvivingMember() {

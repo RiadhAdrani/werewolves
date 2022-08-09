@@ -10,5 +10,6 @@ enum RoleId {
   villager,
   wolfpack,
   servant,
-  judge
+  judge,
+  blackWolf,
 }

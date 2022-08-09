@@ -12,9 +12,8 @@ Widget roleInfoIconNamePlayer(Role role) {
       ),
       Text(
         '(${role.getPlayerName()})',
-        style: const TextStyle(fontSize: 18, fontStyle: FontStyle.italic),
+        style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
       ),
-      
     ]),
   );
 }

@@ -48,4 +48,9 @@ class GameInformation {
     return GameInformation(
         'The Judge portected ${player.getName()}.', turn, GameState.night);
   }
+
+  static GameInformation mutedInformation(Player player, int turn) {
+    return GameInformation(
+        '${player.getName()} is muted.', turn, GameState.night);
+  }
 }

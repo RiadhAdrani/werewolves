@@ -10,6 +10,7 @@ enum AbilityId {
   callsign,
   serve,
   judgement,
+  mute,
 
   // captain
   talker,
