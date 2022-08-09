@@ -11,6 +11,7 @@ enum AbilityId {
   serve,
   judgement,
   mute,
+  word,
 
   // captain
   talker,

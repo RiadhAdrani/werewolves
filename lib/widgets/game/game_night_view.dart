@@ -7,7 +7,7 @@ import 'package:werewolves/widgets/game/game_night_view_role_info.dart';
 
 Widget gameNightView(GameModel game, BuildContext context) {
   return Scaffold(
-    appBar: gameAppBar('Night (${game.getCurrentTurn()})', context,
+    appBar: gameAppBar('Night (${game.getCurrentTurn()})', context, game,
         backgroundColor: Colors.blueGrey[900]!, textColor: Colors.white),
     body: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -16,9 +16,13 @@ Widget gameNightView(GameModel game, BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           roleInfoIconNamePlayer(game.getCurrent()!),
-          Divider(color: Colors.blueGrey[100],),
+          Divider(
+            color: Colors.blueGrey[100],
+          ),
           importantInformationsView(game.getCurrent()!.getInformations(game)),
-          Divider(color: Colors.blueGrey[100],),
+          Divider(
+            color: Colors.blueGrey[100],
+          ),
           abilitiesView(game, context),
           TextButton(
               onPressed: () {

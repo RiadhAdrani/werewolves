@@ -12,4 +12,5 @@ enum RoleId {
   servant,
   judge,
   blackWolf,
+  garrulousWolf
 }

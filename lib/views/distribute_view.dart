@@ -100,7 +100,7 @@ class _DistributeViewState extends State<DistributeView> {
         height: 450,
         child: ListView(
           children: list.map((role) {
-            return roleWithPlayerName(role);
+            return roleWithPlayerName(role, context);
           }).toList(),
         ),
       ),

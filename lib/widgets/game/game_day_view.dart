@@ -27,7 +27,7 @@ Widget gameDayView(GameModel game, BuildContext context) {
       game.getDeadPlayers().map((player) => player.getName()).toList();
 
   return Scaffold(
-    appBar: gameAppBar('Day (${game.getCurrentTurn()})', context,
+    appBar: gameAppBar('Day (${game.getCurrentTurn()})', context, game,
         backgroundColor: Colors.blue[100]!),
     body: Padding(
       padding: const EdgeInsets.all(0.0),

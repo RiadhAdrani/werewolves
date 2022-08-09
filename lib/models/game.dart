@@ -38,6 +38,10 @@ class GameModel extends ChangeNotifier {
   int _currentIndex = 0;
   int _currentTurn = 0;
 
+  List<Role> getRolesForDebug() {
+    return _roles;
+  }
+
   /// Return the correct widget to be displayed
   /// during the current `state`.
   Widget viewToDisplay(BuildContext context) {

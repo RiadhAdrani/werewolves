@@ -93,6 +93,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
         case StatusEffectType.wasProtected:
         case StatusEffectType.wasJudged:
         case StatusEffectType.wasMuted:
+        case StatusEffectType.shouldSayTheWord:
           player.removeEffectsOfType(effect.type);
           break;
 

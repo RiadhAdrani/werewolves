@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/selected_model.dart';
@@ -8,6 +9,10 @@ import 'package:werewolves/views/select_view.dart';
 import 'package:werewolves/widgets/game/game_arguments_extractor.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
   runApp(
     ChangeNotifierProvider(
         create: (context) => SelectedModel(), child: const MyApp()),
@@ -31,8 +36,8 @@ class MyApp extends StatelessWidget {
             child: const GameArgumentsExtractor())
       },
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.blueGrey,
+          buttonTheme: ButtonThemeData(splashColor: Colors.blueGrey[100])),
     );
   }
 }
