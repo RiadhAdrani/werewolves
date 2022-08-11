@@ -9,6 +9,7 @@ class Werewolf extends RoleSingular {
   Werewolf(super.player) {
     id = RoleId.werewolf;
     isWolf = true;
+    isUnique = false;
 
     /// TODO : check for these cases when adding new roles
     /// A servant with [love effect] transformed into a werewolf should not change its team.

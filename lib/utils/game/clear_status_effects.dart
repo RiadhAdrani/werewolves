@@ -1,5 +1,7 @@
+import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/status_effects.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game_info.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -12,6 +14,8 @@ import 'package:werewolves/objects/effects/was_protected_effect.dart';
 import 'package:werewolves/utils/game/resolve_seen_role.dart';
 
 void resolveEffectsAndCollectInfosOfNight(GameModel game) {
+  int currentTurn = game.getCurrentTurn();
+
   game.getPlayersList().forEach((player) {
     final newEffects = <StatusEffect>[];
 
@@ -45,8 +49,8 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           newEffects.add(WasMutedStatusEffect(effect.source));
 
           if (!(effect.source.player as Player).hasFatalEffect()) {
-            game.addGameInfo(GameInformation.mutedInformation(
-                player, game.getCurrentTurn()));
+            game.addGameInfo(
+                GameInformation.mutedInformation(player, currentTurn));
           }
 
           break;
@@ -63,7 +67,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           Role role = resolveSeenRole(player);
 
           game.addGameInfo(GameInformation.clairvoyanceInformation(
-              role.id, game.getState(), game.getCurrentTurn()));
+              role.id, game.getState(), currentTurn));
 
           break;
 
@@ -74,13 +78,34 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           newEffects.add(WasJudgedStatusEffect(effect.source));
 
           game.addGameInfo(
-              GameInformation.judgeInformation(player, game.getCurrentTurn()));
+              GameInformation.judgeInformation(player, currentTurn));
           break;
 
         /// Captain ------------------------------------------------------
         case StatusEffectType.shouldTalkFirst:
           game.addGameInfo(GameInformation.talkInformation(
-              player, game.getState(), game.getCurrentTurn()));
+              player, game.getState(), currentTurn));
+
+          player.removeEffectsOfType(effect.type);
+          break;
+
+        /// Shepherd -----------------------------------------------------
+        case StatusEffectType.hasSheep:
+
+          /// If the playe has a wolf role
+          /// We should remove one sheep
+          /// which in our case is the target count.
+          if (player.hasWolfRole()) {
+            Ability shepherdAbility =
+                effect.source.getAbilityOfType(AbilityId.sheeps)!;
+
+            shepherdAbility.targetCount--;
+            game.addGameInfo(
+                GameInformation.sheepInformation(true, currentTurn));
+          } else {
+            game.addGameInfo(
+                GameInformation.sheepInformation(false, currentTurn));
+          }
 
           player.removeEffectsOfType(effect.type);
           break;
@@ -120,10 +145,12 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
 }
 
 void resolveEffectsAndCollectInfosOfDay(GameModel game) {
+  int currentTurn = game.getCurrentTurn();
+
   game.getPlayersList().forEach((player) {
     if (player.hasFatalEffect()) {
-      game.addGameInfo(GameInformation.deathInformation(
-          player, GameState.day, game.getCurrentTurn()));
+      game.addGameInfo(
+          GameInformation.deathInformation(player, GameState.day, currentTurn));
     }
   });
 }

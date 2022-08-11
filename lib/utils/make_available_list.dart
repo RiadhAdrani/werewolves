@@ -10,6 +10,7 @@ import 'package:werewolves/objects/roles/judge.dart';
 import 'package:werewolves/objects/roles/knight.dart';
 import 'package:werewolves/objects/roles/protector.dart';
 import 'package:werewolves/objects/roles/seer.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/objects/roles/witch.dart';
@@ -56,6 +57,9 @@ List<Role> makeAvailableList() {
         break;
       case RoleId.garrulousWolf:
         output.add(GarrulousWolf(player()));
+        break;
+      case RoleId.shepherd:
+        output.add(Shepherd(player()));
         break;
 
       /// Not ready for production -------------------------------------------

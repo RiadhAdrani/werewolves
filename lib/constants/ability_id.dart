@@ -12,6 +12,7 @@ enum AbilityId {
   judgement,
   mute,
   word,
+  sheeps,
 
   // captain
   talker,

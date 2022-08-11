@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
+import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
@@ -19,6 +20,7 @@ abstract class Role<T> {
   List<Ability> abilities = [];
   bool isWolf = false;
   bool isGroupRole = false;
+  bool isUnique = true;
 
   Role(this.player);
 
@@ -39,6 +41,22 @@ abstract class Role<T> {
   /// Check if the role is meant to be treated as a group.
   bool isGroup() {
     return isGroupRole;
+  }
+
+  /// Get role description
+  String getDescription() {
+    return getRoleDescription(id);
+  }
+
+  /// Return the first ability of the given type if it exists.
+  Ability? getAbilityOfType(AbilityId ability) {
+    for (int i = 0; i < abilities.length; i++) {
+      if (abilities[i].name == ability) {
+        return abilities[i];
+      }
+    }
+
+    return null;
   }
 
   /// Should the role be called during the night.
@@ -79,11 +97,6 @@ abstract class Role<T> {
   /// and prgrammatically assign initial team
   /// for players.
   Teams getSupposedInitialTeam();
-
-  /// Get role description
-  String getDescription() {
-    return getRoleDescription(id);
-  }
 
   /// Effects that will be executed
   /// before the call of the player.

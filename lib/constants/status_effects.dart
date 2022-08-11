@@ -19,7 +19,8 @@ enum StatusEffectType {
   hasCallsign,
   hasInheritedCaptaincy,
   shouldTalkFirst,
-  shouldSayTheWord
+  shouldSayTheWord,
+  hasSheep
 }
 
 const List<StatusEffectType> fatalStatusEffects = [
@@ -40,7 +41,6 @@ String statusEffectTypeToString(StatusEffectType effect) {
       return 'isProtected';
     case StatusEffectType.wasProtected:
       return 'wasProtected';
-      break;
     case StatusEffectType.isDevoured:
       return 'isDevoured';
     case StatusEffectType.isInfected:
@@ -76,8 +76,10 @@ String statusEffectTypeToString(StatusEffectType effect) {
     case StatusEffectType.hasInheritedCaptaincy:
       return 'hasInheritedCaptaincy';
     case StatusEffectType.shouldTalkFirst:
-      return 'ShouldTalkFirst';
+      return 'shouldTalkFirst';
     case StatusEffectType.shouldSayTheWord:
-      return 'ShouldSayTheWord';
+      return 'shouldSayTheWord';
+    case StatusEffectType.hasSheep:
+      return "hasSheep";
   }
 }

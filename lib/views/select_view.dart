@@ -43,9 +43,10 @@ class _SelectRolesViewState extends State<SelectRolesView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<SelectedModel>(
-      builder: ((context, value, child) {
+      builder: ((context, selectController, child) {
         return Scaffold(
-          appBar: AppBar(title: Text('Selected roles (${value.items.length})')),
+          appBar: AppBar(
+              title: Text('Selected roles (${selectController.items.length})')),
           floatingActionButton: FloatingActionButton(
             onPressed: (() => {_next(context)}),
             child: const Icon(Icons.done),
@@ -53,10 +54,19 @@ class _SelectRolesViewState extends State<SelectRolesView> {
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(
-              children: value.available
-                  .map((role) =>
-                      selectRoleButtonView(role, value.isSelected(role), () {
-                        value.toggleSelected(role);
+              children: selectController.available
+                  .map((role) => selectRoleButtonView(
+                          role,
+                          selectController.isSelected(role),
+                          selectController.countNumber(role.id), () {
+                        selectController.toggleSelected(role);
+                      }, () {
+                        if (selectController.countNumber(role.id) > 0 &&
+                            role.isUnique == false) {
+                          selectController.addCount(role);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Added role')));
+                        }
                       }))
                   .toList(),
             ),

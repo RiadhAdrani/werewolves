@@ -53,4 +53,11 @@ class GameInformation {
     return GameInformation(
         '${player.getName()} is muted.', turn, GameState.night);
   }
+
+  static GameInformation sheepInformation(bool killed, int turn) {
+    return GameInformation(
+        killed ? 'A sheep was killed' : 'A sheep returned to the shepherd.',
+        turn,
+        GameState.night);
+  }
 }

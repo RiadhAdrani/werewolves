@@ -1,6 +1,10 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
+import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/villager.dart';
+import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/transformers/objects/convert_role_id.dart';
 import 'package:werewolves/utils/make_available_list.dart';
 
@@ -23,21 +27,52 @@ class SelectedModel extends ChangeNotifier {
   }
 
   List<Role> generateList() {
-    return makeListFromId(_items.map((role) => role.id).toList()) ;
+    return makeListFromId(_items.map((role) => role.id).toList());
   }
 
   bool isSelected(Role item) {
-    try {
-      _items.firstWhere((element) => element.instanceId == item.instanceId);
-      return true;
-    } catch (e) {
-      return false;
+    return countNumber(item.id) > 0;
+  }
+
+  int countNumber(RoleId id) {
+    int count = 0;
+
+    for (var role in _items) {
+      if (role.id == id) count++;
     }
+
+    return count;
+  }
+
+  void addCount(Role role) {
+    if (role.isUnique) return;
+
+    if (role.id == RoleId.villager) {
+      add(Villager(Player('dummy_villager')));
+    }
+
+    if (role.id == RoleId.werewolf) {
+      add(Werewolf(Player('dummy_wolf')));
+    }
+
+    notifyListeners();
   }
 
   void toggleSelected(Role item) {
     if (isSelected(item)) {
-      remove(item);
+      if (item.isUnique) {
+        remove(item);
+      } else {
+        if (countNumber(item.id) > 0) {
+          for (var role in _items) {
+            if (role.id == item.id) {
+              /// Remove one instance;
+              _items.remove(role);
+              break;
+            }
+          }
+        }
+      }
     } else {
       add(item);
     }

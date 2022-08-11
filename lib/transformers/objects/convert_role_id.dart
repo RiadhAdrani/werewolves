@@ -11,6 +11,7 @@ import 'package:werewolves/objects/roles/knight.dart';
 import 'package:werewolves/objects/roles/protector.dart';
 import 'package:werewolves/objects/roles/seer.dart';
 import 'package:werewolves/objects/roles/servant.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/objects/roles/witch.dart';
@@ -62,6 +63,9 @@ List<Role> makeListFromId(List<RoleId> listOfUid) {
         break;
       case RoleId.garrulousWolf:
         list.add(GarrulousWolf(player));
+        break;
+      case RoleId.shepherd:
+        list.add(Shepherd(player));
         break;
     }
   }
