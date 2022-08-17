@@ -1,3 +1,4 @@
+import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/player.dart';
@@ -15,8 +16,22 @@ dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
 
   if (villagersCount == wolvesCount) {
     Role? protector = getRoleInGame(RoleId.protector, roles);
+    Role? witch = getRoleInGame(RoleId.witch, roles);
+    Role? knight = getRoleInGame(RoleId.knight, roles);
 
-    if (protector == null || protector.player.team != Teams.village) {
+    bool protectorCanWinIt = protector != null && protector.player.team == Teams.village;
+
+    bool witchCanWinIt = (witch != null &&
+        witch.player.team == Teams.village &&
+        (witch.hasUnusedAbility(AbilityId.curse) || witch.hasUnusedAbility(AbilityId.revive)));
+
+    bool knightCanWinIt = (knight != null &&
+        knight.player.team == Teams.village &&
+        knight.hasUnusedAbility(AbilityId.counter));
+
+    bool continuable = protectorCanWinIt || witchCanWinIt || knightCanWinIt;
+
+    if (!continuable) {
       return Teams.wolves;
     }
   }

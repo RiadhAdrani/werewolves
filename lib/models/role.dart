@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 import 'package:werewolves/constants/ability_id.dart';
+import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
@@ -57,6 +58,27 @@ abstract class Role<T> {
     }
 
     return null;
+  }
+
+  /// Return if the role has a certain ability by its `id`.
+  bool hasAbility(AbilityId id) {
+    for (Ability ability in abilities) {
+      if (ability.name == id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool hasUnusedAbility(AbilityId id) {
+    for (Ability ability in abilities) {
+      if (ability.name == id && ability.useCount != AbilityUseCount.none) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /// Should the role be called during the night.
