@@ -13,5 +13,6 @@ enum RoleId {
   judge,
   blackWolf,
   garrulousWolf,
-  shepherd
+  shepherd,
+  alien
 }

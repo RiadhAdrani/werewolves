@@ -22,7 +22,7 @@ import 'package:werewolves/widgets/game/game_day_view.dart';
 import 'package:werewolves/widgets/game/game_init_view.dart';
 import 'package:werewolves/widgets/game/game_night_view.dart';
 import 'package:werewolves/widgets/game/game_standard_alert.dart';
-import 'package:werewolves/widgets/game/game_use_ability.dart';
+import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/game/game_use_ability_done.dart';
 
 class GameModel extends ChangeNotifier {
@@ -40,6 +40,18 @@ class GameModel extends ChangeNotifier {
 
   List<Role> getRolesForDebug() {
     return _roles;
+  }
+
+  List<Role> getPlayableRoles() {
+    List<Role> output = [];
+
+    for (Role role in _roles) {
+      if (!role.isObsolete()) {
+        output.add(role);
+      }
+    }
+
+    return output;
   }
 
   /// Return the correct widget to be displayed
@@ -138,21 +150,18 @@ class GameModel extends ChangeNotifier {
   }
 
   /// Specific use case for [useAbility] during the night
-  void useAbilitInNight(
-      Ability ability, List<Player> targets, BuildContext context) {
+  void useAbilitInNight(Ability ability, List<Player> targets, BuildContext context) {
     if (!ability.isForNight()) return;
 
     var affected = useAbility(ability, targets);
 
     Navigator.pop(context);
 
-    showAbilityAppliedMessage(
-        context, getAbilityAppliedMessage(ability, affected));
+    showAbilityAppliedMessage(context, getAbilityAppliedMessage(ability, affected));
   }
 
-  /// Specific use case for [useAbility] during the night
-  void useAbilityInDay(
-      Ability ability, List<Player> targets, BuildContext context) {
+  /// Specific use case for [useAbility] during the day
+  void useAbilityInDay(Ability ability, List<Player> targets, BuildContext context) {
     if (!ability.isForDay()) return;
 
     _useAbility(ability, targets);
@@ -179,8 +188,7 @@ class GameModel extends ChangeNotifier {
           context, () {
         showUseAbilityDialog(context, this, currentPendingAbility,
             (List<Player> currentAbilityTargets) {
-          useAbilityInDay(
-              currentPendingAbility, currentAbilityTargets, context);
+          useAbilityInDay(currentPendingAbility, currentAbilityTargets, context);
         }, cancelable: false);
       });
     } else {
@@ -247,17 +255,14 @@ class GameModel extends ChangeNotifier {
   /// Return the list of the last night informations.
   List<GameInformation> getCurrentTurnSummary() {
     return _infos
-        .where((item) =>
-            item.getTurn() == _currentTurn &&
-            item.getPeriod() == GameState.night)
+        .where((item) => item.getTurn() == _currentTurn && item.getPeriod() == GameState.night)
         .toList();
   }
 
   /// Return the list of the current day informations.
   List<GameInformation> getCurrentDaySummary() {
     return _infos
-        .where((item) =>
-            item.getTurn() == _currentTurn && item.getPeriod() == GameState.day)
+        .where((item) => item.getTurn() == _currentTurn && item.getPeriod() == GameState.day)
         .toList();
   }
 
@@ -322,8 +327,7 @@ class GameModel extends ChangeNotifier {
     /// A possible new team
     var maybeNewTeam = calculateNewTeamForServant(newRole);
 
-    if (maybeNewTeam is Teams &&
-        maybeNewTeam != (servant.player as Player).team) {
+    if (maybeNewTeam is Teams && maybeNewTeam != (servant.player as Player).team) {
       (servant.player as Player).team = maybeNewTeam;
     }
 
@@ -351,8 +355,7 @@ class GameModel extends ChangeNotifier {
     (servant.player as Player).removeRoleOfType(RoleId.servant);
 
     /// Add to the game info.
-    addGameInfo(GameInformation.servantInformation(
-        deadRole.id, getState(), getCurrentTurn()));
+    addGameInfo(GameInformation.servantInformation(deadRole.id, getState(), getCurrentTurn()));
 
     /// Used to perform additional processing.
     useSituationalPostEffect();
@@ -405,8 +408,7 @@ class GameModel extends ChangeNotifier {
   /// `Protector` should use his `shield` every turn.
   bool _checkAllUnskippableAbilitiesUse() {
     for (var ability in getCurrent()!.abilities) {
-      if (ability.wasUsedInCurrentTurn(_currentTurn) == false &&
-          ability.isUnskippable()) {
+      if (ability.wasUsedInCurrentTurn(_currentTurn) == false && ability.isUnskippable()) {
         return false;
       }
     }
@@ -434,8 +436,7 @@ class GameModel extends ChangeNotifier {
       }
     }
 
-    var probablyNextIndex =
-        _roles.indexWhere((element) => element.callingPriority == next);
+    var probablyNextIndex = _roles.indexWhere((element) => element.callingPriority == next);
 
     if (probablyNextIndex != -1) {
       _currentIndex = probablyNextIndex;
@@ -463,8 +464,7 @@ class GameModel extends ChangeNotifier {
       }
     }
 
-    _currentIndex =
-        _roles.indexWhere((element) => element.callingPriority == min);
+    _currentIndex = _roles.indexWhere((element) => element.callingPriority == min);
   }
 
   /// Create appropriate `RoleGroups` and override the current list of roles.
@@ -514,10 +514,8 @@ class GameModel extends ChangeNotifier {
       if (_checkAllUnskippableAbilitiesUse()) {
         _setNextIndex(context);
       } else {
-        showStandardAlert(
-            'Unable to proceed',
-            'At least one mandatory ability was not used during this turn.',
-            context);
+        showStandardAlert('Unable to proceed',
+            'At least one mandatory ability was not used during this turn.', context);
       }
     }
   }
@@ -582,8 +580,7 @@ class GameModel extends ChangeNotifier {
 
     getPlayersList().forEach((player) {
       /// If the captain is dead.
-      if (player.hasFatalEffect() &&
-          player.hasEffect(StatusEffectType.isServed)) {
+      if (player.hasFatalEffect() && player.hasEffect(StatusEffectType.isServed)) {
         Role theOldRole = getRole(player.getMainRole().id)!;
 
         onServedDeath(theOldRole, () {
@@ -606,8 +603,7 @@ class GameModel extends ChangeNotifier {
     });
   }
 
-  void _collectPendingAbilityOfPlayer(Player player,
-      {List<RoleId> ignored = const []}) {
+  void _collectPendingAbilityOfPlayer(Player player, {List<RoleId> ignored = const []}) {
     for (var role in player.roles) {
       if (ignored.contains(role.id)) continue;
 

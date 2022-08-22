@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/ability.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/utils/append_plural_s.dart';
@@ -10,11 +9,9 @@ import 'package:werewolves/widgets/alert/game_info_alert.dart';
 import 'package:werewolves/widgets/buttons/standard_text_button.dart';
 import 'package:werewolves/widgets/cards/target_player_card.dart';
 
-void showUseAbilityDialog(BuildContext context, GameModel game, Ability ability,
-    Function onAbilityUsed,
+void showNormalAbilityDialog(
+    BuildContext context, Ability ability, List<Player> targetList, Function onAbilityUsed,
     {bool cancelable = true}) {
-  List<Player> targetList = ability.createListOfTargetPlayers(game);
-
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -27,8 +24,7 @@ void showUseAbilityDialog(BuildContext context, GameModel game, Ability ability,
             return WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
-                title:
-                    Text("${ability.getName()} (${ability.owner.getName()})"),
+                title: Text("${ability.getName()} (${ability.owner.getName()})"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,8 +41,7 @@ void showUseAbilityDialog(BuildContext context, GameModel game, Ability ability,
                       height: 300,
                       child: ListView(
                         children: targetList.map((target) {
-                          return targetPlayerCard(
-                              target, model.isSelected(target), () {
+                          return targetPlayerCard(target, model.isSelected(target), () {
                             model.toggleSelected(target);
                           });
                         }).toList(),

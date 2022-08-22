@@ -1,6 +1,7 @@
 import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
+import 'package:werewolves/constants/ability_ui.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -18,12 +19,16 @@ abstract class Ability {
   late AbilityUseCount useCount;
   late AbilityTime time;
 
+  AbilityUI ui = AbilityUI.normal;
+
   /// Execute the ability on targets.
   List<Player> use(List<Player> targets, int turn) {
     List<Player> appliedTo = [];
 
     if (isUsable() && targets.isNotEmpty) {
-      targets.sublist(0, targetCount).forEach((target) {
+      var subList = targetCount == 99 ? targets : targets.sublist(0, targetCount);
+
+      for (var target in subList) {
         turnsUsedIn.add(turn);
 
         if (shouldBeAppliedSurely(target)) {
@@ -35,7 +40,7 @@ abstract class Ability {
             useCount = AbilityUseCount.none;
           }
         }
-      });
+      }
     }
 
     return appliedTo;

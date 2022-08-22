@@ -1,6 +1,7 @@
 import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/father_of_wolves.dart';
@@ -60,6 +61,9 @@ List<Role> makeAvailableList() {
         break;
       case RoleId.shepherd:
         output.add(Shepherd(player()));
+        break;
+      case RoleId.alien:
+        output.add(Alien(player()));
         break;
 
       /// Not ready for production -------------------------------------------

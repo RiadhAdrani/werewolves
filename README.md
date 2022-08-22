@@ -25,5 +25,6 @@ The currently verified working roles (french version):
 -   `Black Werewolf (Loup noir)`
 -   `Garrulous Werewolf (Loup bavard)`
 -   `Shepherd (Berger)`
+-   `Alien (Alien)`
 
 _Note : This version of the game does not inherit all the rules from the original one, some abilities are changed/altered due to some limitations._

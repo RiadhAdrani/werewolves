@@ -8,5 +8,7 @@ String getTeamName(Teams team) {
       return 'Wolves';
     case Teams.cupid:
       return 'Lovers';
+    case Teams.alien:
+      return 'Alien';
   }
 }

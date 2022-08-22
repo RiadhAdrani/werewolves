@@ -9,5 +9,6 @@ const seerCallPriority = 5000;
 const shepherdCallPriority = 5500;
 const knightCallPriority = 6000;
 const hunterCallPriority = 7000;
+const alienCallPriority = 7200;
 const judgeCallPriority = 7500;
 const captainCallPriority = 8000;

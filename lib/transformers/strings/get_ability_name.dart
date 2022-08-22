@@ -38,5 +38,7 @@ String getAbilityName(AbilityId id) {
       return "Garrulous Word";
     case AbilityId.sheeps:
       return "Sheeps";
+    case AbilityId.guess:
+      return "Guess";
   }
 }

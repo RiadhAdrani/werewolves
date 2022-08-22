@@ -1,6 +1,5 @@
 enum StatusEffectType {
   isProtected,
-  wasProtected,
   isDevoured,
   isInfected,
   isCursed,
@@ -14,13 +13,18 @@ enum StatusEffectType {
   isServing,
   isJudged,
   isMuted,
+  isGuessed,
+
   wasMuted,
+  wasProtected,
   wasJudged,
+
   hasCallsign,
   hasInheritedCaptaincy,
+  hasSheep,
+
   shouldTalkFirst,
   shouldSayTheWord,
-  hasSheep
 }
 
 const List<StatusEffectType> fatalStatusEffects = [
@@ -28,7 +32,8 @@ const List<StatusEffectType> fatalStatusEffects = [
   StatusEffectType.isDevoured,
   StatusEffectType.isHunted,
   StatusEffectType.isCountered,
-  StatusEffectType.isExecuted
+  StatusEffectType.isExecuted,
+  StatusEffectType.isGuessed
 ];
 
 bool isFatalEffect(StatusEffectType effect) {
@@ -81,5 +86,7 @@ String statusEffectTypeToString(StatusEffectType effect) {
       return 'shouldSayTheWord';
     case StatusEffectType.hasSheep:
       return "hasSheep";
+    case StatusEffectType.isGuessed:
+      return "isGuessed";
   }
 }

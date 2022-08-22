@@ -49,8 +49,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           newEffects.add(WasMutedStatusEffect(effect.source));
 
           if (!(effect.source.player as Player).hasFatalEffect()) {
-            game.addGameInfo(
-                GameInformation.mutedInformation(player, currentTurn));
+            game.addGameInfo(GameInformation.mutedInformation(player, currentTurn));
           }
 
           break;
@@ -66,8 +65,8 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
 
           Role role = resolveSeenRole(player);
 
-          game.addGameInfo(GameInformation.clairvoyanceInformation(
-              role.id, game.getState(), currentTurn));
+          game.addGameInfo(
+              GameInformation.clairvoyanceInformation(role.id, game.getState(), currentTurn));
 
           break;
 
@@ -77,14 +76,12 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           player.removeEffectsOfType(effect.type);
           newEffects.add(WasJudgedStatusEffect(effect.source));
 
-          game.addGameInfo(
-              GameInformation.judgeInformation(player, currentTurn));
+          game.addGameInfo(GameInformation.judgeInformation(player, currentTurn));
           break;
 
         /// Captain ------------------------------------------------------
         case StatusEffectType.shouldTalkFirst:
-          game.addGameInfo(GameInformation.talkInformation(
-              player, game.getState(), currentTurn));
+          game.addGameInfo(GameInformation.talkInformation(player, game.getState(), currentTurn));
 
           player.removeEffectsOfType(effect.type);
           break;
@@ -96,15 +93,12 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           /// We should remove one sheep
           /// which in our case is the target count.
           if (player.hasWolfRole()) {
-            Ability shepherdAbility =
-                effect.source.getAbilityOfType(AbilityId.sheeps)!;
+            Ability shepherdAbility = effect.source.getAbilityOfType(AbilityId.sheeps)!;
 
             shepherdAbility.targetCount--;
-            game.addGameInfo(
-                GameInformation.sheepInformation(true, currentTurn));
+            game.addGameInfo(GameInformation.sheepInformation(true, currentTurn));
           } else {
-            game.addGameInfo(
-                GameInformation.sheepInformation(false, currentTurn));
+            game.addGameInfo(GameInformation.sheepInformation(false, currentTurn));
           }
 
           player.removeEffectsOfType(effect.type);
@@ -133,6 +127,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
         case StatusEffectType.isInfected:
         case StatusEffectType.isServed:
         case StatusEffectType.isServing:
+        case StatusEffectType.isGuessed:
           break;
       }
     }
@@ -149,8 +144,7 @@ void resolveEffectsAndCollectInfosOfDay(GameModel game) {
 
   game.getPlayersList().forEach((player) {
     if (player.hasFatalEffect()) {
-      game.addGameInfo(
-          GameInformation.deathInformation(player, GameState.day, currentTurn));
+      game.addGameInfo(GameInformation.deathInformation(player, GameState.day, currentTurn));
     }
   });
 }
