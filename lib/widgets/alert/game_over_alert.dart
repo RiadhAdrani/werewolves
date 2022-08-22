@@ -13,11 +13,14 @@ void showGameOverAlert(Teams team, GameModel game, BuildContext context) {
           onWillPop: () async => false,
           child: AlertDialog(
             title: const Text('Game over !'),
-            content: Text('The ${getTeamName(team)} Team won !', textAlign: TextAlign.left,),
+            content: Text(
+              'The ${getTeamName(team)} Team won !',
+              textAlign: TextAlign.left,
+            ),
             actions: [
               standardTextButton('Leave', () {
                 game.dispose();
-                Navigator.pushNamed(context, '/');
+                Navigator.popUntil(context, ModalRoute.withName("/"));
               }),
             ],
           ),

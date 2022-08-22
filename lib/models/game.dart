@@ -79,7 +79,6 @@ class GameModel extends ChangeNotifier {
   }
 
   /// Return a list of alive players.
-  /// TODO: add an optional boolean for the addition of dead players
   /// Used for possible future role `CHAMAN`
   /// Add add them to the output list.
   List<Player> getPlayersList() {
@@ -174,32 +173,41 @@ class GameModel extends ChangeNotifier {
 
     _collectPendingAbilityInDay();
 
-    if (_pendingAbilities.isNotEmpty) {
-      Ability currentPendingAbility = _pendingAbilities[0];
+    void useNext() {
+      if (_pendingAbilities.isNotEmpty) {
+        Ability currentPendingAbility = _pendingAbilities[0];
 
-      _pendingAbilities.removeAt(0);
+        _pendingAbilities.removeAt(0);
 
-      notifyListeners();
+        notifyListeners();
 
-      showStepAlert(
-          '${currentPendingAbility.owner.getName()} should use his ability',
-          'Make sure everyone else is asleep!',
-          getCurrentDaySummary().map((item) => item.getText()).toList(),
-          context, () {
-        showUseAbilityDialog(context, this, currentPendingAbility,
-            (List<Player> currentAbilityTargets) {
-          useAbilityInDay(currentPendingAbility, currentAbilityTargets, context);
-        }, cancelable: false);
-      });
-    } else {
-      // resolveEffectsAndCollectInfosOfDay(this);
+        if (currentPendingAbility.createListOfTargetPlayers(this).isEmpty) {
+          useNext();
+          return;
+        }
 
-      _eleminateDeadPlayers();
+        showStepAlert(
+            '${currentPendingAbility.owner.getName()} should use his ability',
+            'Make sure everyone else is asleep!',
+            getCurrentDaySummary().map((item) => item.getText()).toList(),
+            context, () {
+          showUseAbilityDialog(context, this, currentPendingAbility,
+              (List<Player> currentAbilityTargets) {
+            useAbilityInDay(currentPendingAbility, currentAbilityTargets, context);
+          }, cancelable: false);
+        });
+      } else {
+        // resolveEffectsAndCollectInfosOfDay(this);
 
-      notifyListeners();
+        _eleminateDeadPlayers();
 
-      _gameOverCheck(context);
+        notifyListeners();
+
+        _gameOverCheck(context);
+      }
     }
+
+    useNext();
   }
 
   /// Return the appropriate message depending on the affected list.
@@ -408,7 +416,9 @@ class GameModel extends ChangeNotifier {
   /// `Protector` should use his `shield` every turn.
   bool _checkAllUnskippableAbilitiesUse() {
     for (var ability in getCurrent()!.abilities) {
-      if (ability.wasUsedInCurrentTurn(_currentTurn) == false && ability.isUnskippable()) {
+      if (ability.wasUsedInCurrentTurn(_currentTurn) == false &&
+          ability.isUnskippable() &&
+          ability.createListOfTargetPlayers(this).isNotEmpty) {
         return false;
       }
     }

@@ -9,7 +9,7 @@ void onGameExit(BuildContext context) {
             actions: [
               TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/');
+                    Navigator.popUntil(context, ModalRoute.withName("/"));
                   },
                   child: const Text('Leave game')),
               TextButton(

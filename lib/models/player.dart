@@ -47,8 +47,7 @@ class Player {
     final newList = <StatusEffect>[];
 
     for (var effect in effects) {
-      if (exception.contains(effect.type) ||
-          !fatalStatusEffects.contains(effect.type)) {
+      if (exception.contains(effect.type) || !fatalStatusEffects.contains(effect.type)) {
         newList.add(effect);
       }
     }
@@ -71,9 +70,7 @@ class Player {
     roles.removeWhere((role) {
       if (role.id == id) {
         if (role.isGroup()) {
-          (role as RoleGroup)
-              .player
-              .removeWhere((Player player) => player.id == this.id);
+          (role as RoleGroup).player.removeWhere((Player player) => player.id == this.id);
         } else {
           var dummyDeadVillager = Player("this_player_name_should_not_appear");
           dummyDeadVillager.isAlive = false;
@@ -139,9 +136,10 @@ class Player {
   }
 
   /// Resolve the main role of the player
-  /// 
+  ///
   /// ### uses:
   /// - Reveal the true form for the seer.
+  /// - Retrieve the main role for the alien.
   /// - Resolve the main role for the servant.
   Role getMainRole() {
     if (roles.isEmpty) return Villager(Player(''));

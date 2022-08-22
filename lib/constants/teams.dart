@@ -1,1 +1,1 @@
-enum Teams { village, wolves, cupid, alien }
+enum Teams { equality, village, wolves, cupid, alien }

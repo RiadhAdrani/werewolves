@@ -10,6 +10,7 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/father_infect_effect.dart';
+import 'package:werewolves/objects/roles/wolfpack.dart';
 
 class InfectAbility extends Ability {
   InfectAbility(Role owner) {
@@ -29,8 +30,7 @@ class InfectAbility extends Ability {
 
   @override
   bool isTarget(Player target) {
-    return target.hasEffect(StatusEffectType.isDevoured) &&
-        !target.hasWolfRole();
+    return target.hasEffect(StatusEffectType.isDevoured) && !target.hasWolfRole();
   }
 
   @override
@@ -56,9 +56,9 @@ class InfectAbility extends Ability {
 
     var newMember = affected[0];
 
-    /// TODO: check if the infected is a solo
-    /// Solo can't join the wolves team.
-    newMember.team = Teams.wolves;
+    if (Wolfpack.shouldJoinWolfpackUponInfection(newMember)) {
+      newMember.team = Teams.wolves;
+    }
 
     game.addMemberToGroup(newMember, RoleId.wolfpack);
   }

@@ -10,5 +10,7 @@ String getTeamName(Teams team) {
       return 'Lovers';
     case Teams.alien:
       return 'Alien';
+    case Teams.equality:
+      return 'Null';
   }
 }
