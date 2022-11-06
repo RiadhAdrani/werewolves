@@ -3,6 +3,21 @@ import 'package:uuid/uuid.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
+import 'package:werewolves/objects/roles/alien.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
+import 'package:werewolves/objects/roles/captain.dart';
+import 'package:werewolves/objects/roles/father_of_wolves.dart';
+import 'package:werewolves/objects/roles/garrulous_wolf.dart';
+import 'package:werewolves/objects/roles/hunter.dart';
+import 'package:werewolves/objects/roles/judge.dart';
+import 'package:werewolves/objects/roles/knight.dart';
+import 'package:werewolves/objects/roles/protector.dart';
+import 'package:werewolves/objects/roles/seer.dart';
+import 'package:werewolves/objects/roles/servant.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
+import 'package:werewolves/objects/roles/villager.dart';
+import 'package:werewolves/objects/roles/werewolf.dart';
+import 'package:werewolves/objects/roles/witch.dart';
 import 'package:werewolves/transformers/strings/get_role_description.dart';
 import 'package:werewolves/transformers/strings/get_role_name.dart';
 import 'package:werewolves/transformers/strings/get_role_icon.dart';
@@ -259,4 +274,64 @@ abstract class RoleGroup extends Role<List<Player>> {
   void setObsolete() {
     player = [];
   }
+}
+
+List<Role> makeListFromId(List<RoleId> listOfIds) {
+  final list = <Role>[];
+
+  final player = Player("dummy Player");
+
+  for (var element in listOfIds) {
+    switch (element) {
+      case RoleId.protector:
+        list.add(Protector(player));
+        break;
+      case RoleId.werewolf:
+        list.add(Werewolf(player));
+        break;
+      case RoleId.fatherOfWolves:
+        list.add(FatherOfWolves(player));
+        break;
+      case RoleId.witch:
+        list.add(Witch(player));
+        break;
+      case RoleId.seer:
+        list.add(Seer(player));
+        break;
+      case RoleId.knight:
+        list.add(Knight(player));
+        break;
+      case RoleId.hunter:
+        list.add(Hunter(player));
+        break;
+      case RoleId.captain:
+        list.add(Captain(player));
+        break;
+      case RoleId.villager:
+        list.add(Villager(player));
+        break;
+      case RoleId.wolfpack:
+        break;
+      case RoleId.servant:
+        list.add(Servant(player));
+        break;
+      case RoleId.judge:
+        list.add(Judge(player));
+        break;
+      case RoleId.blackWolf:
+        list.add(BlackWolf(player));
+        break;
+      case RoleId.garrulousWolf:
+        list.add(GarrulousWolf(player));
+        break;
+      case RoleId.shepherd:
+        list.add(Shepherd(player));
+        break;
+      case RoleId.alien:
+        list.add(Alien(player));
+        break;
+    }
+  }
+
+  return list;
 }

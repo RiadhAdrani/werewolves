@@ -4,7 +4,6 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
-import 'package:werewolves/transformers/objects/convert_role_id.dart';
 import 'package:werewolves/utils/make_available_list.dart';
 
 class SelectedModel extends ChangeNotifier {
