@@ -6,7 +6,6 @@ import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/utils/check_game_balance.dart';
 import 'package:werewolves/utils/game/clear_status_effects.dart';
-import 'package:werewolves/utils/game/make_roles_from_initial_list.dart';
 import 'package:werewolves/widgets/alert/game_over_alert.dart';
 import 'package:werewolves/widgets/alert/game_step_alert.dart';
 import 'package:werewolves/widgets/game/game_day_view.dart';

@@ -18,6 +18,7 @@ import 'package:werewolves/objects/roles/shepherd.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/objects/roles/witch.dart';
+import 'package:werewolves/objects/roles/wolfpack.dart';
 
 const uuid = Uuid();
 
@@ -331,6 +332,28 @@ List<Role> makeListFromId(List<RoleId> listOfIds) {
   }
 
   return list;
+}
+
+List<Role> makeRolesFromInitialList(List<Role> input) {
+  // role Groups to be added
+  var wolfpack = <Player>[];
+
+  // output
+  var output = <Role>[];
+
+  for (var role in input) {
+    if (role.isWolf) {
+      wolfpack.add(role.player as Player);
+    }
+
+    if (!role.isGroup()) {
+      output.add(role);
+    }
+  }
+
+  output.add(Wolfpack(wolfpack));
+
+  return output;
 }
 
 String getRoleDescription(RoleId role) {
