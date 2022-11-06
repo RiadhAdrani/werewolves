@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_ui.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/models/game.dart';
@@ -135,3 +134,5 @@ enum AbilityId {
 }
 
 enum AbilityTime { night, day, both }
+
+enum AbilityType { active, passive, both }
