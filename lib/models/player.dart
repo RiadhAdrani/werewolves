@@ -5,6 +5,21 @@ import 'package:werewolves/objects/roles/villager.dart';
 
 enum Team { equality, village, wolves, cupid, alien }
 
+String getTeamName(Team team) {
+  switch (team) {
+    case Team.village:
+      return 'Village';
+    case Team.wolves:
+      return 'Wolves';
+    case Team.cupid:
+      return 'Lovers';
+    case Team.alien:
+      return 'Alien';
+    case Team.equality:
+      return 'Null';
+  }
+}
+
 const uuid = Uuid();
 
 class Player {

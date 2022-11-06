@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
-import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/captain.dart';
@@ -18,9 +18,6 @@ import 'package:werewolves/objects/roles/shepherd.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/objects/roles/witch.dart';
-import 'package:werewolves/transformers/strings/get_role_description.dart';
-import 'package:werewolves/transformers/strings/get_role_name.dart';
-import 'package:werewolves/transformers/strings/get_role_icon.dart';
 
 const uuid = Uuid();
 
@@ -334,4 +331,87 @@ List<Role> makeListFromId(List<RoleId> listOfIds) {
   }
 
   return list;
+}
+
+String getRoleDescription(RoleId role) {
+  // TODO : description for roles
+  return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
+}
+
+String getRoleIconPath(RoleId role) {
+  String base(String icon) {
+    return 'assets/$icon.png';
+  }
+
+  switch (role) {
+    case RoleId.protector:
+      return base('protector');
+    case RoleId.werewolf:
+      return base('werewolf');
+    case RoleId.fatherOfWolves:
+      return base('father_wolf');
+    case RoleId.witch:
+      return base('witch');
+    case RoleId.seer:
+      return base('seer');
+    case RoleId.knight:
+      return base('knight');
+    case RoleId.hunter:
+      return base('hunter');
+    case RoleId.captain:
+      return base('captain');
+    case RoleId.villager:
+      return base('simple_villager');
+    case RoleId.wolfpack:
+      return base('werewolf');
+    case RoleId.servant:
+      return base('simple_villager');
+    case RoleId.judge:
+      return base('simple_villager');
+    case RoleId.blackWolf:
+      return base('werewolf');
+    case RoleId.garrulousWolf:
+      return base('werewolf');
+    case RoleId.shepherd:
+      return base('simple_villager');
+    case RoleId.alien:
+      return base('simple_villager');
+  }
+}
+
+String getRoleName(RoleId role) {
+  switch (role) {
+    case RoleId.protector:
+      return "Protector";
+    case RoleId.werewolf:
+      return "Werewolf";
+    case RoleId.fatherOfWolves:
+      return "Father of wolves";
+    case RoleId.witch:
+      return "Witch";
+    case RoleId.seer:
+      return "Seer";
+    case RoleId.knight:
+      return "Knight";
+    case RoleId.hunter:
+      return "Hunter";
+    case RoleId.captain:
+      return "Captain";
+    case RoleId.villager:
+      return "Villager";
+    case RoleId.wolfpack:
+      return "Wolfpack";
+    case RoleId.servant:
+      return "Servant";
+    case RoleId.judge:
+      return "Judge";
+    case RoleId.blackWolf:
+      return "Black Wolf";
+    case RoleId.garrulousWolf:
+      return 'Garrulous Wolf';
+    case RoleId.shepherd:
+      return 'Shepherd';
+    case RoleId.alien:
+      return "Alien";
+  }
 }

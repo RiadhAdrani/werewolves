@@ -16,7 +16,6 @@ import 'package:werewolves/widgets/game/game_night_view.dart';
 import 'package:werewolves/widgets/game/game_standard_alert.dart';
 import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/game/game_use_ability_done.dart';
-import 'package:werewolves/transformers/strings/get_role_name.dart';
 
 enum GameState {
   empty,

@@ -1,5 +1,5 @@
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/transformers/strings/get_team_name.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/utils/check_game_balance.dart';
 import 'package:werewolves/utils/extract_players_from_role_list.dart';
 

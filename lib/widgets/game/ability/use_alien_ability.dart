@@ -5,7 +5,6 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/alien.dart';
-import 'package:werewolves/transformers/strings/get_role_name.dart';
 import 'package:werewolves/widgets/buttons/standard_text_button.dart';
 
 void showAlienAbilityDialog(
