@@ -1,9 +1,10 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/objects/ability/wolfpack_devour.dart';
+import 'package:werewolves/models/status_effect.dart';
 
 class Wolfpack extends RoleGroup {
   Wolfpack(super.player) {
@@ -77,5 +78,64 @@ class Wolfpack extends RoleGroup {
       case RoleId.alien:
         return false;
     }
+  }
+}
+
+class DevourEffect extends StatusEffect {
+  DevourEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = StatusEffectType.isDevoured;
+  }
+}
+
+class DevourAbility extends Ability {
+  DevourAbility(Role owner) {
+    super.targetCount = 1;
+    super.name = AbilityId.devour;
+    super.type = AbilityType.active;
+    super.useCount = AbilityUseCount.infinite;
+    super.time = AbilityTime.night;
+    super.owner = owner;
+  }
+
+  @override
+  void callOnTarget(Player target) {
+    target.addStatusEffect(DevourEffect(owner));
+  }
+
+  @override
+  bool isTarget(Player target) {
+    return true;
+  }
+
+  @override
+  bool shouldBeAppliedSurely(Player target) {
+    return !target.hasEffect(StatusEffectType.isProtected);
+  }
+
+  @override
+  bool shouldBeAvailable() {
+    return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'No body has been devoured';
+
+    return '${targets[0].name} has been devoured.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
+    return false;
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
+    return false;
   }
 }
