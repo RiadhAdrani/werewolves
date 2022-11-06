@@ -41,7 +41,7 @@ class Protector extends RoleSingular {
     ];
 
     List<Player> protected =
-        game.getPlayersWithStatusEffects([StatusEffectType.wasProtected]);
+        game.getPlayersWithStatusEffects([EffectId.wasProtected]);
 
     if (protected.isNotEmpty) {
       output
@@ -67,19 +67,19 @@ class Protector extends RoleSingular {
   }
 }
 
-class ProtectedEffect extends StatusEffect {
+class ProtectedEffect extends Effect {
   ProtectedEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isProtected;
+    type = EffectId.isProtected;
   }
 }
 
-class WasProtectedEffect extends StatusEffect {
+class WasProtectedEffect extends Effect {
   WasProtectedEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.wasProtected;
+    type = EffectId.wasProtected;
   }
 }
 
@@ -100,7 +100,7 @@ class ProtectAbility extends Ability {
 
   @override
   bool isTarget(Player target) {
-    return !target.hasEffect(StatusEffectType.wasProtected);
+    return !target.hasEffect(EffectId.wasProtected);
   }
 
   @override

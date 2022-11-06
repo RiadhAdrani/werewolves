@@ -60,11 +60,11 @@ class Shepherd extends RoleSingular {
   }
 }
 
-class SheepEffect extends StatusEffect {
+class SheepEffect extends Effect {
   SheepEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.hasSheep;
+    type = EffectId.hasSheep;
   }
 }
 

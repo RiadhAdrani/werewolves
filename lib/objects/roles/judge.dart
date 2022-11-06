@@ -58,19 +58,19 @@ class Judge extends RoleSingular {
   }
 }
 
-class JudgedEffect extends StatusEffect {
+class JudgedEffect extends Effect {
   JudgedEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isJudged;
+    type = EffectId.isJudged;
   }
 }
 
-class WasJudgedEffect extends StatusEffect {
+class WasJudgedEffect extends Effect {
   WasJudgedEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.wasJudged;
+    type = EffectId.wasJudged;
   }
 }
 
@@ -91,7 +91,7 @@ class JudgementAbility extends Ability {
 
   @override
   bool isTarget(Player target) {
-    return !target.hasEffect(StatusEffectType.wasJudged);
+    return !target.hasEffect(EffectId.wasJudged);
   }
 
   @override

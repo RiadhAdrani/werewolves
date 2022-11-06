@@ -302,7 +302,7 @@ class GameModel extends ChangeNotifier {
   }
 
   /// Return a list of players with specific effects
-  List<Player> getPlayersWithStatusEffects(List<StatusEffectType> effects) {
+  List<Player> getPlayersWithStatusEffects(List<EffectId> effects) {
     final output = <Player>[];
 
     getPlayersList().forEach((player) {
@@ -419,7 +419,7 @@ class GameModel extends ChangeNotifier {
     /// Remove the [serving] effect from the servant player;
     /// No need to remove the [served] effects
     /// because the dead player will be sent to the graveyard.
-    (servant.player as Player).removeEffectsOfType(StatusEffectType.isServing);
+    (servant.player as Player).removeEffectsOfType(EffectId.isServing);
 
     /// Add the new role to the servant player.
     (servant.player as Player).addRole(newRole);
@@ -670,8 +670,7 @@ class GameModel extends ChangeNotifier {
 
     getPlayersList().forEach((player) {
       /// If the captain is dead.
-      if (player.hasFatalEffect() &&
-          player.hasEffect(StatusEffectType.isServed)) {
+      if (player.hasFatalEffect() && player.hasEffect(EffectId.isServed)) {
         Role theOldRole = getRole(player.getMainRole().id)!;
 
         onServedDeath(theOldRole, () {

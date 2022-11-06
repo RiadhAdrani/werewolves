@@ -54,11 +54,11 @@ class Seer extends RoleSingular {
   }
 }
 
-class ClairvoyanceEffect extends StatusEffect {
+class ClairvoyanceEffect extends Effect {
   ClairvoyanceEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isSeen;
+    type = EffectId.isSeen;
   }
 }
 

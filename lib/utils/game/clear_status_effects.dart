@@ -12,7 +12,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
   int currentTurn = game.getCurrentTurn();
 
   game.getPlayersList().forEach((player) {
-    final newEffects = <StatusEffect>[];
+    final newEffects = <Effect>[];
 
     for (var effect in player.effects) {
       /// do not remove permanent or fatal effects.
@@ -26,7 +26,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
       switch (effect.type) {
 
         /// Protector -----------------------------------------------------
-        case StatusEffectType.isProtected:
+        case EffectId.isProtected:
 
           /// currently protected player could not be protected again
           /// add [wasProtected] effect
@@ -36,7 +36,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           break;
 
         /// Black Wolf ----------------------------------------------------
-        case StatusEffectType.isMuted:
+        case EffectId.isMuted:
 
           /// Currently muted player cannot be muted two night in a row
           /// so we add [wasMuted] effect.
@@ -51,7 +51,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           break;
 
         /// Seer ----------------------------------------------------------
-        case StatusEffectType.isSeen:
+        case EffectId.isSeen:
           player.removeEffectsOfType(effect.type);
 
           /// If the seer is dead, we do not report anything
@@ -68,7 +68,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
 
         /// Judge --------------------------------------------------------
         /// Role cannot be protected by the judge two consecutive rounds.
-        case StatusEffectType.isJudged:
+        case EffectId.isJudged:
           player.removeEffectsOfType(effect.type);
           newEffects.add(WasJudgedEffect(effect.source));
 
@@ -77,7 +77,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           break;
 
         /// Captain ------------------------------------------------------
-        case StatusEffectType.shouldTalkFirst:
+        case EffectId.shouldTalkFirst:
           game.addGameInfo(GameInformation.talkInformation(
               player, game.getState(), currentTurn));
 
@@ -85,7 +85,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           break;
 
         /// Shepherd -----------------------------------------------------
-        case StatusEffectType.hasSheep:
+        case EffectId.hasSheep:
 
           /// If the player has a wolf role
           /// We should remove one sheep
@@ -107,28 +107,28 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
 
         /// Common effects -----------------------------------------------
         /// Should only be removed.
-        case StatusEffectType.isRevived:
-        case StatusEffectType.isSubstitue:
-        case StatusEffectType.hasInheritedCaptaincy:
-        case StatusEffectType.wasProtected:
-        case StatusEffectType.wasJudged:
-        case StatusEffectType.wasMuted:
-        case StatusEffectType.shouldSayTheWord:
+        case EffectId.isRevived:
+        case EffectId.isSubstitue:
+        case EffectId.hasInheritedCaptaincy:
+        case EffectId.wasProtected:
+        case EffectId.wasJudged:
+        case EffectId.wasMuted:
+        case EffectId.shouldSayTheWord:
           player.removeEffectsOfType(effect.type);
           break;
 
         /// Unreachable code because these effects are permanent. --------
         /// Fatal or permanent effects.
-        case StatusEffectType.isCountered:
-        case StatusEffectType.isExecuted:
-        case StatusEffectType.isDevoured:
-        case StatusEffectType.isHunted:
-        case StatusEffectType.isCursed:
-        case StatusEffectType.hasCallsign:
-        case StatusEffectType.isInfected:
-        case StatusEffectType.isServed:
-        case StatusEffectType.isServing:
-        case StatusEffectType.isGuessed:
+        case EffectId.isCountered:
+        case EffectId.isExecuted:
+        case EffectId.isDevoured:
+        case EffectId.isHunted:
+        case EffectId.isCursed:
+        case EffectId.hasCallsign:
+        case EffectId.isInfected:
+        case EffectId.isServed:
+        case EffectId.isServing:
+        case EffectId.isGuessed:
           break;
       }
     }

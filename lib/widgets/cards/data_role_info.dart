@@ -18,7 +18,7 @@ Widget gameRoleDataInfo(Role role) {
             children: [
               Text('Player name : ${(role.player.getName())}'),
               Text(
-                  'Player Status effects : ${(role as RoleSingular).player.effects.map((effect) => statusEffectTypeToString(effect.type)).join(' | ')}')
+                  'Player Status effects : ${(role as RoleSingular).player.effects.map((effect) => effectIdToString(effect.type)).join(' | ')}')
             ],
           )
       ]),

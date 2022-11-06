@@ -48,7 +48,7 @@ class Servant extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(GameModel game) {
-    return player.hasEffect(StatusEffectType.isServing) == false;
+    return player.hasEffect(EffectId.isServing) == false;
   }
 
   @override
@@ -57,19 +57,19 @@ class Servant extends RoleSingular {
   }
 }
 
-class ServeEffect extends StatusEffect {
+class ServeEffect extends Effect {
   ServeEffect(Role source) {
     this.source = source;
     permanent = true;
-    type = StatusEffectType.isServed;
+    type = EffectId.isServed;
   }
 }
 
-class ServingEffect extends StatusEffect {
+class ServingEffect extends Effect {
   ServingEffect(Role source) {
     this.source = source;
     permanent = true;
-    type = StatusEffectType.isServing;
+    type = EffectId.isServing;
   }
 }
 
@@ -111,7 +111,7 @@ class ServantAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasEffect(StatusEffectType.isServing);
+    return !(owner.player as Player).hasEffect(EffectId.isServing);
   }
 
   @override

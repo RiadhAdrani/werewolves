@@ -67,19 +67,19 @@ class Witch extends RoleSingular {
   }
 }
 
-class CurseEffect extends StatusEffect {
+class CurseEffect extends Effect {
   CurseEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isCursed;
+    type = EffectId.isCursed;
   }
 }
 
-class ReviveEffect extends StatusEffect {
+class ReviveEffect extends Effect {
   ReviveEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isRevived;
+    type = EffectId.isRevived;
   }
 }
 

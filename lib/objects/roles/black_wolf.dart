@@ -56,19 +56,19 @@ class BlackWolf extends RoleSingular {
   }
 }
 
-class MuteEffect extends StatusEffect {
+class MuteEffect extends Effect {
   MuteEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isMuted;
+    type = EffectId.isMuted;
   }
 }
 
-class WasMutedEffect extends StatusEffect {
+class WasMutedEffect extends Effect {
   WasMutedEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.wasMuted;
+    type = EffectId.wasMuted;
   }
 }
 
@@ -89,7 +89,7 @@ class MuteAbility extends Ability {
 
   @override
   bool isTarget(Player target) {
-    return !target.hasEffect(StatusEffectType.wasMuted);
+    return !target.hasEffect(EffectId.wasMuted);
   }
 
   @override
@@ -104,7 +104,7 @@ class MuteAbility extends Ability {
 
   @override
   bool shouldBeAppliedSurely(Player target) {
-    return !target.hasEffect(StatusEffectType.isProtected);
+    return !target.hasEffect(EffectId.isProtected);
   }
 
   @override

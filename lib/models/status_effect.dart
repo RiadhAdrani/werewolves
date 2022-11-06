@@ -1,12 +1,12 @@
 import 'package:werewolves/models/role.dart';
 
-class StatusEffect {
-  late StatusEffectType type;
+class Effect {
+  late EffectId type;
   late Role source;
   late bool permanent;
 }
 
-enum StatusEffectType {
+enum EffectId {
   isProtected,
   isDevoured,
   isInfected,
@@ -35,66 +35,66 @@ enum StatusEffectType {
   shouldSayTheWord,
 }
 
-const List<StatusEffectType> fatalStatusEffects = [
-  StatusEffectType.isCursed,
-  StatusEffectType.isDevoured,
-  StatusEffectType.isHunted,
-  StatusEffectType.isCountered,
-  StatusEffectType.isExecuted,
-  StatusEffectType.isGuessed
+const List<EffectId> fatalStatusEffects = [
+  EffectId.isCursed,
+  EffectId.isDevoured,
+  EffectId.isHunted,
+  EffectId.isCountered,
+  EffectId.isExecuted,
+  EffectId.isGuessed
 ];
 
-bool isFatalEffect(StatusEffectType effect) {
+bool isFatalEffect(EffectId effect) {
   return fatalStatusEffects.contains(effect);
 }
 
-String statusEffectTypeToString(StatusEffectType effect) {
+String effectIdToString(EffectId effect) {
   switch (effect) {
-    case StatusEffectType.isProtected:
+    case EffectId.isProtected:
       return 'isProtected';
-    case StatusEffectType.wasProtected:
+    case EffectId.wasProtected:
       return 'wasProtected';
-    case StatusEffectType.isDevoured:
+    case EffectId.isDevoured:
       return 'isDevoured';
-    case StatusEffectType.isInfected:
+    case EffectId.isInfected:
       return 'isInfected';
-    case StatusEffectType.isCursed:
+    case EffectId.isCursed:
       return 'isCursed';
-    case StatusEffectType.isRevived:
+    case EffectId.isRevived:
       return 'isRevived';
-    case StatusEffectType.isSeen:
+    case EffectId.isSeen:
       return 'isSeen';
-    case StatusEffectType.isCountered:
+    case EffectId.isCountered:
       return 'isCountered';
-    case StatusEffectType.isHunted:
+    case EffectId.isHunted:
       return 'isHunted';
-    case StatusEffectType.isExecuted:
+    case EffectId.isExecuted:
       return 'isExecuted';
-    case StatusEffectType.isSubstitue:
+    case EffectId.isSubstitue:
       return 'isSubstition';
-    case StatusEffectType.isServed:
+    case EffectId.isServed:
       return 'isServed';
-    case StatusEffectType.isServing:
+    case EffectId.isServing:
       return 'isServing';
-    case StatusEffectType.isJudged:
+    case EffectId.isJudged:
       return 'isJudged';
-    case StatusEffectType.isMuted:
+    case EffectId.isMuted:
       return 'isMuted';
-    case StatusEffectType.wasMuted:
+    case EffectId.wasMuted:
       return 'wasMuted';
-    case StatusEffectType.wasJudged:
+    case EffectId.wasJudged:
       return 'wasJudged';
-    case StatusEffectType.hasCallsign:
+    case EffectId.hasCallsign:
       return 'hasCallsign';
-    case StatusEffectType.hasInheritedCaptaincy:
+    case EffectId.hasInheritedCaptaincy:
       return 'hasInheritedCaptaincy';
-    case StatusEffectType.shouldTalkFirst:
+    case EffectId.shouldTalkFirst:
       return 'shouldTalkFirst';
-    case StatusEffectType.shouldSayTheWord:
+    case EffectId.shouldSayTheWord:
       return 'shouldSayTheWord';
-    case StatusEffectType.hasSheep:
+    case EffectId.hasSheep:
       return "hasSheep";
-    case StatusEffectType.isGuessed:
+    case EffectId.isGuessed:
       return "isGuessed";
   }
 }

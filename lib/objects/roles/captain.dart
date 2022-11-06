@@ -73,7 +73,7 @@ class Captain extends RoleSingular {
     /// We leave the inheritance to the dead captain.
     if (player.getMainRole() == this &&
         player.hasFatalEffect() == true &&
-        player.hasEffect(StatusEffectType.isServed)) {
+        player.hasEffect(EffectId.isServed)) {
       var servant = gameModel.getRole(RoleId.servant);
 
       if (servant == null) {
@@ -100,35 +100,35 @@ class Captain extends RoleSingular {
   }
 }
 
-class ExecutedEffect extends StatusEffect {
+class ExecutedEffect extends Effect {
   ExecutedEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isExecuted;
+    type = EffectId.isExecuted;
   }
 }
 
-class InheritCaptaincyEffect extends StatusEffect {
+class InheritCaptaincyEffect extends Effect {
   InheritCaptaincyEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.hasInheritedCaptaincy;
+    type = EffectId.hasInheritedCaptaincy;
   }
 }
 
-class SubstitueEffect extends StatusEffect {
+class SubstitueEffect extends Effect {
   SubstitueEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isSubstitue;
+    type = EffectId.isSubstitue;
   }
 }
 
-class TalkerEffect extends StatusEffect {
+class TalkerEffect extends Effect {
   TalkerEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.shouldTalkFirst;
+    type = EffectId.shouldTalkFirst;
   }
 }
 

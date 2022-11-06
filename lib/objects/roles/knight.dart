@@ -61,11 +61,11 @@ class Knight extends RoleSingular {
   }
 }
 
-class CounterEffect extends StatusEffect {
+class CounterEffect extends Effect {
   CounterEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isCountered;
+    type = EffectId.isCountered;
   }
 }
 

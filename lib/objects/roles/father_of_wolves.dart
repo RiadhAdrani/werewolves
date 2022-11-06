@@ -65,11 +65,11 @@ class FatherOfWolves extends RoleSingular {
   }
 }
 
-class InfectEffect extends StatusEffect {
+class InfectEffect extends Effect {
   InfectEffect(Role source) {
     this.source = source;
     permanent = true;
-    type = StatusEffectType.isInfected;
+    type = EffectId.isInfected;
   }
 }
 
@@ -85,19 +85,18 @@ class InfectAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.removeEffectsOfType(StatusEffectType.isDevoured);
+    target.removeEffectsOfType(EffectId.isDevoured);
     target.addStatusEffect(InfectEffect(owner));
   }
 
   @override
   bool isTarget(Player target) {
-    return target.hasEffect(StatusEffectType.isDevoured) &&
-        !target.hasWolfRole();
+    return target.hasEffect(EffectId.isDevoured) && !target.hasWolfRole();
   }
 
   @override
   bool shouldBeAppliedSurely(Player target) {
-    return !target.hasEffect(StatusEffectType.isProtected);
+    return !target.hasEffect(EffectId.isProtected);
   }
 
   @override

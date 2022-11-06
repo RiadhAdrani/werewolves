@@ -57,11 +57,11 @@ class GarrulousWolf extends RoleSingular {
   }
 }
 
-class GarrulousEffect extends StatusEffect {
+class GarrulousEffect extends Effect {
   GarrulousEffect(Role source) {
     this.source = source;
     permanent = true;
-    type = StatusEffectType.shouldSayTheWord;
+    type = EffectId.shouldSayTheWord;
   }
 }
 

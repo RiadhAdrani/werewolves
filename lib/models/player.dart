@@ -13,7 +13,7 @@ class Player {
   bool isAlive = true;
   Team team = Team.village;
   String id = uuid.v4();
-  List<StatusEffect> effects = [];
+  List<Effect> effects = [];
   List<Role> roles = [];
 
   Player(this.name);
@@ -30,18 +30,18 @@ class Player {
 
   /// Add a new status effect.
   /// Does not account for duplicate.
-  void addStatusEffect(StatusEffect effect) {
+  void addStatusEffect(Effect effect) {
     effects.add(effect);
   }
 
   /// Remove all status effect of the given type
-  void removeEffectsOfType(StatusEffectType effect) {
+  void removeEffectsOfType(EffectId effect) {
     effects = effects.where((element) => element.type != effect).toList();
   }
 
   /// Remove all fatal effects except the given ones.
-  void removeFatalEffects(List<StatusEffectType> exception) {
-    final newList = <StatusEffect>[];
+  void removeFatalEffects(List<EffectId> exception) {
+    final newList = <Effect>[];
 
     for (var effect in effects) {
       if (exception.contains(effect.type) ||
@@ -86,7 +86,7 @@ class Player {
   }
 
   /// Check if the player has a status effect.
-  bool hasEffect(StatusEffectType effect) {
+  bool hasEffect(EffectId effect) {
     for (var e in effects) {
       if (e.type == effect) return true;
     }

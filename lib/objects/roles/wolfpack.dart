@@ -81,11 +81,11 @@ class Wolfpack extends RoleGroup {
   }
 }
 
-class DevourEffect extends StatusEffect {
+class DevourEffect extends Effect {
   DevourEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isDevoured;
+    type = EffectId.isDevoured;
   }
 }
 
@@ -111,7 +111,7 @@ class DevourAbility extends Ability {
 
   @override
   bool shouldBeAppliedSurely(Player target) {
-    return !target.hasEffect(StatusEffectType.isProtected);
+    return !target.hasEffect(EffectId.isProtected);
   }
 
   @override

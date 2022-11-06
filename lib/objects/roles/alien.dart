@@ -52,7 +52,7 @@ class Alien extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(GameModel game) {
-    return !player.hasEffect(StatusEffectType.hasCallsign);
+    return !player.hasEffect(EffectId.hasCallsign);
   }
 
   static RoleId resolveAlienGuessPossibility(RoleId id) {
@@ -196,7 +196,7 @@ class AlienCallSignAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+    return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
         !(owner.player as Player).hasFatalEffect();
   }
 
@@ -212,7 +212,7 @@ class AlienCallSignAbility extends Ability {
 
   @override
   bool isUnskippable() {
-    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+    return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
         !(owner.player as Player).hasFatalEffect();
   }
 

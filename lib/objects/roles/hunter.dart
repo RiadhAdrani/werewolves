@@ -19,8 +19,7 @@ class Hunter extends RoleSingular {
 
   @override
   bool canUseAbilitiesDuringNight() {
-    return player.hasFatalEffect() ||
-        !player.hasEffect(StatusEffectType.hasCallsign);
+    return player.hasFatalEffect() || !player.hasEffect(EffectId.hasCallsign);
   }
 
   @override
@@ -30,8 +29,7 @@ class Hunter extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(GameModel game) {
-    return player.hasFatalEffect() ||
-        !player.hasEffect(StatusEffectType.hasCallsign);
+    return player.hasFatalEffect() || !player.hasEffect(EffectId.hasCallsign);
   }
 
   @override
@@ -45,7 +43,7 @@ class Hunter extends RoleSingular {
       return ['You have become a Hunter! Choose someone to kill.'];
     }
 
-    if (!player.hasEffect(StatusEffectType.hasCallsign)) {
+    if (!player.hasEffect(EffectId.hasCallsign)) {
       return [
         'You should give the narrator a call sign that you may use during the day phase to kill a werewolf.',
       ];
@@ -70,11 +68,11 @@ class Hunter extends RoleSingular {
   }
 }
 
-class HuntEffect extends StatusEffect {
+class HuntEffect extends Effect {
   HuntEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isHunted;
+    type = EffectId.isHunted;
   }
 }
 
@@ -160,7 +158,7 @@ class CallSignAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+    return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
         !(owner.player as Player).hasFatalEffect();
   }
 
@@ -176,7 +174,7 @@ class CallSignAbility extends Ability {
 
   @override
   bool isUnskippable() {
-    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+    return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
         !(owner.player as Player).hasFatalEffect();
   }
 
