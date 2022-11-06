@@ -1,9 +1,10 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/objects/ability/judge_judgement.dart';
+import 'package:werewolves/models/status_effect.dart';
 
 class Judge extends RoleSingular {
   Judge(super.player) {
@@ -55,4 +56,61 @@ class Judge extends RoleSingular {
   bool beforeCallEffect(BuildContext context, GameModel gameModel) {
     return false;
   }
+}
+
+class JudgedEffect extends StatusEffect {
+  JudgedEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = StatusEffectType.isJudged;
+  }
+}
+
+class JudgementAbility extends Ability {
+  JudgementAbility(Role owner) {
+    super.targetCount = 1;
+    super.name = AbilityId.judgement;
+    super.type = AbilityType.active;
+    super.useCount = AbilityUseCount.infinite;
+    super.time = AbilityTime.night;
+    super.owner = owner;
+  }
+
+  @override
+  void callOnTarget(Player target) {
+    target.addStatusEffect(JudgedEffect(owner));
+  }
+
+  @override
+  bool isTarget(Player target) {
+    return !target.hasEffect(StatusEffectType.wasJudged);
+  }
+
+  @override
+  bool isUnskippable() {
+    return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    return "Player cannot be voted on.";
+  }
+
+  @override
+  bool shouldBeAppliedSurely(Player target) {
+    return true;
+  }
+
+  @override
+  bool shouldBeAvailable() {
+    return true;
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
+    return false;
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
 }
