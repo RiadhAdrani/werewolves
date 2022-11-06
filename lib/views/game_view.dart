@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:werewolves/models/game_arguments.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/widgets/game/game_leave_dialog.dart';
 

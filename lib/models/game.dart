@@ -29,6 +29,12 @@ enum GameState {
 
 enum DayState { information, discussion, vote, execution, resolution }
 
+class GameArguments {
+  final List<Role> list;
+
+  GameArguments(this.list);
+}
+
 class GameInformation {
   late final String _text;
   late final GameState _period;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/models/game_arguments.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/views/game_view.dart';
 
 class GameArgumentsExtractor extends StatelessWidget {
