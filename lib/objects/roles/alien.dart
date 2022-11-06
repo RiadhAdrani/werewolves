@@ -181,7 +181,7 @@ class AlienCallSignAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(CallsignStatusEffect(owner));
+    target.addStatusEffect(CallSignEffect(owner));
   }
 
   @override
