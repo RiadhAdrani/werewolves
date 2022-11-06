@@ -169,7 +169,7 @@ class Player {
     }
 
     if (roles.length > 2) {
-      // TODO: check for other possibilities
+      // TODO : check for other possibilities
 
       /// we check for any role that is not captain, or a group role.
       for (var role in roles) {

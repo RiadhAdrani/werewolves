@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/status_effect.dart';
-import 'package:werewolves/objects/ability/alien_callsign.dart';
-import 'package:werewolves/objects/ability/alien_guess.dart';
+import 'package:werewolves/objects/effects/callsign_effect.dart';
+import 'package:werewolves/objects/effects/guessed_effect.dart';
 
 class Alien extends RoleSingular {
   Alien(super.player) {
@@ -113,6 +114,111 @@ class Alien extends RoleSingular {
     }
 
     return players;
+  }
+}
+
+class GuessAbility extends Ability {
+  GuessAbility(Role owner) {
+    super.targetCount = 99;
+    super.name = AbilityId.guess;
+    super.type = AbilityType.active;
+    super.useCount = AbilityUseCount.infinite;
+    super.time = AbilityTime.day;
+    super.ui = AbilityUI.alien;
+    super.owner = owner;
+  }
+
+  @override
+  void callOnTarget(Player target) {
+    target.addStatusEffect(GuessedStatusEffect(owner));
+  }
+
+  @override
+  bool isTarget(Player target) {
+    return target != owner.player;
+  }
+
+  @override
+  bool shouldBeAppliedSurely(Player target) {
+    return true;
+  }
+
+  @override
+  bool shouldBeAvailable() {
+    return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'No body was killed.';
+
+    return '${targets[0].name} has been killed.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
+    return false;
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
+    return false;
+  }
+}
+
+class AlienCallSignAbility extends Ability {
+  AlienCallSignAbility(Role owner) {
+    super.targetCount = 1;
+    super.name = AbilityId.callsign;
+    super.type = AbilityType.active;
+    super.useCount = AbilityUseCount.once;
+    super.time = AbilityTime.night;
+    super.owner = owner;
+  }
+
+  @override
+  void callOnTarget(Player target) {
+    target.addStatusEffect(CallsignStatusEffect(owner));
+  }
+
+  @override
+  bool isTarget(Player target) {
+    return target == owner.player;
+  }
+
+  @override
+  bool shouldBeAppliedSurely(Player target) {
+    return true;
+  }
+
+  @override
+  bool shouldBeAvailable() {
+    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+        !(owner.player as Player).hasFatalEffect();
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'Alien did not give his signal';
+
+    return '${targets[0].name} has given his call sign.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
+    return !(owner.player as Player).hasEffect(StatusEffectType.hasCallsign) &&
+        !(owner.player as Player).hasFatalEffect();
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
+    return false;
   }
 }
 
