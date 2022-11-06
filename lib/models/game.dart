@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/constants/teams.dart';
@@ -22,6 +21,13 @@ import 'package:werewolves/widgets/game/game_standard_alert.dart';
 import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/game/game_use_ability_done.dart';
 import 'package:werewolves/transformers/strings/get_role_name.dart';
+
+enum GameState {
+  empty,
+  initialized,
+  night,
+  day,
+}
 
 class GameInformation {
   late final String _text;

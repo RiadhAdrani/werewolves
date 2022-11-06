@@ -1,6 +1,5 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
@@ -51,7 +50,8 @@ class Captain extends RoleSingular {
     final output = <String>[];
 
     if (player.hasFatalEffect()) {
-      output.add('You are dead, choose another fellow player to inherit your capitaincy.');
+      output.add(
+          'You are dead, choose another fellow player to inherit your capitaincy.');
     }
 
     output.add('Choose a player whom will start the discussion.');
@@ -90,7 +90,8 @@ class Captain extends RoleSingular {
       }
 
       gameModel.onServedDeath(this, () {
-        showConfirmAlert("Captain inheritance", 'The servant became the new captain.', context, () {
+        showConfirmAlert("Captain inheritance",
+            'The servant became the new captain.', context, () {
           if (gameModel.getState() == GameState.night) {
             gameModel.skipCurrentRole(context);
           }
