@@ -3,7 +3,6 @@ import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_single.dart';
@@ -49,8 +48,8 @@ class Alien extends RoleSingular {
   }
 
   @override
-  Teams getSupposedInitialTeam() {
-    return Teams.alien;
+  Team getSupposedInitialTeam() {
+    return Team.alien;
   }
 
   @override
@@ -99,7 +98,8 @@ class Alien extends RoleSingular {
   static bool resolveAlienGuess(Player player, RoleId role) {
     Role mainRole = player.getMainRole();
 
-    return resolveAlienGuessPossibility(role) == resolveAlienGuessPossibility(mainRole.id);
+    return resolveAlienGuessPossibility(role) ==
+        resolveAlienGuessPossibility(mainRole.id);
   }
 
   static dynamic getCorrectlyGuessedRoles(List<AlienGuessItem> items) {

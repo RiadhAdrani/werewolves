@@ -1,12 +1,13 @@
 import 'package:uuid/uuid.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/roles/villager.dart';
+
+enum Team { equality, village, wolves, cupid, alien }
 
 const uuid = Uuid();
 
@@ -14,7 +15,7 @@ class Player {
   late String name;
 
   bool isAlive = true;
-  Teams team = Teams.village;
+  Team team = Team.village;
   String id = uuid.v4();
   List<StatusEffect> effects = [];
   List<Role> roles = [];
@@ -27,7 +28,7 @@ class Player {
   }
 
   /// Switch the current team.
-  void changeTeam(Teams newTeam) {
+  void changeTeam(Team newTeam) {
     team = newTeam;
   }
 
@@ -47,7 +48,8 @@ class Player {
     final newList = <StatusEffect>[];
 
     for (var effect in effects) {
-      if (exception.contains(effect.type) || !fatalStatusEffects.contains(effect.type)) {
+      if (exception.contains(effect.type) ||
+          !fatalStatusEffects.contains(effect.type)) {
         newList.add(effect);
       }
     }
@@ -70,7 +72,9 @@ class Player {
     roles.removeWhere((role) {
       if (role.id == id) {
         if (role.isGroup()) {
-          (role as RoleGroup).player.removeWhere((Player player) => player.id == this.id);
+          (role as RoleGroup)
+              .player
+              .removeWhere((Player player) => player.id == this.id);
         } else {
           var dummyDeadVillager = Player("this_player_name_should_not_appear");
           dummyDeadVillager.isAlive = false;

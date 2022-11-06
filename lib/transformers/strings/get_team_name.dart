@@ -1,16 +1,16 @@
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 
-String getTeamName(Teams team) {
+String getTeamName(Team team) {
   switch (team) {
-    case Teams.village:
+    case Team.village:
       return 'Village';
-    case Teams.wolves:
+    case Team.wolves:
       return 'Wolves';
-    case Teams.cupid:
+    case Team.cupid:
       return 'Lovers';
-    case Teams.alien:
+    case Team.alien:
       return 'Alien';
-    case Teams.equality:
+    case Team.equality:
       return 'Null';
   }
 }

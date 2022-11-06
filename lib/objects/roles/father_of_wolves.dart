@@ -2,7 +2,7 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/roles.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/father_infect.dart';
@@ -18,7 +18,7 @@ class FatherOfWolves extends RoleSingular {
     /// A servant with [love effect] transformed into a werewolf should not change its team.
 
     if (player.roles.length == 1) {
-      player.team = Teams.wolves;
+      player.team = Team.wolves;
     }
   }
 
@@ -44,7 +44,9 @@ class FatherOfWolves extends RoleSingular {
 
   @override
   List<String> getInformations(GameModel game) {
-    return ['Do you want to infect the player that you killed wth the wolfpack ?'];
+    return [
+      'Do you want to infect the player that you killed wth the wolfpack ?'
+    ];
   }
 
   @override
@@ -53,8 +55,8 @@ class FatherOfWolves extends RoleSingular {
   }
 
   @override
-  Teams getSupposedInitialTeam() {
-    return Teams.wolves;
+  Team getSupposedInitialTeam() {
+    return Team.wolves;
   }
 
   @override

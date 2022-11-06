@@ -2,7 +2,7 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/roles.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/seer_clairvoyance.dart';
@@ -45,8 +45,8 @@ class Seer extends RoleSingular {
   }
 
   @override
-  Teams getSupposedInitialTeam() {
-    return Teams.village;
+  Team getSupposedInitialTeam() {
+    return Team.village;
   }
 
   @override

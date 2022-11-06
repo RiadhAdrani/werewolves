@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -407,7 +406,7 @@ class GameModel extends ChangeNotifier {
     /// A possible new team
     var maybeNewTeam = calculateNewTeamForServant(newRole);
 
-    if (maybeNewTeam is Teams &&
+    if (maybeNewTeam is Team &&
         maybeNewTeam != (servant.player as Player).team) {
       (servant.player as Player).team = maybeNewTeam;
     }
@@ -721,7 +720,7 @@ class GameModel extends ChangeNotifier {
   void _gameOverCheck(BuildContext context) {
     dynamic result = checkTeamsAreBalanced(getPlayersList(), _roles);
 
-    if (result is Teams) {
+    if (result is Team) {
       gameOver = true;
       showGameOverAlert(result, this, context);
     }

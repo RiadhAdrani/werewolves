@@ -1,6 +1,5 @@
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/constants/roles.dart';
-import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/count_solo_team.dart';
@@ -15,12 +14,12 @@ dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
   Role? alien = getRoleInGame(RoleId.alien, roles);
 
   if (players.isEmpty) {
-    return Teams.equality;
+    return Team.equality;
   }
 
   /// In case only solos remained
   if (solosCount == players.length) {
-    return Teams.equality;
+    return Team.equality;
   }
 
   /// Alien Winning condition
@@ -29,13 +28,13 @@ dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
       alien != null &&
       wolvesCount == 0 &&
       solosCount == 1) {
-    return Teams.alien;
+    return Team.alien;
   }
 
   /// Villager
   /// The village win if there is no werewolf remaining.
   if (wolvesCount == 0) {
-    return Teams.village;
+    return Team.village;
   }
 
   if (villagersCount == wolvesCount) {
@@ -44,26 +43,26 @@ dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
     Role? knight = getRoleInGame(RoleId.knight, roles);
 
     bool protectorCanWinIt =
-        protector != null && protector.player.team == Teams.village;
+        protector != null && protector.player.team == Team.village;
 
     bool witchCanWinIt = (witch != null &&
-        witch.player.team == Teams.village &&
+        witch.player.team == Team.village &&
         (witch.hasUnusedAbility(AbilityId.curse) ||
             witch.hasUnusedAbility(AbilityId.revive)));
 
     bool knightCanWinIt = (knight != null &&
-        knight.player.team == Teams.village &&
+        knight.player.team == Team.village &&
         knight.hasUnusedAbility(AbilityId.counter));
 
     bool continuable = protectorCanWinIt || witchCanWinIt || knightCanWinIt;
 
     if (!continuable) {
-      return Teams.wolves;
+      return Team.wolves;
     }
   }
 
   if (villagersCount < wolvesCount) {
-    return Teams.wolves;
+    return Team.wolves;
   }
 
   return true;

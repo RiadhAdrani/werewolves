@@ -1,6 +1,5 @@
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -54,7 +53,7 @@ class InfectAbility extends Ability {
     var newMember = affected[0];
 
     if (Wolfpack.shouldJoinWolfpackUponInfection(newMember)) {
-      newMember.team = Teams.wolves;
+      newMember.team = Team.wolves;
     }
 
     game.addMemberToGroup(newMember, RoleId.wolfpack);

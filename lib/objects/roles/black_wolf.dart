@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/black_mute.dart';
 
@@ -47,8 +47,8 @@ class BlackWolf extends RoleSingular {
   }
 
   @override
-  Teams getSupposedInitialTeam() {
-    return Teams.wolves;
+  Team getSupposedInitialTeam() {
+    return Team.wolves;
   }
 
   @override

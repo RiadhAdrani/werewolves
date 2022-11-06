@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 import 'package:werewolves/constants/roles.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/transformers/strings/get_role_description.dart';
@@ -114,9 +114,9 @@ abstract class Role<T> {
 
   /// Return the supposed initial role team.
   /// This is used when distributing roles
-  /// and prgrammatically assign initial team
+  /// and programmatically assign initial team
   /// for players.
-  Teams getSupposedInitialTeam();
+  Team getSupposedInitialTeam();
 
   /// Effects that will be executed
   /// before the call of the player.
