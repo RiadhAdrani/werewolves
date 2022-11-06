@@ -2,7 +2,6 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/effects/hunt_effect.dart';
 
 class HuntAbility extends Ability {

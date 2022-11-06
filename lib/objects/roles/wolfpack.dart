@@ -3,7 +3,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/objects/ability/wolfpack_devour.dart';
 
 class Wolfpack extends RoleGroup {

@@ -1,8 +1,6 @@
 import 'package:uuid/uuid.dart';
 import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/role_group.dart';
-import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 
 enum Team { equality, village, wolves, cupid, alien }
@@ -151,7 +149,7 @@ class Player {
       /// it is impossible due to the fact
       /// that a singular role has been assigned to the player
 
-      // TODO: check cupidon lovers.
+      // TODO : check cupidon lovers.
 
       /// any, wolfpack -> any
       /// any, lovers -> any;
