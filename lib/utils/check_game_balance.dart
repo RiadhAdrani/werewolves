@@ -1,5 +1,5 @@
-import 'package:werewolves/constants/ability_id.dart';
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -25,7 +25,10 @@ dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
 
   /// Alien Winning condition
   /// The alien should be the only one remaining, or with a villager.
-  if (players.length <= 2 && alien != null && wolvesCount == 0 && solosCount == 1) {
+  if (players.length <= 2 &&
+      alien != null &&
+      wolvesCount == 0 &&
+      solosCount == 1) {
     return Teams.alien;
   }
 
@@ -40,11 +43,13 @@ dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
     Role? witch = getRoleInGame(RoleId.witch, roles);
     Role? knight = getRoleInGame(RoleId.knight, roles);
 
-    bool protectorCanWinIt = protector != null && protector.player.team == Teams.village;
+    bool protectorCanWinIt =
+        protector != null && protector.player.team == Teams.village;
 
     bool witchCanWinIt = (witch != null &&
         witch.player.team == Teams.village &&
-        (witch.hasUnusedAbility(AbilityId.curse) || witch.hasUnusedAbility(AbilityId.revive)));
+        (witch.hasUnusedAbility(AbilityId.curse) ||
+            witch.hasUnusedAbility(AbilityId.revive)));
 
     bool knightCanWinIt = (knight != null &&
         knight.player.team == Teams.village &&

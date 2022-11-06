@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_ui.dart';
@@ -26,7 +25,8 @@ abstract class Ability {
     List<Player> appliedTo = [];
 
     if (isUsable() && targets.isNotEmpty) {
-      var subList = targetCount == 99 ? targets : targets.sublist(0, targetCount);
+      var subList =
+          targetCount == 99 ? targets : targets.sublist(0, targetCount);
 
       for (var target in subList) {
         turnsUsedIn.add(turn);
@@ -109,4 +109,28 @@ abstract class Ability {
 
   /// Check if this ability should be used when the owner is dead.
   bool shouldBeUsedOnOwnerDeath();
+}
+
+enum AbilityId {
+  protect,
+  devour,
+  infect,
+  clairvoyance,
+  revive,
+  curse,
+  counter,
+  hunt,
+  callsign,
+  serve,
+  judgement,
+  mute,
+  word,
+  sheeps,
+  guess,
+
+  // captain
+  talker,
+  execute,
+  substitute,
+  inherit
 }

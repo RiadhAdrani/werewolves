@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/role.dart';

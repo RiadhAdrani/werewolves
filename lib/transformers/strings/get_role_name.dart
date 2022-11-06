@@ -1,4 +1,4 @@
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/roles.dart';
 
 String getRoleName(RoleId role) {
   switch (role) {

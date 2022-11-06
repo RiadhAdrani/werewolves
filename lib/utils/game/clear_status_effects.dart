@@ -1,7 +1,6 @@
-import 'package:werewolves/constants/ability_id.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game_info.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -20,7 +19,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
     final newEffects = <StatusEffect>[];
 
     for (var effect in player.effects) {
-      /// do not remove premanent or fatal effects.
+      /// do not remove permanent or fatal effects.
       /// Fatal effects will be treated later
       /// by confirming the death of the players
       /// and moving them into the graveyard.
@@ -49,7 +48,8 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           newEffects.add(WasMutedStatusEffect(effect.source));
 
           if (!(effect.source.player as Player).hasFatalEffect()) {
-            game.addGameInfo(GameInformation.mutedInformation(player, currentTurn));
+            game.addGameInfo(
+                GameInformation.mutedInformation(player, currentTurn));
           }
 
           break;
@@ -65,8 +65,8 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
 
           Role role = resolveSeenRole(player);
 
-          game.addGameInfo(
-              GameInformation.clairvoyanceInformation(role.id, game.getState(), currentTurn));
+          game.addGameInfo(GameInformation.clairvoyanceInformation(
+              role.id, game.getState(), currentTurn));
 
           break;
 
@@ -76,12 +76,14 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           player.removeEffectsOfType(effect.type);
           newEffects.add(WasJudgedStatusEffect(effect.source));
 
-          game.addGameInfo(GameInformation.judgeInformation(player, currentTurn));
+          game.addGameInfo(
+              GameInformation.judgeInformation(player, currentTurn));
           break;
 
         /// Captain ------------------------------------------------------
         case StatusEffectType.shouldTalkFirst:
-          game.addGameInfo(GameInformation.talkInformation(player, game.getState(), currentTurn));
+          game.addGameInfo(GameInformation.talkInformation(
+              player, game.getState(), currentTurn));
 
           player.removeEffectsOfType(effect.type);
           break;
@@ -89,16 +91,19 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
         /// Shepherd -----------------------------------------------------
         case StatusEffectType.hasSheep:
 
-          /// If the playe has a wolf role
+          /// If the player has a wolf role
           /// We should remove one sheep
           /// which in our case is the target count.
           if (player.hasWolfRole()) {
-            Ability shepherdAbility = effect.source.getAbilityOfType(AbilityId.sheeps)!;
+            Ability shepherdAbility =
+                effect.source.getAbilityOfType(AbilityId.sheeps)!;
 
             shepherdAbility.targetCount--;
-            game.addGameInfo(GameInformation.sheepInformation(true, currentTurn));
+            game.addGameInfo(
+                GameInformation.sheepInformation(true, currentTurn));
           } else {
-            game.addGameInfo(GameInformation.sheepInformation(false, currentTurn));
+            game.addGameInfo(
+                GameInformation.sheepInformation(false, currentTurn));
           }
 
           player.removeEffectsOfType(effect.type);
@@ -116,7 +121,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           player.removeEffectsOfType(effect.type);
           break;
 
-        /// Unreachable code because these effects are premanent. --------
+        /// Unreachable code because these effects are permanent. --------
         /// Fatal or permanent effects.
         case StatusEffectType.isCountered:
         case StatusEffectType.isExecuted:
@@ -144,7 +149,8 @@ void resolveEffectsAndCollectInfosOfDay(GameModel game) {
 
   game.getPlayersList().forEach((player) {
     if (player.hasFatalEffect()) {
-      game.addGameInfo(GameInformation.deathInformation(player, GameState.day, currentTurn));
+      game.addGameInfo(
+          GameInformation.deathInformation(player, GameState.day, currentTurn));
     }
   });
 }

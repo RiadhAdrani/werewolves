@@ -1,7 +1,7 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/game.dart';
@@ -43,12 +43,10 @@ class Protector extends RoleSingular {
       'The chosen target will be immune to the strikes of the wolves.'
     ];
 
-    List<Player> protected =
-        game.getPlayersWithStatusEffects([StatusEffectType.wasProtected]);
+    List<Player> protected = game.getPlayersWithStatusEffects([StatusEffectType.wasProtected]);
 
     if (protected.isNotEmpty) {
-      output
-          .add('You cannot protect (${protected[0].getName()}) in this night.');
+      output.add('You cannot protect (${protected[0].getName()}) in this night.');
     }
 
     return output;

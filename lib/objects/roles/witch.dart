@@ -1,7 +1,7 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role_single.dart';
@@ -47,14 +47,11 @@ class Witch extends RoleSingular {
       output.add('(${wounded.map((e) => e.getName()).join(', ')}) was killed.');
     }
 
-    output.addAll([
-      'Would you like to revive?',
-      'Do you want to curse someone?'
-    ]);
+    output.addAll(['Would you like to revive?', 'Do you want to curse someone?']);
 
     return output;
   }
-  
+
   @override
   bool canUseAbilitiesDuringDay() {
     return false;

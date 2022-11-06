@@ -1,4 +1,4 @@
-import 'package:werewolves/constants/ability_id.dart';
+import 'package:werewolves/models/ability.dart';
 
 String getAbilityName(AbilityId id) {
   switch (id) {

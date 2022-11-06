@@ -1,7 +1,7 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/game.dart';
@@ -21,8 +21,7 @@ class Hunter extends RoleSingular {
 
   @override
   bool canUseAbilitiesDuringNight() {
-    return player.hasFatalEffect() ||
-        !player.hasEffect(StatusEffectType.hasCallsign);
+    return player.hasFatalEffect() || !player.hasEffect(StatusEffectType.hasCallsign);
   }
 
   @override
@@ -32,8 +31,7 @@ class Hunter extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(GameModel game) {
-    return player.hasFatalEffect() ||
-        !player.hasEffect(StatusEffectType.hasCallsign);
+    return player.hasFatalEffect() || !player.hasEffect(StatusEffectType.hasCallsign);
   }
 
   @override
@@ -70,5 +68,4 @@ class Hunter extends RoleSingular {
   bool beforeCallEffect(BuildContext context, GameModel gameModel) {
     return false;
   }
-  
 }

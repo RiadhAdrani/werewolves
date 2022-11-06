@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/ability_id.dart';
 import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_ui.dart';

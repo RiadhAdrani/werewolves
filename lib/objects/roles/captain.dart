@@ -2,7 +2,7 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/role_call_priority.dart';
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/game.dart';
@@ -51,8 +51,7 @@ class Captain extends RoleSingular {
     final output = <String>[];
 
     if (player.hasFatalEffect()) {
-      output.add(
-          'You are dead, choose another fellow player to inherit your capitaincy.');
+      output.add('You are dead, choose another fellow player to inherit your capitaincy.');
     }
 
     output.add('Choose a player whom will start the discussion.');
@@ -73,7 +72,7 @@ class Captain extends RoleSingular {
   @override
   bool beforeCallEffect(BuildContext context, GameModel gameModel) {
     /// Check for servant effect.
-    /// We do not pass the captaincy to the servant 
+    /// We do not pass the captaincy to the servant
     /// if he is not a captain mainly,
     /// the servant should get the secondary role.
     /// We leave the inheritance to the dead captain.
@@ -91,8 +90,7 @@ class Captain extends RoleSingular {
       }
 
       gameModel.onServedDeath(this, () {
-        showConfirmAlert("Captain inheritance",
-            'The servant became the new captain.', context, () {
+        showConfirmAlert("Captain inheritance", 'The servant became the new captain.', context, () {
           if (gameModel.getState() == GameState.night) {
             gameModel.skipCurrentRole(context);
           }

@@ -1,4 +1,4 @@
-import 'package:werewolves/constants/role_id.dart';
+import 'package:werewolves/constants/roles.dart';
 
 String base(String icon) {
   return 'assets/$icon.png';
