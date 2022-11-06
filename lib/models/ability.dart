@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/ability_use_count.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -137,3 +136,5 @@ enum AbilityTime { night, day, both }
 enum AbilityType { active, passive, both }
 
 enum AbilityUI { normal, alien }
+
+enum AbilityUseCount { once, infinite, none }

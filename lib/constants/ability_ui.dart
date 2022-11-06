@@ -1,1 +1,0 @@
-enum AbilityUI { normal, alien }
