@@ -1,8 +1,8 @@
-import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:flutter/material.dart';
+import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/garrulous_word.dart';
 

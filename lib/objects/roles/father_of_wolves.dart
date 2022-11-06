@@ -1,9 +1,9 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:werewolves/constants/role_call_priority.dart';
 import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
+import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_single.dart';
 import 'package:werewolves/objects/ability/father_infect.dart';
 
@@ -14,8 +14,8 @@ class FatherOfWolves extends RoleSingular {
     callingPriority = fatherOfWolvesCallPriority;
     abilities = [InfectAbility(this)];
 
-    /// TODO : check for these cases when adding new roles
-    /// A servant with [love effect] transformed into a werewolf should not change its team.
+    // TODO : check for these cases when adding new roles
+    // A servant with [love effect] transformed into a werewolf should not change its team.
 
     if (player.roles.length == 1) {
       player.team = Team.wolves;

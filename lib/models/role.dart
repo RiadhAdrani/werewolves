@@ -10,6 +10,21 @@ import 'package:werewolves/transformers/strings/get_role_icon.dart';
 
 const uuid = Uuid();
 
+const servantCallPriority = 500;
+const protectorCallPriority = 1000;
+const wolfpackCallPriority = 2000;
+const fatherOfWolvesCallPriority = 3000;
+const blackWolfCallPriority = 3500;
+const garrulousWolfCallPriority = 3700;
+const witchCallPriority = 4000;
+const seerCallPriority = 5000;
+const shepherdCallPriority = 5500;
+const knightCallPriority = 6000;
+const hunterCallPriority = 7000;
+const alienCallPriority = 7200;
+const judgeCallPriority = 7500;
+const captainCallPriority = 8000;
+
 abstract class Role<T> {
   late T player;
 
