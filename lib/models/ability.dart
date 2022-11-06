@@ -3,6 +3,38 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/transformers/strings/get_ability_name.dart';
 
+enum AbilityId {
+  protect,
+  devour,
+  infect,
+  clairvoyance,
+  revive,
+  curse,
+  counter,
+  hunt,
+  callsign,
+  serve,
+  judgement,
+  mute,
+  word,
+  sheeps,
+  guess,
+
+  // captain
+  talker,
+  execute,
+  substitute,
+  inherit
+}
+
+enum AbilityTime { night, day, both }
+
+enum AbilityType { active, passive, both }
+
+enum AbilityUI { normal, alien }
+
+enum AbilityUseCount { once, infinite, none }
+
 abstract class Ability {
   List<int> turnsUsedIn = [];
 
@@ -106,35 +138,3 @@ abstract class Ability {
   /// Check if this ability should be used when the owner is dead.
   bool shouldBeUsedOnOwnerDeath();
 }
-
-enum AbilityId {
-  protect,
-  devour,
-  infect,
-  clairvoyance,
-  revive,
-  curse,
-  counter,
-  hunt,
-  callsign,
-  serve,
-  judgement,
-  mute,
-  word,
-  sheeps,
-  guess,
-
-  // captain
-  talker,
-  execute,
-  substitute,
-  inherit
-}
-
-enum AbilityTime { night, day, both }
-
-enum AbilityType { active, passive, both }
-
-enum AbilityUI { normal, alien }
-
-enum AbilityUseCount { once, infinite, none }

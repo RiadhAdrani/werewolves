@@ -1,7 +1,6 @@
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/constants/game_states.dart';
 import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/models/game_info.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
