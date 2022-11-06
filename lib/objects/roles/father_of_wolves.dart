@@ -1,9 +1,11 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/objects/ability/father_infect.dart';
+import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/objects/roles/wolfpack.dart';
 
 class FatherOfWolves extends RoleSingular {
   FatherOfWolves(super.player) {
@@ -59,6 +61,77 @@ class FatherOfWolves extends RoleSingular {
 
   @override
   bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+    return false;
+  }
+}
+
+class InfectEffect extends StatusEffect {
+  InfectEffect(Role source) {
+    this.source = source;
+    permanent = true;
+    type = StatusEffectType.isInfected;
+  }
+}
+
+class InfectAbility extends Ability {
+  InfectAbility(Role owner) {
+    super.targetCount = 1;
+    super.name = AbilityId.infect;
+    super.type = AbilityType.active;
+    super.useCount = AbilityUseCount.once;
+    super.time = AbilityTime.night;
+    super.owner = owner;
+  }
+
+  @override
+  void callOnTarget(Player target) {
+    target.removeEffectsOfType(StatusEffectType.isDevoured);
+    target.addStatusEffect(InfectEffect(owner));
+  }
+
+  @override
+  bool isTarget(Player target) {
+    return target.hasEffect(StatusEffectType.isDevoured) &&
+        !target.hasWolfRole();
+  }
+
+  @override
+  bool shouldBeAppliedSurely(Player target) {
+    return !target.hasEffect(StatusEffectType.isProtected);
+  }
+
+  @override
+  bool shouldBeAvailable() {
+    return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    if (targets.isEmpty) return 'No body was infected.';
+
+    return '${targets[0].name} has been infected and will join the Wolfpack.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {
+    if (affected.isEmpty) return;
+
+    var newMember = affected[0];
+
+    if (Wolfpack.shouldJoinWolfpackUponInfection(newMember)) {
+      newMember.team = Team.wolves;
+    }
+
+    game.addMemberToGroup(newMember, RoleId.wolfpack);
+  }
+
+  @override
+  bool isUnskippable() {
+    return false;
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
     return false;
   }
 }
