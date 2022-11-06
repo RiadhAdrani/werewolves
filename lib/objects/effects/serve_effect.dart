@@ -1,8 +1,7 @@
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/status_effect.dart';
 
-class ServeStatusEffect extends StatusEffect{
+class ServeStatusEffect extends StatusEffect {
   ServeStatusEffect(Role source) {
     this.source = source;
     permanent = true;

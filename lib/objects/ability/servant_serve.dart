@@ -1,8 +1,8 @@
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/effects/serve_effect.dart';
 import 'package:werewolves/objects/effects/serving_effect.dart';
 

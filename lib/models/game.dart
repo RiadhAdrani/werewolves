@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/utils/check_game_balance.dart';
 import 'package:werewolves/utils/game/calculate_new_team_for_servant.dart';
 import 'package:werewolves/utils/game/clear_status_effects.dart';

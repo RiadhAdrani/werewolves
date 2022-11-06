@@ -1,9 +1,8 @@
 import 'package:uuid/uuid.dart';
-import 'package:werewolves/constants/status_effects.dart';
+import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/models/role_single.dart';
-import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 
 enum Team { equality, village, wolves, cupid, alien }

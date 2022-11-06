@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_group.dart';
 import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/models/status_effect.dart';
 
 Widget gameRoleDataInfo(Role role) {
   return Card(

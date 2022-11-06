@@ -1,10 +1,10 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/ability/captain_execute.dart';
 import 'package:werewolves/objects/ability/captain_inherit.dart';
 import 'package:werewolves/objects/ability/captain_substitue.dart';

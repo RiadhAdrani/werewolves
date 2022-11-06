@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/ability/alien_callsign.dart';
 import 'package:werewolves/objects/ability/alien_guess.dart';
 
