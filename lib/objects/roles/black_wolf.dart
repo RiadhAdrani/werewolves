@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/objects/ability/black_mute.dart';
+import 'package:werewolves/models/status_effect.dart';
 
 class BlackWolf extends RoleSingular {
   BlackWolf(super.player) {
@@ -53,4 +54,61 @@ class BlackWolf extends RoleSingular {
   bool shouldBeCalledAtNight(GameModel game) {
     return true;
   }
+}
+
+class MuteEffect extends StatusEffect {
+  MuteEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = StatusEffectType.isMuted;
+  }
+}
+
+class MuteAbility extends Ability {
+  MuteAbility(Role owner) {
+    super.targetCount = 1;
+    super.name = AbilityId.mute;
+    super.type = AbilityType.active;
+    super.useCount = AbilityUseCount.infinite;
+    super.time = AbilityTime.night;
+    super.owner = owner;
+  }
+
+  @override
+  void callOnTarget(Player target) {
+    target.addStatusEffect(MuteEffect(owner));
+  }
+
+  @override
+  bool isTarget(Player target) {
+    return !target.hasEffect(StatusEffectType.wasMuted);
+  }
+
+  @override
+  bool isUnskippable() {
+    return true;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    return "Player muted";
+  }
+
+  @override
+  bool shouldBeAppliedSurely(Player target) {
+    return !target.hasEffect(StatusEffectType.isProtected);
+  }
+
+  @override
+  bool shouldBeAvailable() {
+    return true;
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
+    return false;
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
 }
