@@ -1,10 +1,10 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
-import 'package:werewolves/utils/make_available_list.dart';
 
 class SelectedModel extends ChangeNotifier {
   final List<Role> _items = [];

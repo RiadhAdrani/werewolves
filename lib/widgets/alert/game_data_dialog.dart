@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/utils/count_village_team.dart';
-import 'package:werewolves/utils/count_wolf_team.dart';
 import 'package:werewolves/widgets/cards/data_info.dart';
 import 'package:werewolves/widgets/cards/data_role_info.dart';
 

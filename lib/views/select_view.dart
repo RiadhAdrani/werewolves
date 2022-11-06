@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
-import 'package:werewolves/utils/check_list_is_valid.dart';
 import 'package:werewolves/widgets/select/select_role_button_view.dart';
 
 class SelectRolesView extends StatefulWidget {

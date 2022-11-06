@@ -4,8 +4,6 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/roles/servant.dart';
-import 'package:werewolves/utils/check_game_balance.dart';
-import 'package:werewolves/utils/game/clear_status_effects.dart';
 import 'package:werewolves/widgets/alert/game_over_alert.dart';
 import 'package:werewolves/widgets/alert/game_step_alert.dart';
 import 'package:werewolves/widgets/game/game_day_view.dart';
@@ -14,6 +12,20 @@ import 'package:werewolves/widgets/game/game_night_view.dart';
 import 'package:werewolves/widgets/game/game_standard_alert.dart';
 import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/game/game_use_ability_done.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
+import 'package:werewolves/objects/roles/judge.dart';
+import 'package:werewolves/objects/roles/protector.dart';
+import 'package:werewolves/objects/roles/seer.dart';
+import 'package:werewolves/objects/roles/alien.dart';
+import 'package:werewolves/objects/roles/captain.dart';
+import 'package:werewolves/objects/roles/father_of_wolves.dart';
+import 'package:werewolves/objects/roles/garrulous_wolf.dart';
+import 'package:werewolves/objects/roles/hunter.dart';
+import 'package:werewolves/objects/roles/knight.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
+import 'package:werewolves/objects/roles/villager.dart';
+import 'package:werewolves/objects/roles/werewolf.dart';
+import 'package:werewolves/objects/roles/witch.dart';
 
 enum GameState {
   empty,
@@ -738,4 +750,351 @@ class GameModel extends ChangeNotifier {
       _roles.remove(role);
     }
   }
+}
+
+void resolveEffectsAndCollectInfosOfNight(GameModel game) {
+  int currentTurn = game.getCurrentTurn();
+
+  game.getPlayersList().forEach((player) {
+    final newEffects = <Effect>[];
+
+    for (var effect in player.effects) {
+      /// do not remove permanent or fatal effects.
+      /// Fatal effects will be treated later
+      /// by confirming the death of the players
+      /// and moving them into the graveyard.
+      if (effect.permanent || isFatalEffect(effect.type)) {
+        continue;
+      }
+
+      switch (effect.type) {
+
+        /// Protector -----------------------------------------------------
+        case EffectId.isProtected:
+
+          /// currently protected player could not be protected again
+          /// add [wasProtected] effect
+          /// so he won't be targeted by the protector in the next turn.
+          player.removeEffectsOfType(effect.type);
+          newEffects.add(WasProtectedEffect(effect.source));
+          break;
+
+        /// Black Wolf ----------------------------------------------------
+        case EffectId.isMuted:
+
+          /// Currently muted player cannot be muted two night in a row
+          /// so we add [wasMuted] effect.
+          player.removeEffectsOfType(effect.type);
+          newEffects.add(WasMutedEffect(effect.source));
+
+          if (!(effect.source.player as Player).hasFatalEffect()) {
+            game.addGameInfo(
+                GameInformation.mutedInformation(player, currentTurn));
+          }
+
+          break;
+
+        /// Seer ----------------------------------------------------------
+        case EffectId.isSeen:
+          player.removeEffectsOfType(effect.type);
+
+          /// If the seer is dead, we do not report anything
+          if ((effect.source as RoleSingular).player.hasFatalEffect()) {
+            break;
+          }
+
+          Role role = resolveSeenRole(player);
+
+          game.addGameInfo(GameInformation.clairvoyanceInformation(
+              role.id, game.getState(), currentTurn));
+
+          break;
+
+        /// Judge --------------------------------------------------------
+        /// Role cannot be protected by the judge two consecutive rounds.
+        case EffectId.isJudged:
+          player.removeEffectsOfType(effect.type);
+          newEffects.add(WasJudgedEffect(effect.source));
+
+          game.addGameInfo(
+              GameInformation.judgeInformation(player, currentTurn));
+          break;
+
+        /// Captain ------------------------------------------------------
+        case EffectId.shouldTalkFirst:
+          game.addGameInfo(GameInformation.talkInformation(
+              player, game.getState(), currentTurn));
+
+          player.removeEffectsOfType(effect.type);
+          break;
+
+        /// Shepherd -----------------------------------------------------
+        case EffectId.hasSheep:
+
+          /// If the player has a wolf role
+          /// We should remove one sheep
+          /// which in our case is the target count.
+          if (player.hasWolfRole()) {
+            Ability shepherdAbility =
+                effect.source.getAbilityOfType(AbilityId.sheeps)!;
+
+            shepherdAbility.targetCount--;
+            game.addGameInfo(
+                GameInformation.sheepInformation(true, currentTurn));
+          } else {
+            game.addGameInfo(
+                GameInformation.sheepInformation(false, currentTurn));
+          }
+
+          player.removeEffectsOfType(effect.type);
+          break;
+
+        /// Common effects -----------------------------------------------
+        /// Should only be removed.
+        case EffectId.isRevived:
+        case EffectId.isSubstitue:
+        case EffectId.hasInheritedCaptaincy:
+        case EffectId.wasProtected:
+        case EffectId.wasJudged:
+        case EffectId.wasMuted:
+        case EffectId.shouldSayTheWord:
+          player.removeEffectsOfType(effect.type);
+          break;
+
+        /// Unreachable code because these effects are permanent. --------
+        /// Fatal or permanent effects.
+        case EffectId.isCountered:
+        case EffectId.isExecuted:
+        case EffectId.isDevoured:
+        case EffectId.isHunted:
+        case EffectId.isCursed:
+        case EffectId.hasCallsign:
+        case EffectId.isInfected:
+        case EffectId.isServed:
+        case EffectId.isServing:
+        case EffectId.isGuessed:
+          break;
+      }
+    }
+
+    /// Apply new effects
+    for (var effect in newEffects) {
+      player.addStatusEffect(effect);
+    }
+  });
+}
+
+List<Role> makeAvailableList() {
+  Player player() => Player("Placeholder_Player");
+
+  List<Role> output = [];
+
+  for (var element in RoleId.values) {
+    switch (element) {
+      case RoleId.protector:
+        output.add(Protector(player()));
+        break;
+      case RoleId.werewolf:
+        output.add(Werewolf(player()));
+        break;
+      case RoleId.fatherOfWolves:
+        output.add(FatherOfWolves(player()));
+        break;
+      case RoleId.witch:
+        output.add(Witch(player()));
+        break;
+      case RoleId.seer:
+        output.add(Seer(player()));
+        break;
+      case RoleId.knight:
+        output.add(Knight(player()));
+        break;
+      case RoleId.hunter:
+        output.add(Hunter(player()));
+        break;
+      case RoleId.captain:
+        output.add(Captain(player()));
+        break;
+      case RoleId.villager:
+        output.add(Villager(player()));
+        break;
+      case RoleId.judge:
+        output.add(Judge(player()));
+        break;
+      case RoleId.blackWolf:
+        output.add(BlackWolf(player()));
+        break;
+      case RoleId.garrulousWolf:
+        output.add(GarrulousWolf(player()));
+        break;
+      case RoleId.shepherd:
+        output.add(Shepherd(player()));
+        break;
+      case RoleId.alien:
+        output.add(Alien(player()));
+        break;
+
+      /// Not ready for production -------------------------------------------
+      case RoleId.servant:
+        break;
+
+      /// Group roles --------------------------------------------------------
+      /// Will be injected automatically later,
+      /// when roles have been distributed.
+      case RoleId.wolfpack:
+        break;
+    }
+  }
+
+  return output;
+}
+
+void resolveEffectsAndCollectInfosOfDay(GameModel game) {
+  int currentTurn = game.getCurrentTurn();
+
+  game.getPlayersList().forEach((player) {
+    if (player.hasFatalEffect()) {
+      game.addGameInfo(
+          GameInformation.deathInformation(player, GameState.day, currentTurn));
+    }
+  });
+}
+
+int getWolfTeamCount(List<Player> players) {
+  int sum = 0;
+
+  for (var player in players) {
+    if (player.team == Team.wolves) {
+      sum++;
+    }
+  }
+
+  return sum;
+}
+
+int getVillageTeamCount(List<Player> players) {
+  int sum = 0;
+
+  for (var player in players) {
+    if (player.team == Team.village) {
+      sum++;
+    }
+  }
+
+  return sum;
+}
+
+int getSoloTeamsCount(List<Player> players) {
+  int sum = 0;
+
+  for (var player in players) {
+    if (![Team.village, Team.wolves].contains(player.team)) {
+      sum++;
+    }
+  }
+
+  return sum;
+}
+
+dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
+  int wolvesCount = getWolfTeamCount(players);
+  int villagersCount = getVillageTeamCount(players);
+  int solosCount = getSoloTeamsCount(players);
+
+  Role? alien = getRoleInGame(RoleId.alien, roles);
+
+  if (players.isEmpty) {
+    return Team.equality;
+  }
+
+  /// In case only solos remained
+  if (solosCount == players.length) {
+    return Team.equality;
+  }
+
+  /// Alien Winning condition
+  /// The alien should be the only one remaining, or with a villager.
+  if (players.length <= 2 &&
+      alien != null &&
+      wolvesCount == 0 &&
+      solosCount == 1) {
+    return Team.alien;
+  }
+
+  /// Villager
+  /// The village win if there is no werewolf remaining.
+  if (wolvesCount == 0) {
+    return Team.village;
+  }
+
+  if (villagersCount == wolvesCount) {
+    Role? protector = getRoleInGame(RoleId.protector, roles);
+    Role? witch = getRoleInGame(RoleId.witch, roles);
+    Role? knight = getRoleInGame(RoleId.knight, roles);
+
+    bool protectorCanWinIt =
+        protector != null && protector.player.team == Team.village;
+
+    bool witchCanWinIt = (witch != null &&
+        witch.player.team == Team.village &&
+        (witch.hasUnusedAbility(AbilityId.curse) ||
+            witch.hasUnusedAbility(AbilityId.revive)));
+
+    bool knightCanWinIt = (knight != null &&
+        knight.player.team == Team.village &&
+        knight.hasUnusedAbility(AbilityId.counter));
+
+    bool continuable = protectorCanWinIt || witchCanWinIt || knightCanWinIt;
+
+    if (!continuable) {
+      return Team.wolves;
+    }
+  }
+
+  if (villagersCount < wolvesCount) {
+    return Team.wolves;
+  }
+
+  return true;
+}
+
+Role? getRoleInGame(RoleId id, List<Role> roles) {
+  for (var role in roles) {
+    if (role.id == id && !role.isObsolete()) {
+      return role;
+    }
+  }
+
+  return null;
+}
+
+List<Player> extractPlayersList(List<Role> roles) {
+  List<Player> output = [];
+
+  for (var role in roles) {
+    if (!role.isGroup()) {
+      role.player as Player;
+      if (!output.contains(role.player)) {
+        if (!(role.player as Player).isDead()) {
+          output.add(role.player);
+        }
+      }
+    }
+  }
+
+  return output;
+}
+
+dynamic checkListIsValid(List<Role> roles) {
+  if (roles.length < 7) {
+    return "Player count is too short to start a game. Try adding more roles to reach at least 7 players.";
+  }
+
+  dynamic balanced = checkTeamsAreBalanced(extractPlayersList(roles), roles);
+
+  if (balanced != true) {
+    return "Game is not balanced, ${getTeamName(balanced)} team is already winning.";
+  }
+
+  return true;
 }

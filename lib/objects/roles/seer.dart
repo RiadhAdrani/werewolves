@@ -54,6 +54,10 @@ class Seer extends RoleSingular {
   }
 }
 
+Role resolveSeenRole(Player player) {
+  return player.getMainRole();
+}
+
 class ClairvoyanceEffect extends Effect {
   ClairvoyanceEffect(Role source) {
     this.source = source;
