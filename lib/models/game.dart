@@ -29,6 +29,8 @@ enum GameState {
   day,
 }
 
+enum DayState { information, discussion, vote, execution, resolution }
+
 class GameInformation {
   late final String _text;
   late final GameState _period;
