@@ -3,12 +3,12 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/widgets/cards/data_info.dart';
 import 'package:werewolves/widgets/cards/data_role_info.dart';
 
-void showGameDataDialog(BuildContext context, GameModel game) {
+void showGameDataDialog(BuildContext context, Game game) {
   List<String> simple = [
-    'Number of alive players is ${game.getPlayersList().length}',
-    'Number of dead players is ${game.getDeadPlayers().length}',
-    'Number of players within team Village is ${getVillageTeamCount(game.getPlayersList())}',
-    'Number of players within team Wolves is ${getWolfTeamCount(game.getPlayersList())}'
+    'Number of alive players is ${game.playersList.length}',
+    'Number of dead players is ${game.deadPlayers.length}',
+    'Number of players within team Village is ${getVillageTeamCount(game.playersList)}',
+    'Number of players within team Wolves is ${getWolfTeamCount(game.playersList)}'
   ];
 
   showDialog(
@@ -39,8 +39,7 @@ void showGameDataDialog(BuildContext context, GameModel game) {
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: game
-                          .getRolesForDebug()
+                      children: game.rolesForDebug
                           .map((role) => gameRoleDataInfo(role))
                           .toList(),
                     ),

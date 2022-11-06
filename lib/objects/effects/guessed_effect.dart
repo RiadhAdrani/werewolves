@@ -1,5 +1,5 @@
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 
 class GuessedStatusEffect extends Effect {
   GuessedStatusEffect(Role source) {

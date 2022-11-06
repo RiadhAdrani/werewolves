@@ -126,7 +126,7 @@ abstract class Role<T> {
   }
 
   /// Should the role be called during the night.
-  bool shouldBeCalledAtNight(GameModel game);
+  bool shouldBeCalledAtNight(Game game);
 
   /// Can the role use its abilities
   bool canUseAbilitiesDuringNight();
@@ -153,10 +153,10 @@ abstract class Role<T> {
   bool playerIsFatallyWounded();
 
   /// Get the informations that the role needs to know.
-  List<String> getInformations(GameModel game);
+  List<String> getInformations(Game game);
 
   /// Get the instructions ,advices and tips for the narrator.
-  List<String> getAdvices(GameModel game);
+  List<String> getAdvices(Game game);
 
   /// Return the supposed initial role team.
   /// This is used when distributing roles
@@ -169,7 +169,7 @@ abstract class Role<T> {
   ///
   /// Used mainly with a dead captain
   /// chosen by the servant.
-  bool beforeCallEffect(BuildContext context, GameModel gameModel);
+  bool beforeCallEffect(BuildContext context, Game gameModel);
 
   /// Force the role into an obsolete state.
   void setObsolete();

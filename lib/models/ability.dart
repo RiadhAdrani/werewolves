@@ -95,8 +95,8 @@ abstract class Ability {
     return turnsUsedIn.contains(turn);
   }
 
-  List<Player> createListOfTargetPlayers(GameModel game) {
-    return game.getPlayersList().where((player) => isTarget(player)).toList();
+  List<Player> createListOfTargetPlayers(Game game) {
+    return game.playersList.where((player) => isTarget(player)).toList();
   }
 
   /// Check if the given target is valid or not.
@@ -127,7 +127,7 @@ abstract class Ability {
   String onAppliedMessage(List<Player> targets);
 
   /// Effect launched after the ability has applied successfully;
-  void usePostEffect(GameModel game, List<Player> affected);
+  void usePostEffect(Game game, List<Player> affected);
 
   /// Generate ability detailed description;
   String getDescription() {

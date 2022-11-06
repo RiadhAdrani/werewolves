@@ -5,10 +5,8 @@ import 'package:werewolves/widgets/cards/ability_card_view.dart';
 import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/text/title_with_icon.dart';
 
-Widget abilitiesView(GameModel game, BuildContext context) {
-  final abilities = game
-      .getCurrent()!
-      .abilities
+Widget abilitiesView(Game game, BuildContext context) {
+  final abilities = game.currentRole!.abilities
       .where((ability) => game.isAbilityAvailableAtNight(ability))
       .toList();
 
@@ -28,8 +26,9 @@ Widget abilitiesView(GameModel game, BuildContext context) {
                   final ability = abilities[index];
 
                   return abilityCardView(ability, () {
-                    showUseAbilityDialog(context, game, ability, (List<Player> targets) {
-                      game.useAbilitInNight(ability, targets, context);
+                    showUseAbilityDialog(context, game, ability,
+                        (List<Player> targets) {
+                      game.useAbilityInNight(ability, targets, context);
                     });
                   });
                 },

@@ -4,7 +4,7 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
 
 class FatherOfWolves extends RoleSingular {
@@ -33,17 +33,17 @@ class FatherOfWolves extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
-    return game.getCurrentTurn() > 1;
+  bool shouldBeCalledAtNight(Game game) {
+    return game.currentTurn > 1;
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     return [
       'Do you want to infect the player that you killed wth the wolfpack ?'
     ];
@@ -60,7 +60,7 @@ class FatherOfWolves extends RoleSingular {
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }
 }
@@ -112,7 +112,7 @@ class InfectAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {
+  void usePostEffect(Game game, List<Player> affected) {
     if (affected.isEmpty) return;
 
     var newMember = affected[0];

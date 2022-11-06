@@ -4,7 +4,7 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 
 class Protector extends RoleSingular {
   Protector(super.player) {
@@ -14,7 +14,7 @@ class Protector extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
+  bool shouldBeCalledAtNight(Game game) {
     return true;
   }
 
@@ -29,12 +29,12 @@ class Protector extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     final output = <String>[
       'Choose a target to protect with your shield.',
       'The chosen target will be immune to the strikes of the wolves.'
@@ -62,7 +62,7 @@ class Protector extends RoleSingular {
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }
 }
@@ -121,7 +121,7 @@ class ProtectAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 
   @override
   bool isUnskippable() {

@@ -3,7 +3,7 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/objects/effects/callsign_effect.dart';
 import 'package:werewolves/objects/effects/guessed_effect.dart';
 
@@ -16,7 +16,7 @@ class Alien extends RoleSingular {
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }
 
@@ -36,12 +36,12 @@ class Alien extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     return ["Pick a callsign."];
   }
 
@@ -51,7 +51,7 @@ class Alien extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
+  bool shouldBeCalledAtNight(Game game) {
     return !player.hasEffect(EffectId.hasCallsign);
   }
 
@@ -156,7 +156,7 @@ class GuessAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 
   @override
   bool isUnskippable() {
@@ -208,7 +208,7 @@ class AlienCallSignAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 
   @override
   bool isUnskippable() {

@@ -4,7 +4,7 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 
 class Wolfpack extends RoleGroup {
   Wolfpack(super.player) {
@@ -24,17 +24,17 @@ class Wolfpack extends RoleGroup {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
+  bool shouldBeCalledAtNight(Game game) {
     return hasAtLeastOneSurvivingMember();
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     return ['Assembe wolfpack.', 'Choose your victim.'];
   }
 
@@ -49,7 +49,7 @@ class Wolfpack extends RoleGroup {
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }
 
@@ -127,7 +127,7 @@ class DevourAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 
   @override
   bool isUnskippable() {

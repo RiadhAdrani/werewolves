@@ -4,7 +4,7 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/widgets/alert/game_confirm_ability_use.dart';
 
 class Captain extends RoleSingular {
@@ -31,17 +31,17 @@ class Captain extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
+  bool shouldBeCalledAtNight(Game game) {
     return true;
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     final output = <String>[];
 
     if (player.hasFatalEffect()) {
@@ -65,7 +65,7 @@ class Captain extends RoleSingular {
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     /// Check for servant effect.
     /// We do not pass the captaincy to the servant
     /// if he is not a captain mainly,
@@ -87,7 +87,7 @@ class Captain extends RoleSingular {
       gameModel.onServedDeath(this, () {
         showConfirmAlert("Captain inheritance",
             'The servant became the new captain.', context, () {
-          if (gameModel.getState() == GameState.night) {
+          if (gameModel.state == GameState.night) {
             gameModel.skipCurrentRole(context);
           }
         });
@@ -170,7 +170,7 @@ class ExecuteAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 
   @override
   bool isUnskippable() {
@@ -223,7 +223,7 @@ class InheritAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {
+  void usePostEffect(Game game, List<Player> affected) {
     if (affected.isEmpty) return;
 
     game.replaceCaptainPlayer(affected[0]);
@@ -280,7 +280,7 @@ class SubstitueAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 
   @override
   bool isUnskippable() {
@@ -331,7 +331,7 @@ class TalkerAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 
   @override
   bool isUnskippable() {

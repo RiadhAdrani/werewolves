@@ -5,7 +5,7 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/widgets/game/ability/use_alien_ability.dart';
 import 'package:werewolves/widgets/game/ability/use_normal_ability.dart';
 
-void showUseAbilityDialog(BuildContext context, GameModel game, Ability ability,
+void showUseAbilityDialog(BuildContext context, Game game, Ability ability,
     Function(List<Player>) onAbilityUsed,
     {bool cancelable = true}) {
   List<Player> targetList = ability.createListOfTargetPlayers(game);
@@ -20,7 +20,7 @@ void showUseAbilityDialog(BuildContext context, GameModel game, Ability ability,
         ability,
         targetList,
         onAbilityUsed,
-        game.getPlayableRoles(),
+        game.playableRoles,
       );
       break;
   }

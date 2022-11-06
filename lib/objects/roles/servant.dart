@@ -4,7 +4,7 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 
 import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
@@ -44,12 +44,12 @@ class Servant extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     return [
       'The servant shall choose a target.',
       'If the chosen player dies, the servant takes his role.'
@@ -62,12 +62,12 @@ class Servant extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
+  bool shouldBeCalledAtNight(Game game) {
     return player.hasEffect(EffectId.isServing) == false;
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }
 }
@@ -135,7 +135,7 @@ class ServantAbility extends Ability {
   }
 
   @override
-  void usePostEffect(GameModel game, List<Player> affected) {}
+  void usePostEffect(Game game, List<Player> affected) {}
 }
 
 dynamic calculateNewTeamForServant(Role newRole) {

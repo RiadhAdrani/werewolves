@@ -5,9 +5,9 @@ import 'package:werewolves/widgets/game/game_night_view_important_info.dart';
 import 'package:werewolves/widgets/game/game_night_view_abilities.dart';
 import 'package:werewolves/widgets/game/game_night_view_role_info.dart';
 
-Widget gameNightView(GameModel game, BuildContext context) {
+Widget gameNightView(Game game, BuildContext context) {
   return Scaffold(
-    appBar: gameAppBar('Night (${game.getCurrentTurn()})', context, game,
+    appBar: gameAppBar('Night (${game.currentTurn})', context, game,
         backgroundColor: Colors.blueGrey[900]!, textColor: Colors.white),
     body: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -15,11 +15,11 @@ Widget gameNightView(GameModel game, BuildContext context) {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          roleInfoIconNamePlayer(game.getCurrent()!),
+          roleInfoIconNamePlayer(game.currentRole!),
           Divider(
             color: Colors.blueGrey[100],
           ),
-          importantInformationsView(game.getCurrent()!.getInformations(game)),
+          importantInformationsView(game.currentRole!.getInformations(game)),
           Divider(
             color: Colors.blueGrey[100],
           ),

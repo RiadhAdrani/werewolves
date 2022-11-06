@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 
