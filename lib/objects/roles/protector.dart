@@ -75,6 +75,14 @@ class ProtectedEffect extends StatusEffect {
   }
 }
 
+class WasProtectedEffect extends StatusEffect {
+  WasProtectedEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = StatusEffectType.wasProtected;
+  }
+}
+
 class ProtectAbility extends Ability {
   ProtectAbility(Role owner) {
     super.targetCount = 1;

@@ -64,6 +64,14 @@ class MuteEffect extends StatusEffect {
   }
 }
 
+class WasMutedEffect extends StatusEffect {
+  WasMutedEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = StatusEffectType.wasMuted;
+  }
+}
+
 class MuteAbility extends Ability {
   MuteAbility(Role owner) {
     super.targetCount = 1;

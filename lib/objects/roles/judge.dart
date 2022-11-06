@@ -66,6 +66,14 @@ class JudgedEffect extends StatusEffect {
   }
 }
 
+class WasJudgedEffect extends StatusEffect {
+  WasJudgedEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = StatusEffectType.wasJudged;
+  }
+}
+
 class JudgementAbility extends Ability {
   JudgementAbility(Role owner) {
     super.targetCount = 1;

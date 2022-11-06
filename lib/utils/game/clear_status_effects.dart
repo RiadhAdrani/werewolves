@@ -3,9 +3,9 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/status_effect.dart';
-import 'package:werewolves/objects/effects/was_judged_effect.dart';
-import 'package:werewolves/objects/effects/was_muted_effect.dart';
-import 'package:werewolves/objects/effects/was_protected_effect.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
+import 'package:werewolves/objects/roles/judge.dart';
+import 'package:werewolves/objects/roles/protector.dart';
 import 'package:werewolves/utils/game/resolve_seen_role.dart';
 
 void resolveEffectsAndCollectInfosOfNight(GameModel game) {
@@ -32,7 +32,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           /// add [wasProtected] effect
           /// so he won't be targeted by the protector in the next turn.
           player.removeEffectsOfType(effect.type);
-          newEffects.add(WasProtectedStatusEffect(effect.source));
+          newEffects.add(WasProtectedEffect(effect.source));
           break;
 
         /// Black Wolf ----------------------------------------------------
@@ -41,7 +41,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
           /// Currently muted player cannot be muted two night in a row
           /// so we add [wasMuted] effect.
           player.removeEffectsOfType(effect.type);
-          newEffects.add(WasMutedStatusEffect(effect.source));
+          newEffects.add(WasMutedEffect(effect.source));
 
           if (!(effect.source.player as Player).hasFatalEffect()) {
             game.addGameInfo(
@@ -70,7 +70,7 @@ void resolveEffectsAndCollectInfosOfNight(GameModel game) {
         /// Role cannot be protected by the judge two consecutive rounds.
         case StatusEffectType.isJudged:
           player.removeEffectsOfType(effect.type);
-          newEffects.add(WasJudgedStatusEffect(effect.source));
+          newEffects.add(WasJudgedEffect(effect.source));
 
           game.addGameInfo(
               GameInformation.judgeInformation(player, currentTurn));
