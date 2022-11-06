@@ -4,7 +4,7 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/objects/ability/shepherd_sheeps.dart';
+import 'package:werewolves/models/status_effect.dart';
 
 class Shepherd extends RoleSingular {
   Shepherd(super.player) {
@@ -56,6 +56,63 @@ class Shepherd extends RoleSingular {
 
   @override
   bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+    return false;
+  }
+}
+
+class SheepEffect extends StatusEffect {
+  SheepEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = StatusEffectType.hasSheep;
+  }
+}
+
+class ShepherdAbility extends Ability {
+  ShepherdAbility(Role owner) {
+    super.targetCount = 2;
+    super.name = AbilityId.sheeps;
+    super.type = AbilityType.active;
+    super.useCount = AbilityUseCount.infinite;
+    super.time = AbilityTime.night;
+    super.owner = owner;
+  }
+
+  @override
+  void callOnTarget(Player target) {
+    target.addStatusEffect(SheepEffect(owner));
+  }
+
+  @override
+  bool isTarget(Player target) {
+    return true;
+  }
+
+  @override
+  bool shouldBeAppliedSurely(Player target) {
+    return true;
+  }
+
+  @override
+  bool shouldBeAvailable() {
+    return targetCount > 0;
+  }
+
+  @override
+  String onAppliedMessage(List<Player> targets) {
+    return 'Sheep(s) sent.';
+  }
+
+  @override
+  void usePostEffect(GameModel game, List<Player> affected) {}
+
+  @override
+  bool isUnskippable() {
+    return targetCount > 0;
+  }
+
+  @override
+  bool shouldBeUsedOnOwnerDeath() {
     return false;
   }
 }
