@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/ability_time.dart';
 import 'package:werewolves/constants/ability_type.dart';
 import 'package:werewolves/constants/ability_ui.dart';
 import 'package:werewolves/constants/ability_use_count.dart';
@@ -134,3 +133,5 @@ enum AbilityId {
   substitute,
   inherit
 }
+
+enum AbilityTime { night, day, both }
