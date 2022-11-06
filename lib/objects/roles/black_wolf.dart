@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';

@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 
@@ -43,5 +42,6 @@ RoleId resolveAlienGuessPossibility(RoleId id) {
 bool resolveAlienGuess(Player player, RoleId role) {
   Role mainRole = player.getMainRole();
 
-  return resolveAlienGuessPossibility(role) == resolveAlienGuessPossibility(mainRole.id);
+  return resolveAlienGuessPossibility(role) ==
+      resolveAlienGuessPossibility(mainRole.id);
 }

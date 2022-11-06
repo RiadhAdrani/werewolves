@@ -1,6 +1,6 @@
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
+import 'package:werewolves/models/role.dart';
 import 'package:werewolves/transformers/strings/get_role_name.dart';
 
 class GameInformation {

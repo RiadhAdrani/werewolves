@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -9,8 +8,12 @@ import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/transformers/strings/get_role_name.dart';
 import 'package:werewolves/widgets/buttons/standard_text_button.dart';
 
-void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> targetList,
-    Function(List<Player>) onAbilityUsed, List<Role> remainingRoles,
+void showAlienAbilityDialog(
+    BuildContext context,
+    Ability ability,
+    List<Player> targetList,
+    Function(List<Player>) onAbilityUsed,
+    List<Role> remainingRoles,
     {bool cancelable = true}) {
   showDialog(
       context: context,
@@ -24,7 +27,8 @@ void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> 
             return WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
-                title: Text("${ability.getName()} (${ability.owner.getName()})"),
+                title:
+                    Text("${ability.getName()} (${ability.owner.getName()})"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,8 +45,11 @@ void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> 
                       height: 300,
                       child: ListView(
                         children: model.items.map((item) {
-                          return roleToGuessCard(item, (item) => model.toggleSelected(item), () {
-                            _showOptionsForAlienDialog(context, model.possibleGuesses,
+                          return roleToGuessCard(
+                              item, (item) => model.toggleSelected(item), () {
+                            _showOptionsForAlienDialog(
+                                context,
+                                model.possibleGuesses,
                                 (guess) => model.changeGuess(item, guess));
                           });
                         }).toList(),
@@ -76,8 +83,8 @@ void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> 
       });
 }
 
-Widget roleToGuessCard(
-    AlienGuessItem item, Function(AlienGuessItem) onCheckChange, Function onItemPressed) {
+Widget roleToGuessCard(AlienGuessItem item,
+    Function(AlienGuessItem) onCheckChange, Function onItemPressed) {
   return Card(
     child: Padding(
       padding: const EdgeInsets.all(4.0),
@@ -112,8 +119,8 @@ Widget roleToGuessCard(
   );
 }
 
-void _showOptionsForAlienDialog(
-    BuildContext context, List<RoleId> options, Function(RoleId) onItemSelected) {
+void _showOptionsForAlienDialog(BuildContext context, List<RoleId> options,
+    Function(RoleId) onItemSelected) {
   showDialog(
       context: context,
       builder: (BuildContext context) {

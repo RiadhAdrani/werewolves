@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
@@ -9,6 +8,25 @@ import 'package:werewolves/transformers/strings/get_role_name.dart';
 import 'package:werewolves/transformers/strings/get_role_icon.dart';
 
 const uuid = Uuid();
+
+enum RoleId {
+  protector,
+  werewolf,
+  fatherOfWolves,
+  witch,
+  seer,
+  knight,
+  hunter,
+  captain,
+  villager,
+  wolfpack,
+  servant,
+  judge,
+  blackWolf,
+  garrulousWolf,
+  shepherd,
+  alien
+}
 
 const servantCallPriority = 500;
 const protectorCallPriority = 1000;

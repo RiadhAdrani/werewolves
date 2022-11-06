@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:flutter/material.dart';

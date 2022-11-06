@@ -1,4 +1,3 @@
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/alien.dart';

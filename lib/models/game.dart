@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:werewolves/constants/roles.dart';
 import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
