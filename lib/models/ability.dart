@@ -1,7 +1,6 @@
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/transformers/strings/get_ability_name.dart';
 
 enum AbilityId {
   protect,
@@ -137,4 +136,47 @@ abstract class Ability {
 
   /// Check if this ability should be used when the owner is dead.
   bool shouldBeUsedOnOwnerDeath();
+}
+
+String getAbilityName(AbilityId id) {
+  switch (id) {
+    case AbilityId.protect:
+      return "Protect";
+    case AbilityId.devour:
+      return "Devour";
+    case AbilityId.infect:
+      return "Infect";
+    case AbilityId.clairvoyance:
+      return "Clairvoyance";
+    case AbilityId.revive:
+      return "Revive";
+    case AbilityId.curse:
+      return "Curse";
+    case AbilityId.counter:
+      return "Counter";
+    case AbilityId.hunt:
+      return "Hunt";
+    case AbilityId.talker:
+      return "Order";
+    case AbilityId.execute:
+      return "Execute";
+    case AbilityId.substitute:
+      return "Substitue";
+    case AbilityId.inherit:
+      return "Inherit";
+    case AbilityId.callsign:
+      return "Call sign";
+    case AbilityId.serve:
+      return "Serve";
+    case AbilityId.judgement:
+      return "Judge";
+    case AbilityId.mute:
+      return "Mute";
+    case AbilityId.word:
+      return "Garrulous Word";
+    case AbilityId.sheeps:
+      return "Sheeps";
+    case AbilityId.guess:
+      return "Guess";
+  }
 }
