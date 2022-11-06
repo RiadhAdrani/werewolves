@@ -4,7 +4,7 @@ import 'package:werewolves/widgets/alert/game_data_dialog.dart';
 import 'package:werewolves/widgets/alert/game_write_dialog.dart';
 import 'package:werewolves/widgets/game/game_leave_dialog.dart';
 
-AppBar gameAppBar(String title, BuildContext context, GameModel game,
+AppBar gameAppBar(String title, BuildContext context, Game game,
     {Color textColor = Colors.black, Color backgroundColor = Colors.white54}) {
   Widget appBarButton(String text, Function onPress) {
     return TextButton(

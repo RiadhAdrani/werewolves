@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
-import 'package:werewolves/transformers/strings/get_role_name.dart';
+import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/widgets/buttons/standard_text_button.dart';
 
-void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> targetList,
-    Function(List<Player>) onAbilityUsed, List<Role> remainingRoles,
+void showAlienAbilityDialog(
+    BuildContext context,
+    Ability ability,
+    List<Player> targetList,
+    Function(List<Player>) onAbilityUsed,
+    List<Role> remainingRoles,
     {bool cancelable = true}) {
   showDialog(
       context: context,
@@ -23,7 +26,8 @@ void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> 
             return WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
-                title: Text("${ability.getName()} (${ability.owner.getName()})"),
+                title:
+                    Text("${ability.getName()} (${ability.owner.getName()})"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,41 +44,13 @@ void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> 
                       height: 300,
                       child: ListView(
                         children: model.items.map((item) {
-                          return Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                Checkbox(
-                                    value: item.selected,
-                                    onChanged: (bool? val) {
-                                      model.toggleSelected(item);
-                                    }),
-                                Expanded(
-                                    child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item.player.getName(),
-                                      style: const TextStyle(fontSize: 13),
-                                    ),
-                                    if (item.guess != null)
-                                      Text(
-                                        'Guess : ${getRoleName(item.guess!)}',
-                                        style: const TextStyle(fontSize: 11),
-                                      ),
-                                  ],
-                                )),
-                                TextButton(
-                                    onPressed: () {
-                                      _showOptionsForAlienDialog(context, model.possibleGuesses,
-                                          (RoleId roleId) {
-                                        model.changeGuess(item, roleId);
-                                      });
-                                    },
-                                    child: const Text("Guess"))
-                              ]),
-                            ),
-                          );
+                          return roleToGuessCard(
+                              item, (item) => model.toggleSelected(item), () {
+                            _showOptionsForAlienDialog(
+                                context,
+                                model.possibleGuesses,
+                                (guess) => model.changeGuess(item, guess));
+                          });
                         }).toList(),
                       ),
                     )
@@ -86,7 +62,7 @@ void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> 
                       Navigator.pop(context);
                     }),
                   standardTextButton('Apply', () {
-                    dynamic res = model.getCorrectlyGuessedRoles();
+                    dynamic res = Alien.getCorrectlyGuessedRoles(model.items);
 
                     List<Player> targets = [];
 
@@ -106,8 +82,44 @@ void showAlienAbilityDialog(BuildContext context, Ability ability, List<Player> 
       });
 }
 
-void _showOptionsForAlienDialog(
-    BuildContext context, List<RoleId> options, Function(RoleId) onItemSelected) {
+Widget roleToGuessCard(AlienGuessItem item,
+    Function(AlienGuessItem) onCheckChange, Function onItemPressed) {
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Checkbox(
+            value: item.selected,
+            onChanged: (bool? val) {
+              onCheckChange(item);
+            }),
+        Expanded(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              item.player.getName(),
+              style: const TextStyle(fontSize: 13),
+            ),
+            if (item.guess != null)
+              Text(
+                'Guess : ${getRoleName(item.guess!)}',
+                style: const TextStyle(fontSize: 11),
+              ),
+          ],
+        )),
+        TextButton(
+            onPressed: () {
+              onItemPressed();
+            },
+            child: const Text("Guess"))
+      ]),
+    ),
+  );
+}
+
+void _showOptionsForAlienDialog(BuildContext context, List<RoleId> options,
+    Function(RoleId) onItemSelected) {
   showDialog(
       context: context,
       builder: (BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:werewolves/models/game_arguments.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/widgets/game/game_leave_dialog.dart';
 
@@ -28,17 +27,16 @@ class _GameViewState extends State<GameView> {
     if (!_initialized) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {
-          Provider.of<GameModel>(context, listen: false)
-              .init(widget.arguments.list);
+          Provider.of<Game>(context, listen: false).init(widget.arguments.list);
           _initialized = true;
         });
       });
     }
 
-    return Consumer<GameModel>(builder: (context, value, child) {
+    return Consumer<Game>(builder: (context, value, child) {
       return WillPopScope(
         onWillPop: () async {
-          if (!value.hasPendingAbilities()) {
+          if (!value.hasPendingAbilities) {
             _onBackPressed();
           }
 

@@ -1,11 +1,10 @@
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 
-class CallsignStatusEffect extends StatusEffect {
-  CallsignStatusEffect(Role source) {
+class CallSignEffect extends Effect {
+  CallSignEffect(Role source) {
     this.source = source;
     permanent = true;
-    type = StatusEffectType.hasCallsign;
+    type = EffectId.hasCallsign;
   }
 }

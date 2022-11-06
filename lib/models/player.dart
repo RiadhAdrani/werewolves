@@ -1,12 +1,24 @@
 import 'package:uuid/uuid.dart';
-import 'package:werewolves/constants/role_id.dart';
-import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/role_group.dart';
-import 'package:werewolves/models/role_single.dart';
-import 'package:werewolves/models/status_effect.dart';
 import 'package:werewolves/objects/roles/villager.dart';
+
+enum Team { equality, village, wolves, cupid, alien }
+
+String getTeamName(Team team) {
+  switch (team) {
+    case Team.village:
+      return 'Village';
+    case Team.wolves:
+      return 'Wolves';
+    case Team.cupid:
+      return 'Lovers';
+    case Team.alien:
+      return 'Alien';
+    case Team.equality:
+      return 'Null';
+  }
+}
 
 const uuid = Uuid();
 
@@ -14,9 +26,9 @@ class Player {
   late String name;
 
   bool isAlive = true;
-  Teams team = Teams.village;
+  Team team = Team.village;
   String id = uuid.v4();
-  List<StatusEffect> effects = [];
+  List<Effect> effects = [];
   List<Role> roles = [];
 
   Player(this.name);
@@ -27,27 +39,28 @@ class Player {
   }
 
   /// Switch the current team.
-  void changeTeam(Teams newTeam) {
+  void changeTeam(Team newTeam) {
     team = newTeam;
   }
 
   /// Add a new status effect.
   /// Does not account for duplicate.
-  void addStatusEffect(StatusEffect effect) {
+  void addStatusEffect(Effect effect) {
     effects.add(effect);
   }
 
   /// Remove all status effect of the given type
-  void removeEffectsOfType(StatusEffectType effect) {
+  void removeEffectsOfType(EffectId effect) {
     effects = effects.where((element) => element.type != effect).toList();
   }
 
   /// Remove all fatal effects except the given ones.
-  void removeFatalEffects(List<StatusEffectType> exception) {
-    final newList = <StatusEffect>[];
+  void removeFatalEffects(List<EffectId> exception) {
+    final newList = <Effect>[];
 
     for (var effect in effects) {
-      if (exception.contains(effect.type) || !fatalStatusEffects.contains(effect.type)) {
+      if (exception.contains(effect.type) ||
+          !fatalStatusEffects.contains(effect.type)) {
         newList.add(effect);
       }
     }
@@ -70,7 +83,9 @@ class Player {
     roles.removeWhere((role) {
       if (role.id == id) {
         if (role.isGroup()) {
-          (role as RoleGroup).player.removeWhere((Player player) => player.id == this.id);
+          (role as RoleGroup)
+              .player
+              .removeWhere((Player player) => player.id == this.id);
         } else {
           var dummyDeadVillager = Player("this_player_name_should_not_appear");
           dummyDeadVillager.isAlive = false;
@@ -86,7 +101,7 @@ class Player {
   }
 
   /// Check if the player has a status effect.
-  bool hasEffect(StatusEffectType effect) {
+  bool hasEffect(EffectId effect) {
     for (var e in effects) {
       if (e.type == effect) return true;
     }
@@ -149,7 +164,7 @@ class Player {
       /// it is impossible due to the fact
       /// that a singular role has been assigned to the player
 
-      // TODO: check cupidon lovers.
+      // TODO : check cupidon lovers.
 
       /// any, wolfpack -> any
       /// any, lovers -> any;
@@ -169,7 +184,7 @@ class Player {
     }
 
     if (roles.length > 2) {
-      // TODO: check for other possibilities
+      // TODO : check for other possibilities
 
       /// we check for any role that is not captain, or a group role.
       for (var role in roles) {

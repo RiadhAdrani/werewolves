@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:werewolves/constants/role_id.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/utils/game/resolve_alien_guess.dart';
+import 'package:werewolves/objects/roles/alien.dart';
 
 class UseAlienAbilityModel extends ChangeNotifier {
   late List<AlienGuessItem> items;
@@ -36,28 +35,4 @@ class UseAlienAbilityModel extends ChangeNotifier {
 
     notifyListeners();
   }
-
-  dynamic getCorrectlyGuessedRoles() {
-    List<Player> players = [];
-
-    for (AlienGuessItem item in items) {
-      if (item.selected == true && item.guess != null) {
-        if (resolveAlienGuess(item.player, item.guess!)) {
-          players.add(item.player);
-        } else {
-          return false;
-        }
-      }
-    }
-
-    return players;
-  }
-}
-
-class AlienGuessItem {
-  Player player;
-  bool selected = false;
-  RoleId? guess;
-
-  AlienGuessItem(this.player);
 }

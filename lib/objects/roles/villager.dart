@@ -1,8 +1,8 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/models/role.dart';
 
 class Villager extends RoleSingular {
   Villager(super.player) {
@@ -20,17 +20,17 @@ class Villager extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
+  bool shouldBeCalledAtNight(Game game) {
     return false;
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     return [];
   }
 
@@ -40,12 +40,12 @@ class Villager extends RoleSingular {
   }
 
   @override
-  Teams getSupposedInitialTeam() {
-    return Teams.village;
+  Team getSupposedInitialTeam() {
+    return Team.village;
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }
 }

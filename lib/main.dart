@@ -14,7 +14,8 @@ void main() {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(
-    ChangeNotifierProvider(create: (context) => SelectedModel(), child: const MyApp()),
+    ChangeNotifierProvider(
+        create: (context) => SelectedModel(), child: const MyApp()),
   );
 }
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/select': (context) => const SelectRolesView(),
         '/distribute': (context) => const DistributeView(),
         '/game': (context) => ChangeNotifierProvider(
-            create: (context) => GameModel(), child: const GameArgumentsExtractor())
+            create: (context) => Game(), child: const GameArgumentsExtractor())
       },
       theme: ThemeData(
           primarySwatch: Colors.blueGrey,

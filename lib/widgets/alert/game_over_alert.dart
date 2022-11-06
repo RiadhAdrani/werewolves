@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/transformers/strings/get_team_name.dart';
 import 'package:werewolves/widgets/buttons/standard_text_button.dart';
 
-void showGameOverAlert(Teams team, GameModel game, BuildContext context) {
+void showGameOverAlert(Team team, Game game, BuildContext context) {
   showDialog(
       context: context,
       barrierDismissible: false,

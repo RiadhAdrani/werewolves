@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/game.dart';
 
-Widget gameInitView(GameModel game, BuildContext context) {
+Widget gameInitView(Game game, BuildContext context) {
   return ColoredBox(
     color: Colors.blueGrey[900]!,
     child: Center(

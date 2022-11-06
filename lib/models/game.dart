@@ -1,21 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:werewolves/constants/ability_id.dart';
-import 'package:werewolves/constants/ability_use_count.dart';
-import 'package:werewolves/constants/game_states.dart';
-import 'package:werewolves/constants/role_id.dart';
-import 'package:werewolves/constants/status_effects.dart';
-import 'package:werewolves/constants/teams.dart';
 import 'package:werewolves/models/ability.dart';
-import 'package:werewolves/models/game_info.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/role_group.dart';
-import 'package:werewolves/models/role_single.dart';
-import 'package:werewolves/utils/check_game_balance.dart';
-import 'package:werewolves/utils/game/calculate_new_team_for_servant.dart';
-import 'package:werewolves/utils/game/clear_status_effects.dart';
-import 'package:werewolves/utils/game/create_role_for_servant.dart';
-import 'package:werewolves/utils/game/make_roles_from_initial_list.dart';
+import 'package:werewolves/models/effect.dart';
+import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/widgets/alert/game_over_alert.dart';
 import 'package:werewolves/widgets/alert/game_step_alert.dart';
 import 'package:werewolves/widgets/game/game_day_view.dart';
@@ -24,25 +12,107 @@ import 'package:werewolves/widgets/game/game_night_view.dart';
 import 'package:werewolves/widgets/game/game_standard_alert.dart';
 import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/game/game_use_ability_done.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
+import 'package:werewolves/objects/roles/judge.dart';
+import 'package:werewolves/objects/roles/protector.dart';
+import 'package:werewolves/objects/roles/seer.dart';
+import 'package:werewolves/objects/roles/alien.dart';
+import 'package:werewolves/objects/roles/captain.dart';
+import 'package:werewolves/objects/roles/father_of_wolves.dart';
+import 'package:werewolves/objects/roles/garrulous_wolf.dart';
+import 'package:werewolves/objects/roles/hunter.dart';
+import 'package:werewolves/objects/roles/knight.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
+import 'package:werewolves/objects/roles/villager.dart';
+import 'package:werewolves/objects/roles/werewolf.dart';
+import 'package:werewolves/objects/roles/witch.dart';
 
-class GameModel extends ChangeNotifier {
+enum GameState {
+  empty,
+  initialized,
+  night,
+  day,
+}
+
+enum DayState { information, discussion, vote, execution, resolution }
+
+class GameArguments {
+  final List<Role> list;
+
+  GameArguments(this.list);
+}
+
+class GameInformation {
+  late final String _text;
+  late final GameState _period;
+  late final int _turn;
+
+  String getText() {
+    return _text;
+  }
+
+  GameState getPeriod() {
+    return _period;
+  }
+
+  int getTurn() {
+    return _turn;
+  }
+
+  GameInformation(this._text, this._turn, this._period);
+
+  static GameInformation death(Player player, GameState period, int turn) {
+    return GameInformation('${player.getName()} died.', turn, period);
+  }
+
+  static GameInformation talk(Player player, GameState period, int turn) {
+    return GameInformation(
+        '${player.getName()} starts the discussion.', turn, period);
+  }
+
+  static GameInformation clairvoyance(RoleId role, GameState period, int turn) {
+    return GameInformation('The seer saw : ${getRoleName(role)}', turn, period);
+  }
+
+  static GameInformation servant(RoleId role, GameState period, int turn) {
+    return GameInformation(
+        'The servant became ${getRoleName(role)}.', turn, period);
+  }
+
+  static GameInformation judge(Player player, int turn) {
+    return GameInformation(
+        'The Judge protected ${player.getName()}.', turn, GameState.night);
+  }
+
+  static GameInformation mute(Player player, int turn) {
+    return GameInformation(
+        '${player.getName()} is muted.', turn, GameState.night);
+  }
+
+  static GameInformation sheep(bool killed, int turn) {
+    return GameInformation(
+        killed ? 'A sheep was killed' : 'A sheep returned to the shepherd.',
+        turn,
+        GameState.night);
+  }
+}
+
+class Game extends ChangeNotifier {
   final List<Role> _roles = [];
   final List<Player> _graveyard = [];
   final List<GameInformation> _infos = [];
   final List<Ability> _pendingAbilities = [];
 
-  bool gameOver = false;
-
   GameState _state = GameState.empty;
-
   int _currentIndex = 0;
   int _currentTurn = 0;
+  bool gameOver = false;
 
-  List<Role> getRolesForDebug() {
+  List<Role> get rolesForDebug {
     return _roles;
   }
 
-  List<Role> getPlayableRoles() {
+  List<Role> get playableRoles {
     List<Role> output = [];
 
     for (Role role in _roles) {
@@ -54,34 +124,19 @@ class GameModel extends ChangeNotifier {
     return output;
   }
 
-  /// Return the correct widget to be displayed
-  /// during the current `state`.
-  Widget viewToDisplay(BuildContext context) {
-    switch (_state) {
-      case GameState.empty:
-        return const Text('Loading...');
-      case GameState.initialized:
-        return gameInitView(this, context);
-      case GameState.night:
-        return gameNightView(this, context);
-      case GameState.day:
-        return gameDayView(this, context);
-    }
-  }
-
-  bool hasPendingAbilities() {
+  bool get hasPendingAbilities {
     return _pendingAbilities.isNotEmpty;
   }
 
   /// Return the current state.
-  GameState getState() {
+  GameState get state {
     return _state;
   }
 
   /// Return a list of alive players.
-  /// Used for possible future role `CHAMAN`
+  /// Used for possible future role `Shaman`
   /// Add add them to the output list.
-  List<Player> getPlayersList() {
+  List<Player> get playersList {
     List<Player> output = [];
 
     for (var role in _roles) {
@@ -98,8 +153,35 @@ class GameModel extends ChangeNotifier {
     return output;
   }
 
-  List<Player> getDeadPlayers() {
+  List<Player> get deadPlayers {
     return _graveyard;
+  }
+
+  /// Return currently active role.
+  Role? get currentRole {
+    if (_state != GameState.night) return null;
+
+    return _roles[_currentIndex];
+  }
+
+  /// Return current turn.
+  int get currentTurn {
+    return _currentTurn;
+  }
+
+  /// Return the correct widget to be displayed
+  /// during the current `state`.
+  Widget viewToDisplay(BuildContext context) {
+    switch (_state) {
+      case GameState.empty:
+        return const Text('Loading...');
+      case GameState.initialized:
+        return gameInitView(this, context);
+      case GameState.night:
+        return gameNightView(this, context);
+      case GameState.day:
+        return gameDayView(this, context);
+    }
   }
 
   Role? getRole(RoleId id) {
@@ -126,18 +208,6 @@ class GameModel extends ChangeNotifier {
     _next(context);
   }
 
-  /// Return currently active role.
-  Role? getCurrent() {
-    if (_state != GameState.night) return null;
-
-    return _roles[_currentIndex];
-  }
-
-  /// Return current turn.
-  int getCurrentTurn() {
-    return _currentTurn;
-  }
-
   /// Check if the given ability is available at the current night.
   bool isAbilityAvailableAtNight(Ability ability) {
     return _isAbilityAvailableAtNight(ability);
@@ -149,18 +219,21 @@ class GameModel extends ChangeNotifier {
   }
 
   /// Specific use case for [useAbility] during the night
-  void useAbilitInNight(Ability ability, List<Player> targets, BuildContext context) {
+  void useAbilityInNight(
+      Ability ability, List<Player> targets, BuildContext context) {
     if (!ability.isForNight()) return;
 
     var affected = useAbility(ability, targets);
 
     Navigator.pop(context);
 
-    showAbilityAppliedMessage(context, getAbilityAppliedMessage(ability, affected));
+    showAbilityAppliedMessage(
+        context, getAbilityAppliedMessage(ability, affected));
   }
 
   /// Specific use case for [useAbility] during the day
-  void useAbilityInDay(Ability ability, List<Player> targets, BuildContext context) {
+  void useAbilityInDay(
+      Ability ability, List<Player> targets, BuildContext context) {
     if (!ability.isForDay()) return;
 
     _useAbility(ability, targets);
@@ -193,13 +266,14 @@ class GameModel extends ChangeNotifier {
             context, () {
           showUseAbilityDialog(context, this, currentPendingAbility,
               (List<Player> currentAbilityTargets) {
-            useAbilityInDay(currentPendingAbility, currentAbilityTargets, context);
+            useAbilityInDay(
+                currentPendingAbility, currentAbilityTargets, context);
           }, cancelable: false);
         });
       } else {
         // resolveEffectsAndCollectInfosOfDay(this);
 
-        _eleminateDeadPlayers();
+        _eliminateDeadPlayers();
 
         notifyListeners();
 
@@ -231,18 +305,18 @@ class GameModel extends ChangeNotifier {
   }
 
   /// Return a list of players with specific effects
-  List<Player> getPlayersWithStatusEffects(List<StatusEffectType> effects) {
+  List<Player> getPlayersWithStatusEffects(List<EffectId> effects) {
     final output = <Player>[];
 
-    getPlayersList().forEach((player) {
+    for (var player in playersList) {
       for (var effect in effects) {
         if (!player.hasEffect(effect)) {
-          return;
+          continue;
         }
       }
 
       output.add(player);
-    });
+    }
 
     return output;
   }
@@ -251,11 +325,11 @@ class GameModel extends ChangeNotifier {
   List<Player> getPlayersWithFatalEffects() {
     final output = <Player>[];
 
-    getPlayersList().forEach((player) {
+    for (var player in playersList) {
       if (player.hasFatalEffect()) {
         output.add(player);
       }
-    });
+    }
 
     return output;
   }
@@ -263,14 +337,17 @@ class GameModel extends ChangeNotifier {
   /// Return the list of the last night informations.
   List<GameInformation> getCurrentTurnSummary() {
     return _infos
-        .where((item) => item.getTurn() == _currentTurn && item.getPeriod() == GameState.night)
+        .where((item) =>
+            item.getTurn() == _currentTurn &&
+            item.getPeriod() == GameState.night)
         .toList();
   }
 
   /// Return the list of the current day informations.
   List<GameInformation> getCurrentDaySummary() {
     return _infos
-        .where((item) => item.getTurn() == _currentTurn && item.getPeriod() == GameState.day)
+        .where((item) =>
+            item.getTurn() == _currentTurn && item.getPeriod() == GameState.day)
         .toList();
   }
 
@@ -335,7 +412,8 @@ class GameModel extends ChangeNotifier {
     /// A possible new team
     var maybeNewTeam = calculateNewTeamForServant(newRole);
 
-    if (maybeNewTeam is Teams && maybeNewTeam != (servant.player as Player).team) {
+    if (maybeNewTeam is Team &&
+        maybeNewTeam != (servant.player as Player).team) {
       (servant.player as Player).team = maybeNewTeam;
     }
 
@@ -344,7 +422,7 @@ class GameModel extends ChangeNotifier {
     /// Remove the [serving] effect from the servant player;
     /// No need to remove the [served] effects
     /// because the dead player will be sent to the graveyard.
-    (servant.player as Player).removeEffectsOfType(StatusEffectType.isServing);
+    (servant.player as Player).removeEffectsOfType(EffectId.isServing);
 
     /// Add the new role to the servant player.
     (servant.player as Player).addRole(newRole);
@@ -358,12 +436,12 @@ class GameModel extends ChangeNotifier {
     /// Remove the servant role from the servant player
     /// This should come after the player have been added to the
     /// wolfpack (if the dead role is a wolf)
-    /// because we use the [servant.player] which will be overriden
+    /// because we use the [servant.player] which will be overwritten
     /// by [removeRoleOfType] and will be set to a dead player.
     (servant.player as Player).removeRoleOfType(RoleId.servant);
 
     /// Add to the game info.
-    addGameInfo(GameInformation.servantInformation(deadRole.id, getState(), getCurrentTurn()));
+    addGameInfo(GameInformation.servant(deadRole.id, state, currentTurn));
 
     /// Used to perform additional processing.
     useSituationalPostEffect();
@@ -380,28 +458,32 @@ class GameModel extends ChangeNotifier {
   void _killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
     _graveyard.add(player);
-    addGameInfo(GameInformation.deathInformation(player, _state, _currentTurn));
+    addGameInfo(GameInformation.death(player, _state, _currentTurn));
   }
 
   /// Perform mass murder on the souls of the already dead players.
   /// Should be used on the list of alive players.
   ///
   /// uses `GameModel._killAndMovePlayerToGraveyard()`.
-  void _eleminateDeadPlayers() {
-    getPlayersList().forEach((player) {
+  void _eliminateDeadPlayers() {
+    for (var player in playersList) {
       if (player.hasFatalEffect()) {
         _killAndMovePlayerToGraveyard(player);
       }
-    });
+    }
   }
 
   /// Perform after night processes of
   /// resolving status effects
-  /// and eleminating dead souls.
+  /// and eliminating dead souls.
   /// When everything is done, we transition into the day phase.
   void _performPostNightProcessing(BuildContext context) {
-    resolveEffectsAndCollectInfosOfNight(this);
-    _eleminateDeadPlayers();
+    List<GameInformation> infos = resolveNightEffects(playersList, currentTurn);
+
+    // Todo : process informations
+    _infos.addAll(infos);
+
+    _eliminateDeadPlayers();
 
     _gameOverCheck(context);
 
@@ -415,7 +497,7 @@ class GameModel extends ChangeNotifier {
   ///
   /// `Protector` should use his `shield` every turn.
   bool _checkAllUnskippableAbilitiesUse() {
-    for (var ability in getCurrent()!.abilities) {
+    for (var ability in currentRole!.abilities) {
       if (ability.wasUsedInCurrentTurn(_currentTurn) == false &&
           ability.isUnskippable() &&
           ability.createListOfTargetPlayers(this).isNotEmpty) {
@@ -446,12 +528,13 @@ class GameModel extends ChangeNotifier {
       }
     }
 
-    var probablyNextIndex = _roles.indexWhere((element) => element.callingPriority == next);
+    var probablyNextIndex =
+        _roles.indexWhere((element) => element.callingPriority == next);
 
     if (probablyNextIndex != -1) {
       _currentIndex = probablyNextIndex;
 
-      getCurrent()!.beforeCallEffect(context, this);
+      currentRole!.beforeCallEffect(context, this);
 
       notifyListeners();
     } else {
@@ -474,7 +557,8 @@ class GameModel extends ChangeNotifier {
       }
     }
 
-    _currentIndex = _roles.indexWhere((element) => element.callingPriority == min);
+    _currentIndex =
+        _roles.indexWhere((element) => element.callingPriority == min);
   }
 
   /// Create appropriate `RoleGroups` and override the current list of roles.
@@ -524,8 +608,10 @@ class GameModel extends ChangeNotifier {
       if (_checkAllUnskippableAbilitiesUse()) {
         _setNextIndex(context);
       } else {
-        showStandardAlert('Unable to proceed',
-            'At least one mandatory ability was not used during this turn.', context);
+        showStandardAlert(
+            'Unable to proceed',
+            'At least one mandatory ability was not used during this turn.',
+            context);
       }
     }
   }
@@ -588,9 +674,9 @@ class GameModel extends ChangeNotifier {
   void _resolveRolesInteractionsAfterAbilityUsedInDay() {
     if (_state != GameState.day) return;
 
-    getPlayersList().forEach((player) {
+    for (var player in playersList) {
       /// If the captain is dead.
-      if (player.hasFatalEffect() && player.hasEffect(StatusEffectType.isServed)) {
+      if (player.hasFatalEffect() && player.hasEffect(EffectId.isServed)) {
         Role theOldRole = getRole(player.getMainRole().id)!;
 
         onServedDeath(theOldRole, () {
@@ -610,10 +696,11 @@ class GameModel extends ChangeNotifier {
           player.removeRoleOfType(theOldRole.id);
         });
       }
-    });
+    }
   }
 
-  void _collectPendingAbilityOfPlayer(Player player, {List<RoleId> ignored = const []}) {
+  void _collectPendingAbilityOfPlayer(Player player,
+      {List<RoleId> ignored = const []}) {
     for (var role in player.roles) {
       if (ignored.contains(role.id)) continue;
 
@@ -631,17 +718,17 @@ class GameModel extends ChangeNotifier {
   void _collectPendingAbilityInDay() {
     if (_state != GameState.day) return;
 
-    getPlayersList().forEach((player) {
+    for (var player in playersList) {
       if (player.hasFatalEffect()) {
         _collectPendingAbilityOfPlayer(player);
       }
-    });
+    }
   }
 
   void _gameOverCheck(BuildContext context) {
-    dynamic result = checkTeamsAreBalanced(getPlayersList(), _roles);
+    dynamic result = checkTeamsAreBalanced(playersList, _roles);
 
-    if (result is Teams) {
+    if (result is Team) {
       gameOver = true;
       showGameOverAlert(result, this, context);
     }
@@ -660,4 +747,361 @@ class GameModel extends ChangeNotifier {
       _roles.remove(role);
     }
   }
+}
+
+List<GameInformation> resolveNightEffects(
+  List<Player> players,
+  int currentTurn,
+) {
+  const List<GameInformation> infos = [];
+
+  for (var player in players) {
+    final newEffects = <Effect>[];
+
+    for (var effect in player.effects) {
+      /// do not remove permanent or fatal effects.
+      /// Fatal effects will be treated later
+      /// by confirming the death of the players
+      /// and moving them into the graveyard.
+      if (effect.permanent || isFatalEffect(effect.type)) {
+        continue;
+      }
+
+      switch (effect.type) {
+
+        /// Protector -----------------------------------------------------
+        case EffectId.isProtected:
+
+          /// currently protected player could not be protected again
+          /// add [wasProtected] effect
+          /// so he won't be targeted by the protector in the next turn.
+          player.removeEffectsOfType(effect.type);
+          newEffects.add(WasProtectedEffect(effect.source));
+          break;
+
+        /// Black Wolf ----------------------------------------------------
+        case EffectId.isMuted:
+
+          /// Currently muted player cannot be muted two night in a row
+          /// so we add [wasMuted] effect.
+          player.removeEffectsOfType(effect.type);
+          newEffects.add(WasMutedEffect(effect.source));
+
+          if (!(effect.source.player as Player).hasFatalEffect()) {
+            infos.add(GameInformation.mute(player, currentTurn));
+          }
+
+          break;
+
+        /// Seer ----------------------------------------------------------
+        case EffectId.isSeen:
+          player.removeEffectsOfType(effect.type);
+
+          /// If the seer is dead, we do not report anything
+          if ((effect.source as RoleSingular).player.hasFatalEffect()) {
+            break;
+          }
+
+          Role role = resolveSeenRole(player);
+
+          infos.add(GameInformation.clairvoyance(
+              role.id, GameState.night, currentTurn));
+
+          break;
+
+        /// Judge --------------------------------------------------------
+        /// Role cannot be protected by the judge two consecutive rounds.
+        case EffectId.isJudged:
+          player.removeEffectsOfType(effect.type);
+          newEffects.add(WasJudgedEffect(effect.source));
+
+          infos.add(GameInformation.judge(player, currentTurn));
+          break;
+
+        /// Captain ------------------------------------------------------
+        case EffectId.shouldTalkFirst:
+          infos.add(GameInformation.talk(player, GameState.night, currentTurn));
+
+          player.removeEffectsOfType(effect.type);
+          break;
+
+        /// Shepherd -----------------------------------------------------
+        case EffectId.hasSheep:
+
+          /// If the player has a wolf role
+          /// We should remove one sheep
+          /// which in our case is the target count.
+          if (player.hasWolfRole()) {
+            Ability shepherdAbility =
+                effect.source.getAbilityOfType(AbilityId.sheeps)!;
+
+            shepherdAbility.targetCount--;
+
+            infos.add(GameInformation.sheep(true, currentTurn));
+          } else {
+            infos.add(GameInformation.sheep(false, currentTurn));
+          }
+
+          player.removeEffectsOfType(effect.type);
+          break;
+
+        /// Common effects -----------------------------------------------
+        /// Should only be removed.
+        case EffectId.isRevived:
+        case EffectId.isSubstitue:
+        case EffectId.hasInheritedCaptaincy:
+        case EffectId.wasProtected:
+        case EffectId.wasJudged:
+        case EffectId.wasMuted:
+        case EffectId.shouldSayTheWord:
+          player.removeEffectsOfType(effect.type);
+          break;
+
+        /// Unreachable code because these effects are permanent. --------
+        /// Fatal or permanent effects.
+        case EffectId.isCountered:
+        case EffectId.isExecuted:
+        case EffectId.isDevoured:
+        case EffectId.isHunted:
+        case EffectId.isCursed:
+        case EffectId.hasCallsign:
+        case EffectId.isInfected:
+        case EffectId.isServed:
+        case EffectId.isServing:
+        case EffectId.isGuessed:
+          break;
+      }
+    }
+
+    /// Apply new effects
+    for (var effect in newEffects) {
+      player.addStatusEffect(effect);
+    }
+  }
+
+  return infos;
+}
+
+/// generate a list of playable roles.
+List<Role> makeAvailableList() {
+  Player player() => Player("Placeholder_Player");
+
+  List<Role> output = [];
+
+  for (var element in RoleId.values) {
+    switch (element) {
+      case RoleId.protector:
+        output.add(Protector(player()));
+        break;
+      case RoleId.werewolf:
+        output.add(Werewolf(player()));
+        break;
+      case RoleId.fatherOfWolves:
+        output.add(FatherOfWolves(player()));
+        break;
+      case RoleId.witch:
+        output.add(Witch(player()));
+        break;
+      case RoleId.seer:
+        output.add(Seer(player()));
+        break;
+      case RoleId.knight:
+        output.add(Knight(player()));
+        break;
+      case RoleId.hunter:
+        output.add(Hunter(player()));
+        break;
+      case RoleId.captain:
+        output.add(Captain(player()));
+        break;
+      case RoleId.villager:
+        output.add(Villager(player()));
+        break;
+      case RoleId.judge:
+        output.add(Judge(player()));
+        break;
+      case RoleId.blackWolf:
+        output.add(BlackWolf(player()));
+        break;
+      case RoleId.garrulousWolf:
+        output.add(GarrulousWolf(player()));
+        break;
+      case RoleId.shepherd:
+        output.add(Shepherd(player()));
+        break;
+      case RoleId.alien:
+        output.add(Alien(player()));
+        break;
+
+      /// Not ready for production -------------------------------------------
+      case RoleId.servant:
+        break;
+
+      /// Group roles --------------------------------------------------------
+      /// Will be injected automatically later,
+      /// when roles have been distributed.
+      case RoleId.wolfpack:
+        break;
+    }
+  }
+
+  return output;
+}
+
+void resolveEffectsAndCollectInfosOfDay(Game game) {
+  int currentTurn = game.currentTurn;
+
+  for (var player in game.playersList) {
+    if (player.hasFatalEffect()) {
+      game.addGameInfo(
+          GameInformation.death(player, GameState.day, currentTurn));
+    }
+  }
+}
+
+/// returns the number of players within the wolf team.
+int getWolfTeamCount(List<Player> players) {
+  int sum = 0;
+
+  for (var player in players) {
+    if (player.team == Team.wolves) {
+      sum++;
+    }
+  }
+
+  return sum;
+}
+
+/// returns the number of players within the village team.
+int getVillageTeamCount(List<Player> players) {
+  int sum = 0;
+
+  for (var player in players) {
+    if (player.team == Team.village) {
+      sum++;
+    }
+  }
+
+  return sum;
+}
+
+/// returns the number of solo players.
+int getSoloTeamsCount(List<Player> players) {
+  int sum = 0;
+
+  for (var player in players) {
+    if (![Team.village, Team.wolves].contains(player.team)) {
+      sum++;
+    }
+  }
+
+  return sum;
+}
+
+/// check if the current list of players is balanced,
+/// otherwise, it returns the winning team.
+dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
+  int wolvesCount = getWolfTeamCount(players);
+  int villagersCount = getVillageTeamCount(players);
+  int solosCount = getSoloTeamsCount(players);
+
+  Role? alien = getRoleInGame(RoleId.alien, roles);
+
+  if (players.isEmpty) {
+    return Team.equality;
+  }
+
+  /// In case only solos remained
+  if (solosCount == players.length) {
+    return Team.equality;
+  }
+
+  /// Alien Winning condition
+  /// The alien should be the only one remaining, or with a villager.
+  if (players.length <= 2 &&
+      alien != null &&
+      wolvesCount == 0 &&
+      solosCount == 1) {
+    return Team.alien;
+  }
+
+  /// Villager
+  /// The village win if there is no werewolf remaining.
+  if (wolvesCount == 0) {
+    return Team.village;
+  }
+
+  if (villagersCount == wolvesCount) {
+    Role? protector = getRoleInGame(RoleId.protector, roles);
+    Role? witch = getRoleInGame(RoleId.witch, roles);
+    Role? knight = getRoleInGame(RoleId.knight, roles);
+
+    bool protectorCanWinIt =
+        protector != null && protector.player.team == Team.village;
+
+    bool witchCanWinIt = (witch != null &&
+        witch.player.team == Team.village &&
+        (witch.hasUnusedAbility(AbilityId.curse) ||
+            witch.hasUnusedAbility(AbilityId.revive)));
+
+    bool knightCanWinIt = (knight != null &&
+        knight.player.team == Team.village &&
+        knight.hasUnusedAbility(AbilityId.counter));
+
+    bool continuable = protectorCanWinIt || witchCanWinIt || knightCanWinIt;
+
+    if (!continuable) {
+      return Team.wolves;
+    }
+  }
+
+  if (villagersCount < wolvesCount) {
+    return Team.wolves;
+  }
+
+  return true;
+}
+
+/// check if the given role is still active in the given list.
+Role? getRoleInGame(RoleId id, List<Role> roles) {
+  for (var role in roles) {
+    if (role.id == id && !role.isObsolete()) {
+      return role;
+    }
+  }
+
+  return null;
+}
+
+/// extract the list of players from the given list of roles
+List<Player> extractPlayersList(List<Role> roles) {
+  List<Player> output = [];
+
+  for (var role in roles) {
+    if (!role.isGroup()) {
+      role.player as Player;
+      if (!output.contains(role.player)) {
+        if (!(role.player as Player).isDead()) {
+          output.add(role.player);
+        }
+      }
+    }
+  }
+
+  return output;
+}
+
+/// check if the list of players is valid for a game to start.
+dynamic checkListIsValid(List<Role> roles) {
+  if (roles.length < 7) {
+    return "Player count is too short to start a game. Try adding more roles to reach at least 7 players.";
+  }
+
+  dynamic balanced = checkTeamsAreBalanced(extractPlayersList(roles), roles);
+
+  if (balanced != true) {
+    return "Game is not balanced, ${getTeamName(balanced)} team is already winning.";
+  }
+
+  return true;
 }

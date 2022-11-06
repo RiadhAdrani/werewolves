@@ -1,11 +1,10 @@
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/status_effect.dart';
+import 'package:werewolves/models/effect.dart';
 
-class GuessedStatusEffect extends StatusEffect {
+class GuessedStatusEffect extends Effect {
   GuessedStatusEffect(Role source) {
     this.source = source;
     permanent = false;
-    type = StatusEffectType.isGuessed;
+    type = EffectId.isGuessed;
   }
 }

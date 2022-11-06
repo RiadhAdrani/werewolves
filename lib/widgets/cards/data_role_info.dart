@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/constants/status_effects.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/role_group.dart';
-import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/models/effect.dart';
 
 Widget gameRoleDataInfo(Role role) {
   return Card(
@@ -20,7 +18,7 @@ Widget gameRoleDataInfo(Role role) {
             children: [
               Text('Player name : ${(role.player.getName())}'),
               Text(
-                  'Player Status effects : ${(role as RoleSingular).player.effects.map((effect) => statusEffectTypeToString(effect.type)).join(' | ')}')
+                  'Player Status effects : ${(role as RoleSingular).player.effects.map((effect) => effectIdToString(effect.type)).join(' | ')}')
             ],
           )
       ]),

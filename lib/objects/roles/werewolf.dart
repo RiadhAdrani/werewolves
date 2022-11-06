@@ -1,9 +1,8 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:werewolves/constants/role_id.dart';
-import 'package:werewolves/constants/teams.dart';
+import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/models/role_single.dart';
+import 'package:werewolves/models/role.dart';
 
 class Werewolf extends RoleSingular {
   Werewolf(super.player) {
@@ -15,7 +14,7 @@ class Werewolf extends RoleSingular {
     /// A servant with [love effect] transformed into a werewolf should not change its team.
 
     if (player.roles.length == 1) {
-      player.team = Teams.wolves;
+      player.team = Team.wolves;
     }
   }
 
@@ -30,17 +29,17 @@ class Werewolf extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(GameModel game) {
+  bool shouldBeCalledAtNight(Game game) {
     return false;
   }
 
   @override
-  List<String> getAdvices(GameModel game) {
+  List<String> getAdvices(Game game) {
     return [];
   }
 
   @override
-  List<String> getInformations(GameModel game) {
+  List<String> getInformations(Game game) {
     return [];
   }
 
@@ -50,12 +49,12 @@ class Werewolf extends RoleSingular {
   }
 
   @override
-  Teams getSupposedInitialTeam() {
-    return Teams.wolves;
+  Team getSupposedInitialTeam() {
+    return Team.wolves;
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, GameModel gameModel) {
+  bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }
 }
