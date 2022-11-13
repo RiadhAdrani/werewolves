@@ -96,7 +96,7 @@ abstract class Role<T> {
   /// Return the first ability of the given type if it exists.
   Ability? getAbilityOfType(AbilityId ability) {
     for (int i = 0; i < abilities.length; i++) {
-      if (abilities[i].name == ability) {
+      if (abilities[i].id == ability) {
         return abilities[i];
       }
     }
@@ -107,7 +107,7 @@ abstract class Role<T> {
   /// Return if the role has a certain ability by its `id`.
   bool hasAbility(AbilityId id) {
     for (Ability ability in abilities) {
-      if (ability.name == id) {
+      if (ability.id == id) {
         return true;
       }
     }
@@ -117,7 +117,7 @@ abstract class Role<T> {
 
   bool hasUnusedAbility(AbilityId id) {
     for (Ability ability in abilities) {
-      if (ability.name == id && ability.useCount != AbilityUseCount.none) {
+      if (ability.id == id && ability.useCount != AbilityUseCount.none) {
         return true;
       }
     }

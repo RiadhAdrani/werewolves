@@ -75,7 +75,7 @@ class WasMutedEffect extends Effect {
 class MuteAbility extends Ability {
   MuteAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.mute;
+    super.id = AbilityId.mute;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;

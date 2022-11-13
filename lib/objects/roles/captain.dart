@@ -135,7 +135,7 @@ class TalkerEffect extends Effect {
 class ExecuteAbility extends Ability {
   ExecuteAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.execute;
+    super.id = AbilityId.execute;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.day;
@@ -186,7 +186,7 @@ class ExecuteAbility extends Ability {
 class InheritAbility extends Ability {
   InheritAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.inherit;
+    super.id = AbilityId.inherit;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.both;
@@ -243,7 +243,7 @@ class InheritAbility extends Ability {
 class SubstitueAbility extends Ability {
   SubstitueAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.substitute;
+    super.id = AbilityId.substitute;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;
@@ -296,7 +296,7 @@ class SubstitueAbility extends Ability {
 class TalkerAbility extends Ability {
   TalkerAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.talker;
+    super.id = AbilityId.talker;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;

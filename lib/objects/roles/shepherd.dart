@@ -71,7 +71,7 @@ class SheepEffect extends Effect {
 class ShepherdAbility extends Ability {
   ShepherdAbility(Role owner) {
     super.targetCount = 2;
-    super.name = AbilityId.sheeps;
+    super.id = AbilityId.sheeps;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;

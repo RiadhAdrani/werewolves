@@ -72,7 +72,7 @@ class CounterEffect extends Effect {
 class CounterAbility extends Ability {
   CounterAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.counter;
+    super.id = AbilityId.counter;
     super.type = AbilityType.passive;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.night;

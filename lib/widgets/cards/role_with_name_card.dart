@@ -7,7 +7,7 @@ Widget roleWithPlayerName(Role role, BuildContext context) {
       padding: const EdgeInsets.all(8.0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
-          role.player.name,
+          role.player.id,
           style: TextStyle(
               fontSize: 20,
               color: Colors.blueGrey[900],

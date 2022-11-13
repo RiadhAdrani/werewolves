@@ -40,7 +40,7 @@ abstract class Ability {
   late int targetCount;
 
   late Role owner;
-  late AbilityId name;
+  late AbilityId id;
   late AbilityType type;
   late AbilityUseCount useCount;
   late AbilityTime time;
@@ -51,7 +51,7 @@ abstract class Ability {
   List<Player> use(List<Player> targets, int turn) {
     List<Player> appliedTo = [];
 
-    if (isUsable() && targets.isNotEmpty) {
+    if (isUsable && targets.isNotEmpty) {
       var subList =
           targetCount == 99 ? targets : targets.sublist(0, targetCount);
 
@@ -73,29 +73,33 @@ abstract class Ability {
     return appliedTo;
   }
 
-  String getName() {
-    return getAbilityName(name);
+  String get name {
+    return getAbilityName(id);
   }
 
-  bool isUsable() {
+  bool get isUsable {
     return useCount != AbilityUseCount.none;
   }
 
   /// Check if the ability is used during the night
-  bool isForNight() {
+  bool get isForNight {
     return [AbilityTime.both, AbilityTime.night].contains(time);
   }
 
   /// Check if the ability is used during the day
-  bool isForDay() {
+  bool get isForDay {
     return [AbilityTime.both, AbilityTime.day].contains(time);
   }
 
-  bool wasUsedInCurrentTurn(int turn) {
+  String get description {
+    return getAbilityDescription(id);
+  }
+
+  bool wasUsedInTurn(int turn) {
     return turnsUsedIn.contains(turn);
   }
 
-  List<Player> createListOfTargetPlayers(Game game) {
+  List<Player> createListOfTargets(Game game) {
     return game.playersList.where((player) => isTarget(player)).toList();
   }
 
@@ -129,13 +133,51 @@ abstract class Ability {
   /// Effect launched after the ability has applied successfully;
   void usePostEffect(Game game, List<Player> affected);
 
-  /// Generate ability detailed description;
-  String getDescription() {
-    return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
-  }
-
   /// Check if this ability should be used when the owner is dead.
   bool shouldBeUsedOnOwnerDeath();
+}
+
+String getAbilityDescription(AbilityId id) {
+  switch (id) {
+    case AbilityId.protect:
+      return "Protect";
+    case AbilityId.devour:
+      return "Devour";
+    case AbilityId.infect:
+      return "Infect";
+    case AbilityId.clairvoyance:
+      return "Clairvoyance";
+    case AbilityId.revive:
+      return "Revive";
+    case AbilityId.curse:
+      return "Curse";
+    case AbilityId.counter:
+      return "Counter";
+    case AbilityId.hunt:
+      return "Hunt";
+    case AbilityId.talker:
+      return "Order";
+    case AbilityId.execute:
+      return "Execute";
+    case AbilityId.substitute:
+      return "Substitue";
+    case AbilityId.inherit:
+      return "Inherit";
+    case AbilityId.callsign:
+      return "Call sign";
+    case AbilityId.serve:
+      return "Serve";
+    case AbilityId.judgement:
+      return "Judge";
+    case AbilityId.mute:
+      return "Mute";
+    case AbilityId.word:
+      return "Garrulous Word";
+    case AbilityId.sheeps:
+      return "Sheeps";
+    case AbilityId.guess:
+      return "Guess";
+  }
 }
 
 String getAbilityName(AbilityId id) {

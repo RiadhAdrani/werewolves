@@ -221,7 +221,7 @@ class Game extends ChangeNotifier {
   /// Specific use case for [useAbility] during the night
   void useAbilityInNight(
       Ability ability, List<Player> targets, BuildContext context) {
-    if (!ability.isForNight()) return;
+    if (!ability.isForNight) return;
 
     var affected = useAbility(ability, targets);
 
@@ -234,7 +234,7 @@ class Game extends ChangeNotifier {
   /// Specific use case for [useAbility] during the day
   void useAbilityInDay(
       Ability ability, List<Player> targets, BuildContext context) {
-    if (!ability.isForDay()) return;
+    if (!ability.isForDay) return;
 
     _useAbility(ability, targets);
 
@@ -254,7 +254,7 @@ class Game extends ChangeNotifier {
 
         notifyListeners();
 
-        if (currentPendingAbility.createListOfTargetPlayers(this).isEmpty) {
+        if (currentPendingAbility.createListOfTargets(this).isEmpty) {
           useNext();
           return;
         }
@@ -361,7 +361,7 @@ class Game extends ChangeNotifier {
           role.canUseSignWithNarrator() &&
           role.canUseAbilitiesDuringDay()) {
         for (var ability in role.abilities) {
-          if (ability.isForDay() && ability.isUsable()) {
+          if (ability.isForDay && ability.isUsable) {
             output.add(ability);
           }
         }
@@ -376,7 +376,7 @@ class Game extends ChangeNotifier {
       /// within the list of roles.
       if (role.isObsolete() == false && role.id == RoleId.captain) {
         for (var ability in role.abilities) {
-          if (ability.name == AbilityId.execute) {
+          if (ability.id == AbilityId.execute) {
             output.add(ability);
           }
         }
@@ -499,9 +499,9 @@ class Game extends ChangeNotifier {
   /// `Protector` should use his `shield` every turn.
   bool _checkAllUnskippableAbilitiesUse() {
     for (var ability in currentRole!.abilities) {
-      if (ability.wasUsedInCurrentTurn(_currentTurn) == false &&
+      if (ability.wasUsedInTurn(_currentTurn) == false &&
           ability.isUnskippable() &&
-          ability.createListOfTargetPlayers(this).isNotEmpty) {
+          ability.createListOfTargets(this).isNotEmpty) {
         return false;
       }
     }
@@ -619,9 +619,9 @@ class Game extends ChangeNotifier {
 
   /// Check if the ability is available at the current night.
   bool _isAbilityAvailableAtNight(Ability ability) {
-    return ability.isForNight() &&
+    return ability.isForNight &&
         ability.useCount != AbilityUseCount.none &&
-        !ability.wasUsedInCurrentTurn(_currentTurn) &&
+        !ability.wasUsedInTurn(_currentTurn) &&
         ability.shouldBeAvailable();
   }
 
@@ -706,7 +706,7 @@ class Game extends ChangeNotifier {
       if (ignored.contains(role.id)) continue;
 
       for (var ability in role.abilities) {
-        if (ability.isUsable() &&
+        if (ability.isUsable &&
             ability.shouldBeUsedOnOwnerDeath() &&
             !_pendingAbilities.contains(ability)) {
           _pendingAbilities.add(ability);

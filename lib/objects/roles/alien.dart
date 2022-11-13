@@ -120,7 +120,7 @@ class Alien extends RoleSingular {
 class GuessAbility extends Ability {
   GuessAbility(Role owner) {
     super.targetCount = 99;
-    super.name = AbilityId.guess;
+    super.id = AbilityId.guess;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.day;
@@ -172,7 +172,7 @@ class GuessAbility extends Ability {
 class AlienCallSignAbility extends Ability {
   AlienCallSignAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.callsign;
+    super.id = AbilityId.callsign;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.night;

@@ -76,7 +76,7 @@ class InfectEffect extends Effect {
 class InfectAbility extends Ability {
   InfectAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.infect;
+    super.id = AbilityId.infect;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.night;

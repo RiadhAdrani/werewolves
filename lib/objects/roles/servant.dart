@@ -91,7 +91,7 @@ class ServingEffect extends Effect {
 class ServantAbility extends Ability {
   ServantAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.serve;
+    super.id = AbilityId.serve;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.night;

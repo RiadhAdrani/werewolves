@@ -86,7 +86,7 @@ class WasProtectedEffect extends Effect {
 class ProtectAbility extends Ability {
   ProtectAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.protect;
+    super.id = AbilityId.protect;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;

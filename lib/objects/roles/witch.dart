@@ -86,7 +86,7 @@ class ReviveEffect extends Effect {
 class CurseAbility extends Ability {
   CurseAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.curse;
+    super.id = AbilityId.curse;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.night;
@@ -137,7 +137,7 @@ class CurseAbility extends Ability {
 class ReviveAbility extends Ability {
   ReviveAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.revive;
+    super.id = AbilityId.revive;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.night;

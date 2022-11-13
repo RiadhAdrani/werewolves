@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/ability.dart';
 
-Widget abilityCardView(Ability ability, Function onClick, {bool variant = false}) {
+Widget abilityCardView(Ability ability, Function onClick,
+    {bool variant = false}) {
   bool should = ability.isUnskippable();
   String skipText =
       ability.isUnskippable() ? "This ability should be used." : "Optional";
@@ -13,20 +14,20 @@ Widget abilityCardView(Ability ability, Function onClick, {bool variant = false}
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          ability.getName(),
+          ability.name,
           style: TextStyle(
               fontSize: variant ? 16 : 20,
               color: Colors.blueGrey,
               fontWeight: FontWeight.bold),
         ),
         if (variant)
-        Text(
-          ability.owner.getPlayerName(),
-          style: const TextStyle(
+          Text(
+            ability.owner.getPlayerName(),
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.blueGrey,
-              ),
-        ),
+            ),
+          ),
         Divider(
           color: Colors.blueGrey[200],
         ),
@@ -41,13 +42,13 @@ Widget abilityCardView(Ability ability, Function onClick, {bool variant = false}
               ),
               Text(
                 skipText,
-                style: TextStyle(fontSize: variant ? 12 :14, color: skipColor),
+                style: TextStyle(fontSize: variant ? 12 : 14, color: skipColor),
               ),
             ],
           ),
         ),
         Text(
-          ability.getDescription(),
+          ability.description,
           style: TextStyle(
               fontSize: variant ? 11 : 13,
               fontStyle: FontStyle.italic,

@@ -77,7 +77,7 @@ class WasJudgedEffect extends Effect {
 class JudgementAbility extends Ability {
   JudgementAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.judgement;
+    super.id = AbilityId.judgement;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;

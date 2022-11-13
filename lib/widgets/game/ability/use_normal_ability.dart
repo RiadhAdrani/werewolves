@@ -9,8 +9,8 @@ import 'package:werewolves/widgets/alert/game_info_alert.dart';
 import 'package:werewolves/widgets/buttons/standard_text_button.dart';
 import 'package:werewolves/widgets/cards/target_player_card.dart';
 
-void showNormalAbilityDialog(
-    BuildContext context, Ability ability, List<Player> targetList, Function onAbilityUsed,
+void showNormalAbilityDialog(BuildContext context, Ability ability,
+    List<Player> targetList, Function onAbilityUsed,
     {bool cancelable = true}) {
   showDialog(
       context: context,
@@ -24,7 +24,7 @@ void showNormalAbilityDialog(
             return WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
-                title: Text("${ability.getName()} (${ability.owner.getName()})"),
+                title: Text("${ability.name} (${ability.owner.getName()})"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,8 @@ void showNormalAbilityDialog(
                       height: 300,
                       child: ListView(
                         children: targetList.map((target) {
-                          return targetPlayerCard(target, model.isSelected(target), () {
+                          return targetPlayerCard(
+                              target, model.isSelected(target), () {
                             model.toggleSelected(target);
                           });
                         }).toList(),

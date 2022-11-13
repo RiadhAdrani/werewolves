@@ -8,7 +8,7 @@ import 'package:werewolves/widgets/game/ability/use_normal_ability.dart';
 void showUseAbilityDialog(BuildContext context, Game game, Ability ability,
     Function(List<Player>) onAbilityUsed,
     {bool cancelable = true}) {
-  List<Player> targetList = ability.createListOfTargetPlayers(game);
+  List<Player> targetList = ability.createListOfTargets(game);
 
   switch (ability.ui) {
     case AbilityUI.normal:

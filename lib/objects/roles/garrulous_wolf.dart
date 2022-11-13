@@ -68,7 +68,7 @@ class GarrulousEffect extends Effect {
 class GarrulousAbility extends Ability {
   GarrulousAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.word;
+    super.id = AbilityId.word;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;

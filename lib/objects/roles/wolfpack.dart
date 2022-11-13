@@ -92,7 +92,7 @@ class DevourEffect extends Effect {
 class DevourAbility extends Ability {
   DevourAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.devour;
+    super.id = AbilityId.devour;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
     super.time = AbilityTime.night;

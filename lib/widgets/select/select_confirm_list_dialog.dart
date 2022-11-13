@@ -9,7 +9,7 @@ AlertDialog confirmDistributedList(
       width: 300,
       child: ListView(
         children: list.map((role) {
-          var playerName = role.player.name as String;
+          var playerName = role.player.id as String;
 
           return Text('${role.getName()} : $playerName');
         }).toList(),

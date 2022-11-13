@@ -79,7 +79,7 @@ class HuntEffect extends Effect {
 class HuntAbility extends Ability {
   HuntAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.hunt;
+    super.id = AbilityId.hunt;
     super.type = AbilityType.both;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.both;
@@ -134,7 +134,7 @@ class HuntAbility extends Ability {
 class CallSignAbility extends Ability {
   CallSignAbility(Role owner) {
     super.targetCount = 1;
-    super.name = AbilityId.callsign;
+    super.id = AbilityId.callsign;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.once;
     super.time = AbilityTime.night;
