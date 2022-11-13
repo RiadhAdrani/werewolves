@@ -77,7 +77,7 @@ class GarrulousAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(GarrulousEffect(owner));
+    target.addEffect(GarrulousEffect(owner));
   }
 
   @override

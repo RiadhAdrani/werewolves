@@ -100,8 +100,8 @@ class ServantAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    (owner.player as Player).addStatusEffect(ServingEffect(owner));
-    target.addStatusEffect(ServeEffect(owner));
+    (owner.player as Player).addEffect(ServingEffect(owner));
+    target.addEffect(ServeEffect(owner));
   }
 
   @override

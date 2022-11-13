@@ -33,9 +33,13 @@ class Player {
 
   Player(this.name);
 
-  /// Return the player name.
-  String getName() {
-    return name;
+  /// Check if the player has a fatal effect.
+  bool get hasFatalEffect {
+    for (var e in effects) {
+      if (fatalStatusEffects.contains(e.type)) return true;
+    }
+
+    return false;
   }
 
   /// Switch the current team.
@@ -45,7 +49,7 @@ class Player {
 
   /// Add a new status effect.
   /// Does not account for duplicate.
-  void addStatusEffect(Effect effect) {
+  void addEffect(Effect effect) {
     effects.add(effect);
   }
 
@@ -79,7 +83,7 @@ class Player {
   }
 
   /// Remove all roles of the given type.
-  void removeRoleOfType(RoleId id) {
+  void removeRolesOfType(RoleId id) {
     roles.removeWhere((role) {
       if (role.id == id) {
         if (role.isGroup()) {
@@ -109,15 +113,6 @@ class Player {
     return false;
   }
 
-  /// Check if the player has a fatal effect.
-  bool hasFatalEffect() {
-    for (var e in effects) {
-      if (fatalStatusEffects.contains(e.type)) return true;
-    }
-
-    return false;
-  }
-
   /// Check if the player has a role of the given type.
   bool hasRole(RoleId id) {
     for (var role in roles) {
@@ -128,7 +123,7 @@ class Player {
   }
 
   /// Check if the player has a group role.
-  bool hasGroupRole() {
+  bool get hasGroupRole {
     for (var role in roles) {
       if (role.isGroupRole) return true;
     }
@@ -137,7 +132,7 @@ class Player {
   }
 
   /// Check if the player has a wolf role.
-  bool hasWolfRole() {
+  bool get hasWolfRole {
     for (var role in roles) {
       if (role.isWolf) return true;
     }
@@ -146,7 +141,7 @@ class Player {
   }
 
   /// Check if the player is obsolete and dead.
-  bool isDead() {
+  bool get isDead {
     return !isAlive;
   }
 
@@ -156,7 +151,7 @@ class Player {
   /// - Reveal the true form for the seer.
   /// - Retrieve the main role for the alien.
   /// - Resolve the main role for the servant.
-  Role getMainRole() {
+  Role get mainRole {
     if (roles.isEmpty) return Villager(Player(''));
 
     if (roles.length == 2) {
@@ -168,7 +163,7 @@ class Player {
 
       /// any, wolfpack -> any
       /// any, lovers -> any;
-      if (hasGroupRole()) {
+      if (hasGroupRole) {
         for (var role in roles) {
           if (!role.isGroupRole) return role;
         }

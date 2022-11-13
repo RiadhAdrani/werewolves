@@ -44,8 +44,7 @@ class Protector extends RoleSingular {
         game.getPlayersWithStatusEffects([EffectId.wasProtected]);
 
     if (protected.isNotEmpty) {
-      output
-          .add('You cannot protect (${protected[0].getName()}) in this night.');
+      output.add('You cannot protect (${protected[0].name}) in this night.');
     }
 
     return output;
@@ -95,7 +94,7 @@ class ProtectAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(ProtectedEffect(owner));
+    target.addEffect(ProtectedEffect(owner));
   }
 
   @override

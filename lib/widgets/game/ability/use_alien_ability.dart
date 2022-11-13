@@ -97,7 +97,7 @@ Widget roleToGuessCard(AlienGuessItem item,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              item.player.getName(),
+              item.player.name,
               style: const TextStyle(fontSize: 13),
             ),
             if (item.guess != null)

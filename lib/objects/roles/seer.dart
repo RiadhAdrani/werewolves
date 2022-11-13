@@ -55,7 +55,7 @@ class Seer extends RoleSingular {
 }
 
 Role resolveSeenRole(Player player) {
-  return player.getMainRole();
+  return player.mainRole;
 }
 
 class ClairvoyanceEffect extends Effect {
@@ -78,7 +78,7 @@ class ClairvoyanceAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(ClairvoyanceEffect(owner));
+    target.addEffect(ClairvoyanceEffect(owner));
   }
 
   @override

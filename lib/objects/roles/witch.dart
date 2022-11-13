@@ -42,7 +42,7 @@ class Witch extends RoleSingular {
     if (wounded.isEmpty) {
       output.add('(Nobody) was killed.');
     } else {
-      output.add('(${wounded.map((e) => e.getName()).join(', ')}) was killed.');
+      output.add('(${wounded.map((p) => p.name).join(', ')}) was killed.');
     }
 
     output
@@ -95,7 +95,7 @@ class CurseAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(CurseEffect(owner));
+    target.addEffect(CurseEffect(owner));
   }
 
   @override
@@ -147,12 +147,12 @@ class ReviveAbility extends Ability {
   @override
   void callOnTarget(Player target) {
     target.removeFatalEffects([]);
-    target.addStatusEffect(ReviveEffect(owner));
+    target.addEffect(ReviveEffect(owner));
   }
 
   @override
   bool isTarget(Player target) {
-    return target.hasFatalEffect();
+    return target.hasFatalEffect;
   }
 
   @override

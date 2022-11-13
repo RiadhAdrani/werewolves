@@ -80,7 +80,7 @@ class ShepherdAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(SheepEffect(owner));
+    target.addEffect(SheepEffect(owner));
   }
 
   @override

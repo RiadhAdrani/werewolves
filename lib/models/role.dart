@@ -199,7 +199,7 @@ abstract class RoleSingular extends Role<Player> {
 
   @override
   bool playerIsFatallyWounded() {
-    return player.hasFatalEffect();
+    return player.hasFatalEffect;
   }
 
   @override
@@ -223,7 +223,7 @@ abstract class RoleGroup extends Role<List<Player>> {
   }
 
   List<Player> getCurrentPlayers() {
-    return player.where((player) => !player.isDead()).toList();
+    return player.where((player) => !player.isDead).toList();
   }
 
   @override
@@ -251,7 +251,7 @@ abstract class RoleGroup extends Role<List<Player>> {
     bool result = true;
 
     for (var member in player) {
-      if (!member.hasFatalEffect()) {
+      if (!member.hasFatalEffect) {
         return false;
       }
     }

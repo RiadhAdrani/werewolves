@@ -19,7 +19,7 @@ class Hunter extends RoleSingular {
 
   @override
   bool canUseAbilitiesDuringNight() {
-    return player.hasFatalEffect() || !player.hasEffect(EffectId.hasCallsign);
+    return player.hasFatalEffect || !player.hasEffect(EffectId.hasCallsign);
   }
 
   @override
@@ -29,7 +29,7 @@ class Hunter extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(Game game) {
-    return player.hasFatalEffect() || !player.hasEffect(EffectId.hasCallsign);
+    return player.hasFatalEffect || !player.hasEffect(EffectId.hasCallsign);
   }
 
   @override
@@ -39,7 +39,7 @@ class Hunter extends RoleSingular {
 
   @override
   List<String> getInformations(Game game) {
-    if (player.hasFatalEffect()) {
+    if (player.hasFatalEffect) {
       return ['You have become a Hunter! Choose someone to kill.'];
     }
 
@@ -88,10 +88,10 @@ class HuntAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(HuntEffect(owner));
+    target.addEffect(HuntEffect(owner));
 
-    if (!target.hasWolfRole()) {
-      (owner as RoleSingular).player.addStatusEffect(HuntEffect(owner));
+    if (!target.hasWolfRole) {
+      (owner as RoleSingular).player.addEffect(HuntEffect(owner));
     }
   }
 
@@ -107,7 +107,7 @@ class HuntAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return (owner.player as Player).hasFatalEffect();
+    return (owner.player as Player).hasFatalEffect;
   }
 
   @override
@@ -143,7 +143,7 @@ class CallSignAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(CallSignEffect(owner));
+    target.addEffect(CallSignEffect(owner));
   }
 
   @override
@@ -159,7 +159,7 @@ class CallSignAbility extends Ability {
   @override
   bool shouldBeAvailable() {
     return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
-        !(owner.player as Player).hasFatalEffect();
+        !(owner.player as Player).hasFatalEffect;
   }
 
   @override
@@ -175,7 +175,7 @@ class CallSignAbility extends Ability {
   @override
   bool isUnskippable() {
     return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
-        !(owner.player as Player).hasFatalEffect();
+        !(owner.player as Player).hasFatalEffect;
   }
 
   @override

@@ -18,12 +18,11 @@ Widget gameDayView(Game game, BuildContext context) {
       game.getCurrentDaySummary().map((info) => info.getText()).toList();
 
   List<String> alivePlayers = game.playersList
-      .map((player) =>
-          '${player.getName()} (as ${player.getMainRole().getName()})')
+      .map((player) => '${player.name} (as ${player.mainRole.getName()})')
       .toList();
 
   List<String> deadPlayers =
-      game.deadPlayers.map((player) => player.getName()).toList();
+      game.deadPlayers.map((player) => player.name).toList();
 
   return Scaffold(
     appBar: gameAppBar('Day (${game.currentTurn})', context, game,

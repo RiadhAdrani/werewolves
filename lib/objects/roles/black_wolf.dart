@@ -84,7 +84,7 @@ class MuteAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(MuteEffect(owner));
+    target.addEffect(MuteEffect(owner));
   }
 
   @override

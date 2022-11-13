@@ -15,7 +15,7 @@ class Knight extends RoleSingular {
 
   @override
   bool canUseAbilitiesDuringNight() {
-    return player.hasFatalEffect();
+    return player.hasFatalEffect;
   }
 
   @override
@@ -35,7 +35,7 @@ class Knight extends RoleSingular {
 
   @override
   List<String> getInformations(Game game) {
-    if (player.hasFatalEffect()) {
+    if (player.hasFatalEffect) {
       return [
         'A player dared to strike you during the night!',
         'Choose a target to counter this attack and redirect it towards him.'
@@ -82,7 +82,7 @@ class CounterAbility extends Ability {
   @override
   void callOnTarget(Player target) {
     (owner.player as Player).removeFatalEffects([]);
-    target.addStatusEffect(CounterEffect(owner));
+    target.addEffect(CounterEffect(owner));
   }
 
   @override
@@ -97,7 +97,7 @@ class CounterAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return (owner.player as Player).hasFatalEffect();
+    return (owner.player as Player).hasFatalEffect;
   }
 
   @override

@@ -44,7 +44,7 @@ class Captain extends RoleSingular {
   List<String> getInformations(Game game) {
     final output = <String>[];
 
-    if (player.hasFatalEffect()) {
+    if (player.hasFatalEffect) {
       output.add(
           'You are dead, choose another fellow player to inherit your capitaincy.');
     }
@@ -71,8 +71,8 @@ class Captain extends RoleSingular {
     /// if he is not a captain mainly,
     /// the servant should get the secondary role.
     /// We leave the inheritance to the dead captain.
-    if (player.getMainRole() == this &&
-        player.hasFatalEffect() == true &&
+    if (player.mainRole == this &&
+        player.hasFatalEffect == true &&
         player.hasEffect(EffectId.isServed)) {
       var servant = gameModel.getRole(RoleId.servant);
 
@@ -144,7 +144,7 @@ class ExecuteAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(ExecutedEffect(owner));
+    target.addEffect(ExecutedEffect(owner));
   }
 
   @override
@@ -195,12 +195,12 @@ class InheritAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(InheritCaptaincyEffect(owner));
+    target.addEffect(InheritCaptaincyEffect(owner));
   }
 
   @override
   bool isTarget(Player target) {
-    return !target.hasFatalEffect();
+    return !target.hasFatalEffect;
   }
 
   @override
@@ -210,7 +210,7 @@ class InheritAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return (owner.player as Player).hasFatalEffect();
+    return (owner.player as Player).hasFatalEffect;
   }
 
   @override
@@ -252,7 +252,7 @@ class SubstitueAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(SubstitueEffect(owner));
+    target.addEffect(SubstitueEffect(owner));
   }
 
   @override
@@ -305,7 +305,7 @@ class TalkerAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(TalkerEffect(owner));
+    target.addEffect(TalkerEffect(owner));
   }
 
   @override
@@ -320,7 +320,7 @@ class TalkerAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasFatalEffect();
+    return !(owner.player as Player).hasFatalEffect;
   }
 
   @override

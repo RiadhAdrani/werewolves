@@ -56,7 +56,7 @@ class Wolfpack extends RoleGroup {
   /// Check if the team of the player should be changed to wolves
   /// when he is infected.
   static bool shouldJoinWolfpackUponInfection(Player player) {
-    RoleId mainRole = player.getMainRole().id;
+    RoleId mainRole = player.mainRole.id;
 
     switch (mainRole) {
       case RoleId.protector:
@@ -101,7 +101,7 @@ class DevourAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(DevourEffect(owner));
+    target.addEffect(DevourEffect(owner));
   }
 
   @override

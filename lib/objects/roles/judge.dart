@@ -86,7 +86,7 @@ class JudgementAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(JudgedEffect(owner));
+    target.addEffect(JudgedEffect(owner));
   }
 
   @override

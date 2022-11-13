@@ -71,7 +71,7 @@ String effectIdToString(EffectId effect) {
     case EffectId.isExecuted:
       return 'isExecuted';
     case EffectId.isSubstitue:
-      return 'isSubstition';
+      return 'isSubstitution';
     case EffectId.isServed:
       return 'isServed';
     case EffectId.isServing:

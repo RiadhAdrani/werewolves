@@ -94,7 +94,7 @@ class Alien extends RoleSingular {
   }
 
   static bool resolveAlienGuess(Player player, RoleId role) {
-    Role mainRole = player.getMainRole();
+    Role mainRole = player.mainRole;
 
     return resolveAlienGuessPossibility(role) ==
         resolveAlienGuessPossibility(mainRole.id);
@@ -130,7 +130,7 @@ class GuessAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(GuessedStatusEffect(owner));
+    target.addEffect(GuessedStatusEffect(owner));
   }
 
   @override
@@ -181,7 +181,7 @@ class AlienCallSignAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addStatusEffect(CallSignEffect(owner));
+    target.addEffect(CallSignEffect(owner));
   }
 
   @override
@@ -197,7 +197,7 @@ class AlienCallSignAbility extends Ability {
   @override
   bool shouldBeAvailable() {
     return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
-        !(owner.player as Player).hasFatalEffect();
+        !(owner.player as Player).hasFatalEffect;
   }
 
   @override
@@ -213,7 +213,7 @@ class AlienCallSignAbility extends Ability {
   @override
   bool isUnskippable() {
     return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
-        !(owner.player as Player).hasFatalEffect();
+        !(owner.player as Player).hasFatalEffect;
   }
 
   @override
@@ -269,7 +269,7 @@ RoleId resolveAlienGuessPossibility(RoleId id) {
 }
 
 bool resolveAlienGuess(Player player, RoleId role) {
-  Role mainRole = player.getMainRole();
+  Role mainRole = player.mainRole;
 
   return resolveAlienGuessPossibility(role) ==
       resolveAlienGuessPossibility(mainRole.id);

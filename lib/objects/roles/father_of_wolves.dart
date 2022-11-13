@@ -86,12 +86,12 @@ class InfectAbility extends Ability {
   @override
   void callOnTarget(Player target) {
     target.removeEffectsOfType(EffectId.isDevoured);
-    target.addStatusEffect(InfectEffect(owner));
+    target.addEffect(InfectEffect(owner));
   }
 
   @override
   bool isTarget(Player target) {
-    return target.hasEffect(EffectId.isDevoured) && !target.hasWolfRole();
+    return target.hasEffect(EffectId.isDevoured) && !target.hasWolfRole;
   }
 
   @override

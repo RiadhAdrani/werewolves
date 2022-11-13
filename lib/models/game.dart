@@ -62,12 +62,12 @@ class GameInformation {
   GameInformation(this._text, this._turn, this._period);
 
   static GameInformation death(Player player, GameState period, int turn) {
-    return GameInformation('${player.getName()} died.', turn, period);
+    return GameInformation('${player.name} died.', turn, period);
   }
 
   static GameInformation talk(Player player, GameState period, int turn) {
     return GameInformation(
-        '${player.getName()} starts the discussion.', turn, period);
+        '${player.name} starts the discussion.', turn, period);
   }
 
   static GameInformation clairvoyance(RoleId role, GameState period, int turn) {
@@ -81,12 +81,11 @@ class GameInformation {
 
   static GameInformation judge(Player player, int turn) {
     return GameInformation(
-        'The Judge protected ${player.getName()}.', turn, GameState.night);
+        'The Judge protected ${player.name}.', turn, GameState.night);
   }
 
   static GameInformation mute(Player player, int turn) {
-    return GameInformation(
-        '${player.getName()} is muted.', turn, GameState.night);
+    return GameInformation('${player.name} is muted.', turn, GameState.night);
   }
 
   static GameInformation sheep(bool killed, int turn) {
@@ -143,7 +142,7 @@ class Game extends ChangeNotifier {
       if (!role.isGroup()) {
         role.player as Player;
         if (!output.contains(role.player)) {
-          if (!(role.player as Player).isDead()) {
+          if (!(role.player as Player).isDead) {
             output.add(role.player);
           }
         }
@@ -326,7 +325,7 @@ class Game extends ChangeNotifier {
     final output = <Player>[];
 
     for (var player in playersList) {
-      if (player.hasFatalEffect()) {
+      if (player.hasFatalEffect) {
         output.add(player);
       }
     }
@@ -438,7 +437,7 @@ class Game extends ChangeNotifier {
     /// wolfpack (if the dead role is a wolf)
     /// because we use the [servant.player] which will be overwritten
     /// by [removeRoleOfType] and will be set to a dead player.
-    (servant.player as Player).removeRoleOfType(RoleId.servant);
+    (servant.player as Player).removeRolesOfType(RoleId.servant);
 
     /// Add to the game info.
     addGameInfo(GameInformation.servant(deadRole.id, state, currentTurn));
@@ -467,7 +466,7 @@ class Game extends ChangeNotifier {
   /// uses `GameModel._killAndMovePlayerToGraveyard()`.
   void _eliminateDeadPlayers() {
     for (var player in playersList) {
-      if (player.hasFatalEffect()) {
+      if (player.hasFatalEffect) {
         _killAndMovePlayerToGraveyard(player);
       }
     }
@@ -677,8 +676,8 @@ class Game extends ChangeNotifier {
 
     for (var player in playersList) {
       /// If the captain is dead.
-      if (player.hasFatalEffect() && player.hasEffect(EffectId.isServed)) {
-        Role theOldRole = getRole(player.getMainRole().id)!;
+      if (player.hasFatalEffect && player.hasEffect(EffectId.isServed)) {
+        Role theOldRole = getRole(player.mainRole.id)!;
 
         onServedDeath(theOldRole, () {
           /// If the main role is captain,
@@ -686,7 +685,7 @@ class Game extends ChangeNotifier {
           /// Otherwise, we will be unable to use
           /// the captain's abilities which
           /// should not happen.
-          if (player.getMainRole().id == RoleId.captain) {
+          if (player.mainRole.id == RoleId.captain) {
             _killAndMovePlayerToGraveyard(theOldRole.player);
           }
 
@@ -694,7 +693,7 @@ class Game extends ChangeNotifier {
           /// We ignore the captain.
           _collectPendingAbilityOfPlayer(player, ignored: [RoleId.captain]);
 
-          player.removeRoleOfType(theOldRole.id);
+          player.removeRolesOfType(theOldRole.id);
         });
       }
     }
@@ -720,7 +719,7 @@ class Game extends ChangeNotifier {
     if (_state != GameState.day) return;
 
     for (var player in playersList) {
-      if (player.hasFatalEffect()) {
+      if (player.hasFatalEffect) {
         _collectPendingAbilityOfPlayer(player);
       }
     }
@@ -788,7 +787,7 @@ List<GameInformation> useNightEffectsResolver(
           player.removeEffectsOfType(effect.type);
           newEffects.add(WasMutedEffect(effect.source));
 
-          if (!(effect.source.player as Player).hasFatalEffect()) {
+          if (!(effect.source.player as Player).hasFatalEffect) {
             infos.add(GameInformation.mute(player, currentTurn));
           }
 
@@ -799,7 +798,7 @@ List<GameInformation> useNightEffectsResolver(
           player.removeEffectsOfType(effect.type);
 
           /// If the seer is dead, we do not report anything
-          if ((effect.source as RoleSingular).player.hasFatalEffect()) {
+          if ((effect.source as RoleSingular).player.hasFatalEffect) {
             break;
           }
 
@@ -832,7 +831,7 @@ List<GameInformation> useNightEffectsResolver(
           /// If the player has a wolf role
           /// We should remove one sheep
           /// which in our case is the target count.
-          if (player.hasWolfRole()) {
+          if (player.hasWolfRole) {
             Ability shepherdAbility =
                 effect.source.getAbilityOfType(AbilityId.sheeps)!;
 
@@ -876,7 +875,7 @@ List<GameInformation> useNightEffectsResolver(
 
     /// Apply new effects
     for (var effect in newEffects) {
-      player.addStatusEffect(effect);
+      player.addEffect(effect);
     }
   }
 
@@ -953,7 +952,7 @@ void useDayEffectsResolver(Game game) {
   int currentTurn = game.currentTurn;
 
   for (var player in game.playersList) {
-    if (player.hasFatalEffect()) {
+    if (player.hasFatalEffect) {
       game.addGameInfo(
           GameInformation.death(player, GameState.day, currentTurn));
     }
@@ -1082,7 +1081,7 @@ List<Player> usePlayerExtractor(List<Role> roles) {
     if (!role.isGroup()) {
       role.player as Player;
       if (!output.contains(role.player)) {
-        if (!(role.player as Player).isDead()) {
+        if (!(role.player as Player).isDead) {
           output.add(role.player);
         }
       }
