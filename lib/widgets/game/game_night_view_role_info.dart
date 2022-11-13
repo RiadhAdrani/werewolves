@@ -9,7 +9,7 @@ Widget roleInfoIconNamePlayer(Role role) {
       Padding(
         padding: const EdgeInsets.all(4.0),
         child: Text(
-          role.icon,
+          role.name,
           style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),

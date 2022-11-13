@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
+import 'package:werewolves/widgets/common.dart';
 import 'package:werewolves/widgets/select/select_role_button_view.dart';
 
 class SelectRolesView extends StatefulWidget {
@@ -47,10 +48,7 @@ class _SelectRolesViewState extends State<SelectRolesView> {
         return Scaffold(
           appBar: AppBar(
               title: Text('Selected roles (${selectController.items.length})')),
-          floatingActionButton: FloatingActionButton(
-            onPressed: (() => {_next(context)}),
-            child: const Icon(Icons.done),
-          ),
+          floatingActionButton: fab(Icons.done, () => _next(context)),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView(

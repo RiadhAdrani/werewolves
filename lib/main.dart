@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Werewolves',
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeView(),
@@ -34,9 +34,6 @@ class MyApp extends StatelessWidget {
         '/game': (context) => ChangeNotifierProvider(
             create: (context) => Game(), child: const GameArgumentsExtractor())
       },
-      theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          buttonTheme: ButtonThemeData(splashColor: Colors.blueGrey[100])),
     );
   }
 }

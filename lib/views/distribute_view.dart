@@ -8,6 +8,7 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/utils/check_player_name.dart';
 import 'package:werewolves/widgets/cards/role_with_name_card.dart';
+import 'package:werewolves/widgets/common.dart';
 import 'package:werewolves/widgets/select/select_set_name_dialog.dart';
 
 class DistributeView extends StatefulWidget {
@@ -50,7 +51,7 @@ class _DistributeViewState extends State<DistributeView> {
 
     void commit(String name) {
       setState(() {
-        /// We check if the typed paramter T is Player
+        /// We check if the typed parameter T is Player
         /// We should not assign players to Team roles
         /// It is the job of the game model to prepare.
         if (temp.player is Player) {
@@ -161,18 +162,8 @@ class _DistributeViewState extends State<DistributeView> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Click to pick',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  '${_initial.length} left',
-                  style: const TextStyle(fontSize: 20),
-                )
+                headingTitle('Click to pick'),
+                subTitle('${_initial.length} left', weight: FontWeight.normal),
               ],
             ),
           ],

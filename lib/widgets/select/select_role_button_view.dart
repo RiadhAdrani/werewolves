@@ -1,52 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/widgets/common.dart';
 
 Widget selectRoleButtonView(
     Role role, bool isSelected, count, onPressed, onLongPress) {
-  return Card(
-    color: isSelected ? Colors.grey[200] : Colors.white,
+  return card(
+    isSelected: isSelected,
     child: InkWell(
         onTap: () => onPressed(),
         onLongPress: () => onLongPress(),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
+        child: padding(
+          [12],
+          Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(role.icon),
+              padding(
+                [8],
+                Image.asset(role.icon),
               ),
               Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Column(
+                child: padding(
+                  [0, 8],
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          '${role.name} (x$count)',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          role.isUnique ? 'Super role' : 'Normal role',
-                          style: const TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                      Text(
-                        role.description,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.black54,
-                        ),
-                        overflow: TextOverflow.fade,
-                        textAlign: TextAlign.justify,
-                      ),
+                      padding([4, 0], subTitle('${role.name} (x$count)')),
+                      padding(
+                          [4, 0],
+                          text(role.isUnique ? 'Super role' : 'Normal role',
+                              italic: true)),
+                      paragraph(role.description),
                     ],
                   ),
                 ),
