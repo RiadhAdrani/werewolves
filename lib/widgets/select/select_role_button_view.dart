@@ -14,7 +14,7 @@ Widget selectRoleButtonView(
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(role.getIcon()),
+                child: Image.asset(role.icon),
               ),
               Flexible(
                 child: Padding(
@@ -25,7 +25,7 @@ Widget selectRoleButtonView(
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(
-                          '${role.getName()} (x$count)',
+                          '${role.name} (x$count)',
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.fade,
@@ -39,7 +39,7 @@ Widget selectRoleButtonView(
                         ),
                       ),
                       Text(
-                        role.getDescription(),
+                        role.description,
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,

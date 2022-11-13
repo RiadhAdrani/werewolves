@@ -10,7 +10,7 @@ import 'package:werewolves/objects/effects/callsign_effect.dart';
 class Hunter extends RoleSingular {
   Hunter(super.player) {
     id = RoleId.hunter;
-    callingPriority = hunterCallPriority;
+    callingPriority = hunterPriority;
     abilities = [
       CallSignAbility(this),
       HuntAbility(this),

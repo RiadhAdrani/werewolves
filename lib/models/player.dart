@@ -86,7 +86,7 @@ class Player {
   void removeRolesOfType(RoleId id) {
     roles.removeWhere((role) {
       if (role.id == id) {
-        if (role.isGroup()) {
+        if (role.isGroup) {
           (role as RoleGroup)
               .player
               .removeWhere((Player player) => player.id == this.id);

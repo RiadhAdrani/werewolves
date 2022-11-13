@@ -8,7 +8,7 @@ import 'package:werewolves/models/effect.dart';
 class BlackWolf extends RoleSingular {
   BlackWolf(super.player) {
     id = RoleId.blackWolf;
-    callingPriority = blackWolfCallPriority;
+    callingPriority = blackWolfPriority;
 
     isWolf = true;
 

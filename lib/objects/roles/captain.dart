@@ -10,7 +10,7 @@ import 'package:werewolves/widgets/alert/game_confirm_ability_use.dart';
 class Captain extends RoleSingular {
   Captain(super.player) {
     id = RoleId.captain;
-    callingPriority = captainCallPriority;
+    callingPriority = captainPriority;
 
     super.abilities = [
       ExecuteAbility(this),

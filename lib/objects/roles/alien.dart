@@ -10,7 +10,7 @@ import 'package:werewolves/objects/effects/guessed_effect.dart';
 class Alien extends RoleSingular {
   Alien(super.player) {
     id = RoleId.alien;
-    callingPriority = alienCallPriority;
+    callingPriority = alienPriority;
 
     super.abilities = [AlienCallSignAbility(this), GuessAbility(this)];
   }

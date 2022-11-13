@@ -7,7 +7,7 @@ Widget gameRoleDataInfo(Role role) {
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(role.getName()),
+        Text(role.name),
         Text('Playable: ${!role.isObsolete()}'),
         if (role.isGroupRole)
           Text(

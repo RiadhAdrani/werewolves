@@ -24,7 +24,7 @@ void showNormalAbilityDialog(BuildContext context, Ability ability,
             return WillPopScope(
               onWillPop: () async => false,
               child: AlertDialog(
-                title: Text("${ability.name} (${ability.owner.getName()})"),
+                title: Text("${ability.name} (${ability.owner.name})"),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -14,7 +14,7 @@ Widget roleWithPlayerName(Role role, BuildContext context) {
               fontWeight: FontWeight.bold),
         ),
         Text(
-          role.getName(),
+          role.name,
           style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
         )
       ]),

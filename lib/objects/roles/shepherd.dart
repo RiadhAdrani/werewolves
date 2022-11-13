@@ -9,7 +9,7 @@ import 'package:werewolves/models/effect.dart';
 class Shepherd extends RoleSingular {
   Shepherd(super.player) {
     id = RoleId.shepherd;
-    callingPriority = shepherdCallPriority;
+    callingPriority = shepherdPriority;
     abilities = [ShepherdAbility(this)];
   }
 

@@ -11,7 +11,7 @@ AlertDialog confirmDistributedList(
         children: list.map((role) {
           var playerName = role.player.id as String;
 
-          return Text('${role.getName()} : $playerName');
+          return Text('${role.name} : $playerName');
         }).toList(),
       ),
     ),

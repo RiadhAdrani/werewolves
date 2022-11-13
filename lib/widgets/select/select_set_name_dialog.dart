@@ -7,11 +7,11 @@ AlertDialog setPlayerNameDialog(Role temp, TextEditingController controller,
     title: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.asset(temp.getIcon()),
+        Image.asset(temp.icon),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            temp.getName(),
+            temp.name,
             style: const TextStyle(fontSize: 22),
           ),
         ),
@@ -31,19 +31,18 @@ AlertDialog setPlayerNameDialog(Role temp, TextEditingController controller,
         SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children:const  [
-            Text('• No duplicate name allowed',
-              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-          Text('• Minimum size is 3',
-              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-          Text('• Maximum size is 25',
-              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
-          Text('• Only alphanumerical characters and space are allowed.',
-              style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))
-          ],),
+            children: const [
+              Text('• No duplicate name allowed',
+                  style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+              Text('• Minimum size is 3',
+                  style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+              Text('• Maximum size is 25',
+                  style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic)),
+              Text('• Only alphanumerical characters and space are allowed.',
+                  style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic))
+            ],
+          ),
         )
-        
-        
       ],
     ),
     actions: [

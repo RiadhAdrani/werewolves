@@ -9,7 +9,7 @@ import 'package:werewolves/models/effect.dart';
 class Seer extends RoleSingular {
   Seer(super.player) {
     id = RoleId.seer;
-    callingPriority = seerCallPriority;
+    callingPriority = seerPriority;
     abilities = [ClairvoyanceAbility(this)];
   }
 

@@ -5,11 +5,11 @@ Widget roleInfoIconNamePlayer(Role role) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8),
     child: Column(children: [
-      Image.asset(role.getIcon()),
+      Image.asset(role.icon),
       Padding(
         padding: const EdgeInsets.all(4.0),
         child: Text(
-          role.getName(),
+          role.icon,
           style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),

@@ -139,7 +139,7 @@ class Game extends ChangeNotifier {
     List<Player> output = [];
 
     for (var role in _roles) {
-      if (!role.isGroup()) {
+      if (!role.isGroup) {
         role.player as Player;
         if (!output.contains(role.player)) {
           if (!(role.player as Player).isDead) {
@@ -259,7 +259,7 @@ class Game extends ChangeNotifier {
         }
 
         showStepAlert(
-            '${currentPendingAbility.owner.getName()} should use his ability',
+            '${currentPendingAbility.owner.name} should use his ability',
             'Make sure everyone else is asleep!',
             getCurrentDaySummary().map((item) => item.getText()).toList(),
             context, () {
@@ -641,7 +641,7 @@ class Game extends ChangeNotifier {
   /// and there is only one instance of that role in the list.
   void _addMemberToGroup(Player newMember, RoleId roleId) {
     for (var role in _roles) {
-      if (role.id == roleId && role.isGroup()) {
+      if (role.id == roleId && role.isGroup) {
         (role as RoleGroup).setPlayer([...role.player, newMember]);
         return;
       }
@@ -1078,7 +1078,7 @@ List<Player> usePlayerExtractor(List<Role> roles) {
   List<Player> output = [];
 
   for (var role in roles) {
-    if (!role.isGroup()) {
+    if (!role.isGroup) {
       role.player as Player;
       if (!output.contains(role.player)) {
         if (!(role.player as Player).isDead) {

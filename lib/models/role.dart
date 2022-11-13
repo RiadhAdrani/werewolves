@@ -41,20 +41,20 @@ enum RoleId {
   alien
 }
 
-const servantCallPriority = 500;
-const protectorCallPriority = 1000;
-const wolfpackCallPriority = 2000;
-const fatherOfWolvesCallPriority = 3000;
-const blackWolfCallPriority = 3500;
-const garrulousWolfCallPriority = 3700;
-const witchCallPriority = 4000;
-const seerCallPriority = 5000;
-const shepherdCallPriority = 5500;
-const knightCallPriority = 6000;
-const hunterCallPriority = 7000;
-const alienCallPriority = 7200;
-const judgeCallPriority = 7500;
-const captainCallPriority = 8000;
+const servantPriority = 500;
+const protectorPriority = 1000;
+const wolfpackPriority = 2000;
+const fatherOfWolvesPriority = 3000;
+const blackWolfPriority = 3500;
+const garrulousWolfPriority = 3700;
+const witchPriority = 4000;
+const seerPriority = 5000;
+const shepherdPriority = 5500;
+const knightPriority = 6000;
+const hunterPriority = 7000;
+const alienPriority = 7200;
+const judgePriority = 7500;
+const captainPriority = 8000;
 
 abstract class Role<T> {
   late T player;
@@ -74,22 +74,22 @@ abstract class Role<T> {
   }
 
   /// Get the name of the role
-  String getName() {
+  String get name {
     return getRoleName(id);
   }
 
   /// Return the icon path in assets
-  String getIcon() {
+  String get icon {
     return getRoleIconPath(id);
   }
 
   /// Check if the role is meant to be treated as a group.
-  bool isGroup() {
+  bool get isGroup {
     return isGroupRole;
   }
 
   /// Get role description
-  String getDescription() {
+  String get description {
     return getRoleDescription(id);
   }
 
@@ -346,7 +346,7 @@ List<Role> makeRolesFromInitialList(List<Role> input) {
       wolfpack.add(role.player as Player);
     }
 
-    if (!role.isGroup()) {
+    if (!role.isGroup) {
       output.add(role);
     }
   }

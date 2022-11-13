@@ -28,7 +28,7 @@ class _DistributeViewState extends State<DistributeView> {
   void _fastCommitForTesting() {
     setState(() {
       _picked = _initial.map((item) {
-        var player = Player(item.getName());
+        var player = Player(item.name);
 
         player.team = item.getSupposedInitialTeam();
 

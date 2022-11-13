@@ -8,7 +8,7 @@ import 'package:werewolves/models/effect.dart';
 class GarrulousWolf extends RoleSingular {
   GarrulousWolf(super.player) {
     id = RoleId.garrulousWolf;
-    callingPriority = garrulousWolfCallPriority;
+    callingPriority = garrulousWolfPriority;
     isWolf = true;
     super.abilities = [GarrulousAbility(this)];
   }

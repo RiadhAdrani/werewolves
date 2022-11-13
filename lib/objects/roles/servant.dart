@@ -24,7 +24,7 @@ import 'package:werewolves/objects/roles/witch.dart';
 class Servant extends RoleSingular {
   Servant(super.player) {
     id = RoleId.servant;
-    callingPriority = servantCallPriority;
+    callingPriority = servantPriority;
     abilities = [ServantAbility(this)];
   }
 

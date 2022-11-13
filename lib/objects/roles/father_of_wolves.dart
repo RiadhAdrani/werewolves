@@ -11,7 +11,7 @@ class FatherOfWolves extends RoleSingular {
   FatherOfWolves(super.player) {
     id = RoleId.fatherOfWolves;
     isWolf = true;
-    callingPriority = fatherOfWolvesCallPriority;
+    callingPriority = fatherOfWolvesPriority;
     abilities = [InfectAbility(this)];
 
     // TODO : check for these cases when adding new roles

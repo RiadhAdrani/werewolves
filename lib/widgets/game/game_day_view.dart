@@ -18,7 +18,7 @@ Widget gameDayView(Game game, BuildContext context) {
       game.getCurrentDaySummary().map((info) => info.getText()).toList();
 
   List<String> alivePlayers = game.playersList
-      .map((player) => '${player.name} (as ${player.mainRole.getName()})')
+      .map((player) => '${player.name} (as ${player.mainRole.name})')
       .toList();
 
   List<String> deadPlayers =

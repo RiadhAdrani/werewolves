@@ -9,7 +9,7 @@ import 'package:werewolves/models/effect.dart';
 class Knight extends RoleSingular {
   Knight(super.player) {
     id = RoleId.knight;
-    callingPriority = knightCallPriority;
+    callingPriority = knightPriority;
     abilities = [CounterAbility(this)];
   }
 
