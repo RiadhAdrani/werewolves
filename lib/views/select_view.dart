@@ -16,7 +16,7 @@ class _SelectRolesViewState extends State<SelectRolesView> {
   void _next(BuildContext context) {
     List<Role> list = Provider.of<SelectedModel>(context, listen: false).items;
 
-    dynamic result = checkListIsValid(list);
+    dynamic result = useGameStartable(list);
 
     if (result == true) {
       Navigator.pushNamed(context, '/distribute');

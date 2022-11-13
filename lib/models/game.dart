@@ -171,7 +171,7 @@ class Game extends ChangeNotifier {
 
   /// Return the correct widget to be displayed
   /// during the current `state`.
-  Widget viewToDisplay(BuildContext context) {
+  Widget useView(BuildContext context) {
     switch (_state) {
       case GameState.empty:
         return const Text('Loading...');
@@ -478,7 +478,8 @@ class Game extends ChangeNotifier {
   /// and eliminating dead souls.
   /// When everything is done, we transition into the day phase.
   void _performPostNightProcessing(BuildContext context) {
-    List<GameInformation> infos = resolveNightEffects(playersList, currentTurn);
+    List<GameInformation> infos =
+        useNightEffectsResolver(playersList, currentTurn);
 
     // Todo : process informations
     _infos.addAll(infos);
@@ -726,7 +727,7 @@ class Game extends ChangeNotifier {
   }
 
   void _gameOverCheck(BuildContext context) {
-    dynamic result = checkTeamsAreBalanced(playersList, _roles);
+    dynamic result = useTeamsBalanceChecker(playersList, _roles);
 
     if (result is Team) {
       gameOver = true;
@@ -749,7 +750,7 @@ class Game extends ChangeNotifier {
   }
 }
 
-List<GameInformation> resolveNightEffects(
+List<GameInformation> useNightEffectsResolver(
   List<Player> players,
   int currentTurn,
 ) {
@@ -883,7 +884,7 @@ List<GameInformation> resolveNightEffects(
 }
 
 /// generate a list of playable roles.
-List<Role> makeAvailableList() {
+List<Role> usePlayableRolesGenerator() {
   Player player() => Player("Placeholder_Player");
 
   List<Role> output = [];
@@ -948,7 +949,7 @@ List<Role> makeAvailableList() {
   return output;
 }
 
-void resolveEffectsAndCollectInfosOfDay(Game game) {
+void useDayEffectsResolver(Game game) {
   int currentTurn = game.currentTurn;
 
   for (var player in game.playersList) {
@@ -960,7 +961,7 @@ void resolveEffectsAndCollectInfosOfDay(Game game) {
 }
 
 /// returns the number of players within the wolf team.
-int getWolfTeamCount(List<Player> players) {
+int useWolvesCounter(List<Player> players) {
   int sum = 0;
 
   for (var player in players) {
@@ -973,7 +974,7 @@ int getWolfTeamCount(List<Player> players) {
 }
 
 /// returns the number of players within the village team.
-int getVillageTeamCount(List<Player> players) {
+int useVillagersCounter(List<Player> players) {
   int sum = 0;
 
   for (var player in players) {
@@ -986,7 +987,7 @@ int getVillageTeamCount(List<Player> players) {
 }
 
 /// returns the number of solo players.
-int getSoloTeamsCount(List<Player> players) {
+int useSolosCounter(List<Player> players) {
   int sum = 0;
 
   for (var player in players) {
@@ -1000,10 +1001,10 @@ int getSoloTeamsCount(List<Player> players) {
 
 /// check if the current list of players is balanced,
 /// otherwise, it returns the winning team.
-dynamic checkTeamsAreBalanced(List<Player> players, List<Role> roles) {
-  int wolvesCount = getWolfTeamCount(players);
-  int villagersCount = getVillageTeamCount(players);
-  int solosCount = getSoloTeamsCount(players);
+dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
+  int wolvesCount = useWolvesCounter(players);
+  int villagersCount = useVillagersCounter(players);
+  int solosCount = useSolosCounter(players);
 
   Role? alien = getRoleInGame(RoleId.alien, roles);
 
@@ -1074,7 +1075,7 @@ Role? getRoleInGame(RoleId id, List<Role> roles) {
 }
 
 /// extract the list of players from the given list of roles
-List<Player> extractPlayersList(List<Role> roles) {
+List<Player> usePlayerExtractor(List<Role> roles) {
   List<Player> output = [];
 
   for (var role in roles) {
@@ -1092,12 +1093,12 @@ List<Player> extractPlayersList(List<Role> roles) {
 }
 
 /// check if the list of players is valid for a game to start.
-dynamic checkListIsValid(List<Role> roles) {
+dynamic useGameStartable(List<Role> roles) {
   if (roles.length < 7) {
     return "Player count is too short to start a game. Try adding more roles to reach at least 7 players.";
   }
 
-  dynamic balanced = checkTeamsAreBalanced(extractPlayersList(roles), roles);
+  dynamic balanced = useTeamsBalanceChecker(usePlayerExtractor(roles), roles);
 
   if (balanced != true) {
     return "Game is not balanced, ${getTeamName(balanced)} team is already winning.";

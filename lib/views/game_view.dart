@@ -42,7 +42,7 @@ class _GameViewState extends State<GameView> {
 
           return false;
         },
-        child: Scaffold(body: value.viewToDisplay(context)),
+        child: Scaffold(body: value.useView(context)),
       );
     });
   }

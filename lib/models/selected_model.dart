@@ -8,7 +8,7 @@ import 'package:werewolves/objects/roles/werewolf.dart';
 
 class SelectedModel extends ChangeNotifier {
   final List<Role> _items = [];
-  final List<Role> _available = makeAvailableList();
+  final List<Role> _available = usePlayableRolesGenerator();
 
   SelectedModel();
 

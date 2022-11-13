@@ -7,8 +7,8 @@ void showGameDataDialog(BuildContext context, Game game) {
   List<String> simple = [
     'Number of alive players is ${game.playersList.length}',
     'Number of dead players is ${game.deadPlayers.length}',
-    'Number of players within team Village is ${getVillageTeamCount(game.playersList)}',
-    'Number of players within team Wolves is ${getWolfTeamCount(game.playersList)}'
+    'Number of players within team Village is ${useVillagersCounter(game.playersList)}',
+    'Number of players within team Wolves is ${useWolvesCounter(game.playersList)}'
   ];
 
   showDialog(
