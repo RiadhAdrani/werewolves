@@ -42,12 +42,13 @@ Widget roleSelectCard(
 }
 
 Widget setPlayerDialog(
+  BuildContext context,
   Role temp,
   TextEditingController controller,
   Function onDone,
-  Function onCancel,
 ) {
   return dialog(
+    context: context,
     iconName: Icons.person,
     title: temp.name,
     content: column(
@@ -75,7 +76,6 @@ Widget setPlayerDialog(
     ),
     actions: [
       button('Done', onDone, flat: true),
-      button('Cancel', onCancel, flat: true),
     ],
   );
 }

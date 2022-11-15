@@ -183,18 +183,28 @@ Widget inkWell({
   );
 }
 
-Widget dialog({
-  IconData? iconName,
-  String? title,
-  Widget? content,
-  List<Widget> actions = const [],
-}) {
+Widget dialog(
+    {IconData? iconName,
+    String? title,
+    Widget? content,
+    List<Widget> actions = const [],
+    BuildContext? context}) {
   return AlertDialog(
     title: row(children: [
       if (iconName != null) padding([0, 8, 0, 0], icon(iconName)),
       if (title != null) subTitle(title)
     ]),
     content: content,
-    actions: actions,
+    actions: [
+      ...actions,
+      if (context != null)
+        button(
+          'Cancel',
+          () {
+            Navigator.pop(context);
+          },
+          flat: true,
+        )
+    ],
   );
 }

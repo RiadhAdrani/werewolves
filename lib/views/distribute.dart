@@ -7,8 +7,8 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/utils/check_player_name.dart';
-import 'package:werewolves/widgets/cards/role_with_name_card.dart';
 import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/widgets/distribute.dart';
 import 'package:werewolves/widgets/select.dart';
 
 class DistributePage extends StatefulWidget {
@@ -19,16 +19,16 @@ class DistributePage extends StatefulWidget {
 }
 
 class _DistributePageState extends State<DistributePage> {
-  bool _initialized = false;
+  bool initialized = false;
 
-  List<Role> _initial = [];
-  List<Role> _picked = [];
+  List<Role> initial = [];
+  List<Role> picked = [];
 
-  Role? _pickedRole;
+  Role? pickedRole;
 
-  void _fastCommitForTesting() {
+  void fastCommit() {
     setState(() {
-      _picked = _initial.map((item) {
+      picked = initial.map((item) {
         var player = Player(item.name);
 
         player.team = item.getSupposedInitialTeam();
@@ -38,16 +38,16 @@ class _DistributePageState extends State<DistributePage> {
         return item;
       }).toList();
 
-      _initial = [];
+      initial = [];
     });
   }
 
-  void _pick(BuildContext context) {
-    if (_initial.isEmpty) return;
+  void pick(BuildContext context) {
+    if (initial.isEmpty) return;
 
-    int index = Random().nextInt(_initial.length);
+    int index = Random().nextInt(initial.length);
 
-    Role temp = _initial[index];
+    Role temp = initial[index];
 
     void commit(String name) {
       setState(() {
@@ -62,10 +62,10 @@ class _DistributePageState extends State<DistributePage> {
           temp.setPlayer(playerToAssign);
         }
 
-        _pickedRole = temp;
-        _picked = [..._picked, _pickedRole!];
-        _initial = _initial
-            .where((element) => element.instanceId != _pickedRole!.instanceId)
+        pickedRole = temp;
+        picked = [...picked, pickedRole!];
+        initial = initial
+            .where((element) => element.instanceId != pickedRole!.instanceId)
             .toList();
       });
     }
@@ -75,95 +75,74 @@ class _DistributePageState extends State<DistributePage> {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (BuildContext context) =>
-            setPlayerDialog(temp, controller, () {
-              String name = controller.text.trim();
+        builder: (BuildContext context) => setPlayerDialog(
+              context,
+              temp,
+              controller,
+              () {
+                String name = controller.text.trim();
 
-              if (!checkPlayerName(name, _picked)) {
-                return;
-              }
+                if (!checkPlayerName(name, picked)) {
+                  return;
+                }
 
-              commit(name);
+                commit(name);
 
-              Navigator.pop(context);
-            }, () {
-              Navigator.pop(context);
-            }));
-  }
-
-  AlertDialog confirmDistributedList(
-      List<Role> list, Function onConfirm, Function onCancel) {
-    return AlertDialog(
-      title: Text('Review players list (${list.length})'),
-      contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-      content: SizedBox(
-        width: 350,
-        height: 450,
-        child: ListView(
-          children: list.map((role) {
-            return roleWithPlayerName(role, context);
-          }).toList(),
-        ),
-      ),
-      actions: [
-        button('Confirm', () => onConfirm()),
-        button('Cancel', () => onCancel()),
-      ],
-    );
-  }
-
-  void reviewAndConfirmList() {
-    showDialog(
-        context: context,
-        builder: (BuildContext builder) => confirmDistributedList(_picked, () {
-              Navigator.pushNamed(context, '/game',
-                  arguments: GameArguments(_picked));
-            }, () {
-              Navigator.pop(context);
-            }));
+                Navigator.pop(context);
+              },
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_initialized) {
+    if (!initialized) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {
-          _initial =
+          initial =
               Provider.of<SelectedModel>(context, listen: false).generateList();
-          _initialized = true;
+          initialized = true;
         });
       });
+    }
+
+    void reviewAndConfirmList() {
+      showDialog(
+          context: context,
+          builder: (BuildContext builder) {
+            return confirmDistributedList(
+              context,
+              picked,
+              () {
+                Navigator.pushNamed(context, '/game',
+                    arguments: GameArguments(picked));
+              },
+            );
+          });
     }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Distribute Roles'),
       ),
-      floatingActionButton: _initial.isEmpty
-          ? FloatingActionButton(
-              onPressed: () {
-                reviewAndConfirmList();
-              },
-              child: const Icon(Icons.done),
-            )
-          : const Text(''),
-      body: InkWell(
-        onTap: () {
-          _pick(context);
-        },
-        onLongPress: () {
-          _fastCommitForTesting();
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      floatingActionButton:
+          fab(initial.isEmpty ? Icons.done : Icons.dangerous_outlined, () {
+        if (initial.isNotEmpty) return;
+        reviewAndConfirmList();
+      }),
+      body: inkWell(
+        onClick: () => pick(context),
+        onHold: fastCommit,
+        child: column(
+          mainAlignment: MainAxisAlignment.center,
+          crossAlignment: CrossAxisAlignment.stretch,
+          mainSize: MainAxisSize.max,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            column(
+              mainAlignment: MainAxisAlignment.center,
+              crossAlignment: CrossAxisAlignment.center,
               children: [
                 headingTitle('Click to pick'),
-                subTitle('${_initial.length} left', weight: FontWeight.normal),
+                subTitle('${initial.length} left', weight: FontWeight.normal),
               ],
             ),
           ],
