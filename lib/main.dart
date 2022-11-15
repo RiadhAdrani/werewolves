@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/selected_model.dart';
-import 'package:werewolves/views/distribute_view.dart';
-import 'package:werewolves/views/home_view.dart';
-import 'package:werewolves/views/select_view.dart';
+import 'package:werewolves/views/distribute.dart';
+import 'package:werewolves/views/home.dart';
+import 'package:werewolves/views/select.dart';
 import 'package:werewolves/widgets/game/game_arguments_extractor.dart';
 
 void main() {
@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
       title: 'Werewolves',
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomeView(),
-        '/select': (context) => const SelectRolesView(),
-        '/distribute': (context) => const DistributeView(),
+        '/': (context) => const HomePage(),
+        '/select': (context) => const SelectionPage(),
+        '/distribute': (context) => const DistributePage(),
         '/game': (context) => ChangeNotifierProvider(
             create: (context) => Game(), child: const GameArgumentsExtractor())
       },

@@ -3,18 +3,18 @@ import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/widgets/game/game_leave_dialog.dart';
 
-class GameView extends StatefulWidget {
+class GamePage extends StatefulWidget {
   final GameArguments arguments;
 
-  const GameView(this.arguments, Key? key) : super(key: key);
+  const GamePage(this.arguments, Key? key) : super(key: key);
 
   @override
-  State<GameView> createState() => _GameViewState();
+  State<GamePage> createState() => _GamePageState();
 }
 
-class _GameViewState extends State<GameView> {
+class _GamePageState extends State<GamePage> {
   @override
-  GameView get widget => super.widget;
+  GamePage get widget => super.widget;
 
   bool _initialized = false;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/views/game_view.dart';
+import 'package:werewolves/views/game.dart';
 
 class GameArgumentsExtractor extends StatelessWidget {
   const GameArgumentsExtractor({Key? key}) : super(key: key);
@@ -9,6 +9,6 @@ class GameArgumentsExtractor extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as GameArguments;
 
-    return GameView(args, const Key('game'));
+    return GamePage(args, const Key('game'));
   }
 }

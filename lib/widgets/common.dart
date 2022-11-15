@@ -88,20 +88,113 @@ Text paragraph(String data,
       justify: true);
 }
 
-Widget padding(List<double> padding, Widget child) {
+EdgeInsetsGeometry useEdge(List<double> edges) {
   EdgeInsetsGeometry p = EdgeInsets.zero;
 
-  if (padding.isEmpty) {
+  if (edges.isEmpty) {
     p = EdgeInsets.zero;
-  } else if (padding.length == 1) {
-    p = EdgeInsets.all(padding[0]);
-  } else if (padding.length == 2) {
-    p = EdgeInsets.symmetric(vertical: padding[0], horizontal: padding[1]);
-  } else if (padding.length == 3) {
-    p = EdgeInsets.fromLTRB(0, padding[0], padding[1], padding[2]);
-  } else if (padding.length > 3) {
-    p = EdgeInsets.fromLTRB(padding[3], padding[0], padding[1], padding[2]);
+  } else if (edges.length == 1) {
+    p = EdgeInsets.all(edges[0]);
+  } else if (edges.length == 2) {
+    p = EdgeInsets.symmetric(vertical: edges[0], horizontal: edges[1]);
+  } else if (edges.length == 3) {
+    p = EdgeInsets.fromLTRB(0, edges[0], edges[1], edges[2]);
+  } else if (edges.length > 3) {
+    p = EdgeInsets.fromLTRB(edges[3], edges[0], edges[1], edges[2]);
   }
 
-  return Padding(padding: p, child: child);
+  return p;
+}
+
+Widget padding(List<double> padding, Widget child) {
+  return Padding(padding: useEdge(padding), child: child);
+}
+
+Widget input(TextEditingController controller,
+    {String placeholder = '',
+    int? max,
+    TextInputType type = TextInputType.text,
+    TextCapitalization capitalization = TextCapitalization.none}) {
+  return TextField(
+    controller: controller,
+    maxLength: max,
+    decoration: InputDecoration(hintText: placeholder),
+    keyboardType: type,
+    textCapitalization: capitalization,
+  );
+}
+
+Widget icon(IconData icon, {Color? color}) {
+  return Icon(
+    icon,
+    color: color,
+  );
+}
+
+Widget image(String name, {double height = 50, double width = 50}) {
+  return Image.asset(
+    name,
+    height: height,
+    width: width,
+  );
+}
+
+Widget column({
+  List<Widget> children = const [],
+  MainAxisAlignment mainAlignment = MainAxisAlignment.start,
+  MainAxisSize mainSize = MainAxisSize.min,
+  CrossAxisAlignment crossAlignment = CrossAxisAlignment.start,
+}) {
+  return Column(
+    mainAxisAlignment: mainAlignment,
+    crossAxisAlignment: crossAlignment,
+    mainAxisSize: mainSize,
+    children: children,
+  );
+}
+
+Widget row({
+  List<Widget> children = const [],
+  MainAxisAlignment mainAlignment = MainAxisAlignment.start,
+  MainAxisSize mainSize = MainAxisSize.min,
+  CrossAxisAlignment crossAlignment = CrossAxisAlignment.center,
+}) {
+  return Row(
+    mainAxisAlignment: mainAlignment,
+    crossAxisAlignment: crossAlignment,
+    mainAxisSize: mainSize,
+    children: children,
+  );
+}
+
+Widget flexible(Widget child) {
+  return Flexible(child: child);
+}
+
+Widget inkWell({
+  Widget? child,
+  void Function()? onClick,
+  void Function()? onHold,
+}) {
+  return InkWell(
+    onTap: onClick,
+    onLongPress: onHold,
+    child: child,
+  );
+}
+
+Widget dialog({
+  IconData? iconName,
+  String? title,
+  Widget? content,
+  List<Widget> actions = const [],
+}) {
+  return AlertDialog(
+    title: row(children: [
+      if (iconName != null) padding([0, 8, 0, 0], icon(iconName)),
+      if (title != null) subTitle(title)
+    ]),
+    content: content,
+    actions: actions,
+  );
 }

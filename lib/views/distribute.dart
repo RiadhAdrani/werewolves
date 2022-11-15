@@ -9,16 +9,16 @@ import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/utils/check_player_name.dart';
 import 'package:werewolves/widgets/cards/role_with_name_card.dart';
 import 'package:werewolves/widgets/common.dart';
-import 'package:werewolves/widgets/select/select_set_name_dialog.dart';
+import 'package:werewolves/widgets/select.dart';
 
-class DistributeView extends StatefulWidget {
-  const DistributeView({Key? key}) : super(key: key);
+class DistributePage extends StatefulWidget {
+  const DistributePage({Key? key}) : super(key: key);
 
   @override
-  State<DistributeView> createState() => _DistributeViewState();
+  State<DistributePage> createState() => _DistributePageState();
 }
 
-class _DistributeViewState extends State<DistributeView> {
+class _DistributePageState extends State<DistributePage> {
   bool _initialized = false;
 
   List<Role> _initial = [];
@@ -76,7 +76,7 @@ class _DistributeViewState extends State<DistributeView> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) =>
-            setPlayerNameDialog(temp, controller, context, () {
+            setPlayerDialog(temp, controller, () {
               String name = controller.text.trim();
 
               if (!checkPlayerName(name, _picked)) {
@@ -106,8 +106,8 @@ class _DistributeViewState extends State<DistributeView> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => onConfirm(), child: const Text('Confirm')),
-        TextButton(onPressed: () => onCancel(), child: const Text('Cancel'))
+        button('Confirm', () => onConfirm()),
+        button('Cancel', () => onCancel()),
       ],
     );
   }

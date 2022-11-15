@@ -4,17 +4,17 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/widgets/common.dart';
-import 'package:werewolves/widgets/select/select_role_button_view.dart';
+import 'package:werewolves/widgets/select.dart';
 
-class SelectRolesView extends StatefulWidget {
-  const SelectRolesView({Key? key}) : super(key: key);
+class SelectionPage extends StatefulWidget {
+  const SelectionPage({Key? key}) : super(key: key);
 
   @override
-  State<SelectRolesView> createState() => _SelectRolesViewState();
+  State<SelectionPage> createState() => _SelectionPageState();
 }
 
-class _SelectRolesViewState extends State<SelectRolesView> {
-  void _next(BuildContext context) {
+class _SelectionPageState extends State<SelectionPage> {
+  void next(BuildContext context) {
     List<Role> list = Provider.of<SelectedModel>(context, listen: false).items;
 
     dynamic result = useGameStartable(list);
@@ -26,17 +26,17 @@ class _SelectRolesViewState extends State<SelectRolesView> {
           barrierDismissible: false,
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Oops ! Invalid list !'),
-              content: Text(result),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Close'))
-              ],
-            );
+            return dialog(
+                title: 'Oops ! Invalid list !',
+                iconName: Icons.dangerous_outlined,
+                content: paragraph(result),
+                actions: [
+                  button(
+                    'Close',
+                    () => Navigator.pop(context),
+                    flat: true,
+                  ),
+                ]);
           });
     }
   }
@@ -47,13 +47,15 @@ class _SelectRolesViewState extends State<SelectRolesView> {
       builder: ((context, selectController, child) {
         return Scaffold(
           appBar: AppBar(
-              title: Text('Selected roles (${selectController.items.length})')),
-          floatingActionButton: fab(Icons.done, () => _next(context)),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView(
+            title: subTitle('Selected roles (${selectController.items.length})',
+                color: Colors.white),
+          ),
+          floatingActionButton: fab(Icons.done, () => next(context)),
+          body: padding(
+            [8],
+            ListView(
               children: selectController.available
-                  .map((role) => selectRoleButtonView(
+                  .map((role) => roleSelectCard(
                           role,
                           selectController.isSelected(role),
                           selectController.countNumber(role.id), () {
