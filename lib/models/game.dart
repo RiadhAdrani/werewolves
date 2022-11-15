@@ -1,16 +1,18 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
+import 'package:werewolves/models/use_ability_model.dart';
+import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/servant.dart';
+import 'package:werewolves/widgets/ability.dart';
 import 'package:werewolves/widgets/alert/game_over_alert.dart';
 import 'package:werewolves/widgets/alert/game_step_alert.dart';
+import 'package:werewolves/widgets/game.dart';
 import 'package:werewolves/widgets/game/game_day_view.dart';
-import 'package:werewolves/widgets/game/game_init_view.dart';
-import 'package:werewolves/widgets/game/game_night_view.dart';
 import 'package:werewolves/widgets/game/game_standard_alert.dart';
-import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/game/game_use_ability_done.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/judge.dart';
@@ -42,7 +44,7 @@ class GameArguments {
   GameArguments(this.list);
 }
 
-class GameInformation {
+class GameEvent {
   late final String _text;
   late final GameState _period;
   late final int _turn;
@@ -59,37 +61,35 @@ class GameInformation {
     return _turn;
   }
 
-  GameInformation(this._text, this._turn, this._period);
+  GameEvent(this._text, this._turn, this._period);
 
-  static GameInformation death(Player player, GameState period, int turn) {
-    return GameInformation('${player.name} died.', turn, period);
+  static GameEvent death(Player player, GameState period, int turn) {
+    return GameEvent('${player.name} died.', turn, period);
   }
 
-  static GameInformation talk(Player player, GameState period, int turn) {
-    return GameInformation(
-        '${player.name} starts the discussion.', turn, period);
+  static GameEvent talk(Player player, GameState period, int turn) {
+    return GameEvent('${player.name} starts the discussion.', turn, period);
   }
 
-  static GameInformation clairvoyance(RoleId role, GameState period, int turn) {
-    return GameInformation('The seer saw : ${getRoleName(role)}', turn, period);
+  static GameEvent clairvoyance(RoleId role, GameState period, int turn) {
+    return GameEvent('The seer saw : ${getRoleName(role)}', turn, period);
   }
 
-  static GameInformation servant(RoleId role, GameState period, int turn) {
-    return GameInformation(
-        'The servant became ${getRoleName(role)}.', turn, period);
+  static GameEvent servant(RoleId role, GameState period, int turn) {
+    return GameEvent('The servant became ${getRoleName(role)}.', turn, period);
   }
 
-  static GameInformation judge(Player player, int turn) {
-    return GameInformation(
+  static GameEvent judge(Player player, int turn) {
+    return GameEvent(
         'The Judge protected ${player.name}.', turn, GameState.night);
   }
 
-  static GameInformation mute(Player player, int turn) {
-    return GameInformation('${player.name} is muted.', turn, GameState.night);
+  static GameEvent mute(Player player, int turn) {
+    return GameEvent('${player.name} is muted.', turn, GameState.night);
   }
 
-  static GameInformation sheep(bool killed, int turn) {
-    return GameInformation(
+  static GameEvent sheep(bool killed, int turn) {
+    return GameEvent(
         killed ? 'A sheep was killed' : 'A sheep returned to the shepherd.',
         turn,
         GameState.night);
@@ -99,7 +99,7 @@ class GameInformation {
 class Game extends ChangeNotifier {
   final List<Role> _roles = [];
   final List<Player> _graveyard = [];
-  final List<GameInformation> _infos = [];
+  List<GameEvent> events = [];
   final List<Ability> _pendingAbilities = [];
 
   GameState _state = GameState.empty;
@@ -175,7 +175,7 @@ class Game extends ChangeNotifier {
       case GameState.empty:
         return const Text('Loading...');
       case GameState.initialized:
-        return gameInitView(this, context);
+        return gamePreView(this, context);
       case GameState.night:
         return gameNightView(this, context);
       case GameState.day:
@@ -259,16 +259,18 @@ class Game extends ChangeNotifier {
         }
 
         showStepAlert(
-            '${currentPendingAbility.owner.name} should use his ability',
-            'Make sure everyone else is asleep!',
-            getCurrentDaySummary().map((item) => item.getText()).toList(),
-            context, () {
-          showUseAbilityDialog(context, this, currentPendingAbility,
-              (List<Player> currentAbilityTargets) {
-            useAbilityInDay(
-                currentPendingAbility, currentAbilityTargets, context);
-          }, cancelable: false);
-        });
+          '${currentPendingAbility.owner.name} should use his ability',
+          'Make sure everyone else is asleep!',
+          getCurrentDaySummary().map((item) => item.getText()).toList(),
+          context,
+          () {
+            showUseAbilityDialog(context, currentPendingAbility,
+                (List<Player> currentAbilityTargets) {
+              useAbilityInDay(
+                  currentPendingAbility, currentAbilityTargets, context);
+            }, cancelable: false);
+          },
+        );
       } else {
         // resolveEffectsAndCollectInfosOfDay(this);
 
@@ -299,8 +301,8 @@ class Game extends ChangeNotifier {
   }
 
   /// Add a game info
-  void addGameInfo(GameInformation info) {
-    _infos.add(info);
+  void addGameInfo(GameEvent info) {
+    events.add(info);
   }
 
   /// Return a list of players with specific effects
@@ -334,8 +336,8 @@ class Game extends ChangeNotifier {
   }
 
   /// Return the list of the last night informations.
-  List<GameInformation> getCurrentTurnSummary() {
-    return _infos
+  List<GameEvent> getCurrentTurnSummary() {
+    return events
         .where((item) =>
             item.getTurn() == _currentTurn &&
             item.getPeriod() == GameState.night)
@@ -343,8 +345,8 @@ class Game extends ChangeNotifier {
   }
 
   /// Return the list of the current day informations.
-  List<GameInformation> getCurrentDaySummary() {
-    return _infos
+  List<GameEvent> getCurrentDaySummary() {
+    return events
         .where((item) =>
             item.getTurn() == _currentTurn && item.getPeriod() == GameState.day)
         .toList();
@@ -440,7 +442,7 @@ class Game extends ChangeNotifier {
     (servant.player as Player).removeRolesOfType(RoleId.servant);
 
     /// Add to the game info.
-    addGameInfo(GameInformation.servant(deadRole.id, state, currentTurn));
+    addGameInfo(GameEvent.servant(deadRole.id, state, currentTurn));
 
     /// Used to perform additional processing.
     useSituationalPostEffect();
@@ -457,7 +459,7 @@ class Game extends ChangeNotifier {
   void _killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
     _graveyard.add(player);
-    addGameInfo(GameInformation.death(player, _state, _currentTurn));
+    addGameInfo(GameEvent.death(player, _state, _currentTurn));
   }
 
   /// Perform mass murder on the souls of the already dead players.
@@ -477,11 +479,10 @@ class Game extends ChangeNotifier {
   /// and eliminating dead souls.
   /// When everything is done, we transition into the day phase.
   void _performPostNightProcessing(BuildContext context) {
-    List<GameInformation> infos =
-        useNightEffectsResolver(playersList, currentTurn);
+    List<GameEvent> infos = useNightEffectsResolver(playersList, currentTurn);
 
     // Todo : process informations
-    _infos.addAll(infos);
+    events.addAll(infos);
 
     _eliminateDeadPlayers();
 
@@ -747,13 +748,67 @@ class Game extends ChangeNotifier {
       _roles.remove(role);
     }
   }
+
+  void showUseAbilityDialog(BuildContext context, Ability ability,
+      Function(List<Player>) onAbilityUsed,
+      {bool cancelable = true}) {
+    List<Player> targetList = ability.createListOfTargets(this);
+
+    switch (ability.ui) {
+      case AbilityUI.normal:
+        {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return ChangeNotifierProvider(
+                  create: (context) => UseAbilityModel(ability),
+                  builder: (context, child) {
+                    final model = context.watch<UseAbilityModel>();
+
+                    return abilityDialog(
+                        model, context, ability, targetList, onAbilityUsed);
+                  },
+                );
+              });
+          break;
+        }
+      case AbilityUI.alien:
+        {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return ChangeNotifierProvider(
+                  create: (context) => UseAlienAbilityModel(
+                    targetList,
+                    playableRoles,
+                  ),
+                  builder: (context, child) {
+                    final model = context.watch<UseAlienAbilityModel>();
+
+                    return alienAbilityDialog(
+                      context,
+                      model,
+                      ability,
+                      targetList,
+                      onAbilityUsed,
+                      playableRoles,
+                    );
+                  },
+                );
+              });
+          break;
+        }
+    }
+  }
 }
 
-List<GameInformation> useNightEffectsResolver(
+List<GameEvent> useNightEffectsResolver(
   List<Player> players,
   int currentTurn,
 ) {
-  const List<GameInformation> infos = [];
+  List<GameEvent> infos = [];
 
   for (var player in players) {
     final newEffects = <Effect>[];
@@ -788,7 +843,7 @@ List<GameInformation> useNightEffectsResolver(
           newEffects.add(WasMutedEffect(effect.source));
 
           if (!(effect.source.player as Player).hasFatalEffect) {
-            infos.add(GameInformation.mute(player, currentTurn));
+            infos.add(GameEvent.mute(player, currentTurn));
           }
 
           break;
@@ -804,8 +859,8 @@ List<GameInformation> useNightEffectsResolver(
 
           Role role = resolveSeenRole(player);
 
-          infos.add(GameInformation.clairvoyance(
-              role.id, GameState.night, currentTurn));
+          infos.add(
+              GameEvent.clairvoyance(role.id, GameState.night, currentTurn));
 
           break;
 
@@ -815,12 +870,12 @@ List<GameInformation> useNightEffectsResolver(
           player.removeEffectsOfType(effect.type);
           newEffects.add(WasJudgedEffect(effect.source));
 
-          infos.add(GameInformation.judge(player, currentTurn));
+          infos.add(GameEvent.judge(player, currentTurn));
           break;
 
         /// Captain ------------------------------------------------------
         case EffectId.shouldTalkFirst:
-          infos.add(GameInformation.talk(player, GameState.night, currentTurn));
+          infos.add(GameEvent.talk(player, GameState.night, currentTurn));
 
           player.removeEffectsOfType(effect.type);
           break;
@@ -837,9 +892,9 @@ List<GameInformation> useNightEffectsResolver(
 
             shepherdAbility.targetCount--;
 
-            infos.add(GameInformation.sheep(true, currentTurn));
+            infos.add(GameEvent.sheep(true, currentTurn));
           } else {
-            infos.add(GameInformation.sheep(false, currentTurn));
+            infos.add(GameEvent.sheep(false, currentTurn));
           }
 
           player.removeEffectsOfType(effect.type);
@@ -953,8 +1008,7 @@ void useDayEffectsResolver(Game game) {
 
   for (var player in game.playersList) {
     if (player.hasFatalEffect) {
-      game.addGameInfo(
-          GameInformation.death(player, GameState.day, currentTurn));
+      game.addGameInfo(GameEvent.death(player, GameState.day, currentTurn));
     }
   }
 }

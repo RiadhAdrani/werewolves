@@ -4,10 +4,9 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/widgets/alert/game_confirm_ability_use.dart';
 import 'package:werewolves/widgets/cards/ability_card_view.dart';
-import 'package:werewolves/widgets/game/game_app_bar.dart';
+import 'package:werewolves/widgets/game.dart';
 import 'package:werewolves/widgets/game/game_day_view_step_section.dart';
 import 'package:werewolves/constants/game_advices.dart';
-import 'package:werewolves/widgets/game/ability/use_ability.dart';
 import 'package:werewolves/widgets/text/title_with_icon.dart';
 
 Widget gameDayView(Game game, BuildContext context) {
@@ -25,8 +24,11 @@ Widget gameDayView(Game game, BuildContext context) {
       game.deadPlayers.map((player) => player.name).toList();
 
   return Scaffold(
-    appBar: gameAppBar('Day (${game.currentTurn})', context, game,
-        backgroundColor: Colors.blue[100]!),
+    appBar: gameBar(
+      context,
+      'Day (${game.currentTurn})',
+      game,
+    ),
     body: Padding(
       padding: const EdgeInsets.all(0.0),
       child: Column(
@@ -86,13 +88,20 @@ Widget gameDayView(Game game, BuildContext context) {
                 scrollDirection: Axis.vertical,
                 children: game.getDayAbilities().map((Ability ability) {
                   return abilityCardView(ability, () {
-                    showConfirmAlert('Before using the ability',
-                        'Make sure everyone else is asleep.', context, () {
-                      showUseAbilityDialog(context, game, ability,
+                    showConfirmAlert(
+                      'Before using the ability',
+                      'Make sure everyone else is asleep.',
+                      context,
+                      () {
+                        game.showUseAbilityDialog(
+                          context,
+                          ability,
                           (List<Player> targets) {
-                        game.useAbilityInDay(ability, targets, context);
-                      });
-                    });
+                            game.useAbilityInDay(ability, targets, context);
+                          },
+                        );
+                      },
+                    );
                   }, variant: true);
                 }).toList(),
               ),

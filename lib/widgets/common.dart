@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget button(String text, Function onClick, {bool flat = false}) {
-  Widget content = Text(text);
+Widget button(String label, Function onClick,
+    {bool flat = false, Color? txtColor, Color? bgColor}) {
+  Widget content = text(label, color: txtColor);
 
   if (flat) {
     return TextButton(
@@ -11,6 +12,7 @@ Widget button(String text, Function onClick, {bool flat = false}) {
   } else {
     return ElevatedButton(
       onPressed: () => onClick(),
+      style: ElevatedButton.styleFrom(primary: bgColor),
       child: content,
     );
   }
@@ -30,16 +32,23 @@ Widget card({bool isSelected = false, Widget child = const Text('card')}) {
   );
 }
 
-Text text(String data,
-    {Color color = Colors.black,
-    FontWeight weight = FontWeight.normal,
-    double size = 14,
-    bool italic = false,
-    bool overflow = true,
-    bool justify = false}) {
+Text text(
+  String data, {
+  Color? color = Colors.black,
+  FontWeight? weight = FontWeight.normal,
+  double? size = 14,
+  bool italic = false,
+  bool overflow = true,
+  bool justify = false,
+  bool center = false,
+}) {
   return Text(
     data,
-    textAlign: justify ? TextAlign.justify : TextAlign.start,
+    textAlign: center
+        ? TextAlign.center
+        : justify
+            ? TextAlign.justify
+            : TextAlign.start,
     style: TextStyle(
         color: color,
         fontWeight: weight,
@@ -51,8 +60,8 @@ Text text(String data,
 
 Text headingTitle(
   String data, {
-  Color color = Colors.black,
-  FontWeight weight = FontWeight.bold,
+  Color? color = Colors.black,
+  FontWeight? weight = FontWeight.bold,
   bool italic = false,
 }) {
   return text(data,
@@ -60,32 +69,38 @@ Text headingTitle(
 }
 
 Text title(String data,
-    {Color color = Colors.black,
-    FontWeight weight = FontWeight.bold,
+    {Color? color = Colors.black,
+    FontWeight? weight = FontWeight.bold,
     bool italic = false}) {
   return text(data,
       color: color, weight: weight, size: 20, italic: italic, overflow: false);
 }
 
 Text subTitle(String data,
-    {Color color = Colors.black,
-    FontWeight weight = FontWeight.w600,
+    {Color? color = Colors.black,
+    FontWeight? weight = FontWeight.w600,
     bool italic = false}) {
   return text(data,
       color: color, weight: weight, size: 16, italic: italic, overflow: false);
 }
 
-Text paragraph(String data,
-    {Color color = Colors.black45,
-    FontWeight weight = FontWeight.normal,
-    bool italic = false}) {
-  return text(data,
-      color: color,
-      weight: weight,
-      size: 12,
-      italic: italic,
-      overflow: true,
-      justify: true);
+Text paragraph(
+  String data, {
+  Color? color = Colors.black45,
+  FontWeight? weight = FontWeight.normal,
+  bool italic = false,
+  bool center = false,
+}) {
+  return text(
+    data,
+    color: color,
+    weight: weight,
+    size: 12,
+    italic: italic,
+    overflow: true,
+    center: center,
+    justify: true,
+  );
 }
 
 EdgeInsetsGeometry useEdge(List<double> edges) {
@@ -124,9 +139,14 @@ Widget input(TextEditingController controller,
   );
 }
 
-Widget icon(IconData icon, {Color? color}) {
+Widget checkbox(bool value, Function(bool?) onChanged) {
+  return Checkbox(value: value, onChanged: onChanged);
+}
+
+Widget icon(IconData icon, {Color? color, double? size}) {
   return Icon(
     icon,
+    size: size,
     color: color,
   );
 }
@@ -183,28 +203,86 @@ Widget inkWell({
   );
 }
 
-Widget dialog(
-    {IconData? iconName,
-    String? title,
-    Widget? content,
-    List<Widget> actions = const [],
-    BuildContext? context}) {
-  return AlertDialog(
-    title: row(children: [
-      if (iconName != null) padding([0, 8, 0, 0], icon(iconName)),
-      if (title != null) subTitle(title)
-    ]),
-    content: content,
-    actions: [
-      ...actions,
-      if (context != null)
-        button(
-          'Cancel',
-          () {
-            Navigator.pop(context);
-          },
-          flat: true,
-        )
-    ],
+Widget dialog({
+  IconData? iconName,
+  String? title,
+  Widget? content,
+  List<Widget> actions = const [],
+  BuildContext? context,
+  bool dismissible = true,
+}) {
+  return WillPopScope(
+    onWillPop: () async {
+      return dismissible ? true : false;
+    },
+    child: AlertDialog(
+      title: row(children: [
+        if (iconName != null) padding([0, 8, 0, 0], icon(iconName)),
+        if (title != null) subTitle(title)
+      ]),
+      content: content,
+      actions: [
+        ...actions,
+        if (context != null)
+          button(
+            'Cancel',
+            () {
+              Navigator.pop(context);
+            },
+            flat: true,
+          )
+      ],
+    ),
   );
+}
+
+class AppBarButton {
+  String label;
+  Function onClick;
+
+  AppBarButton(this.label, this.onClick);
+}
+
+AppBar appBar(String title,
+    {List<AppBarButton> actions = const [],
+    bool showReturnButton = false,
+    Color? bgColor,
+    Color? txtColor}) {
+  return AppBar(
+    automaticallyImplyLeading: showReturnButton,
+    backgroundColor: bgColor,
+    title: subTitle(title, color: txtColor),
+    actions: actions
+        .map((btn) => button(
+              btn.label,
+              btn.onClick,
+              flat: true,
+              txtColor: txtColor,
+            ))
+        .toList(),
+  );
+}
+
+Widget divider() {
+  return Divider(
+    color: Colors.blueGrey[100],
+  );
+}
+
+Widget titleWithIcon(
+  String label,
+  IconData iconData, {
+  double size = 12,
+  Color? color,
+  MainAxisAlignment alignment = MainAxisAlignment.center,
+}) {
+  return padding(
+      [0, 6],
+      row(mainAlignment: alignment, children: [
+        padding(
+          [0, size * 0.4, 0, 0],
+          icon(iconData, color: color, size: size * 1.66),
+        ),
+        text(label, color: color, size: size),
+      ]));
 }

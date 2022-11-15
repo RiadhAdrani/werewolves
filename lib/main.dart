@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/views/distribute.dart';
+import 'package:werewolves/views/game.dart';
 import 'package:werewolves/views/home.dart';
 import 'package:werewolves/views/select.dart';
-import 'package:werewolves/widgets/game/game_arguments_extractor.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
