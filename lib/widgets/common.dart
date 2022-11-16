@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/utils/utils.dart';
 
 Widget button(String label, Function onClick,
     {bool flat = false, Color? txtColor, Color? bgColor}) {
@@ -285,4 +286,35 @@ Widget titleWithIcon(
         ),
         text(label, color: color, size: size),
       ]));
+}
+
+Widget alert(
+  BuildContext context,
+  String title,
+  String message,
+) {
+  return dialog(
+      title: title,
+      content: text(message),
+      actions: [button('Ok', () => Navigator.pop(context), flat: true)]);
+}
+
+Widget confirm(
+  BuildContext context,
+  String title,
+  String message,
+  onConfirm,
+) {
+  return dialog(title: title, content: text(message), actions: [
+    button(
+      'Cancel',
+      dismiss(context),
+      flat: true,
+    ),
+    button(
+      'Confirm',
+      onConfirm,
+      flat: true,
+    )
+  ]);
 }

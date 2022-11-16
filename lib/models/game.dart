@@ -7,13 +7,11 @@ import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/servant.dart';
+import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/ability.dart';
 import 'package:werewolves/widgets/alert/game_over_alert.dart';
 import 'package:werewolves/widgets/alert/game_step_alert.dart';
 import 'package:werewolves/widgets/game.dart';
-import 'package:werewolves/widgets/game/game_day_view.dart';
-import 'package:werewolves/widgets/game/game_standard_alert.dart';
-import 'package:werewolves/widgets/game/game_use_ability_done.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/judge.dart';
 import 'package:werewolves/objects/roles/protector.dart';
@@ -226,8 +224,11 @@ class Game extends ChangeNotifier {
 
     Navigator.pop(context);
 
-    showAbilityAppliedMessage(
-        context, getAbilityAppliedMessage(ability, affected));
+    showAlert(
+      context,
+      'Ability used',
+      getAbilityAppliedMessage(ability, affected),
+    );
   }
 
   /// Specific use case for [useAbility] during the day
@@ -609,10 +610,11 @@ class Game extends ChangeNotifier {
       if (_checkAllUnskippableAbilitiesUse()) {
         _setNextIndex(context);
       } else {
-        showStandardAlert(
-            'Unable to proceed',
-            'At least one mandatory ability was not used during this turn.',
-            context);
+        showAlert(
+          context,
+          'Unable to proceed',
+          'At least one mandatory ability was not used during this turn.',
+        );
       }
     }
   }

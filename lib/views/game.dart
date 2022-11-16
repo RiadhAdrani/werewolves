@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/widgets/game/game_leave_dialog.dart';
+import 'package:werewolves/utils/utils.dart';
 
 class GameArgumentsExtractor extends StatelessWidget {
   const GameArgumentsExtractor({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _GamePageState extends State<GamePage> {
   bool initialized = false;
 
   void _onBackPressed() {
-    onGameExit(context);
+    showExitAlert(context);
   }
 
   @override
