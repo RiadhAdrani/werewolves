@@ -5,11 +5,8 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/utils.dart';
-import 'package:werewolves/widgets/alert/game_confirm_ability_use.dart';
-import 'package:werewolves/widgets/alert/game_data_dialog.dart';
-import 'package:werewolves/widgets/alert/game_write_dialog.dart';
-import 'package:werewolves/widgets/cards/ability_card_view.dart';
 import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/models/effect.dart';
 
 Widget gamePreView(Game game, BuildContext context) {
   return Center(
@@ -35,14 +32,34 @@ AppBar gameBar(
   Color? bgColor,
   Color txtColor = Colors.white,
 }) {
+  void showDebug() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => debugDialog(context, game));
+  }
+
+  void showWrite() {
+    print('write');
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => writeDialog(context));
+  }
+
+  void showExit() {
+    showExitAlert(context);
+  }
+
   return appBar(
     title,
     bgColor: bgColor,
     txtColor: txtColor,
     actions: [
-      AppBarButton('Debug', () => showGameDataDialog(context, game)),
-      AppBarButton('Write', () => showWriteDialog(context)),
-      AppBarButton('Leave', () => showExitAlert(context)),
+      AppBarButton('Debug', showDebug),
+      AppBarButton('Write', showWrite),
+      AppBarButton('Leave', showExit),
     ],
   );
 }
@@ -114,10 +131,13 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
           mainAlignment: MainAxisAlignment.center,
           crossAlignment: CrossAxisAlignment.stretch,
           children: [
-            titleWithIcon(
-              'Remaining abilities',
-              Icons.list_alt_outlined,
-              alignment: MainAxisAlignment.center,
+            padding(
+              [0, 0, 8, 0],
+              titleWithIcon(
+                'Remaining abilities',
+                Icons.list_alt_outlined,
+                alignment: MainAxisAlignment.center,
+              ),
             ),
             Expanded(
               child: ListView.builder(
@@ -126,7 +146,7 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
                 itemBuilder: (context, index) {
                   final ability = abilities[index];
 
-                  return abilityCardView(ability, () {
+                  return abilityCard(ability, () {
                     game.showUseAbilityDialog(
                       context,
                       ability,
@@ -267,12 +287,14 @@ Widget gameDayView(Game game, BuildContext context) {
       game.deadPlayers.map((player) => player.name).toList();
 
   void startNight() {
-    showConfirmAlert(
-        'Start night phase',
-        'You are about to start the night phase, are you sure you completed all the steps ?',
-        context, () {
-      game.startTurn();
-    });
+    showConfirm(
+      context,
+      'End of day',
+      'You are about to start the night phase, are you sure you completed all the steps ?',
+      () {
+        game.startTurn();
+      },
+    );
   }
 
   return Scaffold(
@@ -319,11 +341,11 @@ Widget gameDayView(Game game, BuildContext context) {
               ListView(
                 scrollDirection: Axis.vertical,
                 children: game.getDayAbilities().map((Ability ability) {
-                  return abilityCardView(ability, () {
-                    showConfirmAlert(
+                  return abilityCard(ability, () {
+                    showConfirm(
+                      context,
                       'Before using the ability',
                       'Make sure everyone else is asleep.',
-                      context,
                       () {
                         game.showUseAbilityDialog(
                           context,
@@ -363,5 +385,193 @@ Widget appliedDialog(BuildContext context, String message) {
     'Ability used',
     message,
     dismiss(context),
+  );
+}
+
+Widget debugDialog(BuildContext context, Game game) {
+  List<String> simple = [
+    'Alive : ${game.playersList.length}',
+    'Dead : ${game.deadPlayers.length}',
+    'Villagers : ${useVillagersCounter(game.playersList)}',
+    'Werewolves : ${useWolvesCounter(game.playersList)}',
+    'Solos : ${useSolosCounter(game.playersList)}'
+  ];
+
+  Widget dataView(String data, {IconData icon = Icons.info_outline}) {
+    return card(
+      child: padding(
+        [8],
+        titleWithIcon(
+          data,
+          icon,
+          color: Colors.black45,
+          alignment: MainAxisAlignment.start,
+        ),
+      ),
+    );
+  }
+
+  Widget roleDebugView(Role role) {
+    return card(
+      child: padding(
+        [8],
+        column(crossAlignment: CrossAxisAlignment.start, children: [
+          text(role.name, weight: FontWeight.w500),
+          divider(),
+          titleWithIcon(
+            role.isObsolete() ? 'Obsolete' : 'Playing',
+            role.isObsolete() ? Icons.error_outline : Icons.done,
+            alignment: MainAxisAlignment.start,
+            color: Colors.black45,
+          ),
+          divider(),
+          if (role.isGroupRole)
+            titleWithIcon(
+              '${(role as RoleGroup).getCurrentPlayers().length}',
+              Icons.people_outline,
+              alignment: MainAxisAlignment.start,
+              color: Colors.black45,
+            )
+          else
+            column(
+              crossAlignment: CrossAxisAlignment.stretch,
+              children: [
+                titleWithIcon(
+                  (role.player as Player).name,
+                  Icons.person_outline,
+                  alignment: MainAxisAlignment.start,
+                  color: Colors.black45,
+                ),
+                if ((role as RoleSingular).player.effects.isNotEmpty)
+                  titleWithIcon(
+                    role.player.effects
+                        .map((effect) => effectIdToString(effect.type))
+                        .join(' | '),
+                    Icons.adjust_sharp,
+                    alignment: MainAxisAlignment.start,
+                    color: Colors.black45,
+                  ),
+              ],
+            )
+        ]),
+      ),
+    );
+  }
+
+  return dialog(
+    context: context,
+    iconName: Icons.list_alt,
+    title: 'Debug infos',
+    dismissible: false,
+    content: SizedBox(
+      width: 500,
+      height: 600,
+      child: SingleChildScrollView(
+        child: column(
+          crossAlignment: CrossAxisAlignment.stretch,
+          children: [
+            padding(
+              [8, 0],
+              subTitle('Stats'),
+            ),
+            column(
+              crossAlignment: CrossAxisAlignment.stretch,
+              children: simple.map((info) => dataView(info)).toList(),
+            ),
+            divider(),
+            padding(
+              [8, 0],
+              subTitle('Roles'),
+            ),
+            column(
+              crossAlignment: CrossAxisAlignment.stretch,
+              children: game.rolesForDebug
+                  .map((role) => roleDebugView(role))
+                  .toList(),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget writeDialog(BuildContext context) {
+  return dialog(
+    context: context,
+    iconName: Icons.message,
+    title: 'Write',
+    dismissible: false,
+    content: SizedBox(
+      width: 400,
+      child: column(
+        mainSize: MainAxisSize.min,
+        children: [
+          paragraph(
+              'You can write something here and show it to the player in case there is some problems.'),
+          const TextField(
+            style: TextStyle(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget abilityCard(Ability ability, Function onClick, {bool variant = false}) {
+  bool should = ability.isUnskippable();
+  String skipText =
+      ability.isUnskippable() ? "This ability should be used." : "Optional";
+  Color skipColor = ability.isUnskippable() ? Colors.red : Colors.black;
+
+  Widget content = padding(
+    [12],
+    column(
+      crossAlignment: CrossAxisAlignment.start,
+      children: [
+        text(
+          ability.name,
+          size: variant ? 14 : 18,
+          weight: FontWeight.w500,
+        ),
+        if (variant)
+          text(
+            ability.owner.getPlayerName(),
+            size: 12,
+          ),
+        divider(),
+        padding(
+          [4, 0],
+          row(
+            children: [
+              icon(
+                should ? Icons.dangerous_outlined : Icons.done,
+                size: variant ? 14 : 20,
+                color: skipColor,
+              ),
+              text(
+                skipText,
+                color: skipColor,
+                size: variant ? 10 : 12,
+                italic: should,
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+
+  return padding(
+    [4],
+    card(
+      child: inkWell(
+        onClick: () => onClick(),
+        child: content,
+      ),
+    ),
   );
 }

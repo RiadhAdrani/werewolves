@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/widgets/buttons/standard_text_button.dart';
+import 'package:werewolves/widgets/common.dart';
 
 void showGameOverAlert(Team team, Game game, BuildContext context) {
   showDialog(
@@ -17,7 +17,7 @@ void showGameOverAlert(Team team, Game game, BuildContext context) {
               textAlign: TextAlign.left,
             ),
             actions: [
-              standardTextButton('Leave', () {
+              button('Leave', () {
                 game.dispose();
                 Navigator.popUntil(context, ModalRoute.withName("/"));
               }),

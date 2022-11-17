@@ -5,11 +5,33 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/alien.dart';
-import 'package:werewolves/widgets/alert/game_confirm_ability_use.dart';
 import 'package:werewolves/widgets/alert/game_info_alert.dart';
-import 'package:werewolves/widgets/cards/target_player_card.dart';
 import 'package:werewolves/widgets/common.dart';
-import 'package:werewolves/utils/append_plural_s.dart';
+import 'package:werewolves/utils/utils.dart';
+
+Widget targetCard(Player player, bool isSelected, Function onClick) {
+  return card(
+    isSelected: isSelected,
+    child: inkWell(
+      onClick: () => onClick(),
+      child: padding(
+        [10, 12, 10, 4],
+        row(
+          mainSize: MainAxisSize.max,
+          mainAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            titleWithIcon(player.name, Icons.person_outline, size: 14),
+            if (isSelected)
+              icon(
+                Icons.done_outline,
+                size: 18,
+              ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 
 Widget abilityDialog(
   UseAbilityModel model,
@@ -28,12 +50,14 @@ Widget abilityDialog(
           'You are trying to use an ability without a single selected target while it needs ${ability.targetCount}.',
           context);
     } else {
-      showConfirmAlert(
-          'Confirm changes.',
-          'Committing these changes is irreversible, make sure you selected the correct target.',
-          context, () {
-        onUsed(targets);
-      });
+      showConfirm(
+        context,
+        'Confirm changes.',
+        'Committing these changes is irreversible, make sure you selected the correct target.',
+        () {
+          onUsed(targets);
+        },
+      );
     }
   }
 
@@ -48,7 +72,7 @@ Widget abilityDialog(
           mainSize: MainAxisSize.min,
           crossAlignment: CrossAxisAlignment.start,
           children: [
-            text('Used by : ${ability.owner.name}', color: Colors.black54),
+            text(ability.owner.name, color: Colors.black54),
             padding(
               [16, 0],
               paragraph(
@@ -61,7 +85,7 @@ Widget abilityDialog(
               height: 300,
               child: ListView(
                 children: targetList.map((target) {
-                  return targetPlayerCard(target, model.isSelected(target), () {
+                  return targetCard(target, model.isSelected(target), () {
                     model.toggleSelected(target);
                   });
                 }).toList(),

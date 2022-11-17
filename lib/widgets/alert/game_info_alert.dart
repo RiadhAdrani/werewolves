@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/widgets/buttons/standard_text_button.dart';
+import 'package:werewolves/widgets/common.dart';
 
 void showInfoAlert(
   String title,
@@ -16,7 +16,7 @@ void showInfoAlert(
             title: Text(title),
             content: Text(text),
             actions: [
-              standardTextButton('Okay', () {
+              button('Okay', () {
                 Navigator.pop(context);
               }),
             ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/widgets/buttons/standard_text_button.dart';
+import 'package:werewolves/widgets/common.dart';
 
 void showStepAlert(String title, String text, List<String> items,
     BuildContext context, Function onNext) {
@@ -24,7 +24,7 @@ void showStepAlert(String title, String text, List<String> items,
               ],
             ),
             actions: [
-              standardTextButton('Okay', () {
+              button('Okay', () {
                 Navigator.pop(context);
                 onNext();
               }),

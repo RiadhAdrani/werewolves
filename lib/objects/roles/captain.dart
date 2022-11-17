@@ -5,7 +5,7 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
-import 'package:werewolves/widgets/alert/game_confirm_ability_use.dart';
+import 'package:werewolves/utils/utils.dart';
 
 class Captain extends RoleSingular {
   Captain(super.player) {
@@ -85,12 +85,15 @@ class Captain extends RoleSingular {
       }
 
       gameModel.onServedDeath(this, () {
-        showConfirmAlert("Captain inheritance",
-            'The servant became the new captain.', context, () {
-          if (gameModel.state == GameState.night) {
-            gameModel.skipCurrentRole(context);
-          }
-        });
+        showConfirmUse(
+          context,
+          'The servant became the new captain.',
+          () {
+            if (gameModel.state == GameState.night) {
+              gameModel.skipCurrentRole(context);
+            }
+          },
+        );
 
         return true;
       });
