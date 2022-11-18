@@ -5,7 +5,6 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/alien.dart';
-import 'package:werewolves/widgets/alert/game_info_alert.dart';
 import 'package:werewolves/widgets/common.dart';
 import 'package:werewolves/utils/utils.dart';
 
@@ -45,10 +44,11 @@ Widget abilityDialog(
     final targets = model.getSelected();
 
     if (targets.length < ability.targetCount) {
-      showInfoAlert(
-          'Cannot proceed',
-          'You are trying to use an ability without a single selected target while it needs ${ability.targetCount}.',
-          context);
+      showAlert(
+        context,
+        'Cannot proceed',
+        'You are trying to use an ability without a single selected target while it needs ${ability.targetCount}.',
+      );
     } else {
       showConfirm(
         context,
@@ -119,38 +119,41 @@ Widget alienAbilityDialog(
     }
 
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return dialog(
-              title: 'Options',
-              content: column(
-                mainSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 300,
-                    width: 300,
-                    child: ListView(
-                        children: model.possibleGuesses
-                            .map(
-                              (option) => card(
-                                child: inkWell(
-                                  onClick: () {
-                                    onSelected(option);
-                                  },
-                                  child: padding(
-                                    [8],
-                                    text(
-                                      getRoleName(option),
-                                    ),
-                                  ),
-                                ),
+      context: context,
+      builder: (BuildContext context) {
+        return dialog(
+          title: 'Options',
+          content: column(
+            mainSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 300,
+                width: 300,
+                child: ListView(
+                  children: model.possibleGuesses
+                      .map(
+                        (option) => card(
+                          child: inkWell(
+                            onClick: () {
+                              onSelected(option);
+                            },
+                            child: padding(
+                              [8],
+                              text(
+                                getRoleName(option),
                               ),
-                            )
-                            .toList()),
-                  )
-                ],
-              ));
-        });
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void apply() {

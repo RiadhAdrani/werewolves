@@ -40,8 +40,6 @@ AppBar gameBar(
   }
 
   void showWrite() {
-    print('write');
-
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -146,15 +144,20 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
                 itemBuilder: (context, index) {
                   final ability = abilities[index];
 
-                  return abilityCard(ability, () {
-                    game.showUseAbilityDialog(
-                      context,
-                      ability,
-                      (List<Player> targets) {
-                        game.useAbilityInNight(ability, targets, context);
-                      },
-                    );
-                  });
+                  return abilityCard(
+                    ability,
+                    () {
+                      game.showUseAbilityDialog(
+                        context,
+                        ability,
+                        (List<Player> targets) {
+                          dismiss(context)();
+
+                          game.useAbilityInNight(ability, targets, context);
+                        },
+                      );
+                    },
+                  );
                 },
               ),
             )
@@ -574,4 +577,27 @@ Widget abilityCard(Ability ability, Function onClick, {bool variant = false}) {
       ),
     ),
   );
+}
+
+Widget stepAlert(String title, String text, List<String> items,
+    BuildContext context, Function onNext) {
+  return dialog(
+      iconName: Icons.next_plan_outlined,
+      title: title,
+      dismissible: false,
+      content: column(
+        children: [
+          paragraph(text),
+        ],
+      ),
+      actions: [
+        button(
+          'Done',
+          () {
+            dismiss(context)();
+            onNext();
+          },
+          flat: true,
+        ),
+      ]);
 }

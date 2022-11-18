@@ -9,8 +9,6 @@ import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/ability.dart';
-import 'package:werewolves/widgets/alert/game_over_alert.dart';
-import 'package:werewolves/widgets/alert/game_step_alert.dart';
 import 'package:werewolves/widgets/game.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/judge.dart';
@@ -211,13 +209,19 @@ class Game extends ChangeNotifier {
   }
 
   /// Use the given ability against the provided targets.
-  List<Player> useAbility(Ability ability, List<Player> targets) {
+  List<Player> useAbility(
+    Ability ability,
+    List<Player> targets,
+  ) {
     return _useAbility(ability, targets);
   }
 
   /// Specific use case for [useAbility] during the night
   void useAbilityInNight(
-      Ability ability, List<Player> targets, BuildContext context) {
+    Ability ability,
+    List<Player> targets,
+    BuildContext context,
+  ) {
     if (!ability.isForNight) return;
 
     var affected = useAbility(ability, targets);
@@ -233,7 +237,10 @@ class Game extends ChangeNotifier {
 
   /// Specific use case for [useAbility] during the day
   void useAbilityInDay(
-      Ability ability, List<Player> targets, BuildContext context) {
+    Ability ability,
+    List<Player> targets,
+    BuildContext context,
+  ) {
     if (!ability.isForDay) return;
 
     _useAbility(ability, targets);
@@ -259,22 +266,36 @@ class Game extends ChangeNotifier {
           return;
         }
 
-        showStepAlert(
-          '${currentPendingAbility.owner.name} should use his ability',
-          'Make sure everyone else is asleep!',
-          getCurrentDaySummary().map((item) => item.getText()).toList(),
-          context,
-          () {
-            showUseAbilityDialog(context, currentPendingAbility,
-                (List<Player> currentAbilityTargets) {
-              useAbilityInDay(
-                  currentPendingAbility, currentAbilityTargets, context);
-            }, cancelable: false);
-          },
-        );
+        showDialog(
+            context: context,
+            builder: (context) {
+              return WillPopScope(
+                onWillPop: () async => false,
+                child: stepAlert(
+                  'Ability triggered',
+                  '${currentPendingAbility.owner.name} should use his ability, Make sure everyone else is asleep!',
+                  getCurrentDaySummary().map((item) => item.getText()).toList(),
+                  context,
+                  () {
+                    showUseAbilityDialog(
+                      context,
+                      currentPendingAbility,
+                      (
+                        List<Player> currentAbilityTargets,
+                      ) {
+                        useAbilityInDay(
+                          currentPendingAbility,
+                          currentAbilityTargets,
+                          context,
+                        );
+                      },
+                      cancelable: false,
+                    );
+                  },
+                ),
+              );
+            });
       } else {
-        // resolveEffectsAndCollectInfosOfDay(this);
-
         _eliminateDeadPlayers();
 
         notifyListeners();
@@ -733,7 +754,11 @@ class Game extends ChangeNotifier {
 
     if (result is Team) {
       gameOver = true;
-      showGameOverAlert(result, this, context);
+      showConfirm(context, 'Game Over', 'The ${getTeamName(result)} Team won !',
+          () {
+        dispose();
+        Navigator.popUntil(context, ModalRoute.withName("/"));
+      });
     }
   }
 
