@@ -21,7 +21,7 @@ enum EffectId {
   isServing,
   isJudged,
   isMuted,
-  isGuessed,
+  isGuessedByAlien,
 
   wasMuted,
   wasProtected,
@@ -41,7 +41,7 @@ const List<EffectId> fatalStatusEffects = [
   EffectId.isHunted,
   EffectId.isCountered,
   EffectId.isExecuted,
-  EffectId.isGuessed
+  EffectId.isGuessedByAlien
 ];
 
 bool isFatalEffect(EffectId effect) {
@@ -94,7 +94,7 @@ String effectIdToString(EffectId effect) {
       return 'shouldSayTheWord';
     case EffectId.hasSheep:
       return "hasSheep";
-    case EffectId.isGuessed:
+    case EffectId.isGuessedByAlien:
       return "isGuessed";
   }
 }

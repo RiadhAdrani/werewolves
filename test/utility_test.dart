@@ -14,7 +14,7 @@ void main() {
     });
 
     test('should refuse bad names', () {
-      for (var name in ['na+me']) {
+      for (var name in ['na+me', 'n\$me']) {
         {
           expect(checkPlayerName(name, roles), false);
         }

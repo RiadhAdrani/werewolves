@@ -37,7 +37,7 @@ Widget abilityDialog(
   BuildContext context,
   Ability ability,
   List<Player> targetList,
-  Function onUsed, {
+  Function(List<Player>) onUsed, {
   bool dismissible = true,
 }) {
   void use() {

@@ -245,7 +245,7 @@ class Game extends ChangeNotifier {
 
     _useAbility(ability, targets);
 
-    Navigator.pop(context);
+    // Navigator.pop(context);
 
     notifyListeners();
 
@@ -950,7 +950,7 @@ List<GameEvent> useNightEffectsResolver(
         case EffectId.isInfected:
         case EffectId.isServed:
         case EffectId.isServing:
-        case EffectId.isGuessed:
+        case EffectId.isGuessedByAlien:
           break;
       }
     }

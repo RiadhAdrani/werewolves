@@ -204,7 +204,6 @@ Widget guideSection(
   return ExpansionTile(
     initiallyExpanded: expanded,
     expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
-    backgroundColor: Colors.grey[350],
     title: titleWithIcon(title, icon, alignment: MainAxisAlignment.start),
     children: list
         .map(
@@ -295,7 +294,27 @@ Widget gameDayView(Game game, BuildContext context) {
       'End of day',
       'You are about to start the night phase, are you sure you completed all the steps ?',
       () {
+        dismiss(context)();
         game.startTurn();
+      },
+    );
+  }
+
+  void onAbilityClicked(Ability ability) {
+    showConfirm(
+      context,
+      'Before using the ability',
+      'Make sure everyone else is asleep.',
+      () {
+        dismiss(context)();
+        game.showUseAbilityDialog(
+          context,
+          ability,
+          (List<Player> targets) {
+            dismiss(context)();
+            game.useAbilityInDay(ability, targets, context);
+          },
+        );
       },
     );
   }
@@ -344,22 +363,11 @@ Widget gameDayView(Game game, BuildContext context) {
               ListView(
                 scrollDirection: Axis.vertical,
                 children: game.getDayAbilities().map((Ability ability) {
-                  return abilityCard(ability, () {
-                    showConfirm(
-                      context,
-                      'Before using the ability',
-                      'Make sure everyone else is asleep.',
-                      () {
-                        game.showUseAbilityDialog(
-                          context,
-                          ability,
-                          (List<Player> targets) {
-                            game.useAbilityInDay(ability, targets, context);
-                          },
-                        );
-                      },
-                    );
-                  }, variant: true);
+                  return abilityCard(
+                    ability,
+                    () => onAbilityClicked(ability),
+                    variant: true,
+                  );
                 }).toList(),
               ),
             ),
