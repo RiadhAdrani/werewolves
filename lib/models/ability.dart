@@ -1,6 +1,20 @@
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/alien.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
+import 'package:werewolves/objects/roles/captain.dart';
+import 'package:werewolves/objects/roles/father_of_wolves.dart';
+import 'package:werewolves/objects/roles/garrulous_wolf.dart';
+import 'package:werewolves/objects/roles/hunter.dart';
+import 'package:werewolves/objects/roles/judge.dart';
+import 'package:werewolves/objects/roles/knight.dart';
+import 'package:werewolves/objects/roles/protector.dart';
+import 'package:werewolves/objects/roles/seer.dart';
+import 'package:werewolves/objects/roles/servant.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
+import 'package:werewolves/objects/roles/witch.dart';
+import 'package:werewolves/objects/roles/wolfpack.dart';
 
 enum AbilityId {
   protect,
@@ -135,6 +149,49 @@ abstract class Ability {
 
   /// Check if this ability should be used when the owner is dead.
   bool shouldBeUsedOnOwnerDeath();
+}
+
+Ability createAbilityFromId(AbilityId id, Role owner) {
+  switch (id) {
+    case AbilityId.protect:
+      return ProtectAbility(owner);
+    case AbilityId.devour:
+      return DevourAbility(owner);
+    case AbilityId.infect:
+      return InfectAbility(owner);
+    case AbilityId.clairvoyance:
+      return ClairvoyanceAbility(owner);
+    case AbilityId.revive:
+      return ReviveAbility(owner);
+    case AbilityId.curse:
+      return CurseAbility(owner);
+    case AbilityId.counter:
+      return CounterAbility(owner);
+    case AbilityId.hunt:
+      return HuntAbility(owner);
+    case AbilityId.callsign:
+      return CallSignAbility(owner);
+    case AbilityId.serve:
+      return ServantAbility(owner);
+    case AbilityId.judgement:
+      return JudgementAbility(owner);
+    case AbilityId.mute:
+      return MuteAbility(owner);
+    case AbilityId.word:
+      return GarrulousAbility(owner);
+    case AbilityId.sheeps:
+      return ShepherdAbility(owner);
+    case AbilityId.guess:
+      return GuessAbility(owner);
+    case AbilityId.talker:
+      return TalkerAbility(owner);
+    case AbilityId.execute:
+      return ExecuteAbility(owner);
+    case AbilityId.substitute:
+      return SubstitueAbility(owner);
+    case AbilityId.inherit:
+      return InheritAbility(owner);
+  }
 }
 
 String getAbilityDescription(AbilityId id) {

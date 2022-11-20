@@ -118,11 +118,10 @@ void main() {
     });
 
     test('should remove all effects of a given type', () {
-      Player player = useTestPlayer(effects: [
+      Player player = useTestPlayer(roles: [], effects: [
         EffectId.hasCallsign,
         EffectId.isDevoured,
         EffectId.isCountered,
-        EffectId.isDevoured,
       ]);
 
       player.removeEffectsOfType(EffectId.isDevoured);

@@ -107,7 +107,7 @@ abstract class Role<T> {
   }
 
   /// Return if the role has a certain ability by its `id`.
-  bool hasAbility(AbilityId id) {
+  bool hasAbilityOfType(AbilityId id) {
     for (Ability ability in abilities) {
       if (ability.id == id) {
         return true;
@@ -117,7 +117,7 @@ abstract class Role<T> {
     return false;
   }
 
-  bool hasUnusedAbility(AbilityId id) {
+  bool hasUnusedAbilityOfType(AbilityId id) {
     for (Ability ability in abilities) {
       if (ability.id == id && ability.useCount != AbilityUseCount.none) {
         return true;
@@ -182,9 +182,7 @@ abstract class RoleSingular extends Role<Player> {
 
   @override
   void onCreated() {
-    if (!player.hasRole(id)) {
-      player.roles.add(this);
-    }
+    setPlayer(player);
   }
 
   @override
@@ -194,9 +192,13 @@ abstract class RoleSingular extends Role<Player> {
 
   @override
   void setPlayer(Player player) {
+    if (player.hasRole(id)) {
+      throw 'Player already have this role';
+    }
+
     this.player = player;
 
-    this.player.roles.add(this);
+    player.roles.add(this);
   }
 
   @override
@@ -227,9 +229,7 @@ abstract class RoleGroup extends Role<List<Player>> {
 
   @override
   void onCreated() {
-    for (var member in player) {
-      member.roles.add(this);
-    }
+    setPlayer(player);
   }
 
   List<Player> getCurrentPlayers() {
@@ -273,8 +273,12 @@ abstract class RoleGroup extends Role<List<Player>> {
   void setPlayer(List<Player> player) {
     this.player = player;
 
-    for (var member in this.player) {
-      member.roles.add(this);
+    for (var member in player) {
+      if (member.hasRole(id)) {
+        throw 'Player already have this role !';
+      } else {
+        member.roles.add(this);
+      }
     }
   }
 
@@ -284,59 +288,59 @@ abstract class RoleGroup extends Role<List<Player>> {
   }
 }
 
-List<Role> makeListFromId(List<RoleId> listOfIds) {
+List<Role> createSingularRolesListFromId(List<RoleId> listOfIds) {
   final list = <Role>[];
 
-  final player = Player("dummy Player");
+  Player player() => Player("dummy Player");
 
   for (var element in listOfIds) {
     switch (element) {
       case RoleId.protector:
-        list.add(Protector(player));
+        list.add(Protector(player()));
         break;
       case RoleId.werewolf:
-        list.add(Werewolf(player));
+        list.add(Werewolf(player()));
         break;
       case RoleId.fatherOfWolves:
-        list.add(FatherOfWolves(player));
+        list.add(FatherOfWolves(player()));
         break;
       case RoleId.witch:
-        list.add(Witch(player));
+        list.add(Witch(player()));
         break;
       case RoleId.seer:
-        list.add(Seer(player));
+        list.add(Seer(player()));
         break;
       case RoleId.knight:
-        list.add(Knight(player));
+        list.add(Knight(player()));
         break;
       case RoleId.hunter:
-        list.add(Hunter(player));
+        list.add(Hunter(player()));
         break;
       case RoleId.captain:
-        list.add(Captain(player));
+        list.add(Captain(player()));
         break;
       case RoleId.villager:
-        list.add(Villager(player));
+        list.add(Villager(player()));
         break;
       case RoleId.wolfpack:
         break;
       case RoleId.servant:
-        list.add(Servant(player));
+        list.add(Servant(player()));
         break;
       case RoleId.judge:
-        list.add(Judge(player));
+        list.add(Judge(player()));
         break;
       case RoleId.blackWolf:
-        list.add(BlackWolf(player));
+        list.add(BlackWolf(player()));
         break;
       case RoleId.garrulousWolf:
-        list.add(GarrulousWolf(player));
+        list.add(GarrulousWolf(player()));
         break;
       case RoleId.shepherd:
-        list.add(Shepherd(player));
+        list.add(Shepherd(player()));
         break;
       case RoleId.alien:
-        list.add(Alien(player));
+        list.add(Alien(player()));
         break;
     }
   }
@@ -344,7 +348,10 @@ List<Role> makeListFromId(List<RoleId> listOfIds) {
   return list;
 }
 
-Role createRoleFromId(RoleId id, Player player) {
+Role createRoleFromId(
+  RoleId id,
+  Player player,
+) {
   switch (id) {
     case RoleId.protector:
       return Protector(player);
@@ -381,24 +388,29 @@ Role createRoleFromId(RoleId id, Player player) {
   }
 }
 
-List<Role> makeRolesFromInitialList(List<Role> input) {
-  // role Groups to be added
+List<Role> prepareGameRolesFromPickedList(List<Role> input) {
+  // TODO : add other group roles
   var wolfpack = <Player>[];
 
   // output
   var output = <Role>[];
 
   for (var role in input) {
-    if (role.isWolf) {
-      wolfpack.add(role.player as Player);
-    }
-
     if (!role.isGroup) {
+      if (role.isWolf) {
+        wolfpack.add(role.player);
+        continue;
+      }
+
       output.add(role);
     }
   }
 
-  output.add(Wolfpack(wolfpack));
+  if (wolfpack.isEmpty) {
+    throw 'Game cannot start without a wolfpack !';
+  } else {
+    output.add(Wolfpack(wolfpack));
+  }
 
   return output;
 }

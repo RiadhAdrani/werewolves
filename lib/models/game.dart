@@ -586,7 +586,7 @@ class Game extends ChangeNotifier {
 
   /// Create appropriate `RoleGroups` and override the current list of roles.
   void _initRoles(List<Role> list) {
-    _roles.addAll(makeRolesFromInitialList(list));
+    _roles.addAll(prepareGameRolesFromPickedList(list));
   }
 
   /// Internal function exposed by `init()`.
@@ -1122,12 +1122,12 @@ dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
 
     bool witchCanWinIt = (witch != null &&
         witch.player.team == Team.village &&
-        (witch.hasUnusedAbility(AbilityId.curse) ||
-            witch.hasUnusedAbility(AbilityId.revive)));
+        (witch.hasUnusedAbilityOfType(AbilityId.curse) ||
+            witch.hasUnusedAbilityOfType(AbilityId.revive)));
 
     bool knightCanWinIt = (knight != null &&
         knight.player.team == Team.village &&
-        knight.hasUnusedAbility(AbilityId.counter));
+        knight.hasUnusedAbilityOfType(AbilityId.counter));
 
     bool continuable = protectorCanWinIt || witchCanWinIt || knightCanWinIt;
 

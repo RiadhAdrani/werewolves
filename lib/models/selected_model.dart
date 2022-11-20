@@ -25,7 +25,8 @@ class SelectedModel extends ChangeNotifier {
   }
 
   List<Role> generateList() {
-    return makeListFromId(_items.map((role) => role.id).toList());
+    return createSingularRolesListFromId(
+        _items.map((role) => role.id).toList());
   }
 
   bool isSelected(Role item) {
