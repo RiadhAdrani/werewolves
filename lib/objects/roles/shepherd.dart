@@ -11,6 +11,8 @@ class Shepherd extends RoleSingular {
     id = RoleId.shepherd;
     callingPriority = shepherdPriority;
     abilities = [ShepherdAbility(this)];
+
+    onCreated();
   }
 
   @override

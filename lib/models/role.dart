@@ -58,8 +58,8 @@ const captainPriority = 8000;
 
 abstract class Role<T> {
   late T player;
+  late RoleId id;
 
-  RoleId id = RoleId.villager;
   String instanceId = uuid.v4();
   int callingPriority = -1;
   List<Ability> abilities = [];
@@ -68,6 +68,8 @@ abstract class Role<T> {
   bool isUnique = true;
 
   Role(this.player);
+
+  void onCreated();
 
   T getPlayer() {
     return player;
@@ -134,7 +136,7 @@ abstract class Role<T> {
   /// Can the role use its abilities
   bool canUseAbilitiesDuringDay();
 
-  /// Can the role use signs to communicate with the narrator during the dary.
+  /// Can the role use signs to communicate with the narrator during the day.
   bool canUseSignWithNarrator();
 
   /// Get the name of the player that will be displayed.
@@ -176,8 +178,13 @@ abstract class Role<T> {
 }
 
 abstract class RoleSingular extends Role<Player> {
-  RoleSingular(super.player) {
-    player.roles.add(this);
+  RoleSingular(super.player);
+
+  @override
+  void onCreated() {
+    if (!player.hasRole(id)) {
+      player.roles.add(this);
+    }
   }
 
   @override
@@ -216,7 +223,10 @@ abstract class RoleSingular extends Role<Player> {
 abstract class RoleGroup extends Role<List<Player>> {
   RoleGroup(super.player) {
     isGroupRole = true;
+  }
 
+  @override
+  void onCreated() {
     for (var member in player) {
       member.roles.add(this);
     }
@@ -334,6 +344,43 @@ List<Role> makeListFromId(List<RoleId> listOfIds) {
   return list;
 }
 
+Role createRoleFromId(RoleId id, Player player) {
+  switch (id) {
+    case RoleId.protector:
+      return Protector(player);
+    case RoleId.werewolf:
+      return Werewolf(player);
+    case RoleId.fatherOfWolves:
+      return FatherOfWolves(player);
+    case RoleId.witch:
+      return Witch(player);
+    case RoleId.seer:
+      return Seer(player);
+    case RoleId.knight:
+      return Knight(player);
+    case RoleId.hunter:
+      return Hunter(player);
+    case RoleId.captain:
+      return Captain(player);
+    case RoleId.villager:
+      return Villager(player);
+    case RoleId.wolfpack:
+      return Wolfpack([player]);
+    case RoleId.servant:
+      return Servant(player);
+    case RoleId.judge:
+      return Judge(player);
+    case RoleId.blackWolf:
+      return BlackWolf(player);
+    case RoleId.garrulousWolf:
+      return GarrulousWolf(player);
+    case RoleId.shepherd:
+      return Shepherd(player);
+    case RoleId.alien:
+      return Alien(player);
+  }
+}
+
 List<Role> makeRolesFromInitialList(List<Role> input) {
   // role Groups to be added
   var wolfpack = <Player>[];
@@ -358,7 +405,7 @@ List<Role> makeRolesFromInitialList(List<Role> input) {
 
 String getRoleDescription(RoleId role) {
   // TODO : description for roles
-  return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur pulvinar enim vitae blandit. Etiam lobortis velit a risus interdum, in fermentum dui venenatis. Nunc feugiat sapien at condimentum aliquam. Donec vitae odio pharetra, malesuada mi at, aliquam ante.';
+  return 'Role description';
 }
 
 String getRoleIconPath(RoleId role) {

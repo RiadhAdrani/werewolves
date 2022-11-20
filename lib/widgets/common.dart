@@ -13,7 +13,7 @@ Widget button(String label, Function onClick,
   } else {
     return ElevatedButton(
       onPressed: () => onClick(),
-      style: ElevatedButton.styleFrom(primary: bgColor),
+      style: ElevatedButton.styleFrom(backgroundColor: bgColor),
       child: content,
     );
   }

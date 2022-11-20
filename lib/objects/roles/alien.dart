@@ -13,6 +13,8 @@ class Alien extends RoleSingular {
     callingPriority = alienPriority;
 
     super.abilities = [AlienCallSignAbility(this), GuessAbility(this)];
+
+    onCreated();
   }
 
   @override
@@ -92,7 +94,7 @@ class GuessAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(GuessedStatusEffect(owner));
+    target.addEffect(GuessEffect(owner));
   }
 
   @override

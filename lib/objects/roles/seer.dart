@@ -11,6 +11,8 @@ class Seer extends RoleSingular {
     id = RoleId.seer;
     callingPriority = seerPriority;
     abilities = [ClairvoyanceAbility(this)];
+
+    onCreated();
   }
 
   @override

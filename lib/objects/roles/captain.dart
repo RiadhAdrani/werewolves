@@ -18,6 +18,8 @@ class Captain extends RoleSingular {
       TalkerAbility(this),
       InheritAbility(this)
     ];
+
+    onCreated();
   }
 
   @override

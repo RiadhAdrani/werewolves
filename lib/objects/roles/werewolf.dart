@@ -13,6 +13,8 @@ class Werewolf extends RoleSingular {
     /// TODO : check for these cases when adding new roles
     /// A servant with [love effect] transformed into a werewolf should not change its team.
 
+    onCreated();
+
     if (player.roles.length == 1) {
       player.team = Team.wolves;
     }

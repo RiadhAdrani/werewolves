@@ -11,6 +11,8 @@ class Wolfpack extends RoleGroup {
     id = RoleId.wolfpack;
     callingPriority = wolfpackPriority;
     abilities = [DevourAbility(this)];
+
+    onCreated();
   }
 
   @override
@@ -35,7 +37,7 @@ class Wolfpack extends RoleGroup {
 
   @override
   List<String> getInformations(Game game) {
-    return ['Assembe wolfpack.', 'Choose your victim.'];
+    return ['Assemble wolfpack.', 'Choose your victim.'];
   }
 
   @override

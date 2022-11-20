@@ -11,6 +11,8 @@ class Judge extends RoleSingular {
     id = RoleId.judge;
     callingPriority = judgePriority;
     abilities = [JudgementAbility(this)];
+
+    onCreated();
   }
 
   @override

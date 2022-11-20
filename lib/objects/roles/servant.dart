@@ -26,6 +26,8 @@ class Servant extends RoleSingular {
     id = RoleId.servant;
     callingPriority = servantPriority;
     abilities = [ServantAbility(this)];
+
+    onCreated();
   }
 
   @override
