@@ -261,7 +261,7 @@ class Game extends ChangeNotifier {
 
         notifyListeners();
 
-        if (currentPendingAbility.createListOfTargets(this).isEmpty) {
+        if (currentPendingAbility.createListOfTargets(playersList).isEmpty) {
           useNext();
           return;
         }
@@ -384,7 +384,7 @@ class Game extends ChangeNotifier {
           role.canUseSignWithNarrator() &&
           role.canUseAbilitiesDuringDay()) {
         for (var ability in role.abilities) {
-          if (ability.isForDay && ability.isUsable) {
+          if (ability.isForDay && ability.isPlenty) {
             output.add(ability);
           }
         }
@@ -523,7 +523,7 @@ class Game extends ChangeNotifier {
     for (var ability in currentRole!.abilities) {
       if (ability.wasUsedInTurn(_currentTurn) == false &&
           ability.isUnskippable() &&
-          ability.createListOfTargets(this).isNotEmpty) {
+          ability.createListOfTargets(playersList).isNotEmpty) {
         return false;
       }
     }
@@ -729,7 +729,7 @@ class Game extends ChangeNotifier {
       if (ignored.contains(role.id)) continue;
 
       for (var ability in role.abilities) {
-        if (ability.isUsable &&
+        if (ability.isPlenty &&
             ability.shouldBeUsedOnOwnerDeath() &&
             !_pendingAbilities.contains(ability)) {
           _pendingAbilities.add(ability);
@@ -779,7 +779,7 @@ class Game extends ChangeNotifier {
   void showUseAbilityDialog(BuildContext context, Ability ability,
       Function(List<Player>) onAbilityUsed,
       {bool cancelable = true}) {
-    List<Player> targetList = ability.createListOfTargets(this);
+    List<Player> targetList = ability.createListOfTargets(playersList);
 
     switch (ability.ui) {
       case AbilityUI.normal:

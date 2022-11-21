@@ -102,11 +102,6 @@ class JudgementAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    return "Player cannot be voted on.";
-  }
-
-  @override
   bool shouldBeAppliedSurely(Player target) {
     return true;
   }

@@ -103,13 +103,6 @@ class CounterAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was designed to take the fatal blow.';
-
-    return '${targets[0].name} has been killed.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override

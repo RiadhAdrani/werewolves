@@ -115,13 +115,6 @@ class ProtectAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was protected.';
-
-    return '${targets[0].name} is protected.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override

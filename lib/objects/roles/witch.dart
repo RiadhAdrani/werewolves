@@ -116,13 +116,6 @@ class CurseAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was cursed.';
-
-    return '${targets[0].name} has been cursed.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override
@@ -165,13 +158,6 @@ class ReviveAbility extends Ability {
   @override
   bool shouldBeAvailable() {
     return true;
-  }
-
-  @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was revived.';
-
-    return '${targets[0].name} has been revived.';
   }
 
   @override

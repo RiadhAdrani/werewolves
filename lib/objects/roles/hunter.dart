@@ -113,13 +113,6 @@ class HuntAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was killed.';
-
-    return '${targets[0].name} has been killed.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override
@@ -162,13 +155,6 @@ class CallSignAbility extends Ability {
   bool shouldBeAvailable() {
     return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
         !(owner.player as Player).hasFatalEffect;
-  }
-
-  @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'Hunter did not give his signal';
-
-    return '${targets[0].name} has given his call sign.';
   }
 
   @override

@@ -99,13 +99,6 @@ class ClairvoyanceAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was targeted.';
-
-    return '${targets[0].name} true form has been revealed to the Seer.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override

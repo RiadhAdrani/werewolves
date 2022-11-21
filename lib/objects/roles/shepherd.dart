@@ -101,11 +101,6 @@ class ShepherdAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    return 'Sheep(s) sent.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override

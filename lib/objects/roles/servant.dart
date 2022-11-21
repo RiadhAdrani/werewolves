@@ -117,11 +117,6 @@ class ServantAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    return 'The servant is bound successfully.';
-  }
-
-  @override
   bool shouldBeAppliedSurely(Player target) {
     return true;
   }

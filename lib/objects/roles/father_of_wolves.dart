@@ -107,13 +107,6 @@ class InfectAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was infected.';
-
-    return '${targets[0].name} has been infected and will join the Wolfpack.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {
     if (affected.isEmpty) return;
 

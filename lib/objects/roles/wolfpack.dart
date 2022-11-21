@@ -122,13 +122,6 @@ class DevourAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body has been devoured';
-
-    return '${targets[0].name} has been devoured.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override

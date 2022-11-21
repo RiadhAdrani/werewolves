@@ -98,11 +98,6 @@ class GarrulousAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    return 'The Garrulous wolf knows his word.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override

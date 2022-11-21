@@ -100,11 +100,6 @@ class MuteAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    return "Player muted";
-  }
-
-  @override
   bool shouldBeAppliedSurely(Player target) {
     return !target.hasEffect(EffectId.isProtected);
   }

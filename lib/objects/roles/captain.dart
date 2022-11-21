@@ -168,13 +168,6 @@ class ExecuteAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was designed to be executed.';
-
-    return '${targets[0].name} is executed.';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override
@@ -216,15 +209,6 @@ class InheritAbility extends Ability {
   @override
   bool shouldBeAvailable() {
     return (owner.player as Player).hasFatalEffect;
-  }
-
-  @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) {
-      return 'No body was designed to inherit the captaincy.';
-    }
-
-    return '${targets[0].name} has been executed';
   }
 
   @override
@@ -276,15 +260,6 @@ class SubstitueAbility extends Ability {
   }
 
   @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) {
-      return 'No body was designed to substitue the captain.';
-    }
-
-    return '${targets[0].name} has been executed';
-  }
-
-  @override
   void usePostEffect(Game game, List<Player> affected) {}
 
   @override
@@ -326,13 +301,6 @@ class TalkerAbility extends Ability {
   @override
   bool shouldBeAvailable() {
     return !(owner.player as Player).hasFatalEffect;
-  }
-
-  @override
-  String onAppliedMessage(List<Player> targets) {
-    if (targets.isEmpty) return 'No body was designed to start the discussion';
-
-    return '${targets[0].name} shall start the discussion.';
   }
 
   @override
