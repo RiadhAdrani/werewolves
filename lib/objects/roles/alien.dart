@@ -94,7 +94,7 @@ class GuessAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(GuessEffect(owner));
+    target.addEffect(GuessedByAlienEffect(owner));
   }
 
   @override
@@ -138,7 +138,7 @@ class AlienCallSignAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(CallSignEffect(owner));
+    target.addEffect(HasCallSignEffect(owner));
   }
 
   @override

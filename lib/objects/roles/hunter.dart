@@ -70,8 +70,8 @@ class Hunter extends RoleSingular {
   }
 }
 
-class HuntEffect extends Effect {
-  HuntEffect(Role source) {
+class HuntedEffect extends Effect {
+  HuntedEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.isHunted;
@@ -90,10 +90,10 @@ class HuntAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(HuntEffect(owner));
+    target.addEffect(HuntedEffect(owner));
 
     if (!target.hasWolfRole) {
-      (owner as RoleSingular).player.addEffect(HuntEffect(owner));
+      (owner as RoleSingular).player.addEffect(HuntedEffect(owner));
     }
   }
 
@@ -138,7 +138,7 @@ class CallSignAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(CallSignEffect(owner));
+    target.addEffect(HasCallSignEffect(owner));
   }
 
   @override

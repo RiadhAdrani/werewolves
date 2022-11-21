@@ -58,8 +58,8 @@ class BlackWolf extends RoleSingular {
   }
 }
 
-class MuteEffect extends Effect {
-  MuteEffect(Role source) {
+class MutedEffect extends Effect {
+  MutedEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.isMuted;
@@ -86,7 +86,7 @@ class MuteAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(MuteEffect(owner));
+    target.addEffect(MutedEffect(owner));
   }
 
   @override

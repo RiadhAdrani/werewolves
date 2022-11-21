@@ -3,6 +3,8 @@ import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/captain.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
+import 'package:werewolves/objects/roles/villager.dart';
 
 void main() {
   Player useTestPlayer({
@@ -17,7 +19,7 @@ void main() {
     }
 
     for (var id in effects) {
-      player.addEffect(createEffectFromId(id, effectSource ?? player));
+      player.addEffect(createEffectFromId(id, Villager(Player('dummy'))));
     }
 
     return player;
@@ -100,7 +102,7 @@ void main() {
 
     test('should add effect', () {
       Player player = useTestPlayer();
-      var effect = createEffectFromId(EffectId.hasSheep, player);
+      var effect = createEffectFromId(EffectId.hasSheep, Shepherd(player));
 
       player.addEffect(effect);
 

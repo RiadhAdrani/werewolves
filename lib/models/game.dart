@@ -935,7 +935,7 @@ List<GameEvent> useNightEffectsResolver(
         case EffectId.wasProtected:
         case EffectId.wasJudged:
         case EffectId.wasMuted:
-        case EffectId.shouldSayTheWord:
+        case EffectId.hasWord:
           player.removeEffectsOfType(effect.type);
           break;
 

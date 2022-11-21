@@ -77,7 +77,7 @@ void main() {
         case EffectId.shouldTalkFirst:
           testEffectId(effect, false);
           break;
-        case EffectId.shouldSayTheWord:
+        case EffectId.hasWord:
           testEffectId(effect, false);
           break;
       }

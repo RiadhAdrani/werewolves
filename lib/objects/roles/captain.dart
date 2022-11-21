@@ -113,24 +113,24 @@ class ExecutedEffect extends Effect {
   }
 }
 
-class InheritCaptaincyEffect extends Effect {
-  InheritCaptaincyEffect(Role source) {
+class InheritedCaptaincyEffect extends Effect {
+  InheritedCaptaincyEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.hasInheritedCaptaincy;
   }
 }
 
-class SubstitueEffect extends Effect {
-  SubstitueEffect(Role source) {
+class SubstitutedEffect extends Effect {
+  SubstitutedEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.isSubstitue;
   }
 }
 
-class TalkerEffect extends Effect {
-  TalkerEffect(Role source) {
+class ShouldTalkFirstEffect extends Effect {
+  ShouldTalkFirstEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.shouldTalkFirst;
@@ -193,7 +193,7 @@ class InheritAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(InheritCaptaincyEffect(owner));
+    target.addEffect(InheritedCaptaincyEffect(owner));
   }
 
   @override
@@ -241,7 +241,7 @@ class SubstitueAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(SubstitueEffect(owner));
+    target.addEffect(SubstitutedEffect(owner));
   }
 
   @override
@@ -285,7 +285,7 @@ class TalkerAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(TalkerEffect(owner));
+    target.addEffect(ShouldTalkFirstEffect(owner));
   }
 
   @override

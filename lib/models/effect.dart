@@ -1,8 +1,6 @@
-import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/callsign_effect.dart';
 import 'package:werewolves/objects/effects/guessed_effect.dart';
-import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/father_of_wolves.dart';
@@ -14,7 +12,6 @@ import 'package:werewolves/objects/roles/protector.dart';
 import 'package:werewolves/objects/roles/seer.dart';
 import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/objects/roles/shepherd.dart';
-import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/witch.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
 
@@ -50,7 +47,7 @@ enum EffectId {
   hasSheep,
 
   shouldTalkFirst,
-  shouldSayTheWord,
+  hasWord,
 }
 
 const List<EffectId> fatalStatusEffects = [
@@ -66,104 +63,165 @@ bool isFatalEffect(EffectId effect) {
   return fatalStatusEffects.contains(effect);
 }
 
-String effectIdToString(EffectId effect) {
-  switch (effect) {
+class EffectResourceObject {
+  late String asString;
+  late String description;
+  late Effect Function(Role source) create;
+
+  EffectResourceObject(
+    this.asString,
+    this.description,
+    this.create,
+  );
+}
+
+EffectResourceObject useEffectResourceObject(EffectId id) {
+  switch (id) {
     case EffectId.isProtected:
-      return 'isProtected';
-    case EffectId.wasProtected:
-      return 'wasProtected';
+      return EffectResourceObject(
+        'isProtected',
+        'description',
+        (source) => ProtectedEffect(source),
+      );
     case EffectId.isDevoured:
-      return 'isDevoured';
+      return EffectResourceObject(
+        'isDevoured',
+        'description',
+        (source) => DevouredEffect(source),
+      );
     case EffectId.isInfected:
-      return 'isInfected';
+      return EffectResourceObject(
+        'isInfected',
+        'description',
+        (source) => InfectedEffect(source),
+      );
     case EffectId.isCursed:
-      return 'isCursed';
+      return EffectResourceObject(
+        'isCursed',
+        'description',
+        (source) => CursedEffect(source),
+      );
     case EffectId.isRevived:
-      return 'isRevived';
+      return EffectResourceObject(
+        'isRevived',
+        'description',
+        (source) => RevivedEffect(source),
+      );
     case EffectId.isSeen:
-      return 'isSeen';
+      return EffectResourceObject(
+        'isSeen',
+        'description',
+        (source) => ClairvoyanceEffect(source),
+      );
     case EffectId.isCountered:
-      return 'isCountered';
+      return EffectResourceObject(
+        'isCountered',
+        'description',
+        (source) => CounteredEffect(source),
+      );
     case EffectId.isHunted:
-      return 'isHunted';
+      return EffectResourceObject(
+        'isHunted',
+        'description',
+        (source) => HuntedEffect(source),
+      );
     case EffectId.isExecuted:
-      return 'isExecuted';
+      return EffectResourceObject(
+        'isExecuted',
+        'description',
+        (source) => ExecutedEffect(source),
+      );
     case EffectId.isSubstitue:
-      return 'isSubstitution';
+      return EffectResourceObject(
+        'isSubstitue',
+        'description',
+        (source) => SubstitutedEffect(source),
+      );
     case EffectId.isServed:
-      return 'isServed';
+      return EffectResourceObject(
+        'isServed',
+        'description',
+        (source) => ServedEffect(source),
+      );
     case EffectId.isServing:
-      return 'isServing';
+      return EffectResourceObject(
+        'isServing',
+        'description',
+        (source) => BeingServedEffect(source),
+      );
     case EffectId.isJudged:
-      return 'isJudged';
+      return EffectResourceObject(
+        'isJudged',
+        'description',
+        (source) => JudgedEffect(source),
+      );
     case EffectId.isMuted:
-      return 'isMuted';
-    case EffectId.wasMuted:
-      return 'wasMuted';
-    case EffectId.wasJudged:
-      return 'wasJudged';
-    case EffectId.hasCallsign:
-      return 'hasCallsign';
-    case EffectId.hasInheritedCaptaincy:
-      return 'hasInheritedCaptaincy';
-    case EffectId.shouldTalkFirst:
-      return 'shouldTalkFirst';
-    case EffectId.shouldSayTheWord:
-      return 'shouldSayTheWord';
-    case EffectId.hasSheep:
-      return "hasSheep";
+      return EffectResourceObject(
+        'isMuted',
+        'description',
+        (source) => MutedEffect(source),
+      );
     case EffectId.isGuessedByAlien:
-      return "isGuessed";
+      return EffectResourceObject(
+        'isGuessedByAlien',
+        'description',
+        (source) => GuessedByAlienEffect(source),
+      );
+    case EffectId.wasMuted:
+      return EffectResourceObject(
+        'wasMuted',
+        'description',
+        (source) => WasMutedEffect(source),
+      );
+    case EffectId.wasProtected:
+      return EffectResourceObject(
+        'WasProtect',
+        'description',
+        (source) => WasProtectedEffect(source),
+      );
+    case EffectId.wasJudged:
+      return EffectResourceObject(
+        'wasProtect',
+        'description',
+        (source) => WasJudgedEffect(source),
+      );
+    case EffectId.hasCallsign:
+      return EffectResourceObject(
+        'hasCallSign',
+        'description',
+        (source) => HasCallSignEffect(source),
+      );
+    case EffectId.hasInheritedCaptaincy:
+      return EffectResourceObject(
+        'hasInheritedCaptaincy',
+        'description',
+        (source) => InheritedCaptaincyEffect(source),
+      );
+    case EffectId.hasSheep:
+      return EffectResourceObject(
+        'hasSheep',
+        'description',
+        (source) => HasSheepEffect(source),
+      );
+    case EffectId.shouldTalkFirst:
+      return EffectResourceObject(
+        'shouldTalkFirst',
+        'description',
+        (source) => ShouldTalkFirstEffect(source),
+      );
+    case EffectId.hasWord:
+      return EffectResourceObject(
+        'hasWord',
+        'description',
+        (source) => HasWordEffect(source),
+      );
   }
 }
 
-Effect createEffectFromId(EffectId id, Player player) {
-  switch (id) {
-    case EffectId.isProtected:
-      return ProtectedEffect(Protector(player));
-    case EffectId.isDevoured:
-      return DevourEffect(Wolfpack([player]));
-    case EffectId.isInfected:
-      return InfectEffect(FatherOfWolves(player));
-    case EffectId.isCursed:
-      return CurseEffect(Witch(player));
-    case EffectId.isRevived:
-      return ReviveEffect(Witch(player));
-    case EffectId.isSeen:
-      return ClairvoyanceEffect(Seer(player));
-    case EffectId.isCountered:
-      return CounterEffect(Knight(player));
-    case EffectId.isHunted:
-      return HuntEffect(Hunter(player));
-    case EffectId.isExecuted:
-      return ExecutedEffect(Captain(player));
-    case EffectId.isSubstitue:
-      return SubstitueEffect(Villager(player));
-    case EffectId.isServed:
-      return ServeEffect(Servant(player));
-    case EffectId.isServing:
-      return ServingEffect(Servant(player));
-    case EffectId.isJudged:
-      return JudgedEffect(Judge(player));
-    case EffectId.isMuted:
-      return MuteEffect(BlackWolf(player));
-    case EffectId.isGuessedByAlien:
-      return GuessEffect(Alien(player));
-    case EffectId.wasMuted:
-      return WasMutedEffect(BlackWolf(player));
-    case EffectId.wasProtected:
-      return WasProtectedEffect(Protector(player));
-    case EffectId.wasJudged:
-      return WasJudgedEffect(Judge(player));
-    case EffectId.hasCallsign:
-      return CallSignEffect(Hunter(player));
-    case EffectId.hasInheritedCaptaincy:
-      return InheritCaptaincyEffect(Captain(player));
-    case EffectId.hasSheep:
-      return SheepEffect(Shepherd(player));
-    case EffectId.shouldTalkFirst:
-      return TalkerEffect(Captain(player));
-    case EffectId.shouldSayTheWord:
-      return GarrulousEffect(GarrulousWolf(player));
-  }
+String effectIdToString(EffectId effect) {
+  return useEffectResourceObject(effect).asString;
+}
+
+Effect createEffectFromId(EffectId id, Role owner) {
+  return useEffectResourceObject(id).create(owner);
 }

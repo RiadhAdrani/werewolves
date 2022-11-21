@@ -69,16 +69,16 @@ class Witch extends RoleSingular {
   }
 }
 
-class CurseEffect extends Effect {
-  CurseEffect(Role source) {
+class CursedEffect extends Effect {
+  CursedEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.isCursed;
   }
 }
 
-class ReviveEffect extends Effect {
-  ReviveEffect(Role source) {
+class RevivedEffect extends Effect {
+  RevivedEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.isRevived;
@@ -97,7 +97,7 @@ class CurseAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(CurseEffect(owner));
+    target.addEffect(CursedEffect(owner));
   }
 
   @override
@@ -142,7 +142,7 @@ class ReviveAbility extends Ability {
   @override
   void callOnTarget(Player target) {
     target.removeFatalEffects([]);
-    target.addEffect(ReviveEffect(owner));
+    target.addEffect(RevivedEffect(owner));
   }
 
   @override

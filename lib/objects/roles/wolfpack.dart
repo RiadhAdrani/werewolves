@@ -83,8 +83,8 @@ class Wolfpack extends RoleGroup {
   }
 }
 
-class DevourEffect extends Effect {
-  DevourEffect(Role source) {
+class DevouredEffect extends Effect {
+  DevouredEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.isDevoured;
@@ -103,7 +103,7 @@ class DevourAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(DevourEffect(owner));
+    target.addEffect(DevouredEffect(owner));
   }
 
   @override

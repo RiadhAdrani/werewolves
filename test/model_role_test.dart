@@ -102,7 +102,7 @@ void main() {
       role.player.addEffect(
         createEffectFromId(
           EffectId.isDevoured,
-          Player('source'),
+          Wolfpack([Player('source')]),
         ),
       );
       expect(role.playerIsFatallyWounded(), true);
@@ -133,7 +133,7 @@ void main() {
       role.player[0].addEffect(
         createEffectFromId(
           EffectId.isDevoured,
-          Player('source'),
+          Wolfpack([Player('source')]),
         ),
       );
       expect(role.playerIsFatallyWounded(), false);
@@ -142,7 +142,7 @@ void main() {
         member.addEffect(
           createEffectFromId(
             EffectId.isDevoured,
-            Player('source'),
+            Wolfpack([Player('source')]),
           ),
         );
       }

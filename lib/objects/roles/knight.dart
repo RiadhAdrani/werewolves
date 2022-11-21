@@ -63,8 +63,8 @@ class Knight extends RoleSingular {
   }
 }
 
-class CounterEffect extends Effect {
-  CounterEffect(Role source) {
+class CounteredEffect extends Effect {
+  CounteredEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.isCountered;
@@ -84,7 +84,7 @@ class CounterAbility extends Ability {
   @override
   void callOnTarget(Player target) {
     (owner.player as Player).removeFatalEffects([]);
-    target.addEffect(CounterEffect(owner));
+    target.addEffect(CounteredEffect(owner));
   }
 
   @override

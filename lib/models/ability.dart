@@ -119,6 +119,11 @@ abstract class Ability {
     return players.where((player) => isTarget(player)).toList();
   }
 
+  /// Return the appropriate message according to the number of affected players (target).
+  String onAppliedMessage(List<Player> targets) {
+    return useAbilityResourceObject(id).appliedMessage(targets);
+  }
+
   /// Check if the given target is valid or not.
   bool isTarget(Player target);
 
@@ -143,11 +148,6 @@ abstract class Ability {
   /// to execute the ability on each target.
   void callOnTarget(Player target);
 
-  /// Return the appropriate message according to the number of affected players (target).
-  String onAppliedMessage(List<Player> targets) {
-    return useAbilityResourceObject(id).appliedMessage(targets);
-  }
-
   /// Effect launched after the ability has applied successfully;
   void usePostEffect(Game game, List<Player> affected);
 
@@ -155,146 +155,146 @@ abstract class Ability {
   bool shouldBeUsedOnOwnerDeath();
 }
 
-class AbilityDataObject {
+class AbilityResourceObject {
   late String name;
   late String description;
   late Ability Function(Role) create;
   late Function(List<Player> targets) appliedMessage;
 
-  AbilityDataObject(
+  AbilityResourceObject(
       this.name, this.description, this.create, this.appliedMessage);
 }
 
-AbilityDataObject useAbilityResourceObject(AbilityId id) {
+AbilityResourceObject useAbilityResourceObject(AbilityId id) {
   switch (id) {
     case AbilityId.protect:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Protect',
         'Protect',
         (owner) => ProtectAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.devour:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Devour',
         'Devour',
         (owner) => DevourAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.infect:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Infect',
         'Infect',
         (owner) => InfectAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.clairvoyance:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Clairvoyance',
         'Clairvoyance',
         (owner) => ClairvoyanceAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.revive:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Revive',
         'Revive',
         (owner) => ReviveAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.curse:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Curse',
         'Curse',
         (owner) => CurseAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.counter:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Counter',
         'Counter',
         (owner) => CounterAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.hunt:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Hunt',
         'Hunt',
         (owner) => HuntAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.callsign:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'CallSign',
         'CallSign',
         (owner) => CallSignAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.serve:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Serve',
         'Serve',
         (owner) => ServantAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.judgement:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Judgement',
         'Judgement',
         (owner) => JudgementAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.mute:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Mute',
         'Mute',
         (owner) => MuteAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.word:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Garrulous Word',
         'Garrulous Word',
         (owner) => GarrulousAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.sheeps:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Shepherd',
         'Shepherd',
         (owner) => ShepherdAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.guess:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Guess',
         'Guess',
         (owner) => GuessAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.talker:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Talker',
         'Talker',
         (owner) => TalkerAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.execute:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Execute',
         'Execute',
         (owner) => ExecuteAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.substitute:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Substitute',
         'Substitute',
         (owner) => SubstitueAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.inherit:
-      return AbilityDataObject(
+      return AbilityResourceObject(
         'Inherit',
         'Inherit',
         (owner) => InheritAbility(owner),

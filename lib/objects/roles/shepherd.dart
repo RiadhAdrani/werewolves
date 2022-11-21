@@ -62,8 +62,8 @@ class Shepherd extends RoleSingular {
   }
 }
 
-class SheepEffect extends Effect {
-  SheepEffect(Role source) {
+class HasSheepEffect extends Effect {
+  HasSheepEffect(Role source) {
     this.source = source;
     permanent = false;
     type = EffectId.hasSheep;
@@ -82,7 +82,7 @@ class ShepherdAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(SheepEffect(owner));
+    target.addEffect(HasSheepEffect(owner));
   }
 
   @override

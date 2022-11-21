@@ -67,8 +67,8 @@ class FatherOfWolves extends RoleSingular {
   }
 }
 
-class InfectEffect extends Effect {
-  InfectEffect(Role source) {
+class InfectedEffect extends Effect {
+  InfectedEffect(Role source) {
     this.source = source;
     permanent = true;
     type = EffectId.isInfected;
@@ -88,7 +88,7 @@ class InfectAbility extends Ability {
   @override
   void callOnTarget(Player target) {
     target.removeEffectsOfType(EffectId.isDevoured);
-    target.addEffect(InfectEffect(owner));
+    target.addEffect(InfectedEffect(owner));
   }
 
   @override

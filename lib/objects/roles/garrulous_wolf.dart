@@ -59,11 +59,11 @@ class GarrulousWolf extends RoleSingular {
   }
 }
 
-class GarrulousEffect extends Effect {
-  GarrulousEffect(Role source) {
+class HasWordEffect extends Effect {
+  HasWordEffect(Role source) {
     this.source = source;
     permanent = true;
-    type = EffectId.shouldSayTheWord;
+    type = EffectId.hasWord;
   }
 }
 
@@ -79,7 +79,7 @@ class GarrulousAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    target.addEffect(GarrulousEffect(owner));
+    target.addEffect(HasWordEffect(owner));
   }
 
   @override
