@@ -10,7 +10,6 @@ import 'package:werewolves/objects/roles/father_of_wolves.dart';
 import 'package:werewolves/objects/roles/garrulous_wolf.dart';
 import 'package:werewolves/objects/roles/hunter.dart';
 import 'package:werewolves/objects/roles/judge.dart';
-import 'package:werewolves/objects/roles/knight.dart';
 import 'package:werewolves/objects/roles/protector.dart';
 import 'package:werewolves/objects/roles/seer.dart';
 import 'package:werewolves/objects/roles/servant.dart';
@@ -288,61 +287,152 @@ abstract class RoleGroup extends Role<List<Player>> {
   }
 }
 
+class RoleResourceObject {
+  late String name;
+  late String description;
+  late String iconFile;
+  late Role Function(List<Player>) create;
+
+  RoleResourceObject(
+    this.name,
+    this.description,
+    this.iconFile,
+    this.create,
+  );
+
+  String base(String icon) {
+    return 'assets/$icon.png';
+  }
+
+  String get icon {
+    return base(iconFile);
+  }
+}
+
+RoleResourceObject useRoleData(RoleId id) {
+  switch (id) {
+    case RoleId.protector:
+      return RoleResourceObject(
+        'Protector',
+        'No description',
+        'protector',
+        (players) => Protector(players[0]),
+      );
+    case RoleId.werewolf:
+      return RoleResourceObject(
+        'Werewolf',
+        'No description',
+        'werewolf',
+        (players) => Werewolf(players[0]),
+      );
+    case RoleId.fatherOfWolves:
+      return RoleResourceObject(
+        'Father of Wolves',
+        'No description',
+        'father_wolf',
+        (players) => FatherOfWolves(players[0]),
+      );
+    case RoleId.witch:
+      return RoleResourceObject(
+        'Witch',
+        'No description',
+        'witch',
+        (players) => Witch(players[0]),
+      );
+    case RoleId.seer:
+      return RoleResourceObject(
+        'Seer',
+        'No description',
+        'seer',
+        (players) => Seer(players[0]),
+      );
+    case RoleId.knight:
+      return RoleResourceObject(
+        'Knight',
+        'No description',
+        'knight',
+        (players) => Werewolf(players[0]),
+      );
+    case RoleId.hunter:
+      return RoleResourceObject(
+        'Hunter',
+        'No description',
+        'hunter',
+        (players) => Hunter(players[0]),
+      );
+    case RoleId.captain:
+      return RoleResourceObject(
+        'Captain',
+        'No description',
+        'captain',
+        (players) => Captain(players[0]),
+      );
+    case RoleId.villager:
+      return RoleResourceObject(
+        'Villager',
+        'No description',
+        'simple_villager',
+        (players) => Villager(players[0]),
+      );
+    case RoleId.wolfpack:
+      return RoleResourceObject(
+        'Wolfpack',
+        'No description',
+        'werewolf',
+        (players) => Wolfpack(players),
+      );
+    case RoleId.servant:
+      return RoleResourceObject(
+        'Servant',
+        'No description',
+        'simple_villager',
+        (players) => Servant(players[0]),
+      );
+    case RoleId.judge:
+      return RoleResourceObject(
+        'Judge',
+        'No description',
+        'simple_villager',
+        (players) => Judge(players[0]),
+      );
+    case RoleId.blackWolf:
+      return RoleResourceObject(
+        'Black Wolf',
+        'No description',
+        'werewolf',
+        (players) => BlackWolf(players[0]),
+      );
+    case RoleId.garrulousWolf:
+      return RoleResourceObject(
+        'Garrulous Wolf',
+        'No description',
+        'werewolf',
+        (players) => GarrulousWolf(players[0]),
+      );
+    case RoleId.shepherd:
+      return RoleResourceObject(
+        'Shepherd',
+        'No description',
+        'simple_villager',
+        (players) => Shepherd(players[0]),
+      );
+    case RoleId.alien:
+      return RoleResourceObject(
+        'Servant',
+        'No description',
+        'simple_villager',
+        (players) => Alien(players[0]),
+      );
+  }
+}
+
 List<Role> createSingularRolesListFromId(List<RoleId> listOfIds) {
   final list = <Role>[];
 
   Player player() => Player("dummy Player");
 
-  for (var element in listOfIds) {
-    switch (element) {
-      case RoleId.protector:
-        list.add(Protector(player()));
-        break;
-      case RoleId.werewolf:
-        list.add(Werewolf(player()));
-        break;
-      case RoleId.fatherOfWolves:
-        list.add(FatherOfWolves(player()));
-        break;
-      case RoleId.witch:
-        list.add(Witch(player()));
-        break;
-      case RoleId.seer:
-        list.add(Seer(player()));
-        break;
-      case RoleId.knight:
-        list.add(Knight(player()));
-        break;
-      case RoleId.hunter:
-        list.add(Hunter(player()));
-        break;
-      case RoleId.captain:
-        list.add(Captain(player()));
-        break;
-      case RoleId.villager:
-        list.add(Villager(player()));
-        break;
-      case RoleId.wolfpack:
-        break;
-      case RoleId.servant:
-        list.add(Servant(player()));
-        break;
-      case RoleId.judge:
-        list.add(Judge(player()));
-        break;
-      case RoleId.blackWolf:
-        list.add(BlackWolf(player()));
-        break;
-      case RoleId.garrulousWolf:
-        list.add(GarrulousWolf(player()));
-        break;
-      case RoleId.shepherd:
-        list.add(Shepherd(player()));
-        break;
-      case RoleId.alien:
-        list.add(Alien(player()));
-        break;
-    }
+  for (var id in listOfIds) {
+    list.add(useRoleData(id).create([player()]));
   }
 
   return list;
@@ -352,40 +442,7 @@ Role createRoleFromId(
   RoleId id,
   Player player,
 ) {
-  switch (id) {
-    case RoleId.protector:
-      return Protector(player);
-    case RoleId.werewolf:
-      return Werewolf(player);
-    case RoleId.fatherOfWolves:
-      return FatherOfWolves(player);
-    case RoleId.witch:
-      return Witch(player);
-    case RoleId.seer:
-      return Seer(player);
-    case RoleId.knight:
-      return Knight(player);
-    case RoleId.hunter:
-      return Hunter(player);
-    case RoleId.captain:
-      return Captain(player);
-    case RoleId.villager:
-      return Villager(player);
-    case RoleId.wolfpack:
-      return Wolfpack([player]);
-    case RoleId.servant:
-      return Servant(player);
-    case RoleId.judge:
-      return Judge(player);
-    case RoleId.blackWolf:
-      return BlackWolf(player);
-    case RoleId.garrulousWolf:
-      return GarrulousWolf(player);
-    case RoleId.shepherd:
-      return Shepherd(player);
-    case RoleId.alien:
-      return Alien(player);
-  }
+  return useRoleData(id).create([player]);
 }
 
 List<Role> prepareGameRolesFromPickedList(List<Role> input) {
@@ -415,85 +472,14 @@ List<Role> prepareGameRolesFromPickedList(List<Role> input) {
   return output;
 }
 
-String getRoleDescription(RoleId role) {
-  // TODO : description for roles
-  return 'Role description';
+String getRoleDescription(RoleId id) {
+  return useRoleData(id).description;
 }
 
-String getRoleIconPath(RoleId role) {
-  String base(String icon) {
-    return 'assets/$icon.png';
-  }
-
-  switch (role) {
-    case RoleId.protector:
-      return base('protector');
-    case RoleId.werewolf:
-      return base('werewolf');
-    case RoleId.fatherOfWolves:
-      return base('father_wolf');
-    case RoleId.witch:
-      return base('witch');
-    case RoleId.seer:
-      return base('seer');
-    case RoleId.knight:
-      return base('knight');
-    case RoleId.hunter:
-      return base('hunter');
-    case RoleId.captain:
-      return base('captain');
-    case RoleId.villager:
-      return base('simple_villager');
-    case RoleId.wolfpack:
-      return base('werewolf');
-    case RoleId.servant:
-      return base('simple_villager');
-    case RoleId.judge:
-      return base('simple_villager');
-    case RoleId.blackWolf:
-      return base('werewolf');
-    case RoleId.garrulousWolf:
-      return base('werewolf');
-    case RoleId.shepherd:
-      return base('simple_villager');
-    case RoleId.alien:
-      return base('simple_villager');
-  }
+String getRoleIconPath(RoleId id) {
+  return useRoleData(id).icon;
 }
 
-String getRoleName(RoleId role) {
-  switch (role) {
-    case RoleId.protector:
-      return "Protector";
-    case RoleId.werewolf:
-      return "Werewolf";
-    case RoleId.fatherOfWolves:
-      return "Father of wolves";
-    case RoleId.witch:
-      return "Witch";
-    case RoleId.seer:
-      return "Seer";
-    case RoleId.knight:
-      return "Knight";
-    case RoleId.hunter:
-      return "Hunter";
-    case RoleId.captain:
-      return "Captain";
-    case RoleId.villager:
-      return "Villager";
-    case RoleId.wolfpack:
-      return "Wolfpack";
-    case RoleId.servant:
-      return "Servant";
-    case RoleId.judge:
-      return "Judge";
-    case RoleId.blackWolf:
-      return "Black Wolf";
-    case RoleId.garrulousWolf:
-      return 'Garrulous Wolf';
-    case RoleId.shepherd:
-      return 'Shepherd';
-    case RoleId.alien:
-      return "Alien";
-  }
+String getRoleName(RoleId id) {
+  return useRoleData(id).name;
 }
