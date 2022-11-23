@@ -174,7 +174,7 @@ class ExecuteAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }
@@ -222,7 +222,7 @@ class InheritAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return true;
   }
 }
@@ -266,7 +266,7 @@ class SubstitueAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }
@@ -310,7 +310,7 @@ class TalkerAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }

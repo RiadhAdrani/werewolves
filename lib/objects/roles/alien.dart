@@ -119,7 +119,7 @@ class GuessAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }
@@ -172,7 +172,7 @@ class AlienCallSignAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }

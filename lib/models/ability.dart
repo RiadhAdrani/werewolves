@@ -152,7 +152,7 @@ abstract class Ability {
   void usePostEffect(Game game, List<Player> affected);
 
   /// Check if this ability should be used when the owner is dead.
-  bool shouldBeUsedOnOwnerDeath();
+  bool shouldBeUsedOnDeath();
 }
 
 class AbilityHelperObject {

@@ -119,7 +119,7 @@ class HuntAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return true;
   }
 }
@@ -165,7 +165,7 @@ class CallSignAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }

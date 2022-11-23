@@ -122,7 +122,7 @@ class CurseAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }
@@ -167,7 +167,7 @@ class ReviveAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 }

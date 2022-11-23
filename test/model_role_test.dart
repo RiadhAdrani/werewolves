@@ -5,20 +5,9 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
 
+import 'utils.dart';
+
 void main() {
-  Role useTestRole({
-    RoleId id = RoleId.villager,
-    List<AbilityId> abilities = const [],
-  }) {
-    Role role = createRoleFromId(id, Player('test'));
-
-    for (var ability in abilities) {
-      role.abilities.add(createAbilityFromId(ability, role));
-    }
-
-    return role;
-  }
-
   group('Role', () {
     for (var item in [
       [
@@ -32,7 +21,7 @@ void main() {
         true
       ]
     ]) {
-      var role = useTestRole(abilities: item[0] as List<AbilityId>);
+      var role = createRole(abilities: item[0] as List<AbilityId>);
 
       test('should get if ability exist : ${item[1]} => ${item[2]}', () {
         expect(role.hasAbilityOfType(item[1] as AbilityId), item[2]);
@@ -49,7 +38,7 @@ void main() {
         AbilityId.protect,
       ]
     ]) {
-      var role = useTestRole(abilities: item[0] as List<AbilityId>);
+      var role = createRole(abilities: item[0] as List<AbilityId>);
 
       test('should get ability of type ${item[1]}', () {
         var ab = (role.getAbilityOfType(item[1] as AbilityId)) as Ability;
@@ -68,7 +57,7 @@ void main() {
         AbilityId.callsign,
       ]
     ]) {
-      var role = useTestRole(abilities: item[0] as List<AbilityId>);
+      var role = createRole(abilities: item[0] as List<AbilityId>);
 
       test('should return null when ability does not exist', () {
         var ab = role.getAbilityOfType(item[1] as AbilityId);
@@ -78,7 +67,7 @@ void main() {
     }
 
     test('should return if the user has an unused ability of a given type', () {
-      var role = useTestRole(abilities: [AbilityId.revive, AbilityId.counter]);
+      var role = createRole(abilities: [AbilityId.revive, AbilityId.counter]);
       role.abilities[0].use([Player('test')], 0);
 
       expect(role.hasUnusedAbilityOfType(AbilityId.revive), false);
@@ -86,7 +75,7 @@ void main() {
     });
 
     test('should run implemented abstract functions (RoleSingular)', () {
-      var role = useTestRole(id: RoleId.alien) as RoleSingular;
+      var role = createRole(id: RoleId.alien) as RoleSingular;
 
       // isGroup variable
       expect(role.isGroup, false);

@@ -720,7 +720,7 @@ class Game extends ChangeNotifier {
 
       for (var ability in role.abilities) {
         if (ability.isPlenty &&
-            ability.shouldBeUsedOnOwnerDeath() &&
+            ability.shouldBeUsedOnDeath() &&
             !_pendingAbilities.contains(ability)) {
           _pendingAbilities.add(ability);
         }

@@ -4,30 +4,13 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/shepherd.dart';
-import 'package:werewolves/objects/roles/villager.dart';
+
+import 'utils.dart';
 
 void main() {
-  Player useTestPlayer({
-    List<RoleId> roles = const [RoleId.villager],
-    List<EffectId> effects = const [],
-    Player? effectSource,
-  }) {
-    Player player = Player('test');
-
-    for (var id in roles) {
-      player.addRole(createRoleFromId(id, player));
-    }
-
-    for (var id in effects) {
-      player.addEffect(createEffectFromId(id, Villager(Player('dummy'))));
-    }
-
-    return player;
-  }
-
   group('Resolve player main role', () {
     test('should return the only single role', () {
-      Player player = useTestPlayer(roles: [RoleId.protector]);
+      Player player = createPlayer(roles: [RoleId.protector]);
 
       expect(resolveMainRole(player).id, RoleId.protector);
     });
@@ -35,7 +18,7 @@ void main() {
     test(
         'should return the singular role instead of the group one in case of two roles.',
         () {
-      Player player = useTestPlayer(roles: [RoleId.captain, RoleId.wolfpack]);
+      Player player = createPlayer(roles: [RoleId.captain, RoleId.wolfpack]);
 
       expect(resolveMainRole(player).id, RoleId.captain);
     });
@@ -43,14 +26,14 @@ void main() {
     test(
         'should return the non-captain role in case of two singular role with one of them is the captain',
         () {
-      Player player = useTestPlayer(roles: [RoleId.captain, RoleId.werewolf]);
+      Player player = createPlayer(roles: [RoleId.captain, RoleId.werewolf]);
 
       expect(resolveMainRole(player).id, RoleId.werewolf);
     });
 
     test('should return the role that is non-group and non-captain', () {
       Player player =
-          useTestPlayer(roles: [RoleId.alien, RoleId.captain, RoleId.wolfpack]);
+          createPlayer(roles: [RoleId.alien, RoleId.captain, RoleId.wolfpack]);
 
       expect(resolveMainRole(player).id, RoleId.alien);
     });
@@ -58,13 +41,13 @@ void main() {
 
   group('Player', () {
     for (var item in [
-      [useTestPlayer(), false],
+      [createPlayer(), false],
       [
-        useTestPlayer(effects: [EffectId.isDevoured]),
+        createPlayer(effects: [EffectId.isDevoured]),
         true
       ],
       [
-        useTestPlayer(effects: [EffectId.hasSheep, EffectId.isDevoured]),
+        createPlayer(effects: [EffectId.hasSheep, EffectId.isDevoured]),
         true
       ]
     ]) {
@@ -75,7 +58,7 @@ void main() {
     }
 
     test('should remove fatal effects', () {
-      Player player = useTestPlayer(effects: [
+      Player player = createPlayer(effects: [
         EffectId.isDevoured,
         EffectId.shouldTalkFirst,
         EffectId.isCursed,
@@ -93,7 +76,7 @@ void main() {
 
     for (var team in [Team.alien, Team.wolves, Team.wolves]) {
       test('should change player team', () {
-        Player player = useTestPlayer();
+        Player player = createPlayer();
         player.changeTeam(team);
 
         expect(player.team, team);
@@ -101,7 +84,7 @@ void main() {
     }
 
     test('should add effect', () {
-      Player player = useTestPlayer();
+      Player player = createPlayer();
       var effect = createEffectFromId(EffectId.hasSheep, Shepherd(player));
 
       player.addEffect(effect);
@@ -110,7 +93,7 @@ void main() {
     });
 
     test('should determine if an effect is present or not', () {
-      Player player = useTestPlayer(effects: [
+      Player player = createPlayer(effects: [
         EffectId.hasCallsign,
         EffectId.isDevoured,
         EffectId.isCountered,
@@ -120,7 +103,7 @@ void main() {
     });
 
     test('should remove all effects of a given type', () {
-      Player player = useTestPlayer(roles: [], effects: [
+      Player player = createPlayer(roles: [], effects: [
         EffectId.hasCallsign,
         EffectId.isDevoured,
         EffectId.isCountered,
@@ -133,18 +116,18 @@ void main() {
 
     test('should determine if the player has a role of type', () {
       expect(
-        useTestPlayer(roles: [RoleId.captain]).hasRole(RoleId.captain),
+        createPlayer(roles: [RoleId.captain]).hasRole(RoleId.captain),
         true,
       );
 
       expect(
-        useTestPlayer(roles: [RoleId.captain]).hasRole(RoleId.villager),
+        createPlayer(roles: [RoleId.captain]).hasRole(RoleId.villager),
         false,
       );
     });
 
     test('should add role', () {
-      Player player = useTestPlayer(roles: []);
+      Player player = createPlayer(roles: []);
 
       player.addRole(Captain(player));
 
@@ -152,7 +135,7 @@ void main() {
     });
 
     test('should remove role of given type', () {
-      Player player = useTestPlayer(roles: [RoleId.villager, RoleId.captain]);
+      Player player = createPlayer(roles: [RoleId.villager, RoleId.captain]);
 
       player.removeRole(RoleId.captain);
 
@@ -161,7 +144,7 @@ void main() {
     });
 
     test('should remove group role', () {
-      Player player = useTestPlayer(roles: [
+      Player player = createPlayer(roles: [
         RoleId.villager,
         RoleId.wolfpack,
         RoleId.captain,
@@ -176,30 +159,30 @@ void main() {
 
     test('should determine if there is a wolf role', () {
       expect(
-        useTestPlayer(roles: [RoleId.werewolf, RoleId.wolfpack]).hasWolfRole,
+        createPlayer(roles: [RoleId.werewolf, RoleId.wolfpack]).hasWolfRole,
         true,
       );
 
       expect(
-        useTestPlayer(roles: [RoleId.alien]).hasWolfRole,
+        createPlayer(roles: [RoleId.alien]).hasWolfRole,
         false,
       );
     });
 
     test('should determine if there is a group role', () {
       expect(
-        useTestPlayer(roles: [RoleId.werewolf, RoleId.wolfpack]).hasGroupRole,
+        createPlayer(roles: [RoleId.werewolf, RoleId.wolfpack]).hasGroupRole,
         true,
       );
 
       expect(
-        useTestPlayer(roles: [RoleId.alien]).hasGroupRole,
+        createPlayer(roles: [RoleId.alien]).hasGroupRole,
         false,
       );
     });
 
     test('should determine if a player is dead or alive', () {
-      Player player = useTestPlayer();
+      Player player = createPlayer();
 
       expect(player.isDead, false);
 

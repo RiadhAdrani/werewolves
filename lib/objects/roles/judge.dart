@@ -110,7 +110,7 @@ class JudgementAbility extends Ability {
   }
 
   @override
-  bool shouldBeUsedOnOwnerDeath() {
+  bool shouldBeUsedOnDeath() {
     return false;
   }
 
