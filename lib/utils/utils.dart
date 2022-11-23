@@ -4,6 +4,10 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/widgets/common.dart';
 import 'package:werewolves/widgets/game.dart';
 
+void throwException(String message) {
+  throw '[Exception] $message';
+}
+
 void showExitAlert(BuildContext context) {
   showDialog(
     context: context,

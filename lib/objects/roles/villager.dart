@@ -8,8 +8,6 @@ class Villager extends RoleSingular {
   Villager(super.player) {
     id = RoleId.villager;
     isUnique = false;
-
-    onCreated();
   }
 
   @override

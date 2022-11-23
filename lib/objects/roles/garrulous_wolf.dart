@@ -11,8 +11,6 @@ class GarrulousWolf extends RoleSingular {
     callingPriority = garrulousWolfPriority;
     isWolf = true;
     super.abilities = [GarrulousAbility(this)];
-
-    onCreated();
   }
 
   @override

@@ -15,8 +15,6 @@ class Hunter extends RoleSingular {
       CallSignAbility(this),
       HuntAbility(this),
     ];
-
-    onCreated();
   }
 
   @override

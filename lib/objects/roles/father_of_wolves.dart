@@ -20,8 +20,6 @@ class FatherOfWolves extends RoleSingular {
     if (player.roles.length == 1) {
       player.team = Team.wolves;
     }
-
-    onCreated();
   }
 
   @override

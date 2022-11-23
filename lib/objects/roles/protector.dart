@@ -11,8 +11,6 @@ class Protector extends RoleSingular {
     id = RoleId.protector;
     callingPriority = protectorPriority;
     abilities = [ProtectAbility(this)];
-
-    onCreated();
   }
 
   @override

@@ -68,8 +68,6 @@ abstract class Role<T> {
 
   Role(this.player);
 
-  void onCreated();
-
   T getPlayer() {
     return player;
   }
@@ -180,11 +178,6 @@ abstract class RoleSingular extends Role<Player> {
   RoleSingular(super.player);
 
   @override
-  void onCreated() {
-    setPlayer(player);
-  }
-
-  @override
   String getPlayerName() {
     return player.name;
   }
@@ -224,11 +217,6 @@ abstract class RoleSingular extends Role<Player> {
 abstract class RoleGroup extends Role<List<Player>> {
   RoleGroup(super.player) {
     isGroupRole = true;
-  }
-
-  @override
-  void onCreated() {
-    setPlayer(player);
   }
 
   List<Player> getCurrentPlayers() {
@@ -291,13 +279,23 @@ class RoleResourceObject {
   late String name;
   late String description;
   late String iconFile;
-  late Role Function(List<Player>) create;
+  late Role Function(List<Player>) createRole;
+
+  Role create(List<Player> players) {
+    Role role = createRole(players);
+
+    for (var player in players) {
+      player.addRole(role);
+    }
+
+    return role;
+  }
 
   RoleResourceObject(
     this.name,
     this.description,
     this.iconFile,
-    this.create,
+    this.createRole,
   );
 
   String base(String icon) {

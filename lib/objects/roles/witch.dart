@@ -11,8 +11,6 @@ class Witch extends RoleSingular {
     id = RoleId.witch;
     callingPriority = witchPriority;
     abilities = [CurseAbility(this), ReviveAbility(this)];
-
-    onCreated();
   }
 
   @override

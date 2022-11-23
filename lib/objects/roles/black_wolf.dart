@@ -13,8 +13,6 @@ class BlackWolf extends RoleSingular {
     isWolf = true;
 
     super.abilities = [MuteAbility(this)];
-
-    onCreated();
   }
 
   @override

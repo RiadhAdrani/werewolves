@@ -11,8 +11,6 @@ class Wolfpack extends RoleGroup {
     id = RoleId.wolfpack;
     callingPriority = wolfpackPriority;
     abilities = [DevourAbility(this)];
-
-    onCreated();
   }
 
   @override

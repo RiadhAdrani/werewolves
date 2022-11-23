@@ -15,7 +15,7 @@ void main() {
     Player player = Player('test');
 
     for (var id in roles) {
-      createRoleFromId(id, player);
+      player.addRole(createRoleFromId(id, player));
     }
 
     for (var id in effects) {

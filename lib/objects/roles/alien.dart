@@ -13,8 +13,6 @@ class Alien extends RoleSingular {
     callingPriority = alienPriority;
 
     super.abilities = [AlienCallSignAbility(this), GuessAbility(this)];
-
-    onCreated();
   }
 
   @override

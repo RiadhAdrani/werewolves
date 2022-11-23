@@ -11,8 +11,6 @@ class Knight extends RoleSingular {
     id = RoleId.knight;
     callingPriority = knightPriority;
     abilities = [CounterAbility(this)];
-
-    onCreated();
   }
 
   @override

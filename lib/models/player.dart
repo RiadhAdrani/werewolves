@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/utils/utils.dart';
 
 enum Team { equality, village, wolves, cupid, alien }
 
@@ -24,13 +25,24 @@ const uuid = Uuid();
 class Player {
   late String name;
 
-  bool isAlive = true;
-  Team team = Team.village;
   String id = uuid.v4();
+
+  bool isAlive = true;
+
+  Team team = Team.village;
+
   List<Effect> effects = [];
-  List<Role> roles = [];
+  final List<Role> _roles = [];
 
   Player(this.name);
+
+  List<Role> get roles {
+    return _roles;
+  }
+
+  set roles(List<Role> roles) {
+    throwException('Do not use setter to modify player\'s roles');
+  }
 
   /// Check if the player has a fatal effect.
   bool get hasFatalEffect {
@@ -71,17 +83,18 @@ class Player {
   }
 
   /// Add a role to the list of player's roles.
-  /// If a role with the same id exists, the function will just quit.
-  @Deprecated('Use [Role constructor]')
+  /// If a role with the same id exists, the function will throw.
   void addRole(Role newRole) {
     if (!hasRole(newRole.id)) {
-      roles.add(newRole);
+      _roles.add(newRole);
+    } else {
+      throwException('Player already have [${newRole.id}] role.');
     }
   }
 
   /// Remove all roles of the given type.
   void removeRolesOfType(RoleId id) {
-    roles.removeWhere((role) {
+    _roles.removeWhere((role) {
       if (role.id == id) {
         if (role.isGroup) {
           (role as RoleGroup)
@@ -113,7 +126,7 @@ class Player {
 
   /// Check if the player has a role of the given type.
   bool hasRole(RoleId id) {
-    for (var role in roles) {
+    for (var role in _roles) {
       if (role.id == id) return true;
     }
 
@@ -122,7 +135,7 @@ class Player {
 
   /// Check if the player has a group role.
   bool get hasGroupRole {
-    for (var role in roles) {
+    for (var role in _roles) {
       if (role.isGroupRole) return true;
     }
 
@@ -131,7 +144,7 @@ class Player {
 
   /// Check if the player has a wolf role.
   bool get hasWolfRole {
-    for (var role in roles) {
+    for (var role in _roles) {
       if (role.isWolf) return true;
     }
 
@@ -155,9 +168,9 @@ class Player {
 }
 
 Role resolveMainRole(Player player) {
-  if (player.roles.isEmpty) throw 'Player has no roles !';
+  if (player._roles.isEmpty) throw 'Player has no roles !';
 
-  if (player.roles.length == 2) {
+  if (player._roles.length == 2) {
     /// player cannot have 2 group roles,
     /// it is impossible due to the fact
     /// that a singular role has been assigned to the player
@@ -167,7 +180,7 @@ Role resolveMainRole(Player player) {
     /// any, wolfpack -> any
     /// any, lovers -> any;
     if (player.hasGroupRole) {
-      for (var role in player.roles) {
+      for (var role in player._roles) {
         if (!role.isGroupRole) return role;
       }
     }
@@ -175,20 +188,20 @@ Role resolveMainRole(Player player) {
     /// we assume that the player has 2 singular roles.
     /// any, captain -> any
     if (player.hasRole(RoleId.captain)) {
-      for (var role in player.roles) {
+      for (var role in player._roles) {
         if (role.id != RoleId.captain) return role;
       }
     }
   }
 
-  if (player.roles.length > 2) {
+  if (player._roles.length > 2) {
     // TODO : check for other possibilities
 
     /// we check for any role that is not captain, or a group role.
-    for (var role in player.roles) {
+    for (var role in player._roles) {
       if (role.id != RoleId.captain && !role.isGroupRole) return role;
     }
   }
 
-  return player.roles[0];
+  return player._roles[0];
 }
