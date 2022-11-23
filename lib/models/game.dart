@@ -451,7 +451,7 @@ class Game extends ChangeNotifier {
     /// wolfpack (if the dead role is a wolf)
     /// because we use the [servant.player] which will be overwritten
     /// by [removeRoleOfType] and will be set to a dead player.
-    (servant.player as Player).removeRolesOfType(RoleId.servant);
+    (servant.player as Player).removeRole(RoleId.servant);
 
     /// Add to the game info.
     addGameInfo(GameEvent.servant(deadRole.id, state, currentTurn));
@@ -707,7 +707,7 @@ class Game extends ChangeNotifier {
           /// We ignore the captain.
           _collectPendingAbilityOfPlayer(player, ignored: [RoleId.captain]);
 
-          player.removeRolesOfType(theOldRole.id);
+          player.removeRole(theOldRole.id);
         });
       }
     }
@@ -960,10 +960,10 @@ List<Role> usePlayableRolesGenerator() {
   List<RoleId> nonPlayable = [RoleId.servant, RoleId.wolfpack];
 
   List<RoleId> playable =
-      RoleId.values.where((id) => nonPlayable.contains(id)).toList();
+      RoleId.values.where((id) => !nonPlayable.contains(id)).toList();
 
   return playable
-      .map((id) => useRoleData(id).create([Player('Placeholder')]))
+      .map((id) => useRoleHelper(id).create([Player('Placeholder')]))
       .toList();
 }
 

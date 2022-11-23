@@ -93,7 +93,7 @@ class Player {
   }
 
   /// Remove all roles of the given type.
-  void removeRolesOfType(RoleId id) {
+  void removeRole(RoleId id) {
     _roles.removeWhere((role) {
       if (role.id == id) {
         if (role.isGroup) {

@@ -154,7 +154,7 @@ void main() {
     test('should remove role of given type', () {
       Player player = useTestPlayer(roles: [RoleId.villager, RoleId.captain]);
 
-      player.removeRolesOfType(RoleId.captain);
+      player.removeRole(RoleId.captain);
 
       expect(player.hasRole(RoleId.captain), false);
       expect(player.roles.length, 1);
@@ -167,7 +167,7 @@ void main() {
         RoleId.captain,
       ]);
 
-      player.removeRolesOfType(RoleId.wolfpack);
+      player.removeRole(RoleId.wolfpack);
 
       expect(player.hasRole(RoleId.wolfpack), false);
       expect(player.hasRole(RoleId.villager), true);

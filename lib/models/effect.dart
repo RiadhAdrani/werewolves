@@ -63,154 +63,154 @@ bool isFatalEffect(EffectId effect) {
   return fatalStatusEffects.contains(effect);
 }
 
-class EffectData {
+class EffectHelperObject {
   late String asString;
   late String description;
   late Effect Function(Role source) create;
 
-  EffectData(
+  EffectHelperObject(
     this.asString,
     this.description,
     this.create,
   );
 }
 
-EffectData useEffectData(EffectId id) {
+EffectHelperObject useEffectHelper(EffectId id) {
   switch (id) {
     case EffectId.isProtected:
-      return EffectData(
+      return EffectHelperObject(
         'isProtected',
         'description',
         (source) => ProtectedEffect(source),
       );
     case EffectId.isDevoured:
-      return EffectData(
+      return EffectHelperObject(
         'isDevoured',
         'description',
         (source) => DevouredEffect(source),
       );
     case EffectId.isInfected:
-      return EffectData(
+      return EffectHelperObject(
         'isInfected',
         'description',
         (source) => InfectedEffect(source),
       );
     case EffectId.isCursed:
-      return EffectData(
+      return EffectHelperObject(
         'isCursed',
         'description',
         (source) => CursedEffect(source),
       );
     case EffectId.isRevived:
-      return EffectData(
+      return EffectHelperObject(
         'isRevived',
         'description',
         (source) => RevivedEffect(source),
       );
     case EffectId.isSeen:
-      return EffectData(
+      return EffectHelperObject(
         'isSeen',
         'description',
         (source) => ClairvoyanceEffect(source),
       );
     case EffectId.isCountered:
-      return EffectData(
+      return EffectHelperObject(
         'isCountered',
         'description',
         (source) => CounteredEffect(source),
       );
     case EffectId.isHunted:
-      return EffectData(
+      return EffectHelperObject(
         'isHunted',
         'description',
         (source) => HuntedEffect(source),
       );
     case EffectId.isExecuted:
-      return EffectData(
+      return EffectHelperObject(
         'isExecuted',
         'description',
         (source) => ExecutedEffect(source),
       );
     case EffectId.isSubstitue:
-      return EffectData(
+      return EffectHelperObject(
         'isSubstitue',
         'description',
         (source) => SubstitutedEffect(source),
       );
     case EffectId.isServed:
-      return EffectData(
+      return EffectHelperObject(
         'isServed',
         'description',
         (source) => ServedEffect(source),
       );
     case EffectId.isServing:
-      return EffectData(
+      return EffectHelperObject(
         'isServing',
         'description',
         (source) => BeingServedEffect(source),
       );
     case EffectId.isJudged:
-      return EffectData(
+      return EffectHelperObject(
         'isJudged',
         'description',
         (source) => JudgedEffect(source),
       );
     case EffectId.isMuted:
-      return EffectData(
+      return EffectHelperObject(
         'isMuted',
         'description',
         (source) => MutedEffect(source),
       );
     case EffectId.isGuessedByAlien:
-      return EffectData(
+      return EffectHelperObject(
         'isGuessedByAlien',
         'description',
         (source) => GuessedByAlienEffect(source),
       );
     case EffectId.wasMuted:
-      return EffectData(
+      return EffectHelperObject(
         'wasMuted',
         'description',
         (source) => WasMutedEffect(source),
       );
     case EffectId.wasProtected:
-      return EffectData(
+      return EffectHelperObject(
         'WasProtect',
         'description',
         (source) => WasProtectedEffect(source),
       );
     case EffectId.wasJudged:
-      return EffectData(
+      return EffectHelperObject(
         'wasProtect',
         'description',
         (source) => WasJudgedEffect(source),
       );
     case EffectId.hasCallsign:
-      return EffectData(
+      return EffectHelperObject(
         'hasCallSign',
         'description',
         (source) => HasCallSignEffect(source),
       );
     case EffectId.hasInheritedCaptaincy:
-      return EffectData(
+      return EffectHelperObject(
         'hasInheritedCaptaincy',
         'description',
         (source) => InheritedCaptaincyEffect(source),
       );
     case EffectId.hasSheep:
-      return EffectData(
+      return EffectHelperObject(
         'hasSheep',
         'description',
         (source) => HasSheepEffect(source),
       );
     case EffectId.shouldTalkFirst:
-      return EffectData(
+      return EffectHelperObject(
         'shouldTalkFirst',
         'description',
         (source) => ShouldTalkFirstEffect(source),
       );
     case EffectId.hasWord:
-      return EffectData(
+      return EffectHelperObject(
         'hasWord',
         'description',
         (source) => HasWordEffect(source),
@@ -219,9 +219,9 @@ EffectData useEffectData(EffectId id) {
 }
 
 String effectIdToString(EffectId effect) {
-  return useEffectData(effect).asString;
+  return useEffectHelper(effect).asString;
 }
 
 Effect createEffectFromId(EffectId id, Role owner) {
-  return useEffectData(id).create(owner);
+  return useEffectHelper(id).create(owner);
 }

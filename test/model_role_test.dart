@@ -115,7 +115,7 @@ void main() {
     });
 
     test('should not be a group role (RoleGroup)', () {
-      var role = useRoleData(RoleId.wolfpack)
+      var role = useRoleHelper(RoleId.wolfpack)
           .create([Player('1'), Player('2'), Player('3')]);
 
       // isGroup variable
