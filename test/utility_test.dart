@@ -20,5 +20,9 @@ void main() {
         }
       }
     });
+
+    test('should throw an error', () {
+      expect(() => throwException('Error'), throwsA('[Exception] Error'));
+    });
   });
 }
