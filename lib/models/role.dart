@@ -153,10 +153,10 @@ abstract class Role<T> {
   bool playerIsFatallyWounded();
 
   /// Get the informations that the role needs to know.
-  List<String> getInformations(Game game);
+  List<String> getInformations(List<Role> roles);
 
   /// Get the instructions ,advices and tips for the narrator.
-  List<String> getAdvices(Game game);
+  List<String> getAdvices(List<Role> roles);
 
   /// Return the supposed initial role team.
   /// This is used when distributing roles

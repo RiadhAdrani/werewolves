@@ -29,19 +29,21 @@ class Protector extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(Game game) {
+  List<String> getAdvices(List<Role> roles) {
     return [];
   }
 
   @override
-  List<String> getInformations(Game game) {
+  List<String> getInformations(List<Role> roles) {
     final output = <String>[
       'Choose a target to protect with your shield.',
       'The chosen target will be immune to the strikes of the wolves.'
     ];
 
-    List<Player> protected =
-        game.getPlayersWithStatusEffects([EffectId.wasProtected]);
+    List<Player> protected = getPlayersWithEffects(
+      usePlayerExtractor(roles),
+      [EffectId.wasProtected],
+    );
 
     if (protected.isNotEmpty) {
       output.add('You cannot protect (${protected[0].name}) in this night.');

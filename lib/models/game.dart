@@ -821,6 +821,35 @@ class Game extends ChangeNotifier {
   }
 }
 
+List<Player> getPlayersWithEffects(
+    List<Player> players, List<EffectId> effects) {
+  final output = <Player>[];
+
+  for (var player in players) {
+    for (var effect in effects) {
+      if (!player.hasEffect(effect)) {
+        continue;
+      }
+    }
+
+    output.add(player);
+  }
+
+  return output;
+}
+
+List<Player> getPlayersWithFatalEffect(List<Player> players) {
+  final output = <Player>[];
+
+  for (var player in players) {
+    if (player.hasFatalEffect) {
+      output.add(player);
+    }
+  }
+
+  return output;
+}
+
 List<GameEvent> useNightEffectsResolver(
   List<Player> players,
   int currentTurn,

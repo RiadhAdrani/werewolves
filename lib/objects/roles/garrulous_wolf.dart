@@ -34,12 +34,12 @@ class GarrulousWolf extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(Game game) {
+  List<String> getAdvices(List<Role> roles) {
     return [];
   }
 
   @override
-  List<String> getInformations(Game game) {
+  List<String> getInformations(List<Role> roles) {
     return [
       'The narrator should give you a word that you must include in your speech during the day phase. (Use The "Write" button to communicate the word.)',
       'In case you did not say the word, you will be eliminated from the game.'

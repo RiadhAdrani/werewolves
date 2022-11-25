@@ -29,12 +29,12 @@ class Judge extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(Game game) {
+  List<String> getAdvices(List<Role> roles) {
     return [];
   }
 
   @override
-  List<String> getInformations(Game game) {
+  List<String> getInformations(List<Role> roles) {
     return [
       "The judge choose a player to protect.",
       "The protected player cannot be voted on by the villagers.",

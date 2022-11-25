@@ -181,7 +181,9 @@ Widget gameNightView(Game game, BuildContext context) {
         children: [
           gameNightViewHeading(game.currentRole!),
           divider(),
-          gameNightViewInfos(game.currentRole!.getInformations(game)),
+          gameNightViewInfos(
+            game.currentRole!.getInformations(game.playableRoles),
+          ),
           divider(),
           gameNightViewAbilities(game, context),
           button(

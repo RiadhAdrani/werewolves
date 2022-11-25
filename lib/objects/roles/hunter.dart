@@ -33,12 +33,12 @@ class Hunter extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(Game game) {
+  List<String> getAdvices(List<Role> roles) {
     return [];
   }
 
   @override
-  List<String> getInformations(Game game) {
+  List<String> getInformations(List<Role> roles) {
     if (player.hasFatalEffect) {
       return ['You have become a Hunter! Choose someone to kill.'];
     }

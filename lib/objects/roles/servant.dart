@@ -44,12 +44,12 @@ class Servant extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(Game game) {
+  List<String> getAdvices(List<Role> roles) {
     return [];
   }
 
   @override
-  List<String> getInformations(Game game) {
+  List<String> getInformations(List<Role> roles) {
     return [
       'The servant shall choose a target.',
       'If the chosen player dies, the servant takes his role.'

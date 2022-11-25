@@ -29,13 +29,13 @@ class Seer extends RoleSingular {
   }
 
   @override
-  List<String> getAdvices(Game game) {
+  List<String> getAdvices(List<Role> roles) {
     return [];
   }
 
   @override
-  List<String> getInformations(Game game) {
-    return ['Pick a target to reveale his true role.'];
+  List<String> getInformations(List<Role> roles) {
+    return ['Pick a target to reveal his true role.'];
   }
 
   @override
