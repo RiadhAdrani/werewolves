@@ -58,26 +58,10 @@ class Wolfpack extends RoleGroup {
   static bool shouldJoinWolfpackUponInfection(Player player) {
     RoleId mainRole = player.mainRole.id;
 
-    switch (mainRole) {
-      case RoleId.protector:
-      case RoleId.werewolf:
-      case RoleId.fatherOfWolves:
-      case RoleId.witch:
-      case RoleId.seer:
-      case RoleId.knight:
-      case RoleId.hunter:
-      case RoleId.captain:
-      case RoleId.villager:
-      case RoleId.wolfpack:
-      case RoleId.servant:
-      case RoleId.judge:
-      case RoleId.blackWolf:
-      case RoleId.garrulousWolf:
-      case RoleId.shepherd:
-        return true;
-      case RoleId.alien:
-        return false;
-    }
+    // TODO : add other solos here
+    List<RoleId> nonConvertible = [RoleId.alien];
+
+    return !nonConvertible.contains(mainRole);
   }
 }
 

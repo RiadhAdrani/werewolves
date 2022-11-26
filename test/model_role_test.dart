@@ -103,7 +103,7 @@ void main() {
       expect(role.isObsolete(), true);
     });
 
-    test('should not be a group role (RoleGroup)', () {
+    test('should run implemented abstract functions (RoleGroup)', () {
       var role = useRoleHelper(RoleId.wolfpack)
           .create([Player('1'), Player('2'), Player('3')]);
 
