@@ -15,6 +15,7 @@ import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/objects/roles/shepherd.dart';
 import 'package:werewolves/objects/roles/witch.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
+import 'package:werewolves/utils/utils.dart';
 
 enum AbilityId {
   protect,
@@ -48,7 +49,7 @@ enum AbilityUI { normal, alien }
 
 enum AbilityUseCount { once, infinite, none }
 
-const int infinite = 99;
+const int infinite = 999;
 
 abstract class Ability {
   List<int> turnsUsedIn = [];
@@ -68,16 +69,18 @@ abstract class Ability {
     List<Player> appliedTo = [];
 
     if (isPlenty && targets.isNotEmpty) {
-      var subList =
-          targetCount == infinite ? targets : targets.sublist(0, targetCount);
+      if (targets.length > targetCount) {
+        throwException(
+            'The number of targets is superior to the maximum allowed.');
+      }
 
-      for (var target in subList) {
+      for (var target in targets) {
         turnsUsedIn.add(turn);
 
         if (shouldBeAppliedSurely(target)) {
-          appliedTo.add(target);
-
           callOnTarget(target);
+
+          appliedTo.add(target);
 
           if (useCount == AbilityUseCount.once) {
             useCount = AbilityUseCount.none;

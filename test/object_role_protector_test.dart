@@ -11,36 +11,38 @@ import 'utils.dart';
 void main() {
   group('Protector', () {
     group('Role', () {
+      var role = Protector(Player(''));
+
       test('should have an id', () {
-        expect(Protector(Player('')).id, RoleId.protector);
+        expect(role.id, RoleId.protector);
       });
 
       test('should have a calling priority', () {
-        expect(Protector(Player('')).callingPriority, protectorPriority);
+        expect(role.callingPriority, protectorPriority);
       });
 
       test('should have a protect ability', () {
-        expect(Protector(Player('')).hasAbilityOfType(AbilityId.protect), true);
+        expect(role.hasAbilityOfType(AbilityId.protect), true);
       });
 
       test('should be called at night', () {
-        expect(Protector(Player('')).shouldBeCalledAtNight(Game()), true);
+        expect(role.shouldBeCalledAtNight(Game()), true);
       });
 
       test('should be able to use ability at night', () {
-        expect(Protector(Player('')).canUseAbilitiesDuringNight(), true);
+        expect(role.canUseAbilitiesDuringNight(), true);
       });
 
       test('should NOT be able to use ability at day', () {
-        expect(Protector(Player('')).canUseAbilitiesDuringDay(), false);
+        expect(role.canUseAbilitiesDuringDay(), false);
       });
 
       test('should NOT be able to use sign with narrator', () {
-        expect(Protector(Player('')).canUseSignWithNarrator(), false);
+        expect(role.canUseSignWithNarrator(), false);
       });
 
       test('should return the correct initial team', () {
-        expect(Protector(Player('')).getSupposedInitialTeam(), Team.village);
+        expect(role.getSupposedInitialTeam(), Team.village);
       });
     });
 
