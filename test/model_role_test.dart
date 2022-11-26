@@ -3,6 +3,7 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
 
 import 'utils.dart';
@@ -74,80 +75,132 @@ void main() {
       expect(role.hasUnusedAbilityOfType(AbilityId.counter), true);
     });
 
-    test('should run implemented abstract functions (RoleSingular)', () {
+    group('RoleSingular', () {
       var role = createRole(id: RoleId.alien) as RoleSingular;
 
-      // isGroup variable
-      expect(role.isGroup, false);
+      test('should not be group', () {
+        expect(role.isGroup, false);
+      });
 
-      // add role to player
-      expect(role.player.hasRole(RoleId.alien), true);
+      test('should add role to player', () {
+        expect(role.player.hasRole(RoleId.alien), true);
+      });
 
-      // getPlayerName
-      expect(role.getPlayerName(), 'test');
+      test('should compute player name', () {
+        expect(role.getPlayerName(), 'test');
+      });
 
-      // playerIsFatallyWounded
-      expect(role.playerIsFatallyWounded(), false);
-      role.player.addEffect(
-        createEffectFromId(
-          EffectId.isDevoured,
-          Wolfpack([Player('source')]),
-        ),
-      );
-      expect(role.playerIsFatallyWounded(), true);
-      role.player.removeEffectsOfType(EffectId.isDevoured);
-
-      // isObsolete && setObsolete
-      expect(role.isObsolete(), false);
-      role.setObsolete();
-      expect(role.isObsolete(), true);
-    });
-
-    test('should run implemented abstract functions (RoleGroup)', () {
-      var role = useRoleHelper(RoleId.wolfpack)
-          .create([Player('1'), Player('2'), Player('3')]);
-
-      // isGroup variable
-      expect(role.isGroup, true);
-
-      // add role to players
-      for (var member in role.player) {
-        expect(member.hasRole(RoleId.wolfpack), true);
-      }
-
-      // getPlayerName
-      expect(role.getPlayerName(), '1 | 2 | 3');
-
-      // playerIsFatallyWounded
-      expect(role.playerIsFatallyWounded(), false);
-      role.player[0].addEffect(
-        createEffectFromId(
-          EffectId.isDevoured,
-          Wolfpack([Player('source')]),
-        ),
-      );
-      expect(role.playerIsFatallyWounded(), false);
-
-      for (var member in role.player) {
-        member.addEffect(
+      test('should determine if player is fatally wounded', () {
+        expect(role.playerIsFatallyWounded(), false);
+        role.player.addEffect(
           createEffectFromId(
             EffectId.isDevoured,
             Wolfpack([Player('source')]),
           ),
         );
-      }
-      expect(role.playerIsFatallyWounded(), true);
+        expect(role.playerIsFatallyWounded(), true);
+        role.player.removeEffectsOfType(EffectId.isDevoured);
+      });
 
-      for (var member in role.player) {
-        member.removeEffectsOfType(EffectId.isDevoured);
-      }
+      test('should determine if role is obsolete', () {
+        expect(role.isObsolete(), false);
+        role.setObsolete();
+        expect(role.isObsolete(), true);
+      });
 
-      // isObsolete && setObsolete
-      expect(role.isObsolete(), false);
-      for (var member in role.player) {
-        member.isAlive = false;
-      }
-      expect(role.isObsolete(), true);
+      var group = Villager(Player('0'));
+      var p1 = Player('1');
+      var p2 = Player('2');
+
+      test('setPlayer should add player/role', () {
+        group.setPlayer(p1);
+
+        expect(group.player, p1);
+        expect(p1.hasRole(RoleId.villager), true);
+      });
+
+      test('setPlayer should remove/replace player/role', () {
+        group.setPlayer(p2);
+
+        expect(group.player != p1, true);
+        expect(p1.hasRole(RoleId.villager), false);
+
+        expect(p2.hasRole(RoleId.villager), true);
+        expect(group.player, p2);
+      });
+    });
+
+    group('RoleGroup', () {
+      var role = useRoleHelper(RoleId.wolfpack)
+          .create([Player('1'), Player('2'), Player('3')]);
+
+      test('should be group role', () {
+        expect(role.isGroup, true);
+      });
+
+      test('members should have the role', () {
+        for (var member in role.player) {
+          expect(member.hasRole(RoleId.wolfpack), true);
+        }
+      });
+
+      test('should format players name', () {
+        expect(role.getPlayerName(), '1 | 2 | 3');
+      });
+
+      test('should compute if role is fatally wounded', () {
+        expect(role.playerIsFatallyWounded(), false);
+        role.player[0].addEffect(
+          createEffectFromId(
+            EffectId.isDevoured,
+            Wolfpack([Player('source')]),
+          ),
+        );
+        expect(role.playerIsFatallyWounded(), false);
+
+        for (var member in role.player) {
+          member.addEffect(
+            createEffectFromId(
+              EffectId.isDevoured,
+              Wolfpack([Player('source')]),
+            ),
+          );
+        }
+        expect(role.playerIsFatallyWounded(), true);
+
+        for (var member in role.player) {
+          member.removeEffectsOfType(EffectId.isDevoured);
+        }
+      });
+
+      test('should determine if role is obsolete', () {
+        expect(role.isObsolete(), false);
+        for (var member in role.player) {
+          member.isAlive = false;
+        }
+        expect(role.isObsolete(), true);
+      });
+
+      var group = Wolfpack([]);
+      var p1 = Player('1');
+      var p2 = Player('2');
+
+      test('setPlayer should add players/role', () {
+        group.setPlayer([p1]);
+
+        expect(group.player.contains(p1), true);
+        expect(p1.hasRole(RoleId.wolfpack), true);
+      });
+
+      test('setPlayer should remove/replace player/role', () {
+        group.setPlayer([p2]);
+
+        expect(group.player.contains(p1), false);
+        expect(p1.hasRole(RoleId.wolfpack), false);
+
+        expect(p2.hasRole(RoleId.wolfpack), true);
+        expect(group.player.contains(p2), true);
+      });
     });
 
     test('should not add wolfpack as a singular role list', () {

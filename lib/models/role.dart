@@ -185,13 +185,15 @@ abstract class RoleSingular extends Role<Player> {
 
   @override
   void setPlayer(Player player) {
+    this.player.removeRole(id);
+
     if (player.hasRole(id)) {
       throw 'Player already have this role';
     }
 
-    this.player = player;
-
     player.roles.add(this);
+
+    this.player = player;
   }
 
   @override
@@ -259,15 +261,19 @@ abstract class RoleGroup extends Role<List<Player>> {
 
   @override
   void setPlayer(List<Player> player) {
-    this.player = player;
+    while (this.player.isNotEmpty) {
+      this.player[0].removeRole(id);
+    }
 
     for (var member in player) {
       if (member.hasRole(id)) {
         throw 'Player already have this role !';
       } else {
-        member.roles.add(this);
+        member.addRole(this);
       }
     }
+
+    this.player = player;
   }
 
   @override
