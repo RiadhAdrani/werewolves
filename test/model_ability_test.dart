@@ -17,7 +17,9 @@ void main() {
     test('should exhaust ability use count', () {
       var ability = create();
 
-      ability.use([Player('')], 0);
+      ability.use([
+        createPlayer(effects: [EffectId.isDevoured])
+      ], 0);
 
       expect(ability.useCount, AbilityUseCount.none);
     });
@@ -42,7 +44,7 @@ void main() {
 
     test('should be applied', () {
       var ability = create();
-      var player = createPlayer(effects: []);
+      var player = createPlayer(effects: [EffectId.isDevoured]);
 
       ability.use([player], 0);
 

@@ -118,6 +118,10 @@ class Game extends ChangeNotifier {
     return _state;
   }
 
+  set currentTurnForTesting(int turn) {
+    _currentTurn = turn;
+  }
+
   /// Return a list of alive players.
   /// Used for possible future role `Shaman`
   /// Add add them to the output list.

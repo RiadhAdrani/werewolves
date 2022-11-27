@@ -96,7 +96,7 @@ class InfectAbility extends Ability {
 
   @override
   bool shouldBeAppliedSurely(Player target) {
-    return !target.hasEffect(EffectId.isProtected);
+    return target.hasEffect(EffectId.isDevoured);
   }
 
   @override
