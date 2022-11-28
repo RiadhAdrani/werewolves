@@ -1,4 +1,3 @@
-import 'package:uuid/uuid.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/utils.dart';
@@ -20,12 +19,10 @@ String getTeamName(Team team) {
   }
 }
 
-const uuid = Uuid();
-
 class Player {
   late String name;
 
-  String id = uuid.v4();
+  String id = useId();
 
   bool isAlive = true;
 

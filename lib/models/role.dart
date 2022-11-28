@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:uuid/uuid.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -19,8 +18,7 @@ import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/objects/roles/witch.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
-
-const uuid = Uuid();
+import 'package:werewolves/utils/utils.dart';
 
 enum RoleId {
   protector,
@@ -60,7 +58,7 @@ abstract class Role<T> {
   late T player;
   late RoleId id;
 
-  String instanceId = uuid.v4();
+  String instanceId = useId();
   int callingPriority = -1;
   List<Ability> abilities = [];
   bool isWolf = false;

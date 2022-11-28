@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/widgets/common.dart';
 import 'package:werewolves/widgets/game.dart';
+
+const uuid = Uuid();
+
+String useId() {
+  return uuid.v4();
+}
 
 void throwException(String message) {
   throw '[Exception] $message';
