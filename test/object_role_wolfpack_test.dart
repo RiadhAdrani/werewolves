@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/effect.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
@@ -26,14 +25,14 @@ void main() {
       });
 
       test('should be called at night', () {
-        expect(role.shouldBeCalledAtNight(Game()), true);
+        expect(role.shouldBeCalledAtNight([], 1), true);
       });
 
       test('should NOT be called at night when all members are dead', () {
         var player = Player('');
         player.isAlive = false;
 
-        expect(Wolfpack([player]).shouldBeCalledAtNight(Game()), false);
+        expect(Wolfpack([player]).shouldBeCalledAtNight([], 1), false);
       });
 
       test('should be able to use ability at night', () {

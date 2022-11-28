@@ -33,8 +33,8 @@ class FatherOfWolves extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(Game game) {
-    return game.currentTurn > 1;
+  bool shouldBeCalledAtNight(List<Role> roles, int turn) {
+    return turn > 1;
   }
 
   @override

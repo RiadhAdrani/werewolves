@@ -24,7 +24,7 @@ class Witch extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(Game game) {
+  bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return true;
   }
 

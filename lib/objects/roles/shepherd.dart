@@ -24,7 +24,7 @@ class Shepherd extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(Game game) {
+  bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     var maybeAbility = getAbilityOfType(AbilityId.sheeps);
 
     if (maybeAbility == null) {

@@ -28,7 +28,7 @@ class Hunter extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(Game game) {
+  bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return player.hasFatalEffect || !player.hasEffect(EffectId.hasCallsign);
   }
 

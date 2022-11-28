@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/effect.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/father_of_wolves.dart';
@@ -27,14 +26,11 @@ void main() {
       });
 
       test('should NOT be called at night in the first night', () {
-        expect(role.shouldBeCalledAtNight(Game()), false);
+        expect(role.shouldBeCalledAtNight([], 1), false);
       });
 
       test('should be called at night after the first night', () {
-        var game = Game();
-
-        game.currentTurnForTesting = 2;
-        expect(role.shouldBeCalledAtNight(game), true);
+        expect(role.shouldBeCalledAtNight([], 2), true);
       });
 
       test('should be able to use ability at night', () {

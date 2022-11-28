@@ -539,7 +539,7 @@ class Game extends ChangeNotifier {
       if (role.callingPriority > _roles[_currentIndex].callingPriority &&
           role.callingPriority > -1 &&
           role.callingPriority < next &&
-          role.shouldBeCalledAtNight(this) &&
+          role.shouldBeCalledAtNight(_roles, currentTurn) &&
           role.isObsolete() == false) {
         next = role.callingPriority;
       }
@@ -568,7 +568,7 @@ class Game extends ChangeNotifier {
     for (var role in _roles) {
       if (role.callingPriority < min &&
           role.callingPriority > -1 &&
-          role.shouldBeCalledAtNight(this) &&
+          role.shouldBeCalledAtNight(_roles, currentTurn) &&
           role.isObsolete() == false) {
         min = role.callingPriority;
       }

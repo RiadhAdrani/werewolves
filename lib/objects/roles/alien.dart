@@ -51,7 +51,7 @@ class Alien extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(Game game) {
+  bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return !player.hasEffect(EffectId.hasCallsign);
   }
 

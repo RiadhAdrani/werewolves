@@ -24,7 +24,7 @@ class Wolfpack extends RoleGroup {
   }
 
   @override
-  bool shouldBeCalledAtNight(Game game) {
+  bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return hasAtLeastOneSurvivingMember();
   }
 

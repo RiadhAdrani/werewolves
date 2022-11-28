@@ -126,7 +126,7 @@ abstract class Role<T> {
   }
 
   /// Should the role be called during the night.
-  bool shouldBeCalledAtNight(Game game);
+  bool shouldBeCalledAtNight(List<Role> roles, int turn);
 
   /// Can the role use its abilities
   bool canUseAbilitiesDuringNight();

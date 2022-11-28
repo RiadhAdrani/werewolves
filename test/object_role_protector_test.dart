@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/effect.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/protector.dart';
@@ -26,7 +25,7 @@ void main() {
       });
 
       test('should be called at night', () {
-        expect(role.shouldBeCalledAtNight(Game()), true);
+        expect(role.shouldBeCalledAtNight([], 1), true);
       });
 
       test('should be able to use ability at night', () {

@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/effect.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
@@ -26,8 +25,8 @@ void main() {
         expect(role.hasAbilityOfType(AbilityId.mute), true);
       });
 
-      test('should NOT be called at night in the first night', () {
-        expect(role.shouldBeCalledAtNight(Game()), true);
+      test('should be called at night', () {
+        expect(role.shouldBeCalledAtNight([], 0), true);
       });
 
       test('should be able to use ability at night', () {
