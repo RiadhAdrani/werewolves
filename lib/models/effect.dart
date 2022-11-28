@@ -1,6 +1,6 @@
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/effects/callsign_effect.dart';
-import 'package:werewolves/objects/effects/guessed_effect.dart';
+import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/father_of_wolves.dart';

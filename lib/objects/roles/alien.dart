@@ -5,7 +5,6 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/objects/effects/callsign_effect.dart';
-import 'package:werewolves/objects/effects/guessed_effect.dart';
 
 class Alien extends RoleSingular {
   Alien(super.player) {
@@ -121,6 +120,14 @@ class GuessAbility extends Ability {
   @override
   bool shouldBeUsedOnDeath() {
     return false;
+  }
+}
+
+class GuessedByAlienEffect extends Effect {
+  GuessedByAlienEffect(Role source) {
+    this.source = source;
+    permanent = false;
+    type = EffectId.isGuessedByAlien;
   }
 }
 
