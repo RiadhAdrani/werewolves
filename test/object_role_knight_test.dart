@@ -81,6 +81,18 @@ void main() {
         expect(player.hasEffect(EffectId.isCountered), true);
       });
 
+      test('should remove fatal effects when used', () {
+        var self = createPlayer(effects: [
+          EffectId.isCursed,
+          EffectId.isDevoured,
+        ]);
+        var ability = CounterAbility(Knight(self));
+
+        ability.callOnTarget(createPlayer());
+
+        expect(self.hasFatalEffect, false);
+      });
+
       test('should be able to target any player', () {
         expect(ability.isTarget(createPlayer()), true);
       });
