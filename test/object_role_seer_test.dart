@@ -20,7 +20,7 @@ void main() {
         expect(role.callingPriority, seerPriority);
       });
 
-      test('should have a protect ability', () {
+      test('should have a clairvoyance ability', () {
         expect(role.hasAbilityOfType(AbilityId.clairvoyance), true);
       });
 
@@ -46,7 +46,7 @@ void main() {
     });
 
     group('Effects', () {
-      test('isProtected effect should have correct property values', () {
+      test('isSeen effect should have correct property values', () {
         Effect effect = ClairvoyanceEffect(Seer(Player('test')));
 
         expect(effect.permanent, false);
