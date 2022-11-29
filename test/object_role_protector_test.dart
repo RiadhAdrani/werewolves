@@ -10,7 +10,7 @@ import 'utils.dart';
 void main() {
   group('Protector', () {
     group('Role', () {
-      var role = Protector(Player(''));
+      var role = Protector(Player('test'));
 
       test('should have an id', () {
         expect(role.id, RoleId.protector);
@@ -47,14 +47,14 @@ void main() {
 
     group('Effects', () {
       test('isProtected effect should have correct property values', () {
-        Effect effect = ProtectedEffect(Protector(Player('')));
+        Effect effect = ProtectedEffect(Protector(Player('test')));
 
         expect(effect.permanent, false);
         expect(effect.type, EffectId.isProtected);
       });
 
       test('wasProtected effect should have correct property values', () {
-        Effect effect = WasProtectedEffect(Protector(Player('')));
+        Effect effect = WasProtectedEffect(Protector(Player('test')));
 
         expect(effect.permanent, false);
         expect(effect.type, EffectId.wasProtected);
@@ -62,7 +62,7 @@ void main() {
     });
 
     group('Abilities', () {
-      Ability ability = ProtectAbility(Protector(Player('')));
+      Ability ability = ProtectAbility(Protector(Player('test')));
 
       test('ProtectAbility should have correct properties values', () {
         expect(ability.targetCount, 1);
