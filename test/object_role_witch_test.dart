@@ -118,10 +118,11 @@ void main() {
         });
 
         test('should add revive effect to target', () {
-          var player = Player('test');
+          var player = createPlayer(effects: fatalStatusEffects);
 
           ability.callOnTarget(player);
           expect(player.hasEffect(EffectId.isRevived), true);
+          expect(player.hasFatalEffect, false);
         });
 
         test('should only target fatally affected players', () {
