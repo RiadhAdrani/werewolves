@@ -46,7 +46,7 @@ class Captain extends RoleSingular {
 
     if (player.hasFatalEffect) {
       output.add(
-          'You are dead, choose another fellow player to inherit your capitaincy.');
+          'You are dead, choose another fellow player to inherit your captaincy.');
     }
 
     output.add('Choose a player whom will start the discussion.');
