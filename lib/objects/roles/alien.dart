@@ -54,11 +54,43 @@ class Alien extends RoleSingular {
     return !player.hasEffect(EffectId.hasCallsign);
   }
 
-  static bool resolveAlienGuess(Player player, RoleId role) {
-    Role mainRole = player.mainRole;
+  static RoleId resolveAlienGuessPossibility(RoleId id) {
+    switch (id) {
+      case RoleId.protector:
+        return id;
+      case RoleId.witch:
+        return id;
+      case RoleId.seer:
+        return id;
+      case RoleId.knight:
+        return id;
+      case RoleId.hunter:
+        return id;
+      case RoleId.captain:
+        return id;
+      case RoleId.villager:
+        return id;
+      case RoleId.servant:
+        return id;
+      case RoleId.judge:
+        return id;
+      case RoleId.shepherd:
+        return id;
+      case RoleId.alien:
+        return id;
 
+      case RoleId.werewolf:
+      case RoleId.fatherOfWolves:
+      case RoleId.wolfpack:
+      case RoleId.blackWolf:
+      case RoleId.garrulousWolf:
+        return RoleId.werewolf;
+    }
+  }
+
+  static bool resolveAlienGuess(Player player, RoleId role) {
     return resolveAlienGuessPossibility(role) ==
-        resolveAlienGuessPossibility(mainRole.id);
+        resolveAlienGuessPossibility(player.mainRole.id);
   }
 
   static dynamic getCorrectlyGuessedRoles(List<AlienGuessItem> items) {
@@ -80,7 +112,7 @@ class Alien extends RoleSingular {
 
 class GuessAbility extends Ability {
   GuessAbility(Role owner) {
-    super.targetCount = 99;
+    super.targetCount = infinite;
     super.id = AbilityId.guess;
     super.type = AbilityType.active;
     super.useCount = AbilityUseCount.infinite;
@@ -190,49 +222,4 @@ class AlienGuessItem {
   RoleId? guess;
 
   AlienGuessItem(this.player);
-}
-
-RoleId resolveAlienGuessPossibility(RoleId id) {
-  switch (id) {
-    case RoleId.protector:
-      return id;
-    case RoleId.witch:
-      return id;
-    case RoleId.seer:
-      return id;
-    case RoleId.knight:
-      return id;
-    case RoleId.hunter:
-      return id;
-    case RoleId.captain:
-      return id;
-    case RoleId.villager:
-      return id;
-    case RoleId.servant:
-      return id;
-    case RoleId.judge:
-      return id;
-    case RoleId.shepherd:
-      return id;
-    case RoleId.alien:
-      return id;
-
-    case RoleId.werewolf:
-      return id;
-    case RoleId.fatherOfWolves:
-      return RoleId.werewolf;
-    case RoleId.wolfpack:
-      return RoleId.werewolf;
-    case RoleId.blackWolf:
-      return RoleId.werewolf;
-    case RoleId.garrulousWolf:
-      return RoleId.werewolf;
-  }
-}
-
-bool resolveAlienGuess(Player player, RoleId role) {
-  Role mainRole = player.mainRole;
-
-  return resolveAlienGuessPossibility(role) ==
-      resolveAlienGuessPossibility(mainRole.id);
 }

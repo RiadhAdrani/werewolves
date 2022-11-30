@@ -9,7 +9,7 @@ class UseAlienAbilityModel extends ChangeNotifier {
 
   UseAlienAbilityModel(List<Player> players, List<Role> remainingRoles) {
     for (var element in remainingRoles) {
-      RoleId expected = resolveAlienGuessPossibility(element.id);
+      RoleId expected = Alien.resolveAlienGuessPossibility(element.id);
 
       if (!possibleGuesses.contains(expected)) {
         possibleGuesses.add(expected);
