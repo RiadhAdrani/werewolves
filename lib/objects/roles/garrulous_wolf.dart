@@ -6,11 +6,35 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
 
 class GarrulousWolf extends RoleSingular {
+  final List<String> _previousWords = [];
+  String? _currentWord;
+
   GarrulousWolf(super.player) {
     id = RoleId.garrulousWolf;
     callingPriority = garrulousWolfPriority;
     isWolf = true;
     super.abilities = [GarrulousAbility(this)];
+  }
+
+  String get word {
+    return _currentWord ?? '';
+  }
+
+  List<String> get previousWords {
+    return _previousWords;
+  }
+
+  bool isWordValid(String word) {
+    return word.trim().isNotEmpty &&
+        ![..._previousWords, _currentWord].contains(word.trim());
+  }
+
+  void setWord(String word) {
+    if (_currentWord != null) {
+      _previousWords.add(_currentWord!);
+    }
+
+    _currentWord = word.trim();
   }
 
   @override
@@ -25,7 +49,7 @@ class GarrulousWolf extends RoleSingular {
 
   @override
   bool canUseAbilitiesDuringNight() {
-    return false;
+    return true;
   }
 
   @override
@@ -60,7 +84,7 @@ class GarrulousWolf extends RoleSingular {
 class HasWordEffect extends Effect {
   HasWordEffect(Role source) {
     this.source = source;
-    permanent = true;
+    permanent = false;
     type = EffectId.hasWord;
   }
 }
