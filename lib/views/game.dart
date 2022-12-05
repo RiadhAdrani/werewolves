@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/utils/utils.dart';
+import 'package:werewolves/utils/dialogs.dart';
 
 class GameArgumentsExtractor extends StatelessWidget {
   const GameArgumentsExtractor({Key? key}) : super(key: key);

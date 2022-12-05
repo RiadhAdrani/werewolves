@@ -5,7 +5,7 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
-import 'package:werewolves/utils/utils.dart';
+import 'package:werewolves/utils/dialogs.dart';
 
 class Captain extends RoleSingular {
   Captain(super.player) {

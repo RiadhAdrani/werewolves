@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/utils/utils.dart';
+import 'package:werewolves/utils/dialogs.dart';
 
 Widget button(String label, Function onClick,
     {bool flat = false, Color? txtColor, Color? bgColor}) {

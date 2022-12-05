@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/utils/errors.dart';
 import 'package:werewolves/utils/utils.dart';
 
 void main() {

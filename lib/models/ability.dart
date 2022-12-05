@@ -15,7 +15,7 @@ import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/objects/roles/shepherd.dart';
 import 'package:werewolves/objects/roles/witch.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
-import 'package:werewolves/utils/utils.dart';
+import 'package:werewolves/utils/errors.dart';
 
 enum AbilityId {
   protect,

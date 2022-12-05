@@ -7,7 +7,7 @@ import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/servant.dart';
-import 'package:werewolves/utils/utils.dart';
+import 'package:werewolves/utils/dialogs.dart';
 import 'package:werewolves/widgets/ability.dart';
 import 'package:werewolves/widgets/game.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
