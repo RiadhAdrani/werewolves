@@ -131,7 +131,7 @@ void main() {
     });
 
     group('RoleGroup', () {
-      var role = useRoleHelper(RoleId.wolfpack)
+      var role = useRole(RoleId.wolfpack)
           .create([Player('1'), Player('2'), Player('3')]);
 
       test('should be group role', () {

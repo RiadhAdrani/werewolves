@@ -7,7 +7,6 @@ import 'package:werewolves/models/role.dart';
 class Villager extends RoleSingular {
   Villager(super.player) {
     id = RoleId.villager;
-    isUnique = false;
   }
 
   @override

@@ -996,7 +996,7 @@ List<Role> usePlayableRolesGenerator() {
       RoleId.values.where((id) => !nonPlayable.contains(id)).toList();
 
   return playable
-      .map((id) => useRoleHelper(id).create([Player('Placeholder')]))
+      .map((id) => useRole(id).create([Player('Placeholder')]))
       .toList();
 }
 
