@@ -17,6 +17,10 @@ void main() {
         expect(role.id, RoleId.hunter);
       });
 
+      test('should be a group', () {
+        expect(role.isGroup, false);
+      });
+
       test('should have a calling priority', () {
         expect(role.callingPriority, hunterPriority);
       });

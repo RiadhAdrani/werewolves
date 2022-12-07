@@ -16,6 +16,10 @@ void main() {
         expect(role.id, RoleId.wolfpack);
       });
 
+      test('should be a group', () {
+        expect(role.isGroup, true);
+      });
+
       test('should have a calling priority', () {
         expect(role.callingPriority, wolfpackPriority);
       });

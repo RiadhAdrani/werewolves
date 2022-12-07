@@ -134,7 +134,7 @@ class Player {
   /// Check if the player has a group role.
   bool get hasGroupRole {
     for (var role in _roles) {
-      if (role.isGroupRole) return true;
+      if (role.isGroup) return true;
     }
 
     return false;
@@ -179,7 +179,7 @@ Role resolveMainRole(Player player) {
     /// any, lovers -> any;
     if (player.hasGroupRole) {
       for (var role in player._roles) {
-        if (!role.isGroupRole) return role;
+        if (!role.isGroup) return role;
       }
     }
 
@@ -197,7 +197,7 @@ Role resolveMainRole(Player player) {
 
     /// we check for any role that is not captain, or a group role.
     for (var role in player._roles) {
-      if (role.id != RoleId.captain && !role.isGroupRole) return role;
+      if (role.id != RoleId.captain && !role.isGroup) return role;
     }
   }
 

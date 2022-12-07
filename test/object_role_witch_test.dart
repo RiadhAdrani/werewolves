@@ -16,6 +16,10 @@ void main() {
         expect(role.id, RoleId.witch);
       });
 
+      test('should be a group', () {
+        expect(role.isGroup, false);
+      });
+
       test('should have a calling priority', () {
         expect(role.callingPriority, witchPriority);
       });

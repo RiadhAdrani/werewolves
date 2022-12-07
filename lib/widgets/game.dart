@@ -438,7 +438,7 @@ Widget debugDialog(BuildContext context, Game game) {
             color: Colors.black45,
           ),
           divider(),
-          if (role.isGroupRole)
+          if (role.isGroup)
             titleWithIcon(
               '${(role as RoleGroup).getCurrentPlayers().length}',
               Icons.people_outline,

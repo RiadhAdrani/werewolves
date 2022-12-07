@@ -60,7 +60,6 @@ abstract class Role<T> {
   String instanceId = useId();
   int callingPriority = -1;
   List<Ability> abilities = [];
-  bool isGroupRole = false;
 
   Role(this.player);
 
@@ -92,7 +91,7 @@ abstract class Role<T> {
 
   /// Check if the role is meant to be treated as a group.
   bool get isGroup {
-    return isGroupRole;
+    return false;
   }
 
   /// Get role description
@@ -225,8 +224,11 @@ abstract class RoleSingular extends Role<Player> {
 }
 
 abstract class RoleGroup extends Role<List<Player>> {
-  RoleGroup(super.player) {
-    isGroupRole = true;
+  RoleGroup(super.player);
+
+  @override
+  bool get isGroup {
+    return true;
   }
 
   List<Player> getCurrentPlayers() {
