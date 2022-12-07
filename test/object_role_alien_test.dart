@@ -16,6 +16,10 @@ void main() {
         expect(role.id, RoleId.alien);
       });
 
+      test('should be a wolf', () {
+        expect(role.isWolf, false);
+      });
+
       test('should be a group', () {
         expect(role.isGroup, false);
       });

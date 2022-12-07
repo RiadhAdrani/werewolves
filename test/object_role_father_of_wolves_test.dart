@@ -17,6 +17,10 @@ void main() {
         expect(role.id, RoleId.fatherOfWolves);
       });
 
+      test('should be a wolf', () {
+        expect(role.isWolf, true);
+      });
+
       test('should be a group', () {
         expect(role.isGroup, false);
       });
