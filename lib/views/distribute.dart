@@ -31,8 +31,6 @@ class _DistributePageState extends State<DistributePage> {
       picked = initial.map((item) {
         var player = Player(item.name);
 
-        player.team = item.getSupposedInitialTeam();
-
         item.setPlayer(player);
 
         return item;
@@ -56,8 +54,6 @@ class _DistributePageState extends State<DistributePage> {
         /// It is the job of the game model to prepare.
         if (temp.player is Player) {
           var playerToAssign = Player(name);
-
-          playerToAssign.team = temp.getSupposedInitialTeam();
 
           temp.setPlayer(playerToAssign);
         }

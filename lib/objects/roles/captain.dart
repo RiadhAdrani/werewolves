@@ -5,7 +5,6 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
-import 'package:werewolves/utils/dialogs.dart';
 
 class Captain extends RoleSingular {
   Captain(super.player) {
@@ -70,39 +69,6 @@ class Captain extends RoleSingular {
 
   @override
   bool beforeCallEffect(BuildContext context, Game gameModel) {
-    /// Check for servant effect.
-    /// We do not pass the captaincy to the servant
-    /// if he is not a captain mainly,
-    /// the servant should get the secondary role.
-    /// We leave the inheritance to the dead captain.
-    if (player.mainRole == this &&
-        player.hasFatalEffect == true &&
-        player.hasEffect(EffectId.isServed)) {
-      var servant = gameModel.getRole(RoleId.servant);
-
-      if (servant == null) {
-        return false;
-      }
-
-      if (servant.isObsolete()) {
-        return false;
-      }
-
-      gameModel.onServedDeath(this, () {
-        showConfirmUse(
-          context,
-          'The servant became the new captain.',
-          () {
-            if (gameModel.state == GameState.night) {
-              gameModel.skipCurrentRole(context);
-            }
-          },
-        );
-
-        return true;
-      });
-    }
-
     return false;
   }
 }

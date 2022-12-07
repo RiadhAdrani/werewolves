@@ -27,15 +27,18 @@ class Player {
 
   bool isAlive = true;
 
-  Team team = Team.village;
-
   List<Effect> effects = [];
+
   final List<Role> _roles = [];
 
   Player(this.name);
 
   List<Role> get roles {
     return _roles;
+  }
+
+  Team get team {
+    return resolveTeam(this);
   }
 
   set roles(List<Role> roles) {
@@ -49,11 +52,6 @@ class Player {
     }
 
     return false;
-  }
-
-  /// Switch the current team.
-  void changeTeam(Team newTeam) {
-    team = newTeam;
   }
 
   /// Add a new status effect.
@@ -202,4 +200,19 @@ Role resolveMainRole(Player player) {
   }
 
   return player._roles[0];
+}
+
+Team resolveTeam(Player player) {
+  // Cupid lovers first
+
+  // Solos
+
+  // Wolfpack
+
+  if (player.hasRole(RoleId.alien)) return Team.alien;
+
+  if (player.hasRole(RoleId.wolfpack)) return Team.wolves;
+
+  // surely a villager
+  return Team.village;
 }

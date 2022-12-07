@@ -6,7 +6,6 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
-import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/utils/dialogs.dart';
 import 'package:werewolves/widgets/ability.dart';
 import 'package:werewolves/widgets/game.dart';
@@ -407,63 +406,6 @@ class Game extends ChangeNotifier {
     _setNextIndex(context);
   }
 
-  /// Perform needed tasks to transform the servant into its new role.
-  /// We create a new role from the first one,
-  /// and assign the [servant.player] as its player.
-  void onServedDeath(Role deadRole, Function useSituationalPostEffect) {
-    var servant = getRoleInGame(RoleId.servant, _roles);
-
-    /// The servant does not exist.
-    if (servant == null) {
-      return;
-    }
-
-    /// The servant is dead.
-    if (servant.isObsolete()) {
-      return;
-    }
-
-    /// Create a new role for the servant
-    var newRole = createRoleForServant(deadRole, servant.player);
-
-    /// A possible new team
-    var maybeNewTeam = calculateNewTeamForServant(newRole);
-
-    if (maybeNewTeam is Team &&
-        maybeNewTeam != (servant.player as Player).team) {
-      (servant.player as Player).team = maybeNewTeam;
-    }
-
-    _roles.add(newRole);
-
-    /// Remove the [serving] effect from the servant player;
-    /// No need to remove the [served] effects
-    /// because the dead player will be sent to the graveyard.
-    (servant.player as Player).removeEffectsOfType(EffectId.isServing);
-
-    /// Add the new role to the servant player.
-    (servant.player as Player).addRole(newRole);
-
-    /// check if the new role is a wolf role.
-    /// and add it to the wolfpack
-    if (newRole.isWolf) {
-      addMemberToGroup(servant.player, RoleId.wolfpack);
-    }
-
-    /// Remove the servant role from the servant player
-    /// This should come after the player have been added to the
-    /// wolfpack (if the dead role is a wolf)
-    /// because we use the [servant.player] which will be overwritten
-    /// by [removeRoleOfType] and will be set to a dead player.
-    (servant.player as Player).removeRole(RoleId.servant);
-
-    /// Add to the game info.
-    addGameInfo(GameEvent.servant(deadRole.id, state, currentTurn));
-
-    /// Used to perform additional processing.
-    useSituationalPostEffect();
-  }
-
   // PRIVATE METHODS
   // DO NOT EXPOSE DIRECTLY
   // --------------------------------------------------------------------------
@@ -694,26 +636,7 @@ class Game extends ChangeNotifier {
 
     for (var player in playersList) {
       /// If the captain is dead.
-      if (player.hasFatalEffect && player.hasEffect(EffectId.isServed)) {
-        Role theOldRole = getRole(player.mainRole.id)!;
-
-        onServedDeath(theOldRole, () {
-          /// If the main role is captain,
-          /// we send the bastard to the graveyard.
-          /// Otherwise, we will be unable to use
-          /// the captain's abilities which
-          /// should not happen.
-          if (player.mainRole.id == RoleId.captain) {
-            _killAndMovePlayerToGraveyard(theOldRole.player);
-          }
-
-          /// We should search for pending abilities manually.
-          /// We ignore the captain.
-          _collectPendingAbilityOfPlayer(player, ignored: [RoleId.captain]);
-
-          player.removeRole(theOldRole.id);
-        });
-      }
+      if (player.hasFatalEffect && player.hasEffect(EffectId.isServed)) {}
     }
   }
 

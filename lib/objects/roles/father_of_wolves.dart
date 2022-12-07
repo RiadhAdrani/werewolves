@@ -6,7 +6,6 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/objects/roles/werewolf.dart';
-import 'package:werewolves/objects/roles/wolfpack.dart';
 
 class FatherOfWolves extends Werewolf {
   FatherOfWolves(super.player) {
@@ -106,10 +105,6 @@ class InfectAbility extends Ability {
     if (affected.isEmpty) return;
 
     var newMember = affected[0];
-
-    if (Wolfpack.shouldJoinWolfpackUponInfection(newMember)) {
-      newMember.team = Team.wolves;
-    }
 
     game.addMemberToGroup(newMember, RoleId.wolfpack);
   }

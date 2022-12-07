@@ -39,6 +39,20 @@ void main() {
     });
   });
 
+  group('Resolve player team', () {
+    test('should resolve to alien', () {
+      expect(createPlayer(roles: [RoleId.alien]).team, Team.alien);
+    });
+
+    test('should resolve to wolves', () {
+      expect(createPlayer(roles: [RoleId.wolfpack]).team, Team.wolves);
+    });
+
+    test('should resolve to villager', () {
+      expect(createPlayer().team, Team.village);
+    });
+  });
+
   group('Player', () {
     for (var item in [
       [createPlayer(), false],
@@ -73,15 +87,6 @@ void main() {
       expect(player.hasEffect(EffectId.isDevoured), false);
       expect(player.hasEffect(EffectId.isCursed), false);
     });
-
-    for (var team in [Team.alien, Team.wolves, Team.wolves]) {
-      test('should change player team', () {
-        Player player = createPlayer();
-        player.changeTeam(team);
-
-        expect(player.team, team);
-      });
-    }
 
     test('should add effect', () {
       Player player = createPlayer();
