@@ -4,8 +4,9 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
+import 'package:werewolves/objects/roles/werewolf.dart';
 
-class BlackWolf extends RoleSingular {
+class BlackWolf extends Werewolf {
   BlackWolf(super.player) {
     callingPriority = blackWolfPriority;
 
@@ -15,11 +16,6 @@ class BlackWolf extends RoleSingular {
   @override
   RoleId get id {
     return RoleId.blackWolf;
-  }
-
-  @override
-  bool get isWolf {
-    return true;
   }
 
   @override

@@ -4,8 +4,9 @@ import 'package:werewolves/models/player.dart';
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
+import 'package:werewolves/objects/roles/werewolf.dart';
 
-class GarrulousWolf extends RoleSingular {
+class GarrulousWolf extends Werewolf {
   final List<String> _previousWords = [];
   String? _currentWord;
 
@@ -17,11 +18,6 @@ class GarrulousWolf extends RoleSingular {
   @override
   RoleId get id {
     return RoleId.garrulousWolf;
-  }
-
-  @override
-  bool get isWolf {
-    return true;
   }
 
   String get word {

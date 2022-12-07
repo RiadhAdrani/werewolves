@@ -5,29 +5,18 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/effect.dart';
+import 'package:werewolves/objects/roles/werewolf.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
 
-class FatherOfWolves extends RoleSingular {
+class FatherOfWolves extends Werewolf {
   FatherOfWolves(super.player) {
     callingPriority = fatherOfWolvesPriority;
     abilities = [InfectAbility(this)];
-
-    // TODO : check for these cases when adding new roles
-    // A servant with [love effect] transformed into a werewolf should not change its team.
-
-    if (player.roles.length == 1) {
-      player.team = Team.wolves;
-    }
   }
 
   @override
   RoleId get id {
     return RoleId.fatherOfWolves;
-  }
-
-  @override
-  bool get isWolf {
-    return true;
   }
 
   @override
