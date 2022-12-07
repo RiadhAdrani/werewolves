@@ -6,7 +6,6 @@ import 'package:werewolves/models/role.dart';
 
 class Werewolf extends RoleSingular {
   Werewolf(super.player) {
-    id = RoleId.werewolf;
     isWolf = true;
 
     /// TODO : check for these cases when adding new roles
@@ -15,6 +14,11 @@ class Werewolf extends RoleSingular {
     if (player.roles.length == 1) {
       player.team = Team.wolves;
     }
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.werewolf;
   }
 
   @override
@@ -28,7 +32,7 @@ class Werewolf extends RoleSingular {
   }
 
   @override
-  bool shouldBeCalledAtNight(List<Role> roles, int turne) {
+  bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return false;
   }
 

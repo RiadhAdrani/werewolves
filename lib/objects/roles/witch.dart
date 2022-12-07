@@ -8,9 +8,13 @@ import 'package:werewolves/models/effect.dart';
 
 class Witch extends RoleSingular {
   Witch(super.player) {
-    id = RoleId.witch;
     callingPriority = witchPriority;
     abilities = [CurseAbility(this), ReviveAbility(this)];
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.witch;
   }
 
   @override

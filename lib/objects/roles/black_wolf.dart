@@ -7,12 +7,16 @@ import 'package:werewolves/models/effect.dart';
 
 class BlackWolf extends RoleSingular {
   BlackWolf(super.player) {
-    id = RoleId.blackWolf;
     callingPriority = blackWolfPriority;
 
     isWolf = true;
 
     super.abilities = [MuteAbility(this)];
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.blackWolf;
   }
 
   @override

@@ -5,9 +5,7 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 
 class Villager extends RoleSingular {
-  Villager(super.player) {
-    id = RoleId.villager;
-  }
+  Villager(super.player);
 
   @override
   bool canUseAbilitiesDuringNight() {

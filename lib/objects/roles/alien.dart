@@ -8,10 +8,14 @@ import 'package:werewolves/objects/effects/callsign_effect.dart';
 
 class Alien extends RoleSingular {
   Alien(super.player) {
-    id = RoleId.alien;
     callingPriority = alienPriority;
 
     super.abilities = [AlienCallSignAbility(this), GuessAbility(this)];
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.alien;
   }
 
   @override

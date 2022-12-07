@@ -9,7 +9,6 @@ import 'package:werewolves/utils/dialogs.dart';
 
 class Captain extends RoleSingular {
   Captain(super.player) {
-    id = RoleId.captain;
     callingPriority = captainPriority;
 
     super.abilities = [
@@ -18,6 +17,11 @@ class Captain extends RoleSingular {
       TalkerAbility(this),
       InheritAbility(this)
     ];
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.captain;
   }
 
   @override

@@ -8,9 +8,13 @@ import 'package:werewolves/models/effect.dart';
 
 class Judge extends RoleSingular {
   Judge(super.player) {
-    id = RoleId.judge;
     callingPriority = judgePriority;
     abilities = [JudgementAbility(this)];
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.judge;
   }
 
   @override

@@ -8,9 +8,13 @@ import 'package:werewolves/models/effect.dart';
 
 class Wolfpack extends RoleGroup {
   Wolfpack(super.player) {
-    id = RoleId.wolfpack;
     callingPriority = wolfpackPriority;
     abilities = [DevourAbility(this)];
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.wolfpack;
   }
 
   @override

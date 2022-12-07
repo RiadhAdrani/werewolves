@@ -9,7 +9,6 @@ import 'package:werewolves/objects/roles/wolfpack.dart';
 
 class FatherOfWolves extends RoleSingular {
   FatherOfWolves(super.player) {
-    id = RoleId.fatherOfWolves;
     isWolf = true;
     callingPriority = fatherOfWolvesPriority;
     abilities = [InfectAbility(this)];
@@ -20,6 +19,11 @@ class FatherOfWolves extends RoleSingular {
     if (player.roles.length == 1) {
       player.team = Team.wolves;
     }
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.fatherOfWolves;
   }
 
   @override

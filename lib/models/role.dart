@@ -56,7 +56,6 @@ const captainPriority = 8000;
 
 abstract class Role<T> {
   late T player;
-  late RoleId id;
 
   String instanceId = useId();
   int callingPriority = -1;
@@ -65,6 +64,10 @@ abstract class Role<T> {
   bool isGroupRole = false;
 
   Role(this.player);
+
+  RoleId get id {
+    return RoleId.villager;
+  }
 
   T getPlayer() {
     return player;

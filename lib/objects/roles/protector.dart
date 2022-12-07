@@ -8,9 +8,13 @@ import 'package:werewolves/models/effect.dart';
 
 class Protector extends RoleSingular {
   Protector(super.player) {
-    id = RoleId.protector;
     callingPriority = protectorPriority;
     abilities = [ProtectAbility(this)];
+  }
+
+  @override
+  RoleId get id {
+    return RoleId.protector;
   }
 
   @override
