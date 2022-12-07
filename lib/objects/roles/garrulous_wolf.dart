@@ -11,13 +11,17 @@ class GarrulousWolf extends RoleSingular {
 
   GarrulousWolf(super.player) {
     callingPriority = garrulousWolfPriority;
-    isWolf = true;
     super.abilities = [GarrulousAbility(this)];
   }
 
   @override
   RoleId get id {
     return RoleId.garrulousWolf;
+  }
+
+  @override
+  bool get isWolf {
+    return true;
   }
 
   String get word {

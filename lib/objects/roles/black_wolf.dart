@@ -9,14 +9,17 @@ class BlackWolf extends RoleSingular {
   BlackWolf(super.player) {
     callingPriority = blackWolfPriority;
 
-    isWolf = true;
-
     super.abilities = [MuteAbility(this)];
   }
 
   @override
   RoleId get id {
     return RoleId.blackWolf;
+  }
+
+  @override
+  bool get isWolf {
+    return true;
   }
 
   @override

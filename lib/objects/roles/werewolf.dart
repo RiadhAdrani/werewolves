@@ -5,20 +5,16 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 
 class Werewolf extends RoleSingular {
-  Werewolf(super.player) {
-    isWolf = true;
-
-    /// TODO : check for these cases when adding new roles
-    /// A servant with [love effect] transformed into a werewolf should not change its team.
-
-    if (player.roles.length == 1) {
-      player.team = Team.wolves;
-    }
-  }
+  Werewolf(super.player);
 
   @override
   RoleId get id {
     return RoleId.werewolf;
+  }
+
+  @override
+  bool get isWolf {
+    return true;
   }
 
   @override

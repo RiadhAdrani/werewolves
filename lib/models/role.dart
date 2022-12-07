@@ -60,13 +60,16 @@ abstract class Role<T> {
   String instanceId = useId();
   int callingPriority = -1;
   List<Ability> abilities = [];
-  bool isWolf = false;
   bool isGroupRole = false;
 
   Role(this.player);
 
   RoleId get id {
     return RoleId.villager;
+  }
+
+  bool get isWolf {
+    return false;
   }
 
   T getPlayer() {
