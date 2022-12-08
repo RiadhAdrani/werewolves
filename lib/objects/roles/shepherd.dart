@@ -54,11 +54,6 @@ class Shepherd extends RoleSingular {
   }
 
   @override
-  Team getSupposedInitialTeam() {
-    return Team.village;
-  }
-
-  @override
   bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }

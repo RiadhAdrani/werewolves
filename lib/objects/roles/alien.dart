@@ -49,11 +49,6 @@ class Alien extends RoleSingular {
   }
 
   @override
-  Team getSupposedInitialTeam() {
-    return Team.alien;
-  }
-
-  @override
   bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return !player.hasEffect(EffectId.hasCallsign);
   }

@@ -48,24 +48,8 @@ class Wolfpack extends RoleGroup {
   }
 
   @override
-  Team getSupposedInitialTeam() {
-    return Team.wolves;
-  }
-
-  @override
   bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
-  }
-
-  /// Check if the team of the player should be changed to wolves
-  /// when he is infected.
-  static bool shouldJoinWolfpackUponInfection(Player player) {
-    RoleId mainRole = player.mainRole.id;
-
-    // TODO : add other solos here
-    List<RoleId> nonConvertible = [RoleId.alien];
-
-    return !nonConvertible.contains(mainRole);
   }
 }
 

@@ -51,11 +51,6 @@ class FatherOfWolves extends Werewolf {
   }
 
   @override
-  Team getSupposedInitialTeam() {
-    return Team.wolves;
-  }
-
-  @override
   bool beforeCallEffect(BuildContext context, Game gameModel) {
     return false;
   }

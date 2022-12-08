@@ -75,11 +75,6 @@ class GarrulousWolf extends Werewolf {
   }
 
   @override
-  Team getSupposedInitialTeam() {
-    return Team.wolves;
-  }
-
-  @override
   bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return true;
   }

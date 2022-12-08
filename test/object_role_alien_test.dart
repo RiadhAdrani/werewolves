@@ -60,10 +60,6 @@ void main() {
         expect(role.canUseSignWithNarrator(), true);
       });
 
-      test('should return the correct initial team', () {
-        expect(role.getSupposedInitialTeam(), Team.alien);
-      });
-
       test('should return the correct alien guess', () {
         expect(
           Alien.resolveAlienGuessPossibility(RoleId.villager),

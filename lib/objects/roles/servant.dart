@@ -61,11 +61,6 @@ class Servant extends RoleSingular {
   }
 
   @override
-  Team getSupposedInitialTeam() {
-    return Team.village;
-  }
-
-  @override
   bool shouldBeCalledAtNight(List<Role> roles, int turn) {
     return player.hasEffect(EffectId.isServing) == false;
   }

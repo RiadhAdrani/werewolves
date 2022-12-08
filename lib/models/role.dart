@@ -164,12 +164,6 @@ abstract class Role<T> {
   /// Get the instructions ,advices and tips for the narrator.
   List<String> getAdvices(List<Role> roles);
 
-  /// Return the supposed initial role team.
-  /// This is used when distributing roles
-  /// and programmatically assign initial team
-  /// for players.
-  Team getSupposedInitialTeam();
-
   /// Effects that will be executed
   /// before the call of the player.
   ///
@@ -297,6 +291,7 @@ class RoleHelperObject {
   late String iconFile;
   late Role Function(List<Player>) createRole;
   late bool isUnique;
+  late bool pickable;
 
   Role create(List<Player> players) {
     Role role = createRole(players);
@@ -314,6 +309,7 @@ class RoleHelperObject {
     required this.iconFile,
     required this.createRole,
     required this.isUnique,
+    this.pickable = true,
   });
 
   String base(String icon) {
@@ -329,116 +325,134 @@ RoleHelperObject useRole(RoleId id) {
   switch (id) {
     case RoleId.protector:
       return RoleHelperObject(
-          name: 'Protector',
-          description: 'No description',
-          iconFile: 'protector',
-          createRole: (players) => Protector(players[0]),
-          isUnique: true);
+        name: 'Protector',
+        description: 'No description',
+        iconFile: 'protector',
+        createRole: (players) => Protector(players[0]),
+        isUnique: true,
+      );
     case RoleId.werewolf:
       return RoleHelperObject(
-          name: 'Werewolf',
-          description: 'No description',
-          iconFile: 'werewolf',
-          createRole: (players) => Werewolf(players[0]),
-          isUnique: false);
+        name: 'Werewolf',
+        description: 'No description',
+        iconFile: 'werewolf',
+        createRole: (players) => Werewolf(players[0]),
+        isUnique: false,
+      );
     case RoleId.fatherOfWolves:
       return RoleHelperObject(
-          name: 'Father of Wolves',
-          description: 'No description',
-          iconFile: 'father_wolf',
-          createRole: (players) => FatherOfWolves(players[0]),
-          isUnique: true);
+        name: 'Father of Wolves',
+        description: 'No description',
+        iconFile: 'father_wolf',
+        createRole: (players) => FatherOfWolves(players[0]),
+        isUnique: true,
+      );
     case RoleId.witch:
       return RoleHelperObject(
-          name: 'Witch',
-          description: 'No description',
-          iconFile: 'witch',
-          createRole: (players) => Witch(players[0]),
-          isUnique: true);
+        name: 'Witch',
+        description: 'No description',
+        iconFile: 'witch',
+        createRole: (players) => Witch(players[0]),
+        isUnique: true,
+      );
     case RoleId.seer:
       return RoleHelperObject(
-          name: 'Seer',
-          description: 'No description',
-          iconFile: 'seer',
-          createRole: (players) => Seer(players[0]),
-          isUnique: true);
+        name: 'Seer',
+        description: 'No description',
+        iconFile: 'seer',
+        createRole: (players) => Seer(players[0]),
+        isUnique: true,
+      );
     case RoleId.knight:
       return RoleHelperObject(
-          name: 'Knight',
-          description: 'No description',
-          iconFile: 'knight',
-          createRole: (players) => Knight(players[0]),
-          isUnique: true);
+        name: 'Knight',
+        description: 'No description',
+        iconFile: 'knight',
+        createRole: (players) => Knight(players[0]),
+        isUnique: true,
+      );
     case RoleId.hunter:
       return RoleHelperObject(
-          name: 'Hunter',
-          description: 'No description',
-          iconFile: 'hunter',
-          createRole: (players) => Hunter(players[0]),
-          isUnique: true);
+        name: 'Hunter',
+        description: 'No description',
+        iconFile: 'hunter',
+        createRole: (players) => Hunter(players[0]),
+        isUnique: true,
+      );
     case RoleId.captain:
       return RoleHelperObject(
-          name: 'Captain',
-          description: 'No description',
-          iconFile: 'captain',
-          createRole: (players) => Captain(players[0]),
-          isUnique: true);
+        name: 'Captain',
+        description: 'No description',
+        iconFile: 'captain',
+        createRole: (players) => Captain(players[0]),
+        isUnique: true,
+      );
     case RoleId.villager:
       return RoleHelperObject(
-          name: 'Villager',
-          description: 'No description',
-          iconFile: 'simple_villager',
-          createRole: (players) => Villager(players[0]),
-          isUnique: false);
+        name: 'Villager',
+        description: 'No description',
+        iconFile: 'simple_villager',
+        createRole: (players) => Villager(players[0]),
+        isUnique: false,
+      );
     case RoleId.wolfpack:
       return RoleHelperObject(
-          name: 'Wolfpack',
-          description: 'No description',
-          iconFile: 'werewolf',
-          createRole: (players) => Wolfpack(players),
-          isUnique: true);
+        name: 'Wolfpack',
+        description: 'No description',
+        iconFile: 'werewolf',
+        createRole: (players) => Wolfpack(players),
+        isUnique: true,
+        pickable: false,
+      );
     case RoleId.servant:
       return RoleHelperObject(
-          name: 'Servant',
-          description: 'No description',
-          iconFile: 'simple_villager',
-          createRole: (players) => Servant(players[0]),
-          isUnique: true);
+        name: 'Servant',
+        description: 'No description',
+        iconFile: 'simple_villager',
+        createRole: (players) => Servant(players[0]),
+        isUnique: true,
+        pickable: false,
+      );
     case RoleId.judge:
       return RoleHelperObject(
-          name: 'Judge',
-          description: 'No description',
-          iconFile: 'simple_villager',
-          createRole: (players) => Judge(players[0]),
-          isUnique: true);
+        name: 'Judge',
+        description: 'No description',
+        iconFile: 'simple_villager',
+        createRole: (players) => Judge(players[0]),
+        isUnique: true,
+      );
     case RoleId.blackWolf:
       return RoleHelperObject(
-          name: 'Black Wolf',
-          description: 'No description',
-          iconFile: 'werewolf',
-          createRole: (players) => BlackWolf(players[0]),
-          isUnique: true);
+        name: 'Black Wolf',
+        description: 'No description',
+        iconFile: 'werewolf',
+        createRole: (players) => BlackWolf(players[0]),
+        isUnique: true,
+      );
     case RoleId.garrulousWolf:
       return RoleHelperObject(
-          name: 'Garrulous Wolf',
-          description: 'No description',
-          iconFile: 'werewolf',
-          createRole: (players) => GarrulousWolf(players[0]),
-          isUnique: true);
+        name: 'Garrulous Wolf',
+        description: 'No description',
+        iconFile: 'werewolf',
+        createRole: (players) => GarrulousWolf(players[0]),
+        isUnique: true,
+      );
     case RoleId.shepherd:
       return RoleHelperObject(
-          name: 'Shepherd',
-          description: 'No description',
-          iconFile: 'simple_villager',
-          createRole: (players) => Shepherd(players[0]),
-          isUnique: true);
+        name: 'Shepherd',
+        description: 'No description',
+        iconFile: 'simple_villager',
+        createRole: (players) => Shepherd(players[0]),
+        isUnique: true,
+      );
     case RoleId.alien:
       return RoleHelperObject(
-          name: 'Servant',
-          description: 'No description',
-          iconFile: 'simple_villager',
-          createRole: (players) => Alien(players[0]),
-          isUnique: true);
+        name: 'Servant',
+        description: 'No description',
+        iconFile: 'simple_villager',
+        createRole: (players) => Alien(players[0]),
+        isUnique: true,
+      );
   }
 }
 

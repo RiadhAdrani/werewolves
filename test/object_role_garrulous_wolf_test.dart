@@ -49,10 +49,6 @@ void main() {
         expect(role.canUseSignWithNarrator(), false);
       });
 
-      test('should return the correct initial team', () {
-        expect(role.getSupposedInitialTeam(), Team.wolves);
-      });
-
       test('should set word', () {
         var role = GarrulousWolf(createPlayer());
 

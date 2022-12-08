@@ -54,25 +54,6 @@ void main() {
       test('should NOT be able to use sign with narrator', () {
         expect(role.canUseSignWithNarrator(), false);
       });
-
-      test('should return the correct initial team', () {
-        expect(role.getSupposedInitialTeam(), Team.wolves);
-      });
-
-      test(
-          'should compute if infected player should change its team upon infection',
-          () {
-        for (var role in RoleId.values) {
-          expect(
-            Wolfpack.shouldJoinWolfpackUponInfection(
-              createPlayer(
-                roles: [role],
-              ),
-            ),
-            [RoleId.alien].contains(role) ? false : true,
-          );
-        }
-      });
     });
 
     group('Effects', () {

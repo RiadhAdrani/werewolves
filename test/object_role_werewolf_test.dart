@@ -43,10 +43,6 @@ void main() {
       test('should NOT be able to use sign with narrator', () {
         expect(role.canUseSignWithNarrator(), false);
       });
-
-      test('should return the correct initial team', () {
-        expect(role.getSupposedInitialTeam(), Team.wolves);
-      });
     });
   });
 }

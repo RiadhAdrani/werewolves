@@ -70,10 +70,6 @@ void main() {
       test('should be able to use sign with narrator', () {
         expect(role.canUseSignWithNarrator(), true);
       });
-
-      test('should return the correct initial team', () {
-        expect(role.getSupposedInitialTeam(), Team.village);
-      });
     });
 
     group('Effects', () {

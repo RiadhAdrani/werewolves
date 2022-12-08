@@ -1,6 +1,5 @@
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 
@@ -45,11 +44,6 @@ class Werewolf extends RoleSingular {
   @override
   bool canUseAbilitiesDuringDay() {
     return false;
-  }
-
-  @override
-  Team getSupposedInitialTeam() {
-    return Team.wolves;
   }
 
   @override
