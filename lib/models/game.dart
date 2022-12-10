@@ -84,7 +84,7 @@ class GameEvent {
 class Game extends ChangeNotifier {
   final List<Role> _roles = [];
   final List<Player> _graveyard = [];
-  List<GameEvent> events = [];
+  final List<GameEvent> events = [];
   final List<Ability> _pendingAbilities = [];
 
   GameState _state = GameState.empty;
@@ -321,7 +321,7 @@ class Game extends ChangeNotifier {
   }
 
   /// Return a list of players with specific effects
-  List<Player> getPlayersWithStatusEffects(List<EffectId> effects) {
+  List<Player> getPlayersWithEffects(List<EffectId> effects) {
     final output = <Player>[];
 
     for (var player in playersList) {
@@ -388,7 +388,7 @@ class Game extends ChangeNotifier {
     for (var role in _roles) {
       /// We check the captain is obsolete.
       /// kinda useless but
-      /// There should only one instance of captain
+      /// There should only be one instance of captain
       /// within the list of roles.
       if (role.isObsolete() == false && role.id == RoleId.captain) {
         for (var ability in role.abilities) {
@@ -439,7 +439,7 @@ class Game extends ChangeNotifier {
   void _performPostNightProcessing(BuildContext context) {
     List<GameEvent> infos = useNightEffectsResolver(playersList, currentTurn);
 
-    // Todo : process informations
+    // TODO : process informations
     events.addAll(infos);
 
     _eliminateDeadPlayers();
@@ -912,11 +912,8 @@ List<GameEvent> useNightEffectsResolver(
 
 /// generate a list of playable roles.
 List<Role> usePlayableRolesGenerator() {
-  // TODO : review this list when adding roles
-  List<RoleId> nonPlayable = [RoleId.servant, RoleId.wolfpack];
-
   List<RoleId> playable =
-      RoleId.values.where((id) => !nonPlayable.contains(id)).toList();
+      RoleId.values.where((id) => useRole(id).pickable).toList();
 
   return playable
       .map((id) => useRole(id).create([Player('Placeholder')]))

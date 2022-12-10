@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/widgets/game.dart';
 
 void showExitAlert(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/widgets/base.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

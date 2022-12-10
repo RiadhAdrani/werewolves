@@ -7,7 +7,7 @@ import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
 import 'package:werewolves/utils/utils.dart';
-import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/widgets/distribute.dart';
 import 'package:werewolves/widgets/select.dart';
 

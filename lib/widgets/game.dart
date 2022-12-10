@@ -5,7 +5,7 @@ import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/dialogs.dart';
-import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/models/effect.dart';
 
 Widget gamePreView(Game game, BuildContext context) {

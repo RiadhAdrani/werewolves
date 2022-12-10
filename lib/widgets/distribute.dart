@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/widgets/base.dart';
 
 Widget confirmDistributedList(
   BuildContext context,

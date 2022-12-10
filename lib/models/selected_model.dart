@@ -1,81 +1,44 @@
 import 'dart:collection';
 import 'package:flutter/cupertino.dart';
-import 'package:werewolves/models/game.dart';
-import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/objects/roles/villager.dart';
-import 'package:werewolves/objects/roles/werewolf.dart';
 
 class SelectedModel extends ChangeNotifier {
-  final List<Role> _items = [];
-  final List<Role> _available = usePlayableRolesGenerator();
+  final List<RoleId> _items = [];
 
   SelectedModel();
 
-  UnmodifiableListView<Role> get items => UnmodifiableListView(_items);
+  List<RoleId> get items => _items;
 
-  UnmodifiableListView<Role> get available => UnmodifiableListView(_available);
+  UnmodifiableListView<RoleId> get available =>
+      UnmodifiableListView(RoleId.values.where((id) => useRole(id).pickable));
 
-  void add(Role item) {
-    _items.add(item);
+  bool isPicked(RoleId item) {
+    return _items.contains(item);
   }
 
-  void remove(Role item) {
-    _items.remove(item);
+  int getCount(RoleId item) {
+    return _items.where((id) => id == item).length;
+  }
+
+  void add(RoleId item) {
+    var role = useRole(item);
+
+    if (getCount(item) == 0 || !role.isUnique) {
+      _items.add(item);
+
+      notifyListeners();
+    }
+  }
+
+  void remove(RoleId role) {
+    _items.remove(role);
+
+    notifyListeners();
   }
 
   List<Role> generateList() {
     return createSingularRolesListFromId(
-        _items.map((role) => role.id).toList());
-  }
-
-  bool isSelected(Role item) {
-    return countNumber(item.id) > 0;
-  }
-
-  int countNumber(RoleId id) {
-    int count = 0;
-
-    for (var role in _items) {
-      if (role.id == id) count++;
-    }
-
-    return count;
-  }
-
-  void addCount(Role role) {
-    if (role.isUnique) return;
-
-    if (role.id == RoleId.villager) {
-      add(Villager(Player('dummy_villager')));
-    }
-
-    if (role.id == RoleId.werewolf) {
-      add(Werewolf(Player('dummy_wolf')));
-    }
-
-    notifyListeners();
-  }
-
-  void toggleSelected(Role item) {
-    if (isSelected(item)) {
-      if (item.isUnique) {
-        remove(item);
-      } else {
-        if (countNumber(item.id) > 0) {
-          for (var role in _items) {
-            if (role.id == item.id) {
-              /// Remove one instance;
-              _items.remove(role);
-              break;
-            }
-          }
-        }
-      }
-    } else {
-      add(item);
-    }
-
-    notifyListeners();
+      _items.map((id) => id).toList(),
+    );
   }
 }

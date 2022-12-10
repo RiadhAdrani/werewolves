@@ -6,7 +6,7 @@ import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/objects/roles/alien.dart';
 import 'package:werewolves/utils/dialogs.dart';
-import 'package:werewolves/widgets/common.dart';
+import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/utils/utils.dart';
 
 Widget targetCard(Player player, bool isSelected, Function onClick) {

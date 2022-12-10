@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
+import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/widgets/common.dart';
-import 'package:werewolves/widgets/select.dart';
 
 class SelectionPage extends StatefulWidget {
   const SelectionPage({Key? key}) : super(key: key);
@@ -14,61 +13,55 @@ class SelectionPage extends StatefulWidget {
 }
 
 class _SelectionPageState extends State<SelectionPage> {
-  void next(BuildContext context) {
-    List<Role> list = Provider.of<SelectedModel>(context, listen: false).items;
-
-    dynamic result = useGameStartable(list);
-
-    if (result == true) {
-      Navigator.pushNamed(context, '/distribute');
-    } else if (result is String) {
-      showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) {
-            return dialog(
-                title: 'Oops ! Invalid list !',
-                iconName: Icons.dangerous_outlined,
-                content: paragraph(result),
-                actions: [
-                  button(
-                    'Close',
-                    () => Navigator.pop(context),
-                    flat: true,
-                  ),
-                ]);
-          });
-    }
-  }
+  void next(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
     return Consumer<SelectedModel>(
-      builder: ((context, selectController, child) {
+      builder: ((context, controller, child) {
         return Scaffold(
           appBar: AppBar(
-            title: subTitle('Selected roles (${selectController.items.length})',
-                color: Colors.white),
+            title: subTitle(
+              'Selected roles (${controller.items.length})',
+              color: Colors.white,
+            ),
           ),
           floatingActionButton: fab(Icons.done, () => next(context)),
-          body: padding(
-            [8],
-            ListView(
-              children: selectController.available
-                  .map((role) => roleSelectCard(
-                          role,
-                          selectController.isSelected(role),
-                          selectController.countNumber(role.id), () {
-                        selectController.toggleSelected(role);
-                      }, () {
-                        if (selectController.countNumber(role.id) > 0 &&
-                            role.isUnique == false) {
-                          selectController.addCount(role);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Added role')));
-                        }
-                      }))
-                  .toList(),
+          body: decoratedBox(
+            color: Colors.black,
+            child: padding(
+              [16, 8],
+              GridView.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                children: controller.available.map((role) {
+                  int count = controller.getCount(role);
+                  bool isUnique = useRole(role).isUnique;
+
+                  void onClick() {
+                    if (count == 0) {
+                      controller.add(role);
+                    } else {
+                      controller.remove(role);
+                    }
+                  }
+
+                  void onHold() {
+                    if (isUnique) return;
+
+                    controller.add(role);
+                  }
+
+                  return roleCard(
+                    role,
+                    count: count,
+                    greyed: count == 0,
+                    onClick: onClick,
+                    onHold: onHold,
+                  );
+                }).toList(),
+              ),
             ),
           ),
         );
