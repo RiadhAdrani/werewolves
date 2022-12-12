@@ -34,15 +34,3 @@ Role createRole({
 
   return role;
 }
-
-void roleTester(
-  Role role, {
-  required RoleId id,
-  required int priority,
-  required List<AbilityId> abilities,
-  required bool shouldBeCalledAtNight,
-  required bool canUseAbilityAtNight,
-  required bool canUseAbilityAtDay,
-  required bool canUseSignWithNarrator,
-  required Team initialTeam,
-}) {}

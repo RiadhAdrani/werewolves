@@ -68,7 +68,11 @@ abstract class Role<T> {
   }
 
   bool get isWolf {
-    return false;
+    return useRole(id).isWolf;
+  }
+
+  bool get isSolo {
+    return useRole(id).isSolo;
   }
 
   T getPlayer() {
@@ -292,6 +296,8 @@ class RoleHelperObject {
   late Role Function(List<Player>) createRole;
   late bool isUnique;
   late bool pickable;
+  late bool isWolf;
+  late bool isSolo;
 
   Role create(List<Player> players) {
     Role role = createRole(players);
@@ -310,6 +316,8 @@ class RoleHelperObject {
     required this.createRole,
     required this.isUnique,
     this.pickable = true,
+    this.isWolf = false,
+    this.isSolo = false,
   });
 
   String base(String icon) {
@@ -338,6 +346,7 @@ RoleHelperObject useRole(RoleId id) {
         iconFile: 'loup-garou',
         createRole: (players) => Werewolf(players[0]),
         isUnique: false,
+        isWolf: true,
       );
     case RoleId.fatherOfWolves:
       return RoleHelperObject(
@@ -346,6 +355,7 @@ RoleHelperObject useRole(RoleId id) {
         iconFile: 'pere-infecte',
         createRole: (players) => FatherOfWolves(players[0]),
         isUnique: true,
+        isWolf: true,
       );
     case RoleId.witch:
       return RoleHelperObject(
@@ -428,6 +438,7 @@ RoleHelperObject useRole(RoleId id) {
         iconFile: 'loup-garou',
         createRole: (players) => BlackWolf(players[0]),
         isUnique: true,
+        isWolf: true,
       );
     case RoleId.garrulousWolf:
       return RoleHelperObject(
@@ -436,6 +447,7 @@ RoleHelperObject useRole(RoleId id) {
         iconFile: 'loup-garou',
         createRole: (players) => GarrulousWolf(players[0]),
         isUnique: true,
+        isWolf: true,
       );
     case RoleId.shepherd:
       return RoleHelperObject(
@@ -452,6 +464,7 @@ RoleHelperObject useRole(RoleId id) {
         iconFile: 'villageois',
         createRole: (players) => Alien(players[0]),
         isUnique: true,
+        isSolo: true,
       );
   }
 }

@@ -20,6 +20,10 @@ void main() {
         expect(role.isWolf, false);
       });
 
+      test('should be a solo', () {
+        expect(role.isSolo, true);
+      });
+
       test('should be a group', () {
         expect(role.isGroup, false);
       });

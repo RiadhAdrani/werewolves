@@ -12,11 +12,6 @@ class Werewolf extends RoleSingular {
   }
 
   @override
-  bool get isWolf {
-    return true;
-  }
-
-  @override
   bool canUseAbilitiesDuringNight() {
     return false;
   }

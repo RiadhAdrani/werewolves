@@ -33,3 +33,52 @@ bool checkPlayerName(String name, List<Role> list) {
 String appendPluralS(int number) {
   return number > 1 ? 's' : '';
 }
+
+class Validation {
+  String? msg;
+  late bool valid;
+
+  Validation(this.valid, {this.msg});
+}
+
+Validation isSelectionValid(List<RoleId> roles) {
+  // ? minimum allowed is 7
+  if (roles.length < 7) {
+    return Validation(
+      false,
+      msg: 'Player count is too low',
+    );
+  }
+
+  // ? the number of wolves should not exceed the number of villagers
+  var villagersCount =
+      roles.where((id) => !useRole(id).isSolo && !useRole(id).isWolf).length;
+  var wolvesCount =
+      roles.where((id) => !useRole(id).isSolo && useRole(id).isWolf).length;
+
+  if (wolvesCount >= villagersCount) {
+    return Validation(
+      false,
+      msg: 'Wolves count is higher than the villagers count',
+    );
+  }
+
+  // ? solos count should not be higher or equal to the number of villagers or wolves.
+  var solosCount = roles.where((id) => useRole(id).isSolo).length;
+
+  if (solosCount >= villagersCount) {
+    return Validation(
+      false,
+      msg: 'Solos count is higher than the villagers count',
+    );
+  }
+
+  if (solosCount >= wolvesCount) {
+    return Validation(
+      false,
+      msg: 'Solos count is higher than the wolves count',
+    );
+  }
+
+  return Validation(true);
+}
