@@ -37,6 +37,19 @@ void main() {
         ],
         [
           [
+            RoleId.villager,
+            RoleId.villager,
+            RoleId.villager,
+            RoleId.villager,
+            RoleId.villager,
+            RoleId.villager,
+            RoleId.villager,
+          ],
+          false,
+          'At least one wolf should be present.',
+        ],
+        [
+          [
             RoleId.werewolf,
             RoleId.werewolf,
             RoleId.werewolf,

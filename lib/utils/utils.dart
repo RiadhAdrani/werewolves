@@ -56,6 +56,14 @@ Validation isSelectionValid(List<RoleId> roles) {
   var wolvesCount =
       roles.where((id) => !useRole(id).isSolo && useRole(id).isWolf).length;
 
+  // ? there should be at least one wolf
+  if (wolvesCount == 0) {
+    return Validation(
+      false,
+      msg: 'At least one wolf should be present.',
+    );
+  }
+
   if (wolvesCount >= villagersCount) {
     return Validation(
       false,
