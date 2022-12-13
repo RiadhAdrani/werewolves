@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
-Color danger = const Color(0xffa63446),
-    info = const Color(0xff3066be),
-    warning = const Color(0xfff2af29),
-    accent = const Color(0xff5b6057),
-    primary = const Color(0xFF080808);
+abstract class BaseColors {
+  static Color red = const Color(0xff67100c);
+  static Color blond = const Color(0xffffefbc);
+  static Color darkJungle = const Color(0xff13182d);
+  static Color beige = const Color(0xffcdae83);
+  static Color darkBlue = const Color(0xff202433);
+}
+
+abstract class Fonts {
+  static const String almendra = 'Almendra';
+  static const String tajawal = 'Tajawal';
+  static const String roboto = 'Roboto';
+}

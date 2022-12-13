@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/theme/theme.dart';
 import 'package:werewolves/utils/dialogs.dart';
 
 Widget button(String label, Function onClick,
@@ -19,10 +20,12 @@ Widget button(String label, Function onClick,
   }
 }
 
-FloatingActionButton fab(IconData icon, Function onClick) {
+FloatingActionButton fab(IconData icon, Function onClick,
+    {Color? color, Color? textColor}) {
   return FloatingActionButton(
     onPressed: () => onClick(),
-    child: Icon(icon),
+    backgroundColor: color,
+    child: Icon(icon, color: textColor),
   );
 }
 
@@ -46,6 +49,7 @@ Text text(
   bool overflow = true,
   bool justify = false,
   bool center = false,
+  String fontFamily = Fonts.roboto,
 }) {
   return Text(
     data,
@@ -55,10 +59,12 @@ Text text(
             ? TextAlign.justify
             : TextAlign.start,
     style: TextStyle(
-        color: color,
-        fontWeight: weight,
-        fontSize: size,
-        fontStyle: italic ? FontStyle.italic : FontStyle.normal),
+      color: color,
+      fontWeight: weight,
+      fontSize: size,
+      fontStyle: italic ? FontStyle.italic : FontStyle.normal,
+      fontFamily: fontFamily,
+    ),
     overflow: overflow ? TextOverflow.visible : TextOverflow.fade,
   );
 }
@@ -68,25 +74,53 @@ Text headingTitle(
   Color? color = Colors.black,
   FontWeight? weight = FontWeight.bold,
   bool italic = false,
+  String fontFamily = Fonts.roboto,
 }) {
-  return text(data,
-      color: color, weight: weight, size: 24, italic: italic, overflow: false);
+  return text(
+    data,
+    color: color,
+    weight: weight,
+    size: 24,
+    italic: italic,
+    overflow: false,
+    fontFamily: fontFamily,
+  );
 }
 
-Text title(String data,
-    {Color? color = Colors.black,
-    FontWeight? weight = FontWeight.bold,
-    bool italic = false}) {
-  return text(data,
-      color: color, weight: weight, size: 20, italic: italic, overflow: false);
+Text title(
+  String data, {
+  Color? color = Colors.black,
+  FontWeight? weight = FontWeight.bold,
+  bool italic = false,
+  String fontFamily = Fonts.roboto,
+}) {
+  return text(
+    data,
+    color: color,
+    weight: weight,
+    size: 20,
+    italic: italic,
+    overflow: false,
+    fontFamily: fontFamily,
+  );
 }
 
-Text subTitle(String data,
-    {Color? color = Colors.black,
-    FontWeight? weight = FontWeight.w600,
-    bool italic = false}) {
-  return text(data,
-      color: color, weight: weight, size: 16, italic: italic, overflow: false);
+Text subTitle(
+  String data, {
+  Color? color = Colors.black,
+  FontWeight? weight = FontWeight.w600,
+  bool italic = false,
+  String fontFamily = Fonts.roboto,
+}) {
+  return text(
+    data,
+    color: color,
+    weight: weight,
+    size: 16,
+    italic: italic,
+    overflow: false,
+    fontFamily: fontFamily,
+  );
 }
 
 Text paragraph(
@@ -95,6 +129,7 @@ Text paragraph(
   FontWeight? weight = FontWeight.normal,
   bool italic = false,
   bool center = false,
+  String fontFamily = Fonts.roboto,
 }) {
   return text(
     data,
@@ -105,6 +140,7 @@ Text paragraph(
     overflow: true,
     center: center,
     justify: true,
+    fontFamily: fontFamily,
   );
 }
 
@@ -378,7 +414,9 @@ Widget decoratedBox({
     decoration: BoxDecoration(
         color: color,
         borderRadius: useRadius(radius),
-        image: img != null ? DecorationImage(image: AssetImage(img)) : null),
+        image: img != null
+            ? DecorationImage(image: AssetImage(img), fit: BoxFit.contain)
+            : null),
     child: widget,
   );
 }

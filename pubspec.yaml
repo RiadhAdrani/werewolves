@@ -36,6 +36,8 @@ dependencies:
   uuid: ^3.0.6
   provider: ^6.0.3
   localstorage: ^4.0.0+1
+  fluttertoast: ^8.1.1
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -60,15 +62,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/captain.png
-    - assets/father_wolf.png
-    - assets/hunter.png
-    - assets/knight.png
-    - assets/protector.png
-    - assets/seer.png
-    - assets/simple_villager.png
-    - assets/werewolf.png
-    - assets/witch.png
     - assets/ancient.png
     - assets/ange.png
     - assets/chasseur.png
@@ -95,6 +88,8 @@ flutter:
     - assets/voleur.png
     - assets/voyante.png
 
+    - assets/effects/cloth.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -106,7 +101,33 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: Almendra
+      fonts:
+        - asset: assets/fonts/Almendra_Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Almendra_BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: assets/fonts/Almendra_Italic.ttf
+          style: italic
+        - asset: assets/fonts/Almendra_Regular.ttf
+    - family: Tajawal
+      fonts:
+        - asset: assets/fonts/Tajawal_Black.ttf
+          weight: 900
+        - asset: assets/fonts/Tajawal_ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Tajawal_Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Tajawal_Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Tajawal_Regular.ttf
+        - asset: assets/fonts/Tajawal_Light.ttf
+          weight: 300
+        - asset: assets/fonts/Tajawal_ExtraLight.ttf
+          weight: 200
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

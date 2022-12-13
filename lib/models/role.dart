@@ -459,7 +459,7 @@ RoleHelperObject useRole(RoleId id) {
       );
     case RoleId.alien:
       return RoleHelperObject(
-        name: 'Servant',
+        name: 'Alien',
         description: 'No description',
         iconFile: 'villageois',
         createRole: (players) => Alien(players[0]),

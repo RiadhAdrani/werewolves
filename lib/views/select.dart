@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selected_model.dart';
+import 'package:werewolves/theme/theme.dart';
+import 'package:werewolves/utils/toast.dart';
+import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/widgets/common.dart';
 
@@ -13,7 +16,15 @@ class SelectionPage extends StatefulWidget {
 }
 
 class _SelectionPageState extends State<SelectionPage> {
-  void next(BuildContext context) {}
+  void next(List<RoleId> roles) {
+    var res = isSelectionValid(roles);
+
+    if (!res.valid) {
+      showToast(res.msg!);
+    } else {
+      Navigator.pushNamed(context, '/distribute');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +32,20 @@ class _SelectionPageState extends State<SelectionPage> {
       builder: ((context, controller, child) {
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: BaseColors.darkBlue,
             title: subTitle(
               'Selected roles (${controller.items.length})',
               color: Colors.white,
             ),
           ),
-          floatingActionButton: fab(Icons.done, () => next(context)),
+          floatingActionButton: fab(
+            Icons.done,
+            () => next(controller.items),
+            color: BaseColors.blond,
+            textColor: BaseColors.darkBlue,
+          ),
           body: decoratedBox(
-            color: Colors.black,
+            color: BaseColors.darkJungle,
             child: padding(
               [16, 8],
               GridView.count(

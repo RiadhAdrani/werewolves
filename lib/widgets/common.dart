@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/theme/theme.dart';
 import 'package:werewolves/widgets/base.dart';
 
 Widget roleCard(
@@ -28,18 +29,19 @@ Widget roleCard(
             child: row(
               mainAlignment: MainAxisAlignment.end,
               children: [
-                decoratedBox(
-                  color: Colors.black.withOpacity(0.75),
-                  radius: [0, 6, 0, 6],
-                  child: padding(
-                    [2, 6],
-                    text(
-                      count.toString(),
-                      color: Colors.white,
-                      size: 10,
+                if (count > 1)
+                  decoratedBox(
+                    color: BaseColors.darkJungle.withOpacity(0.75),
+                    radius: [0, 6, 0, 6],
+                    child: padding(
+                      [2, 6],
+                      text(
+                        count.toString(),
+                        color: Colors.white,
+                        size: 10,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -48,14 +50,16 @@ Widget roleCard(
             width: double.infinity,
             child: decoratedBox(
                 radius: [0, 6],
-                color: Colors.black.withOpacity(0.75),
+                color: BaseColors.darkJungle.withOpacity(0.8),
                 child: padding(
                   [8, 0],
                   text(
                     name,
                     center: true,
                     color: Colors.white,
-                    size: 10,
+                    size: 12,
+                    weight: FontWeight.w500,
+                    fontFamily: Fonts.almendra,
                   ),
                 )),
           )

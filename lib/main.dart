@@ -11,11 +11,17 @@ import 'package:werewolves/views/select.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ],
+  );
 
   runApp(
     ChangeNotifierProvider(
-        create: (context) => SelectedModel(), child: const MyApp()),
+      create: (context) => SelectedModel(),
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -32,7 +38,9 @@ class MyApp extends StatelessWidget {
         '/select': (context) => const SelectionPage(),
         '/distribute': (context) => const DistributePage(),
         '/game': (context) => ChangeNotifierProvider(
-            create: (context) => Game(), child: const GameArgumentsExtractor())
+              create: (context) => Game(),
+              child: const GameArgumentsExtractor(),
+            )
       },
     );
   }
