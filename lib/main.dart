@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
-import 'package:werewolves/models/selected_model.dart';
+import 'package:werewolves/models/selection.dart';
 import 'package:werewolves/views/distribute.dart';
 import 'package:werewolves/views/game.dart';
 import 'package:werewolves/views/home.dart';
@@ -19,7 +19,7 @@ void main() {
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => SelectedModel(),
+      create: (context) => SelectionModel(),
       child: const MyApp(),
     ),
   );

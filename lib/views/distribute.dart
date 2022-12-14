@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/selected_model.dart';
+import 'package:werewolves/models/selection.dart';
 import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/widgets/distribute.dart';
@@ -94,8 +94,8 @@ class _DistributePageState extends State<DistributePage> {
     if (!initialized) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         setState(() {
-          initial =
-              Provider.of<SelectedModel>(context, listen: false).generateList();
+          initial = Provider.of<SelectionModel>(context, listen: false)
+              .generateList();
           initialized = true;
         });
       });

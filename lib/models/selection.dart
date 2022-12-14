@@ -2,10 +2,10 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:werewolves/models/role.dart';
 
-class SelectedModel extends ChangeNotifier {
+class SelectionModel extends ChangeNotifier {
   final List<RoleId> _items = [];
 
-  SelectedModel();
+  SelectionModel();
 
   List<RoleId> get items => _items;
 

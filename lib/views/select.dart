@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/models/selected_model.dart';
+import 'package:werewolves/models/selection.dart';
 import 'package:werewolves/theme/theme.dart';
 import 'package:werewolves/utils/toast.dart';
 import 'package:werewolves/utils/utils.dart';
@@ -28,7 +28,7 @@ class _SelectionPageState extends State<SelectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SelectedModel>(
+    return Consumer<SelectionModel>(
       builder: ((context, controller, child) {
         return Scaffold(
           appBar: AppBar(
