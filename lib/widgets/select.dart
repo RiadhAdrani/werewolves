@@ -61,7 +61,6 @@ Widget setPlayerDialog(
           placeholder: 'Enter player name',
           capitalization: TextCapitalization.words,
         ),
-        // TODO : refactor into a widget
         SingleChildScrollView(
           child: column(
             crossAlignment: CrossAxisAlignment.start,

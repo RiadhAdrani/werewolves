@@ -1,15 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:werewolves/models/game.dart';
-import 'package:werewolves/models/player.dart';
+import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selection.dart';
-import 'package:werewolves/utils/utils.dart';
+import 'package:werewolves/theme/theme.dart';
+import 'package:werewolves/utils/dialogs.dart';
+import 'package:werewolves/utils/toast.dart';
 import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/widgets/distribute.dart';
-import 'package:werewolves/widgets/select.dart';
 
 class DistributePage extends StatefulWidget {
   const DistributePage({Key? key}) : super(key: key);
@@ -19,131 +17,131 @@ class DistributePage extends StatefulWidget {
 }
 
 class _DistributePageState extends State<DistributePage> {
-  bool initialized = false;
-
-  List<Role> initial = [];
-  List<Role> picked = [];
-
-  Role? pickedRole;
-
-  void fastCommit() {
-    setState(() {
-      picked = initial.map((item) {
-        var player = Player(item.name);
-
-        item.setPlayer(player);
-
-        return item;
-      }).toList();
-
-      initial = [];
-    });
-  }
-
-  void pick(BuildContext context) {
-    if (initial.isEmpty) return;
-
-    int index = Random().nextInt(initial.length);
-
-    Role temp = initial[index];
-
-    void commit(String name) {
-      setState(() {
-        /// We check if the typed parameter T is Player
-        /// We should not assign players to Team roles
-        /// It is the job of the game model to prepare.
-        if (temp.player is Player) {
-          var playerToAssign = Player(name);
-
-          temp.setPlayer(playerToAssign);
-        }
-
-        pickedRole = temp;
-        picked = [...picked, pickedRole!];
-        initial = initial
-            .where((element) => element.instanceId != pickedRole!.instanceId)
-            .toList();
-      });
-    }
-
-    final TextEditingController controller = TextEditingController();
-
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) => setPlayerDialog(
-              context,
-              temp,
-              controller,
-              () {
-                String name = controller.text.trim();
-
-                if (!checkPlayerName(name, picked)) {
-                  return;
-                }
-
-                commit(name);
-
-                Navigator.pop(context);
-              },
-            ));
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (!initialized) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        setState(() {
-          initial = Provider.of<SelectionModel>(context, listen: false)
-              .generateList();
-          initialized = true;
-        });
-      });
-    }
+    return ChangeNotifierProvider(
+      create: (context) {
+        List<RoleId> roles =
+            Provider.of<SelectionModel>(context, listen: false).items;
 
-    void reviewAndConfirmList() {
-      showDialog(
-          context: context,
-          builder: (BuildContext builder) {
-            return confirmDistributedList(
-              context,
-              picked,
-              () {
-                Navigator.pushNamed(context, '/game',
-                    arguments: GameArguments(picked));
-              },
+        return DistributionModel(roles);
+      },
+      builder: (context, child) {
+        return Consumer<DistributionModel>(
+          builder: (context, model, child) {
+            void pick() {
+              int? index = model.pick();
+
+              if (index == null) {
+                showToast('All roles are picked !');
+                return;
+              }
+
+              TextEditingController controller = TextEditingController();
+
+              RoleHelperObject role = useRole(model.roles[index]);
+
+              void assign() {
+                bool assigned = model.assign(index, controller.text);
+
+                if (assigned) {
+                  dismiss(context)();
+                } else {
+                  showToast(
+                      'Unable to assign role to player ! Name is invalid or already exists !');
+                }
+              }
+
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return dialog(
+                      title: 'Pick a name',
+                      content: column(
+                        children: [
+                          row(
+                            crossAlignment: CrossAxisAlignment.center,
+                            children: [
+                              image(role.icon),
+                              padding([0, 0, 0, 12], subTitle(role.name)),
+                            ],
+                          ),
+                          input(controller, placeholder: 'Player name', max: 30)
+                        ],
+                      ),
+                      actions: [
+                        button('Done', assign, flat: true),
+                        button('Cancel', dismiss(context), flat: true),
+                      ]);
+                },
+              );
+            }
+
+            void confirm() {
+              if (!model.done) return;
+
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return confirmDistributedList(context, model.distributed, () {
+                    showToast('O K');
+                  });
+                },
+              );
+            }
+
+            return scaffold(
+              appBar: appBar(
+                'Distribute',
+                showReturnButton: true,
+              ),
+              fab: !model.done
+                  ? null
+                  : fab(
+                      model.done ? Icons.done : Icons.dangerous_outlined,
+                      textColor: Colors.black,
+                      confirm,
+                    ),
+              body: inkWell(
+                onClick: pick,
+                onHold: model.autofill,
+                child: column(
+                  mainAlignment: MainAxisAlignment.center,
+                  crossAlignment: CrossAxisAlignment.stretch,
+                  mainSize: MainAxisSize.max,
+                  children: [
+                    column(
+                      mainAlignment: MainAxisAlignment.center,
+                      crossAlignment: CrossAxisAlignment.center,
+                      children: [
+                        padding(
+                          [8],
+                          subTitle(
+                            'Tap to pick',
+                            weight: FontWeight.normal,
+                          ),
+                        ),
+                        padding(
+                          [8],
+                          subTitle(
+                            '${model.picked}/${model.size}',
+                            weight: FontWeight.normal,
+                          ),
+                        ),
+                        button(
+                          'Reset',
+                          model.reset,
+                          bgColor: BaseColors.darkBlue,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             );
-          });
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Distribute Roles'),
-      ),
-      floatingActionButton:
-          fab(initial.isEmpty ? Icons.done : Icons.dangerous_outlined, () {
-        if (initial.isNotEmpty) return;
-        reviewAndConfirmList();
-      }),
-      body: inkWell(
-        onClick: () => pick(context),
-        onHold: fastCommit,
-        child: column(
-          mainAlignment: MainAxisAlignment.center,
-          crossAlignment: CrossAxisAlignment.stretch,
-          mainSize: MainAxisSize.max,
-          children: [
-            column(
-              mainAlignment: MainAxisAlignment.center,
-              crossAlignment: CrossAxisAlignment.center,
-              children: [
-                headingTitle('Click to pick'),
-                subTitle('${initial.length} left', weight: FontWeight.normal),
-              ],
-            ),
-          ],
-        ),
-      ),
+          },
+        );
+      },
     );
   }
 }

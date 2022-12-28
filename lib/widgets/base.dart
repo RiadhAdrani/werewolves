@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:werewolves/theme/theme.dart';
 import 'package:werewolves/utils/dialogs.dart';
 
-Widget button(String label, Function onClick,
-    {bool flat = false, Color? txtColor, Color? bgColor}) {
-  Widget content = text(label, color: txtColor);
+Widget button(
+  String label,
+  Function onClick, {
+  bool flat = false,
+  Color? txtColor,
+  Color? bgColor,
+  double size = 14,
+}) {
+  Widget content = text(label, color: txtColor, size: size);
 
   if (flat) {
     return TextButton(
@@ -20,29 +26,36 @@ Widget button(String label, Function onClick,
   }
 }
 
-FloatingActionButton fab(IconData icon, Function onClick,
-    {Color? color, Color? textColor}) {
+FloatingActionButton fab(
+  IconData icon,
+  Function onClick, {
+  Color? color,
+  Color? textColor,
+}) {
   return FloatingActionButton(
     onPressed: () => onClick(),
-    backgroundColor: color,
+    backgroundColor: color ?? BaseColors.beige,
     child: Icon(icon, color: textColor),
   );
 }
 
-Widget card(
-    {bool isSelected = false,
-    Widget child = const Text('card'),
-    Color bgColor = Colors.white,
-    Color? selectedBgColor}) {
+Widget card({
+  bool isSelected = false,
+  Widget child = const Text('card'),
+  Color? bgColor,
+  Color? selectedBgColor,
+}) {
   return Card(
-    color: isSelected ? (selectedBgColor ?? Colors.grey[300]) : Colors.white,
+    color: isSelected
+        ? (selectedBgColor ?? BaseColors.darkJungle)
+        : BaseColors.darkBlue,
     child: child,
   );
 }
 
 Text text(
   String data, {
-  Color? color = Colors.black,
+  Color? color,
   FontWeight? weight = FontWeight.normal,
   double? size = 14,
   bool italic = false,
@@ -59,7 +72,7 @@ Text text(
             ? TextAlign.justify
             : TextAlign.start,
     style: TextStyle(
-      color: color,
+      color: color ?? BaseColors.text,
       fontWeight: weight,
       fontSize: size,
       fontStyle: italic ? FontStyle.italic : FontStyle.normal,
@@ -71,7 +84,7 @@ Text text(
 
 Text headingTitle(
   String data, {
-  Color? color = Colors.black,
+  Color? color,
   FontWeight? weight = FontWeight.bold,
   bool italic = false,
   String fontFamily = Fonts.roboto,
@@ -89,7 +102,7 @@ Text headingTitle(
 
 Text title(
   String data, {
-  Color? color = Colors.black,
+  Color? color,
   FontWeight? weight = FontWeight.bold,
   bool italic = false,
   String fontFamily = Fonts.roboto,
@@ -107,7 +120,7 @@ Text title(
 
 Text subTitle(
   String data, {
-  Color? color = Colors.black,
+  Color? color,
   FontWeight? weight = FontWeight.w600,
   bool italic = false,
   String fontFamily = Fonts.roboto,
@@ -125,7 +138,7 @@ Text subTitle(
 
 Text paragraph(
   String data, {
-  Color? color = Colors.black45,
+  Color? color,
   FontWeight? weight = FontWeight.normal,
   bool italic = false,
   bool center = false,
@@ -166,15 +179,26 @@ Widget padding(List<double> padding, Widget child) {
   return Padding(padding: useEdge(padding), child: child);
 }
 
-Widget input(TextEditingController controller,
-    {String placeholder = '',
-    int? max,
-    TextInputType type = TextInputType.text,
-    TextCapitalization capitalization = TextCapitalization.none}) {
+Widget input(
+  TextEditingController controller, {
+  String placeholder = '',
+  int? max,
+  double size = 14,
+  TextInputType type = TextInputType.text,
+  TextCapitalization capitalization = TextCapitalization.none,
+}) {
   return TextField(
+    style: TextStyle(
+      color: BaseColors.text,
+      decorationColor: BaseColors.text,
+      fontSize: size,
+    ),
     controller: controller,
     maxLength: max,
-    decoration: InputDecoration(hintText: placeholder),
+    decoration: InputDecoration(
+      hintText: placeholder,
+      hintStyle: const TextStyle(color: Colors.white38),
+    ),
     keyboardType: type,
     textCapitalization: capitalization,
   );
@@ -188,7 +212,7 @@ Widget icon(IconData icon, {Color? color, double? size}) {
   return Icon(
     icon,
     size: size,
-    color: color,
+    color: color ?? Colors.white,
   );
 }
 
@@ -257,11 +281,32 @@ Widget dialog({
       return dismissible ? true : false;
     },
     child: AlertDialog(
-      title: row(children: [
-        if (iconName != null) padding([0, 8, 0, 0], icon(iconName)),
-        if (title != null) subTitle(title)
-      ]),
-      content: content,
+      contentPadding: useEdge([0]),
+      backgroundColor: BaseColors.darkJungle,
+      content: column(
+        crossAlignment: CrossAxisAlignment.stretch,
+        children: [
+          decoratedBox(
+            img: 'assets/effects/cloth.png',
+            opacity: 0.75,
+            color: BaseColors.red,
+            child: padding(
+              [12, 16],
+              row(
+                children: [
+                  if (iconName != null)
+                    padding(
+                      [0, 8, 0, 0],
+                      icon(iconName),
+                    ),
+                  if (title != null) subTitle(title)
+                ],
+              ),
+            ),
+          ),
+          if (content != null) padding([16], content),
+        ],
+      ),
       actions: [
         ...actions,
         if (context != null)
@@ -284,23 +329,50 @@ class AppBarButton {
   AppBarButton(this.label, this.onClick);
 }
 
-AppBar appBar(String title,
-    {List<AppBarButton> actions = const [],
-    bool showReturnButton = false,
-    Color? bgColor,
-    Color? txtColor}) {
+AppBar appBar(
+  String title, {
+  List<AppBarButton> actions = const [],
+  bool showReturnButton = false,
+  Color? bgColor,
+  Color? txtColor,
+}) {
   return AppBar(
     automaticallyImplyLeading: showReturnButton,
-    backgroundColor: bgColor,
+    backgroundColor: bgColor ?? BaseColors.darkBlue,
     title: subTitle(title, color: txtColor),
+    flexibleSpace: Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/effects/cloth.png'),
+          fit: BoxFit.fill,
+          opacity: 0.9,
+        ),
+      ),
+    ),
     actions: actions
-        .map((btn) => button(
-              btn.label,
-              btn.onClick,
-              flat: true,
-              txtColor: txtColor,
-            ))
+        .map(
+          (btn) => button(
+            btn.label,
+            btn.onClick,
+            flat: true,
+            txtColor: txtColor,
+          ),
+        )
         .toList(),
+  );
+}
+
+Scaffold scaffold({
+  AppBar? appBar,
+  Color? bgColor,
+  Widget? fab,
+  required Widget body,
+}) {
+  return Scaffold(
+    backgroundColor: bgColor ?? BaseColors.darkJungle,
+    appBar: appBar,
+    body: body,
+    floatingActionButton: fab,
   );
 }
 
@@ -399,6 +471,7 @@ Widget decoratedBox({
   Color? color,
   BlendMode? blendMode,
   Color? blendColor,
+  double opacity = 1,
 }) {
   var widget = blendColor != null && blendMode != null
       ? Container(
@@ -415,7 +488,11 @@ Widget decoratedBox({
         color: color,
         borderRadius: useRadius(radius),
         image: img != null
-            ? DecorationImage(image: AssetImage(img), fit: BoxFit.contain)
+            ? DecorationImage(
+                image: AssetImage(img),
+                fit: BoxFit.cover,
+                opacity: opacity,
+              )
             : null),
     child: widget,
   );

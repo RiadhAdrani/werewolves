@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/base.dart';
 
 Widget confirmDistributedList(
   BuildContext context,
-  List<Role> list,
+  List<DistributedRole> list,
   Function onConfirm,
 ) {
   return dialog(
@@ -16,16 +18,33 @@ Widget confirmDistributedList(
       child: ListView(
         children: list.map((role) {
           return card(
-              child: padding(
-                  [8],
-                  column(children: [
-                    text(
-                      role.player.name,
-                      weight: FontWeight.bold,
-                      italic: true,
+            child: padding(
+              [8],
+              row(
+                children: [
+                  image(useRole(role.id).icon),
+                  padding(
+                    [8],
+                    column(
+                      children: [
+                        text(
+                          ellipsify(role.player, 20),
+                          overflow: false,
+                          weight: FontWeight.bold,
+                          italic: true,
+                        ),
+                        text(
+                          useRole(role.id).name,
+                          size: 10,
+                          italic: true,
+                        ),
+                      ],
                     ),
-                    paragraph(role.name),
-                  ])));
+                  ),
+                ],
+              ),
+            ),
+          );
         }).toList(),
       ),
     ),

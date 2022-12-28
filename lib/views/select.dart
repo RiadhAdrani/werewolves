@@ -30,15 +30,12 @@ class _SelectionPageState extends State<SelectionPage> {
   Widget build(BuildContext context) {
     return Consumer<SelectionModel>(
       builder: ((context, controller, child) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: BaseColors.darkBlue,
-            title: subTitle(
-              'Selected roles (${controller.items.length})',
-              color: Colors.white,
-            ),
+        return scaffold(
+          appBar: appBar(
+            'Selected roles (${controller.items.length})',
+            showReturnButton: true,
           ),
-          floatingActionButton: fab(
+          fab: fab(
             Icons.done,
             () => next(controller.items),
             color: BaseColors.blond,

@@ -8,6 +8,10 @@ String useId() {
   return uuid.v4();
 }
 
+String ellipsify(String str, int max) {
+  return str.length > max ? "${str.substring(0, max)}..." : str;
+}
+
 bool checkPlayerName(String name, List<Role> list) {
   if (name.trim().isEmpty) return false;
 

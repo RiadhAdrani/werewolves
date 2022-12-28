@@ -6,6 +6,7 @@ abstract class BaseColors {
   static Color darkJungle = const Color(0xff13182d);
   static Color beige = const Color(0xffcdae83);
   static Color darkBlue = const Color(0xff202433);
+  static Color text = Colors.white;
 }
 
 abstract class Fonts {
