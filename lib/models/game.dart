@@ -522,7 +522,7 @@ class Game extends ChangeNotifier {
 
   /// Create appropriate `RoleGroups` and override the current list of roles.
   void _initRoles(List<Role> list) {
-    _roles.addAll(prepareGameRolesFromPickedList(list));
+    _roles.addAll(list);
   }
 
   /// Internal function exposed by `init()`.

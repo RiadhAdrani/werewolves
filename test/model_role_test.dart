@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/villager.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
+import 'package:werewolves/utils/utils.dart';
 
 import 'utils.dart';
 
@@ -238,8 +240,8 @@ void main() {
         RoleId.alien,
       ];
 
-      var compiled =
-          prepareGameRolesFromPickedList(createSingularRolesListFromId(roles));
+      var compiled = transformRolesFromPickedList(
+          roles.map((id) => DistributedRole(id, useId())).toList());
 
       // Should add singular roles
       for (var role in compiled) {
@@ -259,8 +261,8 @@ void main() {
         RoleId.alien,
       ];
 
-      void callback() =>
-          prepareGameRolesFromPickedList(createSingularRolesListFromId(roles));
+      void callback() => transformRolesFromPickedList(
+          roles.map((id) => DistributedRole(id, useId())).toList());
 
       expect(callback, throwsA('Game cannot start without a wolfpack !'));
     });
@@ -277,8 +279,8 @@ void main() {
         RoleId.fatherOfWolves
       ];
 
-      var compiled =
-          prepareGameRolesFromPickedList(createSingularRolesListFromId(roles));
+      var compiled = transformRolesFromPickedList(
+          roles.map((id) => DistributedRole(id, useId())).toList());
 
       var wolfpack = compiled
           .firstWhere((element) => element.id == RoleId.wolfpack) as RoleGroup;

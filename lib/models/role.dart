@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:werewolves/models/ability.dart';
+import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/objects/roles/alien.dart';
@@ -488,28 +489,30 @@ Role createRoleFromId(
   return useRole(id).create([player]);
 }
 
-List<Role> prepareGameRolesFromPickedList(List<Role> input) {
-  // TODO : add other group roles
-  var wolfpack = <Player>[];
+List<Role> transformRolesFromPickedList(List<DistributedRole> input) {
+  var wolfpackMembers = <Player>[];
 
   // output
   var output = <Role>[];
 
-  for (var role in input) {
-    if (!role.isGroup) {
-      if (role.isWolf) {
-        wolfpack.add(role.player);
-        continue;
-      }
+  for (var item in input) {
+    var helper = useRole(item.id);
 
-      output.add(role);
+    Player player = Player(item.player);
+    Role role = helper.create([player]);
+
+    if (helper.isWolf) {
+      wolfpackMembers.add(player);
+      continue;
     }
+
+    output.add(role);
   }
 
-  if (wolfpack.isEmpty) {
+  if (wolfpackMembers.isEmpty) {
     throw 'Game cannot start without a wolfpack !';
   } else {
-    output.add(Wolfpack(wolfpack));
+    output.add(Wolfpack(wolfpackMembers));
   }
 
   return output;

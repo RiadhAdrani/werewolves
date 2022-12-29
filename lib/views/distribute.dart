@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/distribution.dart';
+import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selection.dart';
 import 'package:werewolves/theme/theme.dart';
@@ -84,7 +85,13 @@ class _DistributePageState extends State<DistributePage> {
                 context: context,
                 builder: (BuildContext context) {
                   return confirmDistributedList(context, model.distributed, () {
-                    showToast('O K');
+                    Navigator.pushNamed(
+                      context,
+                      '/game',
+                      arguments: GameArguments(
+                        transformRolesFromPickedList(model.distributed),
+                      ),
+                    );
                   });
                 },
               );
