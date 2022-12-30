@@ -503,7 +503,6 @@ List<Role> transformRolesFromPickedList(List<DistributedRole> input) {
 
     if (helper.isWolf) {
       wolfpackMembers.add(player);
-      continue;
     }
 
     output.add(role);
@@ -514,6 +513,9 @@ List<Role> transformRolesFromPickedList(List<DistributedRole> input) {
   } else {
     output.add(Wolfpack(wolfpackMembers));
   }
+
+  print(input.map((e) => e.id));
+  print(output.map((e) => e.id));
 
   return output;
 }

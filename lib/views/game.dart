@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/utils/dialogs.dart';
+import 'package:werewolves/widgets/base.dart';
 
 class GameArgumentsExtractor extends StatelessWidget {
   const GameArgumentsExtractor({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ class _GamePageState extends State<GamePage> {
 
           return false;
         },
-        child: Scaffold(body: game.useView(context)),
+        child: scaffold(body: game.useView(context)),
       );
     });
   }

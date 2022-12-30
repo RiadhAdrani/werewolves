@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:werewolves/models/role.dart';
-import 'package:werewolves/theme/theme.dart';
+import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/widgets/base.dart';
 
 Widget roleCard(

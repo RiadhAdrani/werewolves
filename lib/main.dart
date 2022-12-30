@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/selection.dart';
 import 'package:werewolves/views/distribute.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: themeData,
       title: 'Werewolves',
       initialRoute: '/',
       routes: {

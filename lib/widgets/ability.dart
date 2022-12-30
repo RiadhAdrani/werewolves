@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -9,9 +10,14 @@ import 'package:werewolves/utils/dialogs.dart';
 import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/utils/utils.dart';
 
-Widget targetCard(Player player, bool isSelected, Function onClick) {
+Widget targetCard(
+  Player player,
+  bool isSelected,
+  Function onClick,
+) {
   return card(
     isSelected: isSelected,
+    selectedBgColor: BaseColors.red,
     child: inkWell(
       onClick: () => onClick(),
       child: padding(
@@ -20,10 +26,14 @@ Widget targetCard(Player player, bool isSelected, Function onClick) {
           mainSize: MainAxisSize.max,
           mainAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            titleWithIcon(player.name, Icons.person_outline, size: 14),
+            titleWithIcon(
+              ellipsify(player.name, 20),
+              Icons.person_outline,
+              size: 14,
+            ),
             if (isSelected)
               icon(
-                Icons.done_outline,
+                Icons.done,
                 size: 18,
               ),
           ],
@@ -73,12 +83,13 @@ Widget abilityDialog(
           mainSize: MainAxisSize.min,
           crossAlignment: CrossAxisAlignment.start,
           children: [
-            text(ability.owner.name, color: Colors.black54),
+            text(
+              ability.description,
+            ),
             padding(
               [16, 0],
               paragraph(
                 'You have chosen ${model.getSelected().length}/${ability.targetCount} required target${appendPluralS(ability.targetCount)} out of ${targetList.length} possible option${appendPluralS(targetList.length)}',
-                italic: true,
               ),
             ),
             SizedBox(
@@ -86,9 +97,15 @@ Widget abilityDialog(
               height: 300,
               child: ListView(
                 children: targetList.map((target) {
-                  return targetCard(target, model.isSelected(target), () {
+                  void onClick() {
                     model.toggleSelected(target);
-                  });
+                  }
+
+                  return targetCard(
+                    target,
+                    model.isSelected(target),
+                    onClick,
+                  );
                 }).toList(),
               ),
             )

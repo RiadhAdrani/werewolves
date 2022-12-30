@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:werewolves/theme/theme.dart';
+import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/utils/dialogs.dart';
 
 Widget button(
@@ -216,11 +216,24 @@ Widget icon(IconData icon, {Color? color, double? size}) {
   );
 }
 
-Widget image(String name, {double height = 50, double width = 50}) {
-  return Image.asset(
-    name,
-    height: height,
-    width: width,
+Widget image(
+  String src, {
+  double height = 50,
+  double width = 50,
+  Color color = Colors.transparent,
+  double opacity = 1,
+  List<double> radius = const [],
+}) {
+  return decoratedBox(
+    img: src,
+    color: color,
+    imgFit: BoxFit.fill,
+    opacity: opacity,
+    radius: radius,
+    child: SizedBox(
+      height: height,
+      width: width,
+    ),
   );
 }
 
@@ -376,9 +389,12 @@ Scaffold scaffold({
   );
 }
 
-Widget divider() {
-  return Divider(
-    color: Colors.blueGrey[100],
+Widget divider({Color? color, List<double> spacing = const [4, 0]}) {
+  return padding(
+    spacing,
+    Divider(
+      color: color ?? BaseColors.textSecondary,
+    ),
   );
 }
 
@@ -393,7 +409,7 @@ Widget titleWithIcon(
       [0, 6],
       row(mainAlignment: alignment, children: [
         padding(
-          [0, size * 0.4, 0, 0],
+          [0, size * 0.6, 0, 0],
           icon(iconData, color: color, size: size * 1.66),
         ),
         text(label, color: color, size: size),
@@ -468,6 +484,7 @@ Widget decoratedBox({
   required Widget child,
   List<double> radius = const [0],
   String? img,
+  BoxFit imgFit = BoxFit.cover,
   Color? color,
   BlendMode? blendMode,
   Color? blendColor,
@@ -490,7 +507,7 @@ Widget decoratedBox({
         image: img != null
             ? DecorationImage(
                 image: AssetImage(img),
-                fit: BoxFit.cover,
+                fit: imgFit,
                 opacity: opacity,
               )
             : null),

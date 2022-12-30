@@ -49,6 +49,8 @@ class Protector extends RoleSingular {
       [EffectId.wasProtected],
     );
 
+    print(protected[0].effects);
+
     if (protected.isNotEmpty) {
       output.add('You cannot protect (${protected[0].name}) in this night.');
     }

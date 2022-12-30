@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/constants/game_advices.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/dialogs.dart';
+import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/models/effect.dart';
 
@@ -71,8 +73,9 @@ Widget gameNightViewHeading(Role role) {
         children: [
           image(
             role.icon,
-            width: 75,
             height: 75,
+            width: 75,
+            radius: [6],
           ),
           padding(
             [4],
@@ -167,7 +170,7 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
 }
 
 Widget gameNightView(Game game, BuildContext context) {
-  return Scaffold(
+  return scaffold(
     appBar: gameBar(
       context,
       'Night (${game.currentTurn})',
@@ -206,7 +209,13 @@ Widget guideSection(
   return ExpansionTile(
     initiallyExpanded: expanded,
     expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
-    title: titleWithIcon(title, icon, alignment: MainAxisAlignment.start),
+    iconColor: BaseColors.text,
+    collapsedIconColor: BaseColors.text,
+    title: titleWithIcon(
+      title,
+      icon,
+      alignment: MainAxisAlignment.start,
+    ),
     children: list
         .map(
           (item) => card(
@@ -321,7 +330,7 @@ Widget gameDayView(Game game, BuildContext context) {
     );
   }
 
-  return Scaffold(
+  return scaffold(
     appBar: gameBar(
       context,
       'Day (${game.currentTurn})',
@@ -332,8 +341,8 @@ Widget gameDayView(Game game, BuildContext context) {
       column(
         crossAlignment: CrossAxisAlignment.stretch,
         children: [
-          ColoredBox(
-            color: Colors.grey[300]!,
+          decoratedBox(
+            color: BaseColors.red,
             child: padding(
               [8],
               titleWithIcon(
@@ -351,8 +360,8 @@ Widget gameDayView(Game game, BuildContext context) {
               deadPlayers,
             ),
           ),
-          ColoredBox(
-            color: Colors.grey[300]!,
+          decoratedBox(
+            color: BaseColors.red,
             child: padding(
               [8],
               titleWithIcon('Usable abilities', Icons.subject_rounded),
@@ -417,7 +426,6 @@ Widget debugDialog(BuildContext context, Game game) {
         titleWithIcon(
           data,
           icon,
-          color: Colors.black45,
           alignment: MainAxisAlignment.start,
         ),
       ),
@@ -429,43 +437,52 @@ Widget debugDialog(BuildContext context, Game game) {
       child: padding(
         [8],
         column(crossAlignment: CrossAxisAlignment.start, children: [
-          text(role.name, weight: FontWeight.w500),
+          row(children: [
+            image(role.icon, height: 25, width: 25, radius: [5]),
+            padding(
+              [0, 0, 0, 8],
+              text(role.name, weight: FontWeight.w500),
+            ),
+          ]),
           divider(),
           titleWithIcon(
             role.isObsolete() ? 'Obsolete' : 'Playing',
             role.isObsolete() ? Icons.error_outline : Icons.done,
             alignment: MainAxisAlignment.start,
-            color: Colors.black45,
           ),
-          divider(),
-          if (role.isGroup)
-            titleWithIcon(
-              '${(role as RoleGroup).getCurrentPlayers().length}',
-              Icons.people_outline,
-              alignment: MainAxisAlignment.start,
-              color: Colors.black45,
-            )
-          else
-            column(
-              crossAlignment: CrossAxisAlignment.stretch,
-              children: [
-                titleWithIcon(
-                  (role.player as Player).name,
-                  Icons.person_outline,
-                  alignment: MainAxisAlignment.start,
-                  color: Colors.black45,
-                ),
-                if ((role as RoleSingular).player.effects.isNotEmpty)
-                  titleWithIcon(
-                    role.player.effects
-                        .map((effect) => effectIdToString(effect.type))
-                        .join(' | '),
-                    Icons.adjust_sharp,
-                    alignment: MainAxisAlignment.start,
-                    color: Colors.black45,
-                  ),
-              ],
-            )
+          padding(
+              [4, 0],
+              role.isGroup
+                  ? titleWithIcon(
+                      '${(role as RoleGroup).getCurrentPlayers().length}',
+                      Icons.people_outline,
+                      alignment: MainAxisAlignment.start,
+                      color: BaseColors.textSecondary,
+                    )
+                  : column(
+                      crossAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        titleWithIcon(
+                          ellipsify((role.player as Player).name, 25),
+                          Icons.person_outline,
+                          alignment: MainAxisAlignment.start,
+                          color: BaseColors.textSecondary,
+                        ),
+                        if ((role as RoleSingular).player.effects.isNotEmpty)
+                          padding(
+                            [8, 0],
+                            titleWithIcon(
+                              role.player.effects
+                                  .map(
+                                      (effect) => effectIdToString(effect.type))
+                                  .join(' | '),
+                              Icons.adjust_sharp,
+                              alignment: MainAxisAlignment.start,
+                              color: BaseColors.textSecondary,
+                            ),
+                          ),
+                      ],
+                    )),
         ]),
       ),
     );
@@ -534,11 +551,18 @@ Widget writeDialog(BuildContext context) {
   );
 }
 
-Widget abilityCard(Ability ability, Function onClick, {bool variant = false}) {
+Widget abilityCard(
+  Ability ability,
+  Function onClick, {
+  bool variant = false,
+}) {
   bool should = ability.isUnskippable();
+
   String skipText =
       ability.isUnskippable() ? "This ability should be used." : "Optional";
-  Color skipColor = ability.isUnskippable() ? Colors.red : Colors.black;
+
+  Color skipColor =
+      ability.isUnskippable() ? BaseColors.blond : BaseColors.textSecondary;
 
   Widget content = padding(
     [12],

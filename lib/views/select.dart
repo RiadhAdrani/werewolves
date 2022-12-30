@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selection.dart';
-import 'package:werewolves/theme/theme.dart';
+import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/utils/toast.dart';
 import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/base.dart';

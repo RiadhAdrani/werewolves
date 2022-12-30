@@ -7,6 +7,7 @@ abstract class BaseColors {
   static Color beige = const Color(0xffcdae83);
   static Color darkBlue = const Color(0xff202433);
   static Color text = Colors.white;
+  static Color textSecondary = Colors.white54;
 }
 
 abstract class Fonts {
@@ -14,3 +15,9 @@ abstract class Fonts {
   static const String tajawal = 'Tajawal';
   static const String roboto = 'Roboto';
 }
+
+ThemeData themeData = ThemeData.from(
+  colorScheme: ColorScheme.fromSwatch(
+    primarySwatch: Colors.blueGrey,
+  ),
+);

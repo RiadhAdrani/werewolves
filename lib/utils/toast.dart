@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:werewolves/theme/theme.dart';
+import 'package:werewolves/app/theme.dart';
 
 void showToast(
   String msg, {
