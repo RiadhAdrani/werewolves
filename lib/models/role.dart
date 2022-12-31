@@ -511,11 +511,14 @@ List<Role> transformRolesFromPickedList(List<DistributedRole> input) {
   if (wolfpackMembers.isEmpty) {
     throw 'Game cannot start without a wolfpack !';
   } else {
-    output.add(Wolfpack(wolfpackMembers));
-  }
+    Wolfpack pack = Wolfpack(wolfpackMembers);
 
-  print(input.map((e) => e.id));
-  print(output.map((e) => e.id));
+    for (var player in wolfpackMembers) {
+      player.addRole(pack);
+    }
+
+    output.add(pack);
+  }
 
   return output;
 }

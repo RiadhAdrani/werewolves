@@ -285,6 +285,9 @@ void main() {
       var wolfpack = compiled
           .firstWhere((element) => element.id == RoleId.wolfpack) as RoleGroup;
 
+      expect(wolfpack.player[0].roles.length, 2);
+      expect(wolfpack.player[1].roles.length, 2);
+
       expect(wolfpack.player.length, 2);
     });
   });

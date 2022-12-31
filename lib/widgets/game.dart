@@ -414,9 +414,9 @@ Widget debugDialog(BuildContext context, Game game) {
   List<String> simple = [
     'Alive : ${game.playersList.length}',
     'Dead : ${game.deadPlayers.length}',
-    'Villagers : ${useVillagersCounter(game.playersList)}',
-    'Werewolves : ${useWolvesCounter(game.playersList)}',
-    'Solos : ${useSolosCounter(game.playersList)}'
+    'Villagers : ${calculateVillagers(game.playersList)}',
+    'Werewolves : ${calculateWolves(game.playersList)}',
+    'Solos : ${calculateSolos(game.playersList)}'
   ];
 
   Widget dataView(String data, {IconData icon = Icons.info_outline}) {

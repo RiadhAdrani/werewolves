@@ -931,7 +931,7 @@ void useDayEffectsResolver(Game game) {
 }
 
 /// returns the number of players within the wolf team.
-int useWolvesCounter(List<Player> players) {
+int calculateWolves(List<Player> players) {
   int sum = 0;
 
   for (var player in players) {
@@ -944,7 +944,7 @@ int useWolvesCounter(List<Player> players) {
 }
 
 /// returns the number of players within the village team.
-int useVillagersCounter(List<Player> players) {
+int calculateVillagers(List<Player> players) {
   int sum = 0;
 
   for (var player in players) {
@@ -957,7 +957,7 @@ int useVillagersCounter(List<Player> players) {
 }
 
 /// returns the number of solo players.
-int useSolosCounter(List<Player> players) {
+int calculateSolos(List<Player> players) {
   int sum = 0;
 
   for (var player in players) {
@@ -972,9 +972,9 @@ int useSolosCounter(List<Player> players) {
 /// check if the current list of players is balanced,
 /// otherwise, it returns the winning team.
 dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
-  int wolvesCount = useWolvesCounter(players);
-  int villagersCount = useVillagersCounter(players);
-  int solosCount = useSolosCounter(players);
+  int wolvesCount = calculateWolves(players);
+  int villagersCount = calculateVillagers(players);
+  int solosCount = calculateSolos(players);
 
   Role? alien = getRoleInGame(RoleId.alien, roles);
 
