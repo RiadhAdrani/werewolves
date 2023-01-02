@@ -68,6 +68,10 @@ abstract class Role<T> {
     return RoleId.villager;
   }
 
+  bool get callable {
+    return callingPriority != -1;
+  }
+
   bool get isWolf {
     return useRole(id).isWolf;
   }

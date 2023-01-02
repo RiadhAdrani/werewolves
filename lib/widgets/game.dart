@@ -287,10 +287,10 @@ Widget gameDayGuide(
 
 Widget gameDayView(Game game, BuildContext context) {
   List<String> nightInfos =
-      game.getCurrentTurnSummary().map((info) => info.getText()).toList();
+      game.getCurrentTurnSummary().map((info) => info.text).toList();
 
   List<String> dayInfos =
-      game.getCurrentDaySummary().map((info) => info.getText()).toList();
+      game.getCurrentDaySummary().map((info) => info.text).toList();
 
   List<String> alivePlayers = game.playersList
       .map((player) => '${player.name} (as ${player.mainRole.name})')
@@ -436,21 +436,23 @@ Widget debugDialog(BuildContext context, Game game) {
     return card(
       child: padding(
         [8],
-        column(crossAlignment: CrossAxisAlignment.start, children: [
-          row(children: [
-            image(role.icon, height: 25, width: 25, radius: [5]),
-            padding(
-              [0, 0, 0, 8],
-              text(role.name, weight: FontWeight.w500),
+        column(
+          crossAlignment: CrossAxisAlignment.start,
+          children: [
+            row(children: [
+              image(role.icon, height: 25, width: 25, radius: [5]),
+              padding(
+                [0, 0, 0, 8],
+                text(role.name, weight: FontWeight.w500),
+              ),
+            ]),
+            divider(),
+            titleWithIcon(
+              role.isObsolete() ? 'Obsolete' : 'Playing',
+              role.isObsolete() ? Icons.error_outline : Icons.done,
+              alignment: MainAxisAlignment.start,
             ),
-          ]),
-          divider(),
-          titleWithIcon(
-            role.isObsolete() ? 'Obsolete' : 'Playing',
-            role.isObsolete() ? Icons.error_outline : Icons.done,
-            alignment: MainAxisAlignment.start,
-          ),
-          padding(
+            padding(
               [4, 0],
               role.isGroup
                   ? titleWithIcon(
@@ -482,8 +484,10 @@ Widget debugDialog(BuildContext context, Game game) {
                             ),
                           ),
                       ],
-                    )),
-        ]),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

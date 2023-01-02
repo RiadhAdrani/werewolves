@@ -29,52 +29,39 @@ class GameArguments {
   GameArguments(this.list);
 }
 
-class GameEvent {
-  late final String _text;
-  late final GameState _period;
-  late final int _turn;
+class Event {
+  late final String text;
+  late final GameState period;
+  late final int turn;
 
-  String getText() {
-    return _text;
+  Event(this.text, this.turn, this.period);
+
+  static Event death(Player player, GameState period, int turn) {
+    return Event('${player.name} died.', turn, period);
   }
 
-  GameState getPeriod() {
-    return _period;
+  static Event talk(Player player, GameState period, int turn) {
+    return Event('${player.name} starts the discussion.', turn, period);
   }
 
-  int getTurn() {
-    return _turn;
+  static Event clairvoyance(RoleId role, GameState period, int turn) {
+    return Event('The seer saw : ${getRoleName(role)}', turn, period);
   }
 
-  GameEvent(this._text, this._turn, this._period);
-
-  static GameEvent death(Player player, GameState period, int turn) {
-    return GameEvent('${player.name} died.', turn, period);
+  static Event servant(RoleId role, GameState period, int turn) {
+    return Event('The servant became ${getRoleName(role)}.', turn, period);
   }
 
-  static GameEvent talk(Player player, GameState period, int turn) {
-    return GameEvent('${player.name} starts the discussion.', turn, period);
+  static Event judge(Player player, int turn) {
+    return Event('The Judge protected ${player.name}.', turn, GameState.night);
   }
 
-  static GameEvent clairvoyance(RoleId role, GameState period, int turn) {
-    return GameEvent('The seer saw : ${getRoleName(role)}', turn, period);
+  static Event mute(Player player, int turn) {
+    return Event('${player.name} is muted.', turn, GameState.night);
   }
 
-  static GameEvent servant(RoleId role, GameState period, int turn) {
-    return GameEvent('The servant became ${getRoleName(role)}.', turn, period);
-  }
-
-  static GameEvent judge(Player player, int turn) {
-    return GameEvent(
-        'The Judge protected ${player.name}.', turn, GameState.night);
-  }
-
-  static GameEvent mute(Player player, int turn) {
-    return GameEvent('${player.name} is muted.', turn, GameState.night);
-  }
-
-  static GameEvent sheep(bool killed, int turn) {
-    return GameEvent(
+  static Event sheep(bool killed, int turn) {
+    return Event(
         killed ? 'A sheep was killed' : 'A sheep returned to the shepherd.',
         turn,
         GameState.night);
@@ -84,8 +71,11 @@ class GameEvent {
 class Game extends ChangeNotifier {
   final List<Role> _roles = [];
   final List<Player> _graveyard = [];
-  final List<GameEvent> events = [];
+  final List<Event> events = [];
   final List<Ability> _pendingAbilities = [];
+
+  List<Role> called = [];
+  List<Role> available = [];
 
   GameState _state = GameState.empty;
   int _currentIndex = 0;
@@ -267,7 +257,7 @@ class Game extends ChangeNotifier {
                 child: stepAlert(
                   'Ability triggered',
                   '${currentPendingAbility.owner.name} should use his ability, Make sure everyone else is asleep!',
-                  getCurrentDaySummary().map((item) => item.getText()).toList(),
+                  getCurrentDaySummary().map((item) => item.text).toList(),
                   context,
                   () {
                     showUseAbilityDialog(
@@ -316,7 +306,7 @@ class Game extends ChangeNotifier {
   }
 
   /// Add a game info
-  void addGameInfo(GameEvent info) {
+  void addGameInfo(Event info) {
     events.add(info);
   }
 
@@ -351,19 +341,18 @@ class Game extends ChangeNotifier {
   }
 
   /// Return the list of the last night informations.
-  List<GameEvent> getCurrentTurnSummary() {
+  List<Event> getCurrentTurnSummary() {
     return events
         .where((item) =>
-            item.getTurn() == _currentTurn &&
-            item.getPeriod() == GameState.night)
+            item.turn == _currentTurn && item.period == GameState.night)
         .toList();
   }
 
   /// Return the list of the current day informations.
-  List<GameEvent> getCurrentDaySummary() {
+  List<Event> getCurrentDaySummary() {
     return events
-        .where((item) =>
-            item.getTurn() == _currentTurn && item.getPeriod() == GameState.day)
+        .where(
+            (item) => item.turn == _currentTurn && item.period == GameState.day)
         .toList();
   }
 
@@ -417,7 +406,7 @@ class Game extends ChangeNotifier {
   void _killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
     _graveyard.add(player);
-    addGameInfo(GameEvent.death(player, _state, _currentTurn));
+    addGameInfo(Event.death(player, _state, _currentTurn));
   }
 
   /// Perform mass murder on the souls of the already dead players.
@@ -437,7 +426,7 @@ class Game extends ChangeNotifier {
   /// and eliminating dead souls.
   /// When everything is done, we transition into the day phase.
   void _performPostNightProcessing(BuildContext context) {
-    List<GameEvent> infos = useNightEffectsResolver(playersList, currentTurn);
+    List<Event> infos = useNightEffectsResolver(playersList, currentTurn);
 
     // TODO : process informations
     events.addAll(infos);
@@ -777,11 +766,11 @@ List<Player> getPlayersWithFatalEffect(List<Player> players) {
   return output;
 }
 
-List<GameEvent> useNightEffectsResolver(
+List<Event> useNightEffectsResolver(
   List<Player> players,
   int currentTurn,
 ) {
-  List<GameEvent> infos = [];
+  List<Event> infos = [];
 
   for (var player in players) {
     final newEffects = <Effect>[];
@@ -816,7 +805,7 @@ List<GameEvent> useNightEffectsResolver(
           newEffects.add(WasMutedEffect(effect.source));
 
           if (!(effect.source.player as Player).hasFatalEffect) {
-            infos.add(GameEvent.mute(player, currentTurn));
+            infos.add(Event.mute(player, currentTurn));
           }
 
           break;
@@ -832,8 +821,7 @@ List<GameEvent> useNightEffectsResolver(
 
           Role role = resolveSeenRole(player);
 
-          infos.add(
-              GameEvent.clairvoyance(role.id, GameState.night, currentTurn));
+          infos.add(Event.clairvoyance(role.id, GameState.night, currentTurn));
 
           break;
 
@@ -843,12 +831,12 @@ List<GameEvent> useNightEffectsResolver(
           player.removeEffectsOfType(effect.type);
           newEffects.add(WasJudgedEffect(effect.source));
 
-          infos.add(GameEvent.judge(player, currentTurn));
+          infos.add(Event.judge(player, currentTurn));
           break;
 
         /// Captain ------------------------------------------------------
         case EffectId.shouldTalkFirst:
-          infos.add(GameEvent.talk(player, GameState.night, currentTurn));
+          infos.add(Event.talk(player, GameState.night, currentTurn));
 
           player.removeEffectsOfType(effect.type);
           break;
@@ -865,9 +853,9 @@ List<GameEvent> useNightEffectsResolver(
 
             shepherdAbility.targetCount--;
 
-            infos.add(GameEvent.sheep(true, currentTurn));
+            infos.add(Event.sheep(true, currentTurn));
           } else {
-            infos.add(GameEvent.sheep(false, currentTurn));
+            infos.add(Event.sheep(false, currentTurn));
           }
 
           player.removeEffectsOfType(effect.type);
@@ -925,7 +913,7 @@ void useDayEffectsResolver(Game game) {
 
   for (var player in game.playersList) {
     if (player.hasFatalEffect) {
-      game.addGameInfo(GameEvent.death(player, GameState.day, currentTurn));
+      game.addGameInfo(Event.death(player, GameState.day, currentTurn));
     }
   }
 }
@@ -1075,4 +1063,33 @@ dynamic useGameStartable(List<Role> roles) {
   }
 
   return true;
+}
+
+int nextIndex(
+  Role? current,
+  int turn,
+  List<Role> roles,
+  List<Role> available,
+  List<Role> called,
+) {
+  if (available.isEmpty) return -1;
+
+  int next = 9999999;
+  int index = -1;
+
+  for (var i = 0; i < available.length; i++) {
+    Role role = available[i];
+
+    if ((current == null ||
+            (role.callingPriority >= current.callingPriority)) &&
+        role.callable &&
+        role.callingPriority < next &&
+        role.shouldBeCalledAtNight(roles, turn) &&
+        !role.isObsolete()) {
+      next = role.callingPriority;
+      index = i;
+    }
+  }
+
+  return index;
 }
