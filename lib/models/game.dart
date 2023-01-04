@@ -7,6 +7,7 @@ import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/utils/dialogs.dart';
+import 'package:werewolves/utils/toast.dart';
 import 'package:werewolves/widgets/ability.dart';
 import 'package:werewolves/widgets/game.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
@@ -69,46 +70,35 @@ class Event {
 }
 
 class Game extends ChangeNotifier {
-  final List<Role> _roles = [];
-  final List<Player> _graveyard = [];
+  final List<Role> roles = [];
+  final List<Player> graveyard = [];
   final List<Event> events = [];
-  final List<Ability> _pendingAbilities = [];
+  final List<Ability> pendingAbilities = [];
+
+  bool noContextMode = false;
 
   List<Role> called = [];
   List<Role> available = [];
 
-  GameState _state = GameState.empty;
-  int _currentIndex = 0;
-  int _currentTurn = 0;
-  bool gameOver = false;
+  GameState state = GameState.empty;
+  int currentIndex = -1;
+  int currentTurn = 0;
+  bool isOver = false;
 
   List<Role> get rolesForDebug {
-    return _roles;
+    return roles;
   }
 
   List<Role> get playableRoles {
-    List<Role> output = [];
-
-    for (Role role in _roles) {
-      if (!role.isObsolete()) {
-        output.add(role);
-      }
-    }
-
-    return output;
+    return roles.where((role) => !role.isObsolete()).toList();
   }
 
   bool get hasPendingAbilities {
-    return _pendingAbilities.isNotEmpty;
-  }
-
-  /// Return the current state.
-  GameState get state {
-    return _state;
+    return pendingAbilities.isNotEmpty;
   }
 
   set currentTurnForTesting(int turn) {
-    _currentTurn = turn;
+    currentTurn = turn;
   }
 
   /// Return a list of alive players.
@@ -117,7 +107,7 @@ class Game extends ChangeNotifier {
   List<Player> get playersList {
     List<Player> output = [];
 
-    for (var role in _roles) {
+    for (var role in roles) {
       if (!role.isGroup) {
         role.player as Player;
         if (!output.contains(role.player)) {
@@ -132,25 +122,20 @@ class Game extends ChangeNotifier {
   }
 
   List<Player> get deadPlayers {
-    return _graveyard;
+    return graveyard;
   }
 
   /// Return currently active role.
   Role? get currentRole {
-    if (_state != GameState.night) return null;
+    if (state != GameState.night || currentIndex == -1) return null;
 
-    return _roles[_currentIndex];
-  }
-
-  /// Return current turn.
-  int get currentTurn {
-    return _currentTurn;
+    return available[currentIndex];
   }
 
   /// Return the correct widget to be displayed
   /// during the current `state`.
   Widget useView(BuildContext context) {
-    switch (_state) {
+    switch (state) {
       case GameState.empty:
         return const Text('Loading...');
       case GameState.initialized:
@@ -162,28 +147,92 @@ class Game extends ChangeNotifier {
     }
   }
 
+  void init(List<Role> list) {
+    roles.addAll(list);
+
+    state = GameState.initialized;
+    notifyListeners();
+  }
+
+  void start() {
+    state = GameState.night;
+
+    called = [];
+    available = roles
+        .where((role) => role.shouldBeCalledAtNight(roles, currentTurn))
+        .toList();
+
+    currentIndex = nextIndex(currentRole, roles, available, called,
+        test: (role) => role.shouldBeCalledAtNight(roles, currentTurn));
+
+    notifyListeners();
+  }
+
+  void next() {
+    if (state != GameState.night) {
+      throw 'Unexpected game state : $state .';
+    }
+
+    if (currentRole == null) {
+      throw 'currentRole is null.';
+    }
+
+    bool mandatory = currentRole!.abilities.every((ability) {
+      bool $used = ability.wasUsedInTurn(currentTurn);
+      bool $unskippable = ability.isUnskippable();
+      bool $emptyTargets = ability.createListOfTargets(playersList).isNotEmpty;
+
+      return !$used && $unskippable && $emptyTargets;
+    });
+
+    if (mandatory) {
+      if (!noContextMode) {
+        showToast('At least one mandatory ability was not used.');
+      }
+
+      return;
+    }
+
+    int index = nextIndex(currentRole, roles, available, called);
+
+    if (index == -1) {
+      // TODO check for pending roles
+      // TODO transition to day phase
+      state = GameState.day;
+    } else {
+      Role $new = available[index];
+
+      called.add(currentRole!);
+      available.remove(currentRole);
+
+      currentIndex = available.indexOf($new);
+    }
+
+    notifyListeners();
+  }
+
+  void nextNight() {
+    if (state != GameState.day) {
+      throw 'Unexpected game state : $state .';
+    }
+
+    currentIndex = -1;
+    currentTurn += 1;
+
+    start();
+  }
+
   Role? getRole(RoleId id) {
-    return getRoleInGame(id, _roles);
+    return getRoleInGame(id, roles);
   }
 
   void addPendingAbility(Ability ability) {
-    _pendingAbilities.add(ability);
-  }
-
-  /// Initialize the game.
-  void init(List<Role> list) {
-    _gameInit(list);
+    pendingAbilities.add(ability);
   }
 
   /// Use to start a new turn.
   void startTurn() {
     _gameTransitionToNight();
-  }
-
-  /// Attempt to proceed to the next role
-  /// or transition into the day phase.
-  void next(BuildContext context) {
-    _next(context);
   }
 
   /// Check if the given ability is available at the current night.
@@ -237,10 +286,10 @@ class Game extends ChangeNotifier {
     _collectPendingAbilityInDay();
 
     void useNext() {
-      if (_pendingAbilities.isNotEmpty) {
-        Ability currentPendingAbility = _pendingAbilities[0];
+      if (pendingAbilities.isNotEmpty) {
+        Ability currentPendingAbility = pendingAbilities[0];
 
-        _pendingAbilities.removeAt(0);
+        pendingAbilities.removeAt(0);
 
         notifyListeners();
 
@@ -344,7 +393,7 @@ class Game extends ChangeNotifier {
   List<Event> getCurrentTurnSummary() {
     return events
         .where((item) =>
-            item.turn == _currentTurn && item.period == GameState.night)
+            item.turn == currentTurn && item.period == GameState.night)
         .toList();
   }
 
@@ -352,7 +401,7 @@ class Game extends ChangeNotifier {
   List<Event> getCurrentDaySummary() {
     return events
         .where(
-            (item) => item.turn == _currentTurn && item.period == GameState.day)
+            (item) => item.turn == currentTurn && item.period == GameState.day)
         .toList();
   }
 
@@ -361,7 +410,7 @@ class Game extends ChangeNotifier {
     final output = <Ability>[];
 
     /// Fetch role that can use abilities and has a callsign
-    for (var role in _roles) {
+    for (var role in roles) {
       if (role.isObsolete() == false &&
           role.canUseSignWithNarrator() &&
           role.canUseAbilitiesDuringDay()) {
@@ -374,7 +423,7 @@ class Game extends ChangeNotifier {
     }
 
     /// Add captain execution ability
-    for (var role in _roles) {
+    for (var role in roles) {
       /// We check the captain is obsolete.
       /// kinda useless but
       /// There should only be one instance of captain
@@ -405,8 +454,8 @@ class Game extends ChangeNotifier {
   /// add a game info
   void _killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
-    _graveyard.add(player);
-    addGameInfo(Event.death(player, _state, _currentTurn));
+    graveyard.add(player);
+    addGameInfo(Event.death(player, state, currentTurn));
   }
 
   /// Perform mass murder on the souls of the already dead players.
@@ -446,7 +495,7 @@ class Game extends ChangeNotifier {
   /// `Protector` should use his `shield` every turn.
   bool _checkAllUnskippableAbilitiesUse() {
     for (var ability in currentRole!.abilities) {
-      if (ability.wasUsedInTurn(_currentTurn) == false &&
+      if (ability.wasUsedInTurn(currentTurn) == false &&
           ability.isUnskippable() &&
           ability.createListOfTargets(playersList).isNotEmpty) {
         return false;
@@ -462,25 +511,25 @@ class Game extends ChangeNotifier {
   /// and so we perform night processing
   /// which will transition the game into the day phase.
   void _setNextIndex(BuildContext context) {
-    if (_roles.isEmpty) return;
+    if (roles.isEmpty) return;
 
     int next = 999999;
 
-    for (var role in _roles) {
-      if (role.callingPriority > _roles[_currentIndex].callingPriority &&
+    for (var role in roles) {
+      if (role.callingPriority > roles[currentIndex].callingPriority &&
           role.callingPriority > -1 &&
           role.callingPriority < next &&
-          role.shouldBeCalledAtNight(_roles, currentTurn) &&
+          role.shouldBeCalledAtNight(roles, currentTurn) &&
           role.isObsolete() == false) {
         next = role.callingPriority;
       }
     }
 
     var probablyNextIndex =
-        _roles.indexWhere((element) => element.callingPriority == next);
+        roles.indexWhere((element) => element.callingPriority == next);
 
     if (probablyNextIndex != -1) {
-      _currentIndex = probablyNextIndex;
+      currentIndex = probablyNextIndex;
 
       currentRole!.beforeCallEffect(context, this);
 
@@ -492,36 +541,36 @@ class Game extends ChangeNotifier {
 
   /// Find the index of the first role that should start the night.
   void _initCurrentIndex() {
-    if (_roles.isEmpty) return;
+    if (roles.isEmpty) return;
 
     var min = 999999;
 
-    for (var role in _roles) {
+    for (var role in roles) {
       if (role.callingPriority < min &&
           role.callingPriority > -1 &&
-          role.shouldBeCalledAtNight(_roles, currentTurn) &&
+          role.shouldBeCalledAtNight(roles, currentTurn) &&
           role.isObsolete() == false) {
         min = role.callingPriority;
       }
     }
 
-    _currentIndex =
-        _roles.indexWhere((element) => element.callingPriority == min);
+    currentIndex =
+        roles.indexWhere((element) => element.callingPriority == min);
   }
 
   /// Create appropriate `RoleGroups` and override the current list of roles.
   void _initRoles(List<Role> list) {
-    _roles.addAll(list);
+    roles.addAll(list);
   }
 
   /// Internal function exposed by `init()`.
   /// prepare roles by adding `GroupRoles`
   /// and setting the correct selection index.
-  void _gameInit(List<Role> list) {
+  void _init(List<Role> list) {
     _initRoles(list);
     _initCurrentIndex();
 
-    _state = GameState.initialized;
+    state = GameState.initialized;
 
     notifyListeners();
   }
@@ -532,8 +581,8 @@ class Game extends ChangeNotifier {
   void _gameTransitionToNight() {
     _removeObsoleteRoles();
 
-    _currentTurn = _currentTurn + 1;
-    _state = GameState.night;
+    currentTurn = currentTurn + 1;
+    state = GameState.night;
 
     _initCurrentIndex();
 
@@ -542,7 +591,7 @@ class Game extends ChangeNotifier {
 
   /// Transition into the day phase.
   void _gameTransitionToDay() {
-    _state = GameState.day;
+    state = GameState.day;
 
     notifyListeners();
   }
@@ -552,7 +601,7 @@ class Game extends ChangeNotifier {
   /// If the current role hasn't exhausted all his mandatory abilities
   /// the game will not progress.
   void _next(BuildContext context) {
-    if (_state == GameState.night) {
+    if (state == GameState.night) {
       if (_checkAllUnskippableAbilitiesUse()) {
         _setNextIndex(context);
       } else {
@@ -569,14 +618,14 @@ class Game extends ChangeNotifier {
   bool _isAbilityAvailableAtNight(Ability ability) {
     return ability.isForNight &&
         ability.useCount != AbilityUseCount.none &&
-        !ability.wasUsedInTurn(_currentTurn) &&
+        !ability.wasUsedInTurn(currentTurn) &&
         ability.shouldBeAvailable();
   }
 
   /// Use the ability against the given targets
   /// and apply its post effect if it exists.
   List<Player> _useAbility(Ability ability, List<Player> targets) {
-    List<Player> affected = ability.use(targets, _currentTurn);
+    List<Player> affected = ability.use(targets, currentTurn);
 
     ability.usePostEffect(this, affected);
 
@@ -589,7 +638,7 @@ class Game extends ChangeNotifier {
   /// We assume that the given roleId correspond to a `RoleGroup`
   /// and there is only one instance of that role in the list.
   void _addMemberToGroup(Player newMember, RoleId roleId) {
-    for (var role in _roles) {
+    for (var role in roles) {
       if (role.id == roleId && role.isGroup) {
         (role as RoleGroup).setPlayer([...role.player, newMember]);
         return;
@@ -601,7 +650,7 @@ class Game extends ChangeNotifier {
   /// and kill the old one.
   /// We assume that there is only one captain instance.
   void _replaceCaptainPlayer(Player player) {
-    for (var role in _roles) {
+    for (var role in roles) {
       if (role.id == RoleId.captain) {
         role as RoleSingular;
 
@@ -621,7 +670,7 @@ class Game extends ChangeNotifier {
   ///
   /// If a lover is dead, make sure that the other lover is dead too.
   void _resolveRolesInteractionsAfterAbilityUsedInDay() {
-    if (_state != GameState.day) return;
+    if (state != GameState.day) return;
 
     for (var player in playersList) {
       /// If the captain is dead.
@@ -637,8 +686,8 @@ class Game extends ChangeNotifier {
       for (var ability in role.abilities) {
         if (ability.isPlenty &&
             ability.shouldBeUsedOnDeath() &&
-            !_pendingAbilities.contains(ability)) {
-          _pendingAbilities.add(ability);
+            !pendingAbilities.contains(ability)) {
+          pendingAbilities.add(ability);
         }
       }
     }
@@ -646,7 +695,7 @@ class Game extends ChangeNotifier {
 
   /// Collect pending abilities
   void _collectPendingAbilityInDay() {
-    if (_state != GameState.day) return;
+    if (state != GameState.day) return;
 
     for (var player in playersList) {
       if (player.hasFatalEffect) {
@@ -656,10 +705,10 @@ class Game extends ChangeNotifier {
   }
 
   void _gameOverCheck(BuildContext context) {
-    dynamic result = useTeamsBalanceChecker(playersList, _roles);
+    dynamic result = useTeamsBalanceChecker(playersList, roles);
 
     if (result is Team) {
-      gameOver = true;
+      isOver = true;
       showConfirm(context, 'Game Over', 'The ${getTeamName(result)} Team won !',
           () {
         dispose();
@@ -671,14 +720,14 @@ class Game extends ChangeNotifier {
   void _removeObsoleteRoles() {
     var toRemove = <Role>[];
 
-    for (var role in _roles) {
+    for (var role in roles) {
       if (role.isObsolete()) {
         toRemove.add(role);
       }
     }
 
     for (var role in toRemove) {
-      _roles.remove(role);
+      roles.remove(role);
     }
   }
 
@@ -1067,11 +1116,11 @@ dynamic useGameStartable(List<Role> roles) {
 
 int nextIndex(
   Role? current,
-  int turn,
   List<Role> roles,
   List<Role> available,
-  List<Role> called,
-) {
+  List<Role> called, {
+  bool Function(Role)? test,
+}) {
   if (available.isEmpty) return -1;
 
   int next = 9999999;
@@ -1080,12 +1129,20 @@ int nextIndex(
   for (var i = 0; i < available.length; i++) {
     Role role = available[i];
 
-    if ((current == null ||
-            (role.callingPriority >= current.callingPriority)) &&
-        role.callable &&
-        role.callingPriority < next &&
-        role.shouldBeCalledAtNight(roles, turn) &&
-        !role.isObsolete()) {
+    bool $diff = current != role;
+    bool $test = test?.call(role) ?? true;
+    bool $priority =
+        (current == null || (role.callingPriority >= current.callingPriority));
+    bool $callable = role.callable;
+    bool $nextPriority = role.callingPriority < next;
+    bool $obsolete = !role.isObsolete();
+
+    if ($diff &&
+        $priority &&
+        $callable &&
+        $nextPriority &&
+        $obsolete &&
+        $test) {
       next = role.callingPriority;
       index = i;
     }

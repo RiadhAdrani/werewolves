@@ -20,7 +20,7 @@ Widget gamePreView(Game game, BuildContext context) {
         children: [
           padding([8], title('Everything is ready !')),
           divider(),
-          button('Start', () => game.startTurn(), flat: true),
+          button('Start', game.start, flat: true),
         ],
       ),
     ),
@@ -191,7 +191,7 @@ Widget gameNightView(Game game, BuildContext context) {
           gameNightViewAbilities(game, context),
           button(
             'Next',
-            () => game.next(context),
+            game.next,
             flat: true,
           ),
         ],
@@ -306,7 +306,7 @@ Widget gameDayView(Game game, BuildContext context) {
       'You are about to start the night phase, are you sure you completed all the steps ?',
       () {
         dismiss(context)();
-        game.startTurn();
+        game.nextNight();
       },
     );
   }

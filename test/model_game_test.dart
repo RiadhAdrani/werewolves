@@ -30,11 +30,11 @@ void main() {
         called = [];
       }
 
-      Role? useNext({int times = 1, int turn = 0, Function(Role?)? effect}) {
+      Role? useNext({int times = 1, Function(Role?)? effect}) {
         Role? current;
 
         for (int i = 0; i < times; i++) {
-          int index = nextIndex(current, turn, roles, available, called);
+          int index = nextIndex(current, roles, available, called);
 
           if (index == -1) {
             current = null;
@@ -66,7 +66,7 @@ void main() {
           RoleId.captain,
         ]);
 
-        int index = nextIndex(null, 0, roles, available, called);
+        int index = nextIndex(null, roles, available, called);
 
         expect(index, 0);
       });
@@ -83,7 +83,7 @@ void main() {
 
         Role? current = useNext(times: pool.length + 1);
 
-        int index = nextIndex(current, 0, roles, available, called);
+        int index = nextIndex(current, roles, available, called);
 
         expect(index, -1);
       });
@@ -173,6 +173,93 @@ void main() {
           RoleId.witch,
           RoleId.captain,
         ]);
+      });
+    });
+
+    group('Model', () {
+      Game model = Game();
+
+      setUp(() {
+        model = Game();
+        model.init(createGameList(roles: [
+          RoleId.protector,
+          RoleId.werewolf,
+          RoleId.fatherOfWolves,
+          RoleId.blackWolf,
+          RoleId.captain,
+          RoleId.villager,
+          RoleId.seer,
+          RoleId.hunter,
+        ]));
+
+        model.start();
+        model.noContextMode = true;
+      });
+
+      group('init()', () {
+        test('should initialize model', () {
+          var list = createGameList();
+
+          model = Game();
+          model.init(list);
+
+          expect(model.state, GameState.initialized);
+          expect(model.roles, list);
+        });
+      });
+
+      group('start()', () {
+        test('should start the game', () {
+          expect(model.called, []);
+          expect(model.available.length, 6);
+          expect(model.currentIndex, 0);
+        });
+      });
+
+      group('next()', () {
+        test('should throw when current role is null', () {
+          model.currentIndex = -1;
+
+          expect(() => model.next(), throwsA('currentRole is null.'));
+        });
+
+        test('should throw when game state is not GameState.night', () {
+          model.state = GameState.day;
+
+          expect(() => model.next(),
+              throwsA('Unexpected game state : ${model.state} .'));
+        });
+
+        test('should not skip to next when a mandatory ability is pending', () {
+          model.next();
+
+          expect(model.called, []);
+        });
+
+        test('should switch to next index', () {
+          model.currentRole!.abilities[0]
+              .use([model.playersList[0]], model.currentTurn);
+
+          model.next();
+
+          expect(model.called[0].id, RoleId.protector);
+          expect(model.currentRole!.id, RoleId.wolfpack);
+          expect(model.called.length, 1);
+          expect(model.available.length, 5);
+        });
+
+        test('should switch to day state when all roles are called', () {
+          while (model.currentRole != null) {
+            if (model.currentRole!.abilities.isNotEmpty) {
+              model.currentRole!.abilities[0]
+                  .use([model.playersList[0]], model.currentTurn);
+            }
+
+            model.next();
+          }
+
+          expect(model.state, GameState.day);
+        });
       });
     });
   });
