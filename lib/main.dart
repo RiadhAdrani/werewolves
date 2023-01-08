@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:werewolves/app/theme.dart';
-import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/selection.dart';
-import 'package:werewolves/views/distribute.dart';
-import 'package:werewolves/views/game.dart';
-import 'package:werewolves/views/home.dart';
-import 'package:werewolves/views/select.dart';
+import 'package:werewolves/app/routing.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,16 +30,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: themeData,
       title: 'Werewolves',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomePage(),
-        '/select': (context) => const SelectionPage(),
-        '/distribute': (context) => const DistributePage(),
-        '/game': (context) => ChangeNotifierProvider(
-              create: (context) => Game(),
-              child: const GameArgumentsExtractor(),
-            )
-      },
+      initialRoute: Screen.home.path,
+      routes: routes,
     );
   }
 }

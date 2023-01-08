@@ -1,11 +1,13 @@
 enum Localization { en }
 
-abstract class T {
-  final Localization _selected = Localization.en;
+abstract class Translation {
+  String title;
+
+  Translation({required this.title});
 }
 
-abstract class Lang {
-  late String home;
-
-  Lang(this.home);
+class English extends Translation {
+  English({
+    super.title = 'Werewolves',
+  });
 }
