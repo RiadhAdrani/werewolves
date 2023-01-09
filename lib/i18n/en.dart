@@ -17,10 +17,11 @@ const Map<LKey, String> en = {
   LKey.selectAtLeastOneWolf: 'At least one wolf should be present.',
   LKey.selectPlayerCountLow: 'Players count is too low.',
   LKey.selectSolosCountHigherVillagers:
-      'Solos count is higher than the villagers\'s',
-  LKey.selectSolosCountHigherWolves: 'Solos count is higher than the wolves',
+      'Solos count is higher than the villagers count.',
+  LKey.selectSolosCountHigherWolves:
+      'Solos count is higher than the wolves count.',
   LKey.selectWolvesCountHigherVillagers:
-      'Wolves count is higher than the villagers\'s',
+      'Wolves count is higher than the villagers count.',
 
   // * Distribute Page --------------------------------------------------------
   LKey.distribute: 'Distribute',

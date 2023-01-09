@@ -33,7 +33,7 @@ void main() {
             RoleId.alien,
           ],
           false,
-          'Player count is too low',
+          'Players count is too low.',
         ],
         [
           [
@@ -60,7 +60,7 @@ void main() {
             RoleId.villager,
           ],
           false,
-          'Wolves count is higher than the villagers count',
+          'Wolves count is higher than the villagers count.',
         ],
         [
           [
@@ -75,7 +75,7 @@ void main() {
             RoleId.alien,
           ],
           false,
-          'Solos count is higher than the villagers count',
+          'Solos count is higher than the villagers count.',
         ],
         [
           [
@@ -93,7 +93,7 @@ void main() {
             RoleId.alien,
           ],
           false,
-          'Solos count is higher than the wolves count',
+          'Solos count is higher than the wolves count.',
         ],
         [
           [
