@@ -1,4 +1,6 @@
 import 'package:uuid/uuid.dart';
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 
@@ -50,7 +52,7 @@ Validation isSelectionValid(List<RoleId> roles) {
   if (roles.length < 7) {
     return Validation(
       false,
-      msg: 'Player count is too low',
+      msg: t(LKey.selectPlayerCountLow),
     );
   }
 
@@ -64,14 +66,14 @@ Validation isSelectionValid(List<RoleId> roles) {
   if (wolvesCount == 0) {
     return Validation(
       false,
-      msg: 'At least one wolf should be present.',
+      msg: t(LKey.selectAtLeastOneWolf),
     );
   }
 
   if (wolvesCount >= villagersCount) {
     return Validation(
       false,
-      msg: 'Wolves count is higher than the villagers count',
+      msg: t(LKey.selectWolvesCountHigherVillagers),
     );
   }
 
@@ -81,14 +83,14 @@ Validation isSelectionValid(List<RoleId> roles) {
   if (solosCount >= villagersCount) {
     return Validation(
       false,
-      msg: 'Solos count is higher than the villagers count',
+      msg: t(LKey.selectSolosCountHigherVillagers),
     );
   }
 
   if (solosCount >= wolvesCount) {
     return Validation(
       false,
-      msg: 'Solos count is higher than the wolves count',
+      msg: t(LKey.selectSolosCountHigherWolves),
     );
   }
 

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/app/routing.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/role.dart';
@@ -34,7 +37,7 @@ class _DistributePageState extends State<DistributePage> {
               int? index = model.pick();
 
               if (index == null) {
-                showToast('All roles are picked !');
+                showToast(t(LKey.distributeAllPicked));
                 return;
               }
 
@@ -48,8 +51,7 @@ class _DistributePageState extends State<DistributePage> {
                 if (assigned) {
                   dismiss(context)();
                 } else {
-                  showToast(
-                      'Unable to assign role to player ! Name is invalid or already exists !');
+                  showToast(t(LKey.distributeUnassignableName));
                 }
               }
 
@@ -57,7 +59,7 @@ class _DistributePageState extends State<DistributePage> {
                 context: context,
                 builder: (context) {
                   return dialog(
-                      title: 'Pick a name',
+                      title: t(LKey.distributePickName),
                       content: column(
                         children: [
                           row(
@@ -67,12 +69,15 @@ class _DistributePageState extends State<DistributePage> {
                               padding([0, 0, 0, 12], subTitle(role.name)),
                             ],
                           ),
-                          input(controller, placeholder: 'Player name', max: 30)
+                          input(controller,
+                              placeholder:
+                                  t(LKey.distributePlayerNamePlaceholder),
+                              max: 30)
                         ],
                       ),
                       actions: [
-                        button('Done', assign, flat: true),
-                        button('Cancel', dismiss(context), flat: true),
+                        button(t(LKey.done), assign, flat: true),
+                        button(t(LKey.cancel), dismiss(context), flat: true),
                       ]);
                 },
               );
@@ -87,7 +92,7 @@ class _DistributePageState extends State<DistributePage> {
                   return confirmDistributedList(context, model.distributed, () {
                     Navigator.pushNamed(
                       context,
-                      '/game',
+                      Screen.game.path,
                       arguments: GameArguments(
                         transformRolesFromPickedList(model.distributed),
                       ),
@@ -99,7 +104,7 @@ class _DistributePageState extends State<DistributePage> {
 
             return scaffold(
               appBar: appBar(
-                'Distribute',
+                t(LKey.distribute),
                 showReturnButton: true,
               ),
               fab: !model.done
@@ -124,7 +129,7 @@ class _DistributePageState extends State<DistributePage> {
                         padding(
                           [8],
                           subTitle(
-                            'Tap to pick',
+                            t(LKey.distributeTapToPick),
                             weight: FontWeight.normal,
                           ),
                         ),
@@ -136,7 +141,7 @@ class _DistributePageState extends State<DistributePage> {
                           ),
                         ),
                         button(
-                          'Reset',
+                          t(LKey.reset),
                           model.reset,
                           bgColor: BaseColors.darkBlue,
                         ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/app/routing.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/models/selection.dart';
 import 'package:werewolves/app/theme.dart';
@@ -22,7 +25,10 @@ class _SelectionPageState extends State<SelectionPage> {
     if (!res.valid) {
       showToast(res.msg!);
     } else {
-      Navigator.pushNamed(context, '/distribute');
+      Navigator.pushNamed(
+        context,
+        Screen.distribute.path,
+      );
     }
   }
 
@@ -32,7 +38,7 @@ class _SelectionPageState extends State<SelectionPage> {
       builder: ((context, controller, child) {
         return scaffold(
           appBar: appBar(
-            'Selected roles (${controller.items.length})',
+            t(LKey.selectTitle, params: {'count': controller.items.length}),
             showReturnButton: true,
           ),
           fab: fab(

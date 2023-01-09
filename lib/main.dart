@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/app/app.dart';
 import 'package:werewolves/app/theme.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/selection.dart';
 import 'package:werewolves/app/routing.dart';
 
@@ -16,8 +18,11 @@ void main() {
 
   runApp(
     ChangeNotifierProvider(
-      create: (context) => SelectionModel(),
-      child: const MyApp(),
+      create: (context) => App(),
+      child: ChangeNotifierProvider(
+        create: (context) => SelectionModel(),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: themeData,
-      title: 'Werewolves',
+      title: t(LKey.appTitle),
       initialRoute: Screen.home.path,
       routes: routes,
     );
