@@ -26,8 +26,8 @@ bool checkPlayerName(String name, List<Role> list) {
   }
 
   for (var i = 0; i < list.length; i++) {
-    if (list[i].player is Player &&
-        list[i].player.id.toString().trim().toLowerCase() ==
+    if (list[i].controller is Player &&
+        list[i].controller.id.toString().trim().toLowerCase() ==
             name.trim().toLowerCase()) {
       return false;
     }

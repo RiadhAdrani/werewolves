@@ -105,7 +105,7 @@ class GarrulousAbility extends Ability {
 
   @override
   bool isTarget(Player target) {
-    return target == owner.player;
+    return target == owner.controller;
   }
 
   @override

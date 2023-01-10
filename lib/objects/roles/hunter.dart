@@ -23,7 +23,8 @@ class Hunter extends RoleSingular {
 
   @override
   bool canUseAbilitiesDuringNight() {
-    return player.hasFatalEffect || !player.hasEffect(EffectId.hasCallsign);
+    return controller.hasFatalEffect ||
+        !controller.hasEffect(EffectId.hasCallsign);
   }
 
   @override
@@ -33,7 +34,8 @@ class Hunter extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(List<Role> roles, int turn) {
-    return player.hasFatalEffect || !player.hasEffect(EffectId.hasCallsign);
+    return controller.hasFatalEffect ||
+        !controller.hasEffect(EffectId.hasCallsign);
   }
 
   @override
@@ -43,11 +45,11 @@ class Hunter extends RoleSingular {
 
   @override
   List<String> getInformations(List<Role> roles) {
-    if (player.hasFatalEffect) {
+    if (controller.hasFatalEffect) {
       return ['You have become a Hunter! Choose someone to kill.'];
     }
 
-    if (!player.hasEffect(EffectId.hasCallsign)) {
+    if (!controller.hasEffect(EffectId.hasCallsign)) {
       return [
         'You should give the narrator a call sign that you may use during the day phase to kill a werewolf.',
       ];
@@ -90,13 +92,13 @@ class HuntAbility extends Ability {
     target.addEffect(HuntedEffect(owner));
 
     if (!target.hasWolfRole) {
-      (owner as RoleSingular).player.addEffect(HuntedEffect(owner));
+      (owner as RoleSingular).controller.addEffect(HuntedEffect(owner));
     }
   }
 
   @override
   bool isTarget(Player target) {
-    return target != owner.player;
+    return target != owner.controller;
   }
 
   @override
@@ -106,7 +108,7 @@ class HuntAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return (owner.player as Player).hasFatalEffect;
+    return (owner.controller as Player).hasFatalEffect;
   }
 
   @override
@@ -140,7 +142,7 @@ class CallSignAbility extends Ability {
 
   @override
   bool isTarget(Player target) {
-    return target == owner.player;
+    return target == owner.controller;
   }
 
   @override
@@ -150,8 +152,8 @@ class CallSignAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
-        !(owner.player as Player).hasFatalEffect;
+    return !(owner.controller as Player).hasEffect(EffectId.hasCallsign) &&
+        !(owner.controller as Player).hasFatalEffect;
   }
 
   @override
@@ -159,8 +161,8 @@ class CallSignAbility extends Ability {
 
   @override
   bool isUnskippable() {
-    return !(owner.player as Player).hasEffect(EffectId.hasCallsign) &&
-        !(owner.player as Player).hasFatalEffect;
+    return !(owner.controller as Player).hasEffect(EffectId.hasCallsign) &&
+        !(owner.controller as Player).hasFatalEffect;
   }
 
   @override

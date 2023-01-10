@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/app/assets.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/game.dart';
@@ -56,13 +59,13 @@ const judgePriority = 7500;
 const captainPriority = 8000;
 
 abstract class Role<T> {
-  late T player;
+  late T controller;
 
   String instanceId = useId();
   int callingPriority = -1;
   List<Ability> abilities = [];
 
-  Role(this.player);
+  Role(this.controller);
 
   RoleId get id {
     return RoleId.villager;
@@ -78,10 +81,6 @@ abstract class Role<T> {
 
   bool get isSolo {
     return useRole(id).isSolo;
-  }
-
-  T getPlayer() {
-    return player;
   }
 
   bool get isUnique {
@@ -101,6 +100,10 @@ abstract class Role<T> {
   /// Check if the role is meant to be treated as a group.
   bool get isGroup {
     return false;
+  }
+
+  bool get isObsolete {
+    return true;
   }
 
   /// Get role description
@@ -158,11 +161,6 @@ abstract class Role<T> {
   /// Override the associated player.
   void setPlayer(T player);
 
-  /// Check if the player `isAlive` equals false.
-  /// `isAlive` is updated between phases, and not during the night,
-  /// except by a dead captain.
-  bool isObsolete();
-
   /// Check if the player has been affected by a fatal status effect.
   /// Used to check is primarily dead during the night.
   bool playerIsFatallyWounded();
@@ -189,12 +187,12 @@ abstract class RoleSingular extends Role<Player> {
 
   @override
   String getPlayerName() {
-    return player.name;
+    return controller.name;
   }
 
   @override
   void setPlayer(Player player) {
-    this.player.removeRole(id);
+    controller.removeRole(id);
 
     if (player.hasRole(id)) {
       throw 'Player already have this role';
@@ -202,17 +200,17 @@ abstract class RoleSingular extends Role<Player> {
 
     player.roles.add(this);
 
-    this.player = player;
+    controller = player;
   }
 
   @override
-  bool isObsolete() {
-    return player.isAlive == false;
+  bool get isObsolete {
+    return controller.isAlive == false;
   }
 
   @override
   bool playerIsFatallyWounded() {
-    return player.hasFatalEffect;
+    return controller.hasFatalEffect;
   }
 
   @override
@@ -222,7 +220,7 @@ abstract class RoleSingular extends Role<Player> {
 
     deadPlayer.isAlive = false;
 
-    player = deadPlayer;
+    controller = deadPlayer;
   }
 }
 
@@ -234,19 +232,19 @@ abstract class RoleGroup extends Role<List<Player>> {
     return true;
   }
 
-  List<Player> getCurrentPlayers() {
-    return player.where((player) => !player.isDead).toList();
+  List<Player> get currentPlayers {
+    return controller.where((player) => !player.isDead).toList();
   }
 
   @override
   String getPlayerName() {
-    if (player.isEmpty) return 'There is no one in this group.';
+    if (controller.isEmpty) return 'There is no one in this group.';
 
-    return getCurrentPlayers().map((player) => player.name).join(" | ");
+    return currentPlayers.map((player) => player.name).join(" | ");
   }
 
   bool hasAtLeastOneSurvivingMember() {
-    for (var member in player) {
+    for (var member in controller) {
       if (member.isAlive) return true;
     }
 
@@ -254,7 +252,7 @@ abstract class RoleGroup extends Role<List<Player>> {
   }
 
   @override
-  bool isObsolete() {
+  bool get isObsolete {
     return !hasAtLeastOneSurvivingMember();
   }
 
@@ -262,7 +260,7 @@ abstract class RoleGroup extends Role<List<Player>> {
   bool playerIsFatallyWounded() {
     bool result = true;
 
-    for (var member in player) {
+    for (var member in controller) {
       if (!member.hasFatalEffect) {
         return false;
       }
@@ -273,8 +271,8 @@ abstract class RoleGroup extends Role<List<Player>> {
 
   @override
   void setPlayer(List<Player> player) {
-    while (this.player.isNotEmpty) {
-      this.player[0].removeRole(id);
+    while (controller.isNotEmpty) {
+      controller[0].removeRole(id);
     }
 
     for (var member in player) {
@@ -285,12 +283,12 @@ abstract class RoleGroup extends Role<List<Player>> {
       }
     }
 
-    this.player = player;
+    controller = player;
   }
 
   @override
   void setObsolete() {
-    player = [];
+    controller = [];
   }
 }
 
@@ -326,7 +324,7 @@ class RoleHelperObject {
   });
 
   String base(String icon) {
-    return 'assets/$icon.png';
+    return Assets.icon(icon);
   }
 
   String get icon {
@@ -338,16 +336,16 @@ RoleHelperObject useRole(RoleId id) {
   switch (id) {
     case RoleId.protector:
       return RoleHelperObject(
-        name: 'Protector',
-        description: 'No description',
+        name: t(LKey.protector),
+        description: t(LKey.protectorDescription),
         iconFile: 'salvateur',
         createRole: (players) => Protector(players[0]),
         isUnique: true,
       );
     case RoleId.werewolf:
       return RoleHelperObject(
-        name: 'Werewolf',
-        description: 'No description',
+        name: t(LKey.werewolf),
+        description: t(LKey.werewolfDescription),
         iconFile: 'loup-garou',
         createRole: (players) => Werewolf(players[0]),
         isUnique: false,
@@ -355,8 +353,8 @@ RoleHelperObject useRole(RoleId id) {
       );
     case RoleId.fatherOfWolves:
       return RoleHelperObject(
-        name: 'Father of Wolves',
-        description: 'No description',
+        name: t(LKey.fatherWolf),
+        description: t(LKey.fatherWolfDescription),
         iconFile: 'pere-infecte',
         createRole: (players) => FatherOfWolves(players[0]),
         isUnique: true,
@@ -364,56 +362,56 @@ RoleHelperObject useRole(RoleId id) {
       );
     case RoleId.witch:
       return RoleHelperObject(
-        name: 'Witch',
-        description: 'No description',
+        name: t(LKey.witch),
+        description: t(LKey.witchDescription),
         iconFile: 'sorciere',
         createRole: (players) => Witch(players[0]),
         isUnique: true,
       );
     case RoleId.seer:
       return RoleHelperObject(
-        name: 'Seer',
-        description: 'No description',
+        name: t(LKey.seer),
+        description: t(LKey.seerDescription),
         iconFile: 'voyante',
         createRole: (players) => Seer(players[0]),
         isUnique: true,
       );
     case RoleId.knight:
       return RoleHelperObject(
-        name: 'Knight',
-        description: 'No description',
+        name: t(LKey.knight),
+        description: t(LKey.knightDescription),
         iconFile: 'chevalier',
         createRole: (players) => Knight(players[0]),
         isUnique: true,
       );
     case RoleId.hunter:
       return RoleHelperObject(
-        name: 'Hunter',
-        description: 'No description',
+        name: t(LKey.hunter),
+        description: t(LKey.hunterDescription),
         iconFile: 'chasseur',
         createRole: (players) => Hunter(players[0]),
         isUnique: true,
       );
     case RoleId.captain:
       return RoleHelperObject(
-        name: 'Captain',
-        description: 'No description',
+        name: t(LKey.captain),
+        description: t(LKey.captainDescription),
         iconFile: 'villageois',
         createRole: (players) => Captain(players[0]),
         isUnique: true,
       );
     case RoleId.villager:
       return RoleHelperObject(
-        name: 'Villager',
-        description: 'No description',
+        name: t(LKey.villager),
+        description: t(LKey.villagerDescription),
         iconFile: 'villageois',
         createRole: (players) => Villager(players[0]),
         isUnique: false,
       );
     case RoleId.wolfpack:
       return RoleHelperObject(
-        name: 'Wolfpack',
-        description: 'No description',
+        name: t(LKey.wolfpack),
+        description: t(LKey.wolfpackDescription),
         iconFile: 'loup-garou',
         createRole: (players) => Wolfpack(players),
         isUnique: true,
@@ -430,16 +428,16 @@ RoleHelperObject useRole(RoleId id) {
       );
     case RoleId.judge:
       return RoleHelperObject(
-        name: 'Judge',
-        description: 'No description',
+        name: t(LKey.judge),
+        description: t(LKey.judgeDescription),
         iconFile: 'juge',
         createRole: (players) => Judge(players[0]),
         isUnique: true,
       );
     case RoleId.blackWolf:
       return RoleHelperObject(
-        name: 'Black Wolf',
-        description: 'No description',
+        name: t(LKey.blackWolf),
+        description: t(LKey.blackWolfDescription),
         iconFile: 'loup-garou',
         createRole: (players) => BlackWolf(players[0]),
         isUnique: true,
@@ -447,8 +445,8 @@ RoleHelperObject useRole(RoleId id) {
       );
     case RoleId.garrulousWolf:
       return RoleHelperObject(
-        name: 'Garrulous Wolf',
-        description: 'No description',
+        name: t(LKey.garrulousWolf),
+        description: t(LKey.garrulousWolfDescription),
         iconFile: 'loup-garou',
         createRole: (players) => GarrulousWolf(players[0]),
         isUnique: true,
@@ -456,16 +454,16 @@ RoleHelperObject useRole(RoleId id) {
       );
     case RoleId.shepherd:
       return RoleHelperObject(
-        name: 'Shepherd',
-        description: 'No description',
+        name: t(LKey.shepherd),
+        description: t(LKey.shepherdDescription),
         iconFile: 'villageois',
         createRole: (players) => Shepherd(players[0]),
         isUnique: true,
       );
     case RoleId.alien:
       return RoleHelperObject(
-        name: 'Alien',
-        description: 'No description',
+        name: t(LKey.alien),
+        description: t(LKey.alienDescription),
         iconFile: 'villageois',
         createRole: (players) => Alien(players[0]),
         isUnique: true,

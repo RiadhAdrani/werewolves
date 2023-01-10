@@ -62,7 +62,7 @@ class Servant extends RoleSingular {
 
   @override
   bool shouldBeCalledAtNight(List<Role> roles, int turn) {
-    return player.hasEffect(EffectId.isServing) == false;
+    return controller.hasEffect(EffectId.isServing) == false;
   }
 
   @override
@@ -99,13 +99,13 @@ class ServantAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    (owner.player as Player).addEffect(BeingServedEffect(owner));
+    (owner.controller as Player).addEffect(BeingServedEffect(owner));
     target.addEffect(ServedEffect(owner));
   }
 
   @override
   bool isTarget(Player target) {
-    return target != owner.player;
+    return target != owner.controller;
   }
 
   @override
@@ -120,7 +120,7 @@ class ServantAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasEffect(EffectId.isServing);
+    return !(owner.controller as Player).hasEffect(EffectId.isServing);
   }
 
   @override
@@ -195,7 +195,7 @@ Role createRoleForServant(Role oldRole, Player servantPlayer) {
       break;
   }
 
-  role.player = servantPlayer;
+  role.controller = servantPlayer;
   role.callingPriority += 1;
 
   return role;

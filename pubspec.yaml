@@ -62,31 +62,31 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/ancient.png
-    - assets/ange.png
-    - assets/chasseur.png
-    - assets/chevalier.png
-    - assets/chien-loup.png
-    - assets/corbeau.png
-    - assets/cupidon.png
-    - assets/deux-soeur.png
-    - assets/enfant-sauvage.png
-    - assets/fou.png
-    - assets/grand-mechant.png
-    - assets/joueur-de-flutte.png
-    - assets/juge.png
-    - assets/loup-blanc.png
-    - assets/loup-garou.png
-    - assets/ours.png
-    - assets/pere-infecte.png
-    - assets/petit-fille.png
-    - assets/renard.png
-    - assets/salvateur.png
-    - assets/sorciere.png
-    - assets/trois-freres.png
-    - assets/villageois.png
-    - assets/voleur.png
-    - assets/voyante.png
+    - assets/icons/ancient.png
+    - assets/icons/ange.png
+    - assets/icons/chasseur.png
+    - assets/icons/chevalier.png
+    - assets/icons/chien-loup.png
+    - assets/icons/corbeau.png
+    - assets/icons/cupidon.png
+    - assets/icons/deux-soeur.png
+    - assets/icons/enfant-sauvage.png
+    - assets/icons/fou.png
+    - assets/icons/grand-mechant.png
+    - assets/icons/joueur-de-flutte.png
+    - assets/icons/juge.png
+    - assets/icons/loup-blanc.png
+    - assets/icons/loup-garou.png
+    - assets/icons/ours.png
+    - assets/icons/pere-infecte.png
+    - assets/icons/petit-fille.png
+    - assets/icons/renard.png
+    - assets/icons/salvateur.png
+    - assets/icons/sorciere.png
+    - assets/icons/trois-freres.png
+    - assets/icons/villageois.png
+    - assets/icons/voleur.png
+    - assets/icons/voyante.png
 
     - assets/effects/cloth.png
 

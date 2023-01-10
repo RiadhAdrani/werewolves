@@ -44,7 +44,7 @@ void main() {
 
       test('should be called at night when with fatal effects', () {
         var role = createRole(id: RoleId.hunter);
-        role.player = createPlayer(effects: [EffectId.isDevoured]);
+        role.controller = createPlayer(effects: [EffectId.isDevoured]);
 
         expect(role.shouldBeCalledAtNight([], 1), true);
       });
@@ -58,7 +58,7 @@ void main() {
       test('should be able to use ability at night when with fatal effects',
           () {
         var role = createRole(id: RoleId.hunter);
-        role.player = createPlayer(effects: [EffectId.isDevoured]);
+        role.controller = createPlayer(effects: [EffectId.isDevoured]);
 
         expect(role.canUseAbilitiesDuringNight(), true);
       });

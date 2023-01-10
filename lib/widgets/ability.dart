@@ -186,7 +186,7 @@ Widget alienAbilityDialog(
     List<Player> targets = [];
 
     if (res == false) {
-      targets.add(ability.owner.player as Player);
+      targets.add(ability.owner.controller as Player);
     } else {
       targets.addAll(res as List<Player>);
     }

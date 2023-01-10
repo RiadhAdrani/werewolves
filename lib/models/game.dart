@@ -114,7 +114,7 @@ class Game extends ChangeNotifier {
   }
 
   List<Role> get playableRoles {
-    return roles.where((role) => !role.isObsolete()).toList();
+    return roles.where((role) => !role.isObsolete).toList();
   }
 
   bool get hasPendingAbilities {
@@ -133,10 +133,10 @@ class Game extends ChangeNotifier {
 
     for (var role in roles) {
       if (!role.isGroup) {
-        role.player as Player;
-        if (!output.contains(role.player)) {
-          if (!(role.player as Player).isDead) {
-            output.add(role.player);
+        role.controller as Player;
+        if (!output.contains(role.controller)) {
+          if (!(role.controller as Player).isDead) {
+            output.add(role.controller);
           }
         }
       }
@@ -436,7 +436,7 @@ class Game extends ChangeNotifier {
 
     /// Fetch role that can use abilities and has a callsign
     for (var role in roles) {
-      if (role.isObsolete() == false &&
+      if (role.isObsolete == false &&
           role.canUseSignWithNarrator() &&
           role.canUseAbilitiesDuringDay()) {
         for (var ability in role.abilities) {
@@ -453,7 +453,7 @@ class Game extends ChangeNotifier {
       /// kinda useless but
       /// There should only be one instance of captain
       /// within the list of roles.
-      if (role.isObsolete() == false && role.id == RoleId.captain) {
+      if (role.isObsolete == false && role.id == RoleId.captain) {
         for (var ability in role.abilities) {
           if (ability.id == AbilityId.execute) {
             output.add(ability);
@@ -518,7 +518,7 @@ class Game extends ChangeNotifier {
       if (role.callingPriority < min &&
           role.callingPriority > -1 &&
           role.shouldBeCalledAtNight(roles, currentTurn) &&
-          role.isObsolete() == false) {
+          role.isObsolete == false) {
         min = role.callingPriority;
       }
     }
@@ -574,7 +574,7 @@ class Game extends ChangeNotifier {
   void _addMemberToGroup(Player newMember, RoleId roleId) {
     for (var role in roles) {
       if (role.id == roleId && role.isGroup) {
-        (role as RoleGroup).setPlayer([...role.player, newMember]);
+        (role as RoleGroup).setPlayer([...role.controller, newMember]);
         return;
       }
     }
@@ -590,7 +590,7 @@ class Game extends ChangeNotifier {
 
         /// Add the old captain to the graveyard due
         /// because he is the last to play.
-        _killAndMovePlayerToGraveyard(role.getPlayer());
+        _killAndMovePlayerToGraveyard(role.controller);
 
         /// Replace with the new captain.
         role.setPlayer(player);
@@ -655,7 +655,7 @@ class Game extends ChangeNotifier {
     var toRemove = <Role>[];
 
     for (var role in roles) {
-      if (role.isObsolete()) {
+      if (role.isObsolete) {
         toRemove.add(role);
       }
     }
@@ -787,7 +787,7 @@ List<Event> useNightEffectsResolver(
           player.removeEffectsOfType(effect.type);
           newEffects.add(WasMutedEffect(effect.source));
 
-          if (!(effect.source.player as Player).hasFatalEffect) {
+          if (!(effect.source.controller as Player).hasFatalEffect) {
             infos.add(Event.mute(player, currentTurn));
           }
 
@@ -798,7 +798,7 @@ List<Event> useNightEffectsResolver(
           player.removeEffectsOfType(effect.type);
 
           /// If the seer is dead, we do not report anything
-          if ((effect.source as RoleSingular).player.hasFatalEffect) {
+          if ((effect.source as RoleSingular).controller.hasFatalEffect) {
             break;
           }
 
@@ -979,15 +979,15 @@ dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
     Role? knight = getRoleInGame(RoleId.knight, roles);
 
     bool protectorCanWinIt =
-        protector != null && protector.player.team == Team.village;
+        protector != null && protector.controller.team == Team.village;
 
     bool witchCanWinIt = (witch != null &&
-        witch.player.team == Team.village &&
+        witch.controller.team == Team.village &&
         (witch.hasUnusedAbilityOfType(AbilityId.curse) ||
             witch.hasUnusedAbilityOfType(AbilityId.revive)));
 
     bool knightCanWinIt = (knight != null &&
-        knight.player.team == Team.village &&
+        knight.controller.team == Team.village &&
         knight.hasUnusedAbilityOfType(AbilityId.counter));
 
     bool continuable = protectorCanWinIt || witchCanWinIt || knightCanWinIt;
@@ -1007,7 +1007,7 @@ dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
 /// check if the given role is still active in the given list.
 Role? getRoleInGame(RoleId id, List<Role> roles) {
   for (var role in roles) {
-    if (role.id == id && !role.isObsolete()) {
+    if (role.id == id && !role.isObsolete) {
       return role;
     }
   }
@@ -1021,10 +1021,10 @@ List<Player> usePlayerExtractor(List<Role> roles) {
 
   for (var role in roles) {
     if (!role.isGroup) {
-      role.player as Player;
-      if (!output.contains(role.player)) {
-        if (!(role.player as Player).isDead) {
-          output.add(role.player);
+      role.controller as Player;
+      if (!output.contains(role.controller)) {
+        if (!(role.controller as Player).isDead) {
+          output.add(role.controller);
         }
       }
     }
@@ -1054,7 +1054,7 @@ int nextIndex(
         (current == null || (role.callingPriority >= current.callingPriority));
     bool $callable = role.callable;
     bool $nextPriority = role.callingPriority < next;
-    bool $obsolete = !role.isObsolete();
+    bool $obsolete = !role.isObsolete;
 
     if ($diff &&
         $priority &&

@@ -93,14 +93,14 @@ class Player {
       if (role.id == id) {
         if (role.isGroup) {
           (role as RoleGroup)
-              .player
+              .controller
               .removeWhere((Player player) => player.id == this.id);
         } else {
           var dummyDeadVillager = Player("this_player_name_should_not_appear");
 
           dummyDeadVillager.isAlive = false;
 
-          (role as RoleSingular).player = dummyDeadVillager;
+          (role as RoleSingular).controller = dummyDeadVillager;
         }
 
         return true;

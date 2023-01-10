@@ -85,7 +85,7 @@ void main() {
       });
 
       test('should add role to player', () {
-        expect(role.player.hasRole(RoleId.alien), true);
+        expect(role.controller.hasRole(RoleId.alien), true);
       });
 
       test('should compute player name', () {
@@ -94,20 +94,20 @@ void main() {
 
       test('should determine if player is fatally wounded', () {
         expect(role.playerIsFatallyWounded(), false);
-        role.player.addEffect(
+        role.controller.addEffect(
           createEffectFromId(
             EffectId.isDevoured,
             Wolfpack([Player('source')]),
           ),
         );
         expect(role.playerIsFatallyWounded(), true);
-        role.player.removeEffectsOfType(EffectId.isDevoured);
+        role.controller.removeEffectsOfType(EffectId.isDevoured);
       });
 
       test('should determine if role is obsolete', () {
-        expect(role.isObsolete(), false);
+        expect(role.isObsolete, false);
         role.setObsolete();
-        expect(role.isObsolete(), true);
+        expect(role.isObsolete, true);
       });
 
       var group = Villager(Player('0'));
@@ -117,18 +117,18 @@ void main() {
       test('setPlayer should add player/role', () {
         group.setPlayer(p1);
 
-        expect(group.player, p1);
+        expect(group.controller, p1);
         expect(p1.hasRole(RoleId.villager), true);
       });
 
       test('setPlayer should remove/replace player/role', () {
         group.setPlayer(p2);
 
-        expect(group.player != p1, true);
+        expect(group.controller != p1, true);
         expect(p1.hasRole(RoleId.villager), false);
 
         expect(p2.hasRole(RoleId.villager), true);
-        expect(group.player, p2);
+        expect(group.controller, p2);
       });
     });
 
@@ -141,7 +141,7 @@ void main() {
       });
 
       test('members should have the role', () {
-        for (var member in role.player) {
+        for (var member in role.controller) {
           expect(member.hasRole(RoleId.wolfpack), true);
         }
       });
@@ -152,7 +152,7 @@ void main() {
 
       test('should compute if role is fatally wounded', () {
         expect(role.playerIsFatallyWounded(), false);
-        role.player[0].addEffect(
+        role.controller[0].addEffect(
           createEffectFromId(
             EffectId.isDevoured,
             Wolfpack([Player('source')]),
@@ -160,7 +160,7 @@ void main() {
         );
         expect(role.playerIsFatallyWounded(), false);
 
-        for (var member in role.player) {
+        for (var member in role.controller) {
           member.addEffect(
             createEffectFromId(
               EffectId.isDevoured,
@@ -170,17 +170,17 @@ void main() {
         }
         expect(role.playerIsFatallyWounded(), true);
 
-        for (var member in role.player) {
+        for (var member in role.controller) {
           member.removeEffectsOfType(EffectId.isDevoured);
         }
       });
 
       test('should determine if role is obsolete', () {
-        expect(role.isObsolete(), false);
-        for (var member in role.player) {
+        expect(role.isObsolete, false);
+        for (var member in role.controller) {
           member.isAlive = false;
         }
-        expect(role.isObsolete(), true);
+        expect(role.isObsolete, true);
       });
 
       var group = Wolfpack([]);
@@ -190,18 +190,18 @@ void main() {
       test('setPlayer should add players/role', () {
         group.setPlayer([p1]);
 
-        expect(group.player.contains(p1), true);
+        expect(group.controller.contains(p1), true);
         expect(p1.hasRole(RoleId.wolfpack), true);
       });
 
       test('setPlayer should remove/replace player/role', () {
         group.setPlayer([p2]);
 
-        expect(group.player.contains(p1), false);
+        expect(group.controller.contains(p1), false);
         expect(p1.hasRole(RoleId.wolfpack), false);
 
         expect(p2.hasRole(RoleId.wolfpack), true);
-        expect(group.player.contains(p2), true);
+        expect(group.controller.contains(p2), true);
       });
     });
 
@@ -285,10 +285,10 @@ void main() {
       var wolfpack = compiled
           .firstWhere((element) => element.id == RoleId.wolfpack) as RoleGroup;
 
-      expect(wolfpack.player[0].roles.length, 2);
-      expect(wolfpack.player[1].roles.length, 2);
+      expect(wolfpack.controller[0].roles.length, 2);
+      expect(wolfpack.controller[1].roles.length, 2);
 
-      expect(wolfpack.player.length, 2);
+      expect(wolfpack.controller.length, 2);
     });
   });
 }

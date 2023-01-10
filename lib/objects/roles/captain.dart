@@ -47,7 +47,7 @@ class Captain extends RoleSingular {
   List<String> getInformations(List<Role> roles) {
     final output = <String>[];
 
-    if (player.hasFatalEffect) {
+    if (controller.hasFatalEffect) {
       output.add(
           'You are dead, choose another fellow player to inherit your captaincy.');
     }
@@ -171,7 +171,7 @@ class InheritAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return (owner.player as Player).hasFatalEffect;
+    return (owner.controller as Player).hasFatalEffect;
   }
 
   @override
@@ -209,7 +209,7 @@ class SubstitueAbility extends Ability {
 
   @override
   bool isTarget(Player target) {
-    return target != owner.player;
+    return target != owner.controller;
   }
 
   @override
@@ -263,7 +263,7 @@ class TalkerAbility extends Ability {
 
   @override
   bool shouldBeAvailable() {
-    return !(owner.player as Player).hasFatalEffect;
+    return !(owner.controller as Player).hasFatalEffect;
   }
 
   @override

@@ -494,15 +494,15 @@ Widget debugDialog(BuildContext context, Game game) {
             ]),
             divider(),
             titleWithIcon(
-              t(role.isObsolete() ? LKey.obsolete : LKey.playing),
-              role.isObsolete() ? Icons.error_outline : Icons.done,
+              t(role.isObsolete ? LKey.obsolete : LKey.playing),
+              role.isObsolete ? Icons.error_outline : Icons.done,
               alignment: MainAxisAlignment.start,
             ),
             padding(
               [4, 0],
               role.isGroup
                   ? titleWithIcon(
-                      '${(role as RoleGroup).getCurrentPlayers().length}',
+                      '${(role as RoleGroup).currentPlayers.length}',
                       Icons.people_outline,
                       alignment: MainAxisAlignment.start,
                       color: BaseColors.textSecondary,
@@ -511,16 +511,19 @@ Widget debugDialog(BuildContext context, Game game) {
                       crossAlignment: CrossAxisAlignment.stretch,
                       children: [
                         titleWithIcon(
-                          ellipsify((role.player as Player).name, 25),
+                          ellipsify((role.controller as Player).name, 25),
                           Icons.person_outline,
                           alignment: MainAxisAlignment.start,
                           color: BaseColors.textSecondary,
                         ),
-                        if ((role as RoleSingular).player.effects.isNotEmpty)
+                        if ((role as RoleSingular)
+                            .controller
+                            .effects
+                            .isNotEmpty)
                           padding(
                             [8, 0],
                             titleWithIcon(
-                              role.player.effects
+                              role.controller.effects
                                   .map(
                                       (effect) => effectIdToString(effect.type))
                                   .join(' | '),
