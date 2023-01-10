@@ -36,10 +36,8 @@ void main() {
         () {
       var ability = create();
 
-      expect(
-          () => ability.use([Player(''), Player('')], 0),
-          throwsA(
-              '[Exception] The number of targets is superior to the maximum allowed.'));
+      expect(() => ability.use([Player(''), Player('')], 0),
+          throwsA('The number of targets is superior to the maximum allowed.'));
     });
 
     test('should be applied', () {

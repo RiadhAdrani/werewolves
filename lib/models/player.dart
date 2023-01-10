@@ -1,7 +1,6 @@
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/utils.dart';
-import 'package:werewolves/utils/errors.dart';
 
 enum Team { equality, village, wolves, cupid, alien }
 
@@ -42,7 +41,7 @@ class Player {
   }
 
   set roles(List<Role> roles) {
-    throwException('Do not use setter to modify player\'s roles');
+    throw 'Do not use setter to modify player\'s roles';
   }
 
   /// Check if the player has a fatal effect.
@@ -84,7 +83,7 @@ class Player {
     if (!hasRole(newRole.id)) {
       _roles.add(newRole);
     } else {
-      throwException('Player already have [${newRole.id}] role.');
+      throw 'Player already have [${newRole.id}] role.';
     }
   }
 

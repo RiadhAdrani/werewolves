@@ -16,14 +16,16 @@ Widget roleCard(
   String icon = use.icon;
 
   return decoratedBox(
-      radius: [6],
-      img: icon,
-      blendMode: greyed ? BlendMode.saturation : null,
-      blendColor: greyed ? Colors.grey : null,
-      child: inkWell(
-        onClick: onClick,
-        onHold: onHold,
-        child: column(crossAlignment: CrossAxisAlignment.center, children: [
+    radius: [6],
+    img: icon,
+    blendMode: greyed ? BlendMode.saturation : null,
+    blendColor: greyed ? Colors.grey : null,
+    child: inkWell(
+      onClick: onClick,
+      onHold: onHold,
+      child: column(
+        crossAlignment: CrossAxisAlignment.center,
+        children: [
           SizedBox(
             width: double.infinity,
             child: row(
@@ -49,20 +51,23 @@ Widget roleCard(
           SizedBox(
             width: double.infinity,
             child: decoratedBox(
-                radius: [0, 6],
-                color: BaseColors.darkJungle.withOpacity(0.8),
-                child: padding(
-                  [8, 0],
-                  text(
-                    name,
-                    center: true,
-                    color: Colors.white,
-                    size: 12,
-                    weight: FontWeight.w500,
-                    fontFamily: Fonts.almendra,
-                  ),
-                )),
-          )
-        ]),
-      ));
+              radius: [0, 6],
+              color: BaseColors.darkJungle.withOpacity(0.8),
+              child: padding(
+                [8, 0],
+                text(
+                  name,
+                  center: true,
+                  color: Colors.white,
+                  size: 12,
+                  weight: FontWeight.w500,
+                  fontFamily: Fonts.almendra,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

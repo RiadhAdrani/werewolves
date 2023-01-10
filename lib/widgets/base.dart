@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/app/assets.dart';
 import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/utils/dialogs.dart';
 
@@ -41,7 +42,7 @@ FloatingActionButton fab(
 
 Widget card({
   bool isSelected = false,
-  Widget child = const Text('card'),
+  Widget child = const Text(''),
   Color? bgColor,
   Color? selectedBgColor,
 }) {
@@ -208,12 +209,23 @@ Widget checkbox(bool value, Function(bool?) onChanged) {
   return Checkbox(value: value, onChanged: onChanged);
 }
 
-Widget icon(IconData icon, {Color? color, double? size}) {
-  return Icon(
+Widget icon(
+  IconData icon, {
+  Color? color,
+  double? size,
+  void Function()? onClick,
+}) {
+  var widget = Icon(
     icon,
     size: size,
     color: color ?? Colors.white,
   );
+
+  if (onClick != null) {
+    return inkWell(child: widget, onClick: onClick);
+  }
+
+  return widget;
 }
 
 Widget image(
@@ -300,7 +312,7 @@ Widget dialog({
         crossAlignment: CrossAxisAlignment.stretch,
         children: [
           decoratedBox(
-            img: 'assets/effects/cloth.png',
+            img: Assets.get('effects/cloth.png'),
             opacity: 0.75,
             color: BaseColors.red,
             child: padding(

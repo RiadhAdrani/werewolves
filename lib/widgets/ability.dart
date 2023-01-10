@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/app/app.dart';
 import 'package:werewolves/app/theme.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -57,14 +59,14 @@ Widget abilityDialog(
     if (targets.length < ability.targetCount) {
       showAlert(
         context,
-        'Cannot proceed',
-        'You are trying to use an ability without a single selected target while it needs ${ability.targetCount}.',
+        t(LKey.gameConfirmUseIssueTitle),
+        t(LKey.gameConfirmUseIssueText, params: {'count': ability.targetCount}),
       );
     } else {
       showConfirm(
         context,
-        'Confirm changes.',
-        'Committing these changes is irreversible, make sure you selected the correct target.',
+        t(LKey.gameConfirmUseDoneTitle),
+        t(LKey.gameConfirmUseDoneText),
         () {
           onUsed(targets);
         },
@@ -89,7 +91,11 @@ Widget abilityDialog(
             padding(
               [16, 0],
               paragraph(
-                'You have chosen ${model.getSelected().length}/${ability.targetCount} required target${appendPluralS(ability.targetCount)} out of ${targetList.length} possible option${appendPluralS(targetList.length)}',
+                t(LKey.gameAbilityDialogParagraph, params: {
+                  'count': model.getSelected().length,
+                  'needed': ability.targetCount,
+                  'targetCount': targetList.length,
+                }),
               ),
             ),
             SizedBox(
@@ -111,8 +117,8 @@ Widget abilityDialog(
             )
           ]),
       actions: [
-        if (dismissible) button('Cancel', dismiss, flat: true),
-        button('Apply', use, flat: true)
+        if (dismissible) button(t(LKey.cancel), dismiss, flat: true),
+        button(t(LKey.done), use, flat: true)
       ]);
 }
 
@@ -140,7 +146,7 @@ Widget alienAbilityDialog(
       context: context,
       builder: (BuildContext context) {
         return dialog(
-          title: 'Options',
+          title: t(LKey.options),
           content: column(
             mainSize: MainAxisSize.min,
             children: [
@@ -211,14 +217,18 @@ Widget alienAbilityDialog(
               children: [
                 text(item.player.name),
                 if (item.guess != null)
-                  paragraph('Guess : ${getRoleName(item.guess!)}'),
+                  paragraph(
+                    t(LKey.gameAbilityGuessCurrentTry, params: {
+                      'guess': getRoleName(item.guess!),
+                    }),
+                  ),
               ],
             )),
             TextButton(
                 onPressed: () {
                   onItemPressed();
                 },
-                child: const Text("Guess"))
+                child: text(t(LKey.guess)))
           ],
         ),
       ),
@@ -226,14 +236,17 @@ Widget alienAbilityDialog(
   }
 
   return dialog(
-      title: "${ability.name} (${ability.owner.name})",
+      title: t(LKey.gameAbilityGuessTitle, params: {
+        'ability': ability.name,
+        'role': ability.owner.name,
+      }),
       content: column(
           mainSize: MainAxisSize.min,
           crossAlignment: CrossAxisAlignment.start,
           children: [
             padding(
               [16, 0],
-              text('Guess the true role(s) of one or more player'),
+              text(t(LKey.gameAbilityGuessText)),
             ),
             SizedBox(
               width: 300,
@@ -252,7 +265,7 @@ Widget alienAbilityDialog(
             )
           ]),
       actions: [
-        if (dismissible) button('Cancel', dismiss, flat: true),
-        button('Apply', apply, flat: true)
+        if (dismissible) button(t(LKey.cancel), dismiss, flat: true),
+        button(t(LKey.done), apply, flat: true)
       ]);
 }

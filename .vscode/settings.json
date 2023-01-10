@@ -11,5 +11,6 @@
     "**/Thumbs.db": true
   },
   "hide-files.files": [],
-  "cmake.configureOnOpen": false
+  "cmake.configureOnOpen": false,
+  "cSpell.words": ["almendra", "Almendra", "roboto", "Roboto", "tajawal", "Tajawal"]
 }

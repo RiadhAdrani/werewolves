@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/widgets/base.dart';
 import 'package:werewolves/widgets/game.dart';
 
@@ -29,7 +31,7 @@ void showConfirm(
 }
 
 void showConfirmUse(BuildContext context, String message, Function onConfirm) {
-  showConfirm(context, 'Confirm ability use', message, onConfirm);
+  showConfirm(context, t(LKey.gameConfirmUse), message, onConfirm);
 }
 
 Function dismiss(BuildContext context) {

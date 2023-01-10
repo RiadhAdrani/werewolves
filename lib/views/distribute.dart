@@ -69,10 +69,12 @@ class _DistributePageState extends State<DistributePage> {
                               padding([0, 0, 0, 12], subTitle(role.name)),
                             ],
                           ),
-                          input(controller,
-                              placeholder:
-                                  t(LKey.distributePlayerNamePlaceholder),
-                              max: 30)
+                          input(
+                            controller,
+                            placeholder:
+                                t(LKey.distributePlayerNamePlaceholder),
+                            max: 30,
+                          )
                         ],
                       ),
                       actions: [

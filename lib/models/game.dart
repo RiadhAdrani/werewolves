@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/app/routing.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -38,15 +41,27 @@ class Event {
   Event(this.text, this.turn, this.period);
 
   static Event death(Player player, GameState period, int turn) {
-    return Event('${player.name} died.', turn, period);
+    return Event(
+      t(LKey.eventDeath, params: {'name': player.name}),
+      turn,
+      period,
+    );
   }
 
   static Event talk(Player player, GameState period, int turn) {
-    return Event('${player.name} starts the discussion.', turn, period);
+    return Event(
+      t(LKey.eventTalk, params: {'name': player.name}),
+      turn,
+      period,
+    );
   }
 
   static Event clairvoyance(RoleId role, GameState period, int turn) {
-    return Event('The seer saw : ${getRoleName(role)}', turn, period);
+    return Event(
+      t(LKey.eventClairvoyance, params: {'name': getRoleName(role)}),
+      turn,
+      period,
+    );
   }
 
   static Event servant(RoleId role, GameState period, int turn) {
@@ -54,18 +69,27 @@ class Event {
   }
 
   static Event judge(Player player, int turn) {
-    return Event('The Judge protected ${player.name}.', turn, GameState.night);
+    return Event(
+      t(LKey.eventJudge, params: {'name': player.name}),
+      turn,
+      GameState.night,
+    );
   }
 
   static Event mute(Player player, int turn) {
-    return Event('${player.name} is muted.', turn, GameState.night);
+    return Event(
+      t(LKey.eventMute, params: {'name': player.name}),
+      turn,
+      GameState.night,
+    );
   }
 
   static Event sheep(bool killed, int turn) {
     return Event(
-        killed ? 'A sheep was killed' : 'A sheep returned to the shepherd.',
-        turn,
-        GameState.night);
+      t(killed ? LKey.eventSheepDead : LKey.eventSheepReturned),
+      turn,
+      GameState.night,
+    );
   }
 }
 
@@ -137,7 +161,7 @@ class Game extends ChangeNotifier {
   Widget useView(BuildContext context) {
     switch (state) {
       case GameState.empty:
-        return const Text('Loading...');
+        return Text(t(LKey.loading));
       case GameState.initialized:
         return gamePreView(this, context);
       case GameState.night:
@@ -187,7 +211,7 @@ class Game extends ChangeNotifier {
 
     if (mandatory) {
       if (!noContextMode) {
-        showToast('At least one mandatory ability was not used.');
+        showToast(t(LKey.gameNightMandatoryAbilityNotUsed));
       }
 
       return;
@@ -262,7 +286,7 @@ class Game extends ChangeNotifier {
 
     showAlert(
       context,
-      'Ability used',
+      t(LKey.gameAbilityUsed),
       getAbilityAppliedMessage(ability, affected),
     );
   }
@@ -304,8 +328,9 @@ class Game extends ChangeNotifier {
               return WillPopScope(
                 onWillPop: () async => false,
                 child: stepAlert(
-                  'Ability triggered',
-                  '${currentPendingAbility.owner.name} should use his ability, Make sure everyone else is asleep!',
+                  t(LKey.gameDayAbilityTriggeredTitle),
+                  t(LKey.gameDayAbilityTriggeredText,
+                      params: {'name': currentPendingAbility.owner.name}),
                   getCurrentDaySummary().map((item) => item.text).toList(),
                   context,
                   () {
@@ -440,10 +465,6 @@ class Game extends ChangeNotifier {
     return output;
   }
 
-  void skipCurrentRole(BuildContext context) {
-    _setNextIndex(context);
-  }
-
   // PRIVATE METHODS
   // DO NOT EXPOSE DIRECTLY
   // --------------------------------------------------------------------------
@@ -487,58 +508,6 @@ class Game extends ChangeNotifier {
     _gameTransitionToDay();
   }
 
-  /// Check if all unskippable abilities have been used by the current player.
-  /// Some abilities are mandatory for a healthy game progression.
-  ///
-  /// `Hunter` should use his `hunt` ability when he is fatally wounded.
-  ///
-  /// `Protector` should use his `shield` every turn.
-  bool _checkAllUnskippableAbilitiesUse() {
-    for (var ability in currentRole!.abilities) {
-      if (ability.wasUsedInTurn(currentTurn) == false &&
-          ability.isUnskippable() &&
-          ability.createListOfTargets(playersList).isNotEmpty) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  /// Try to find the appropriate index of the next role.
-  /// If no role was found with the `probablyNextIndex`,
-  /// it means, in theory, that we exhausted all possible roles
-  /// and so we perform night processing
-  /// which will transition the game into the day phase.
-  void _setNextIndex(BuildContext context) {
-    if (roles.isEmpty) return;
-
-    int next = 999999;
-
-    for (var role in roles) {
-      if (role.callingPriority > roles[currentIndex].callingPriority &&
-          role.callingPriority > -1 &&
-          role.callingPriority < next &&
-          role.shouldBeCalledAtNight(roles, currentTurn) &&
-          role.isObsolete() == false) {
-        next = role.callingPriority;
-      }
-    }
-
-    var probablyNextIndex =
-        roles.indexWhere((element) => element.callingPriority == next);
-
-    if (probablyNextIndex != -1) {
-      currentIndex = probablyNextIndex;
-
-      currentRole!.beforeCallEffect(context, this);
-
-      notifyListeners();
-    } else {
-      _performPostNightProcessing(context);
-    }
-  }
-
   /// Find the index of the first role that should start the night.
   void _initCurrentIndex() {
     if (roles.isEmpty) return;
@@ -556,23 +525,6 @@ class Game extends ChangeNotifier {
 
     currentIndex =
         roles.indexWhere((element) => element.callingPriority == min);
-  }
-
-  /// Create appropriate `RoleGroups` and override the current list of roles.
-  void _initRoles(List<Role> list) {
-    roles.addAll(list);
-  }
-
-  /// Internal function exposed by `init()`.
-  /// prepare roles by adding `GroupRoles`
-  /// and setting the correct selection index.
-  void _init(List<Role> list) {
-    _initRoles(list);
-    _initCurrentIndex();
-
-    state = GameState.initialized;
-
-    notifyListeners();
   }
 
   /// Start a new turn and transition into the night.
@@ -594,24 +546,6 @@ class Game extends ChangeNotifier {
     state = GameState.day;
 
     notifyListeners();
-  }
-
-  /// Attempt to proceed to the next role
-  /// or transition into the day phase.
-  /// If the current role hasn't exhausted all his mandatory abilities
-  /// the game will not progress.
-  void _next(BuildContext context) {
-    if (state == GameState.night) {
-      if (_checkAllUnskippableAbilitiesUse()) {
-        _setNextIndex(context);
-      } else {
-        showAlert(
-          context,
-          'Unable to proceed',
-          'At least one mandatory ability was not used during this turn.',
-        );
-      }
-    }
   }
 
   /// Check if the ability is available at the current night.
@@ -712,7 +646,7 @@ class Game extends ChangeNotifier {
       showConfirm(context, 'Game Over', 'The ${getTeamName(result)} Team won !',
           () {
         dispose();
-        Navigator.popUntil(context, ModalRoute.withName("/"));
+        Navigator.popUntil(context, ModalRoute.withName(Screen.home.path));
       });
     }
   }
@@ -1097,21 +1031,6 @@ List<Player> usePlayerExtractor(List<Role> roles) {
   }
 
   return output;
-}
-
-/// check if the list of players is valid for a game to start.
-dynamic useGameStartable(List<Role> roles) {
-  if (roles.length < 7) {
-    return "Player count is too short to start a game. Try adding more roles to reach at least 7 players.";
-  }
-
-  dynamic balanced = useTeamsBalanceChecker(usePlayerExtractor(roles), roles);
-
-  if (balanced != true) {
-    return "Game is not balanced, ${getTeamName(balanced)} team is already winning.";
-  }
-
-  return true;
 }
 
 int nextIndex(

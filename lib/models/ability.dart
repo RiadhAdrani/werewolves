@@ -1,3 +1,5 @@
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -15,7 +17,6 @@ import 'package:werewolves/objects/roles/servant.dart';
 import 'package:werewolves/objects/roles/shepherd.dart';
 import 'package:werewolves/objects/roles/witch.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
-import 'package:werewolves/utils/errors.dart';
 
 enum AbilityId {
   protect,
@@ -37,8 +38,10 @@ enum AbilityId {
   // captain
   talker,
   execute,
+  inherit,
+
+  @Deprecated('do not use')
   substitute,
-  inherit
 }
 
 enum AbilityTime { night, day, both }
@@ -70,8 +73,7 @@ abstract class Ability {
 
     if (isPlenty && targets.isNotEmpty) {
       if (targets.length > targetCount) {
-        throwException(
-            'The number of targets is superior to the maximum allowed.');
+        throw 'The number of targets is superior to the maximum allowed.';
       }
 
       for (var target in targets) {
@@ -172,64 +174,64 @@ AbilityHelperObject useAbilityHelper(AbilityId id) {
   switch (id) {
     case AbilityId.protect:
       return AbilityHelperObject(
-        'Protect',
-        'Protect',
+        t(LKey.protectorProtect),
+        t(LKey.protectorProtectDescription),
         (owner) => ProtectAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.devour:
       return AbilityHelperObject(
-        'Devour',
-        'Devour',
+        t(LKey.wolfpackDevour),
+        t(LKey.wolfpackDevourDescription),
         (owner) => DevourAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.infect:
       return AbilityHelperObject(
-        'Infect',
-        'Infect',
+        t(LKey.fatherWolfInfect),
+        t(LKey.fatherWolfInfect),
         (owner) => InfectAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.clairvoyance:
       return AbilityHelperObject(
-        'Clairvoyance',
-        'Clairvoyance',
+        t(LKey.seerClairvoyance),
+        t(LKey.seerClairvoyanceDescription),
         (owner) => ClairvoyanceAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.revive:
       return AbilityHelperObject(
-        'Revive',
-        'Revive',
+        t(LKey.witchRevive),
+        t(LKey.witchReviveDescription),
         (owner) => ReviveAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.curse:
       return AbilityHelperObject(
-        'Curse',
-        'Curse',
+        t(LKey.witchCurse),
+        t(LKey.witchCurseDescription),
         (owner) => CurseAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.counter:
       return AbilityHelperObject(
-        'Counter',
-        'Counter',
+        t(LKey.knightCounter),
+        t(LKey.knightCounterDescription),
         (owner) => CounterAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.hunt:
       return AbilityHelperObject(
-        'Hunt',
-        'Hunt',
+        t(LKey.hunterHunt),
+        t(LKey.hunterHuntDescription),
         (owner) => HuntAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.callsign:
       return AbilityHelperObject(
-        'CallSign',
-        'CallSign',
+        t(LKey.commonCallsign),
+        t(LKey.commonCallsignDescription),
         (owner) => CallSignAbility(owner),
         (targets) => 'Ability Applied',
       );
@@ -242,50 +244,50 @@ AbilityHelperObject useAbilityHelper(AbilityId id) {
       );
     case AbilityId.judgement:
       return AbilityHelperObject(
-        'Judgement',
-        'Judgement',
+        t(LKey.judgeJudgement),
+        t(LKey.judgeJudgementDescription),
         (owner) => JudgementAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.mute:
       return AbilityHelperObject(
-        'Mute',
-        'Mute',
+        t(LKey.blackWolfMute),
+        t(LKey.blackWolfMuteDescription),
         (owner) => MuteAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.word:
       return AbilityHelperObject(
-        'Garrulous Word',
-        'Garrulous Word',
+        t(LKey.garrulousWolfWord),
+        t(LKey.garrulousWolfWordDescription),
         (owner) => GarrulousAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.sheeps:
       return AbilityHelperObject(
-        'Shepherd',
-        'Shepherd',
+        t(LKey.shepherdSheeps),
+        t(LKey.shepherdSheepsDescription),
         (owner) => ShepherdAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.guess:
       return AbilityHelperObject(
-        'Guess',
-        'Guess',
+        t(LKey.alienGuess),
+        t(LKey.alienGuessDescription),
         (owner) => GuessAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.talker:
       return AbilityHelperObject(
-        'Talker',
-        'Talker',
+        t(LKey.captainTalker),
+        t(LKey.captainTalkerDescription),
         (owner) => TalkerAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.execute:
       return AbilityHelperObject(
-        'Execute',
-        'Execute',
+        t(LKey.captainExecute),
+        t(LKey.captainExecuteDescription),
         (owner) => ExecuteAbility(owner),
         (targets) => 'Effect Applied',
       );
@@ -298,8 +300,8 @@ AbilityHelperObject useAbilityHelper(AbilityId id) {
       );
     case AbilityId.inherit:
       return AbilityHelperObject(
-        'Inherit',
-        'Inherit',
+        t(LKey.captainInherit),
+        t(LKey.captainInheritDescription),
         (owner) => InheritAbility(owner),
         (targets) => 'Effect Applied',
       );

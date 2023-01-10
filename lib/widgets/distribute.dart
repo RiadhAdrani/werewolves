@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:werewolves/app/app.dart';
+import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/utils.dart';
@@ -11,7 +13,7 @@ Widget confirmDistributedList(
 ) {
   return dialog(
     context: context,
-    title: 'Review players list (${list.length})',
+    title: t(LKey.distributeReview, params: {'count': list.length}),
     content: SizedBox(
       width: 350,
       height: 450,
