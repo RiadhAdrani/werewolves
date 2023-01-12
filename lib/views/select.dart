@@ -40,6 +40,7 @@ class _SelectionPageState extends State<SelectionPage> {
           appBar: appBar(
             t(LKey.selectTitle, params: {'count': controller.items.length}),
             showReturnButton: true,
+            bgColor: BaseColors.red,
           ),
           fab: fab(
             Icons.done,

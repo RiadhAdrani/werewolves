@@ -62,33 +62,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/icons/ancient.png
-    - assets/icons/ange.png
-    - assets/icons/chasseur.png
-    - assets/icons/chevalier.png
-    - assets/icons/chien-loup.png
-    - assets/icons/corbeau.png
-    - assets/icons/cupidon.png
-    - assets/icons/deux-soeur.png
-    - assets/icons/enfant-sauvage.png
-    - assets/icons/fou.png
-    - assets/icons/grand-mechant.png
-    - assets/icons/joueur-de-flutte.png
-    - assets/icons/juge.png
-    - assets/icons/loup-blanc.png
-    - assets/icons/loup-garou.png
-    - assets/icons/ours.png
-    - assets/icons/pere-infecte.png
-    - assets/icons/petit-fille.png
-    - assets/icons/renard.png
-    - assets/icons/salvateur.png
-    - assets/icons/sorciere.png
-    - assets/icons/trois-freres.png
-    - assets/icons/villageois.png
-    - assets/icons/voleur.png
-    - assets/icons/voyante.png
-
-    - assets/effects/cloth.png
+    - assets/
+    - assets/textures/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

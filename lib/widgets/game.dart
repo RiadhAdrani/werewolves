@@ -68,33 +68,55 @@ AppBar gameBar(
 }
 
 Widget gameNightViewHeading(Role role) {
+  List<Player> controller = role.isGroup
+      ? (role as RoleGroup).controller
+      : [(role as RoleSingular).controller];
+
   return padding(
     [8, 0],
-    column(
-        crossAlignment: CrossAxisAlignment.center,
-        mainAlignment: MainAxisAlignment.center,
-        children: [
-          image(
-            role.icon,
-            height: 75,
-            width: 75,
-            radius: [6],
-          ),
-          padding(
-            [4],
-            headingTitle(role.name),
-          ),
-          padding(
-            [4],
-            text(
-              t(LKey.gameNightControllerName,
-                  params: {'name': role.getPlayerName()}),
-              italic: true,
-              weight: FontWeight.normal,
-              center: true,
+    row(
+      children: [
+        image(
+          role.icon,
+          height: 100,
+          width: 100,
+          radius: [6],
+        ),
+        Expanded(
+          child: padding(
+            [0, 0, 0, 10],
+            column(
+              mainAlignment: MainAxisAlignment.center,
+              children: [
+                padding(
+                  [4],
+                  text(
+                    role.name,
+                    size: 20,
+                    weight: FontWeight.bold,
+                  ),
+                ),
+                padding(
+                  [0],
+                  SizedBox(
+                    height: 30,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: controller
+                          .map(
+                            (member) => chip(member.name,
+                                max: 10, size: 11, spacing: [2]),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ]),
+        ),
+      ],
+    ),
   );
 }
 
@@ -211,18 +233,18 @@ Widget gameNightView(Game game, BuildContext context) {
       game,
     ),
     body: padding(
-      [8],
+      [8, 12],
       column(
         crossAlignment: CrossAxisAlignment.stretch,
         mainAlignment: MainAxisAlignment.start,
         children: [
           gameNightViewHeading(game.currentRole!),
-          divider(),
+          divider(spacing: [2, 0]),
           gameNightViewInfos(
             context,
             game.currentRole!.getInformations(game.playableRoles),
           ),
-          divider(),
+          divider(spacing: [2, 0]),
           gameNightViewAbilities(game, context),
           button(
             t(LKey.next),
@@ -621,35 +643,26 @@ Widget abilityCard(
     column(
       crossAlignment: CrossAxisAlignment.start,
       children: [
-        text(
-          ability.name,
-          size: variant ? 14 : 18,
-          weight: FontWeight.w500,
-        ),
+        titleWithIcon(ability.name, Icons.dangerous, size: 15, spacing: []),
         if (variant)
           text(
             ability.owner.getPlayerName(),
             size: 12,
           ),
-        divider(),
-        padding(
-          [4, 0],
-          row(
-            children: [
-              icon(
-                should ? Icons.dangerous_outlined : Icons.done,
-                size: variant ? 14 : 20,
-                color: skipColor,
-              ),
-              text(
-                skipText,
-                color: skipColor,
-                size: variant ? 10 : 12,
-                italic: should,
-              ),
-            ],
-          ),
+        divider(spacing: [2, 0]),
+        text(
+          skipText,
+          color: skipColor,
+          size: variant ? 10 : 12,
+          italic: should,
         ),
+        padding(
+          [8, 0, 0, 0],
+          paragraph(
+            ability.description,
+            color: BaseColors.textSecondary,
+          ),
+        )
       ],
     ),
   );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:werewolves/app/assets.dart';
 import 'package:werewolves/app/theme.dart';
 import 'package:werewolves/utils/dialogs.dart';
+import 'package:werewolves/utils/utils.dart';
 
 Widget button(
   String label,
@@ -89,6 +90,7 @@ Text headingTitle(
   FontWeight? weight = FontWeight.bold,
   bool italic = false,
   String fontFamily = Fonts.roboto,
+  bool center = true,
 }) {
   return text(
     data,
@@ -98,6 +100,7 @@ Text headingTitle(
     italic: italic,
     overflow: false,
     fontFamily: fontFamily,
+    center: center,
   );
 }
 
@@ -366,11 +369,11 @@ AppBar appBar(
     backgroundColor: bgColor ?? BaseColors.darkBlue,
     title: subTitle(title, color: txtColor),
     flexibleSpace: Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/effects/cloth.png'),
-          fit: BoxFit.fill,
-          opacity: 0.9,
+          image: AssetImage(Assets.texture(Assets.cloth1)),
+          fit: BoxFit.cover,
+          opacity: 1,
         ),
       ),
     ),
@@ -416,16 +419,57 @@ Widget titleWithIcon(
   double size = 12,
   Color? color,
   MainAxisAlignment alignment = MainAxisAlignment.center,
+  List<double> spacing = const [0, 6],
 }) {
   return padding(
-      [0, 6],
-      row(mainAlignment: alignment, children: [
+    spacing,
+    row(
+      mainAlignment: alignment,
+      children: [
         padding(
           [0, size * 0.6, 0, 0],
           icon(iconData, color: color, size: size * 1.66),
         ),
         text(label, color: color, size: size),
-      ]));
+      ],
+    ),
+  );
+}
+
+Widget chip(
+  String label, {
+  int max = 15,
+  double size = 12,
+  List<double> spacing = const [4],
+  List<double> innerSpacing = const [4, 12],
+  Color? labelColor,
+  Color? color,
+  Color shadowColor = Colors.black,
+  void Function()? onClick,
+}) {
+  return padding(
+    spacing,
+    decoratedBox(
+      shadows: [
+        BoxShadow(
+          color: shadowColor,
+          spreadRadius: 0.15,
+          blurRadius: 0.5,
+          offset: const Offset(0, 0.5),
+        )
+      ],
+      color: color ?? BaseColors.darkBlue,
+      radius: [20],
+      child: padding(
+        innerSpacing,
+        text(
+          ellipsify(label, max),
+          size: size,
+          color: labelColor,
+        ),
+      ),
+    ),
+  );
 }
 
 Widget alert(
@@ -501,6 +545,7 @@ Widget decoratedBox({
   BlendMode? blendMode,
   Color? blendColor,
   double opacity = 1,
+  List<BoxShadow>? shadows,
 }) {
   var widget = blendColor != null && blendMode != null
       ? Container(
@@ -514,6 +559,7 @@ Widget decoratedBox({
 
   return DecoratedBox(
     decoration: BoxDecoration(
+        boxShadow: shadows,
         color: color,
         borderRadius: useRadius(radius),
         image: img != null

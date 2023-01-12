@@ -328,7 +328,7 @@ class RoleHelperObject {
   }
 
   String get icon {
-    return base(iconFile);
+    return Assets.icon(iconFile);
   }
 }
 
@@ -338,7 +338,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.protector),
         description: t(LKey.protectorDescription),
-        iconFile: 'salvateur',
+        iconFile: Assets.protector,
         createRole: (players) => Protector(players[0]),
         isUnique: true,
       );
@@ -346,7 +346,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.werewolf),
         description: t(LKey.werewolfDescription),
-        iconFile: 'loup-garou',
+        iconFile: Assets.werewolf,
         createRole: (players) => Werewolf(players[0]),
         isUnique: false,
         isWolf: true,
@@ -355,7 +355,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.fatherWolf),
         description: t(LKey.fatherWolfDescription),
-        iconFile: 'pere-infecte',
+        iconFile: Assets.fatherWolf,
         createRole: (players) => FatherOfWolves(players[0]),
         isUnique: true,
         isWolf: true,
@@ -364,7 +364,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.witch),
         description: t(LKey.witchDescription),
-        iconFile: 'sorciere',
+        iconFile: Assets.witch,
         createRole: (players) => Witch(players[0]),
         isUnique: true,
       );
@@ -372,7 +372,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.seer),
         description: t(LKey.seerDescription),
-        iconFile: 'voyante',
+        iconFile: Assets.seer,
         createRole: (players) => Seer(players[0]),
         isUnique: true,
       );
@@ -380,7 +380,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.knight),
         description: t(LKey.knightDescription),
-        iconFile: 'chevalier',
+        iconFile: Assets.knight,
         createRole: (players) => Knight(players[0]),
         isUnique: true,
       );
@@ -388,7 +388,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.hunter),
         description: t(LKey.hunterDescription),
-        iconFile: 'chasseur',
+        iconFile: Assets.hunter,
         createRole: (players) => Hunter(players[0]),
         isUnique: true,
       );
@@ -396,7 +396,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.captain),
         description: t(LKey.captainDescription),
-        iconFile: 'villageois',
+        iconFile: Assets.villager,
         createRole: (players) => Captain(players[0]),
         isUnique: true,
       );
@@ -404,7 +404,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.villager),
         description: t(LKey.villagerDescription),
-        iconFile: 'villageois',
+        iconFile: Assets.villager,
         createRole: (players) => Villager(players[0]),
         isUnique: false,
       );
@@ -412,7 +412,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.wolfpack),
         description: t(LKey.wolfpackDescription),
-        iconFile: 'loup-garou',
+        iconFile: Assets.werewolf,
         createRole: (players) => Wolfpack(players),
         isUnique: true,
         pickable: false,
@@ -430,7 +430,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.judge),
         description: t(LKey.judgeDescription),
-        iconFile: 'juge',
+        iconFile: Assets.judge,
         createRole: (players) => Judge(players[0]),
         isUnique: true,
       );
@@ -438,7 +438,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.blackWolf),
         description: t(LKey.blackWolfDescription),
-        iconFile: 'loup-garou',
+        iconFile: Assets.werewolf,
         createRole: (players) => BlackWolf(players[0]),
         isUnique: true,
         isWolf: true,
@@ -447,7 +447,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.garrulousWolf),
         description: t(LKey.garrulousWolfDescription),
-        iconFile: 'loup-garou',
+        iconFile: Assets.werewolf,
         createRole: (players) => GarrulousWolf(players[0]),
         isUnique: true,
         isWolf: true,
@@ -456,7 +456,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.shepherd),
         description: t(LKey.shepherdDescription),
-        iconFile: 'villageois',
+        iconFile: Assets.villager,
         createRole: (players) => Shepherd(players[0]),
         isUnique: true,
       );
@@ -464,7 +464,7 @@ RoleHelperObject useRole(RoleId id) {
       return RoleHelperObject(
         name: t(LKey.alien),
         description: t(LKey.alienDescription),
-        iconFile: 'villageois',
+        iconFile: Assets.villager,
         createRole: (players) => Alien(players[0]),
         isUnique: true,
         isSolo: true,
