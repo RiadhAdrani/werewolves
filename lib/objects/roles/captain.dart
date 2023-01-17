@@ -71,32 +71,44 @@ class Captain extends RoleSingular {
 class ExecutedEffect extends Effect {
   ExecutedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isExecuted;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isExecuted;
   }
 }
 
 class InheritedCaptaincyEffect extends Effect {
   InheritedCaptaincyEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.hasInheritedCaptaincy;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.hasInheritedCaptaincy;
   }
 }
 
 class SubstitutedEffect extends Effect {
   SubstitutedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isSubstitue;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isSubstitue;
   }
 }
 
 class ShouldTalkFirstEffect extends Effect {
   ShouldTalkFirstEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.shouldTalkFirst;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.shouldTalkFirst;
   }
 }
 

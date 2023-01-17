@@ -57,15 +57,15 @@ void main() {
       test('isCursed effect should have correct property values', () {
         Effect effect = CursedEffect(Witch(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isCursed);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isCursed);
       });
 
       test('isRevived effect should have correct property values', () {
         Effect effect = RevivedEffect(Witch(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isRevived);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isRevived);
       });
     });
 

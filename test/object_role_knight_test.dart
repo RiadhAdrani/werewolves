@@ -62,8 +62,8 @@ void main() {
       test('isCountered effect should have correct property values', () {
         Effect effect = CounteredEffect(Knight(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isCountered);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isCountered);
       });
     });
 

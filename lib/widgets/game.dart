@@ -546,8 +546,7 @@ Widget debugDialog(BuildContext context, Game game) {
                             [8, 0],
                             titleWithIcon(
                               role.controller.effects
-                                  .map(
-                                      (effect) => effectIdToString(effect.type))
+                                  .map((effect) => effectIdToString(effect.id))
                                   .join(' | '),
                               Icons.adjust_sharp,
                               alignment: MainAxisAlignment.start,

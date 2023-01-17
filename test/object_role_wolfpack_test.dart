@@ -60,8 +60,8 @@ void main() {
       test('isDevoured effect should have correct property values', () {
         Effect effect = DevouredEffect(Wolfpack([Player('')]));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isDevoured);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isDevoured);
       });
     });
 

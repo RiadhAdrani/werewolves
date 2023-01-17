@@ -53,15 +53,15 @@ void main() {
       test('isProtected effect should have correct property values', () {
         Effect effect = ProtectedEffect(Protector(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isProtected);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isProtected);
       });
 
       test('wasProtected effect should have correct property values', () {
         Effect effect = WasProtectedEffect(Protector(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.wasProtected);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.wasProtected);
       });
     });
 

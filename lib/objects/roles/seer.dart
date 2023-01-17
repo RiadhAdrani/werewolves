@@ -60,8 +60,11 @@ Role resolveSeenRole(Player player) {
 class ClairvoyanceEffect extends Effect {
   ClairvoyanceEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isSeen;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isSeen;
   }
 }
 

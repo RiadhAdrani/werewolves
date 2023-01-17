@@ -83,8 +83,11 @@ class GarrulousWolf extends Werewolf {
 class HasWordEffect extends Effect {
   HasWordEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.hasWord;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.hasWord;
   }
 }
 

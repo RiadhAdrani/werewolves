@@ -157,8 +157,11 @@ class GuessAbility extends Ability {
 class GuessedByAlienEffect extends Effect {
   GuessedByAlienEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isGuessedByAlien;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isGuessedByAlien;
   }
 }
 

@@ -72,16 +72,22 @@ class Protector extends RoleSingular {
 class ProtectedEffect extends Effect {
   ProtectedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isProtected;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isProtected;
   }
 }
 
 class WasProtectedEffect extends Effect {
   WasProtectedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.wasProtected;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.wasProtected;
   }
 }
 

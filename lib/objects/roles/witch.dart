@@ -69,16 +69,22 @@ class Witch extends RoleSingular {
 class CursedEffect extends Effect {
   CursedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isCursed;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isCursed;
   }
 }
 
 class RevivedEffect extends Effect {
   RevivedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isRevived;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isRevived;
   }
 }
 

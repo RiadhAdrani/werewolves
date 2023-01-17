@@ -62,8 +62,8 @@ void main() {
       test('hasSheep effect should have correct property values', () {
         Effect effect = HasSheepEffect(Shepherd(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.hasSheep);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.hasSheep);
       });
     });
 

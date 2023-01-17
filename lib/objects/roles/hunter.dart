@@ -72,8 +72,11 @@ class Hunter extends RoleSingular {
 class HuntedEffect extends Effect {
   HuntedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isHunted;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isHunted;
   }
 }
 

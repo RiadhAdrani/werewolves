@@ -65,30 +65,30 @@ void main() {
       test('isExecuted effect should have correct property values', () {
         Effect effect = ExecutedEffect(Captain(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isExecuted);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isExecuted);
       });
 
       test('isSubstituted effect should have correct property values', () {
         Effect effect = SubstitutedEffect(Captain(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isSubstitue);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isSubstitue);
       });
 
       test('shouldTalkFirst effect should have correct property values', () {
         Effect effect = ShouldTalkFirstEffect(Captain(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.shouldTalkFirst);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.shouldTalkFirst);
       });
 
       test('hasInheritedCaptaincy effect should have correct property values',
           () {
         Effect effect = InheritedCaptaincyEffect(Captain(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.hasInheritedCaptaincy);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.hasInheritedCaptaincy);
       });
     });
 

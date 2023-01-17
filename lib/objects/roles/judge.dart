@@ -60,16 +60,22 @@ class Judge extends RoleSingular {
 class JudgedEffect extends Effect {
   JudgedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isJudged;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isJudged;
   }
 }
 
 class WasJudgedEffect extends Effect {
   WasJudgedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.wasJudged;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.wasJudged;
   }
 }
 

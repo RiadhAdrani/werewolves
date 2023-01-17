@@ -62,8 +62,11 @@ class Shepherd extends RoleSingular {
 class HasSheepEffect extends Effect {
   HasSheepEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.hasSheep;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.hasSheep;
   }
 }
 

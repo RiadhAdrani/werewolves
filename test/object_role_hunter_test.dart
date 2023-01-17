@@ -76,15 +76,15 @@ void main() {
       test('isHunted effect should have correct property values', () {
         Effect effect = HuntedEffect(Hunter(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isHunted);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isHunted);
       });
 
       test('hasCallSignEffect effect should have correct property values', () {
         Effect effect = HasCallSignEffect(Hunter(Player('test')));
 
-        expect(effect.permanent, true);
-        expect(effect.type, EffectId.hasCallsign);
+        expect(effect.isPermanent, true);
+        expect(effect.id, EffectId.hasCallsign);
       });
     });
 

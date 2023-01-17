@@ -77,8 +77,8 @@ void main() {
       test('HasWord effect should have correct property values', () {
         Effect effect = HasWordEffect(GarrulousWolf(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.hasWord);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.hasWord);
       });
     });
 

@@ -57,16 +57,22 @@ class BlackWolf extends Werewolf {
 class MutedEffect extends Effect {
   MutedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isMuted;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isMuted;
   }
 }
 
 class WasMutedEffect extends Effect {
   WasMutedEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.wasMuted;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.wasMuted;
   }
 }
 

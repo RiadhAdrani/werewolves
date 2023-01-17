@@ -763,11 +763,11 @@ List<Event> useNightEffectsResolver(
       /// Fatal effects will be treated later
       /// by confirming the death of the players
       /// and moving them into the graveyard.
-      if (effect.permanent || isFatalEffect(effect.type)) {
+      if (effect.isPermanent || isFatalEffect(effect.id)) {
         continue;
       }
 
-      switch (effect.type) {
+      switch (effect.id) {
 
         /// Protector -----------------------------------------------------
         case EffectId.isProtected:
@@ -775,7 +775,7 @@ List<Event> useNightEffectsResolver(
           /// currently protected player could not be protected again
           /// add [wasProtected] effect
           /// so he won't be targeted by the protector in the next turn.
-          player.removeEffectsOfType(effect.type);
+          player.removeEffectsOfType(effect.id);
           newEffects.add(WasProtectedEffect(effect.source));
           break;
 
@@ -784,7 +784,7 @@ List<Event> useNightEffectsResolver(
 
           /// Currently muted player cannot be muted two night in a row
           /// so we add [wasMuted] effect.
-          player.removeEffectsOfType(effect.type);
+          player.removeEffectsOfType(effect.id);
           newEffects.add(WasMutedEffect(effect.source));
 
           if (!(effect.source.controller as Player).hasFatalEffect) {
@@ -795,7 +795,7 @@ List<Event> useNightEffectsResolver(
 
         /// Seer ----------------------------------------------------------
         case EffectId.isSeen:
-          player.removeEffectsOfType(effect.type);
+          player.removeEffectsOfType(effect.id);
 
           /// If the seer is dead, we do not report anything
           if ((effect.source as RoleSingular).controller.hasFatalEffect) {
@@ -811,7 +811,7 @@ List<Event> useNightEffectsResolver(
         /// Judge --------------------------------------------------------
         /// Role cannot be protected by the judge two consecutive rounds.
         case EffectId.isJudged:
-          player.removeEffectsOfType(effect.type);
+          player.removeEffectsOfType(effect.id);
           newEffects.add(WasJudgedEffect(effect.source));
 
           infos.add(Event.judge(player, currentTurn));
@@ -821,7 +821,7 @@ List<Event> useNightEffectsResolver(
         case EffectId.shouldTalkFirst:
           infos.add(Event.talk(player, GameState.night, currentTurn));
 
-          player.removeEffectsOfType(effect.type);
+          player.removeEffectsOfType(effect.id);
           break;
 
         /// Shepherd -----------------------------------------------------
@@ -841,7 +841,7 @@ List<Event> useNightEffectsResolver(
             infos.add(Event.sheep(false, currentTurn));
           }
 
-          player.removeEffectsOfType(effect.type);
+          player.removeEffectsOfType(effect.id);
           break;
 
         /// Common effects -----------------------------------------------
@@ -853,7 +853,7 @@ List<Event> useNightEffectsResolver(
         case EffectId.wasJudged:
         case EffectId.wasMuted:
         case EffectId.hasWord:
-          player.removeEffectsOfType(effect.type);
+          player.removeEffectsOfType(effect.id);
           break;
 
         /// Unreachable code because these effects are permanent. --------

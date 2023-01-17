@@ -58,8 +58,8 @@ void main() {
       test('isInfect effect should have correct property values', () {
         Effect effect = InfectedEffect(Protector(Player('')));
 
-        expect(effect.permanent, true);
-        expect(effect.type, EffectId.isInfected);
+        expect(effect.isPermanent, true);
+        expect(effect.id, EffectId.isInfected);
       });
     });
 

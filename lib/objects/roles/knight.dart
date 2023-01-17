@@ -63,8 +63,11 @@ class Knight extends RoleSingular {
 class CounteredEffect extends Effect {
   CounteredEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isCountered;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isCountered;
   }
 }
 

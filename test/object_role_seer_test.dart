@@ -53,8 +53,8 @@ void main() {
       test('isSeen effect should have correct property values', () {
         Effect effect = ClairvoyanceEffect(Seer(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isSeen);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isSeen);
       });
     });
 

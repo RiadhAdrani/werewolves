@@ -47,7 +47,7 @@ class Player {
   /// Check if the player has a fatal effect.
   bool get hasFatalEffect {
     for (var e in effects) {
-      if (isFatalEffect(e.type)) return true;
+      if (isFatalEffect(e.id)) return true;
     }
 
     return false;
@@ -61,7 +61,7 @@ class Player {
 
   /// Remove all status effect of the given type
   void removeEffectsOfType(EffectId effect) {
-    effects = effects.where((element) => element.type != effect).toList();
+    effects = effects.where((element) => element.id != effect).toList();
   }
 
   /// Remove all fatal effects except the given ones.
@@ -69,7 +69,7 @@ class Player {
     final newList = <Effect>[];
 
     for (var effect in effects) {
-      if (exception.contains(effect.type) || !isFatalEffect(effect.type)) {
+      if (exception.contains(effect.id) || !isFatalEffect(effect.id)) {
         newList.add(effect);
       }
     }
@@ -113,7 +113,7 @@ class Player {
   /// Check if the player has a status effect.
   bool hasEffect(EffectId effect) {
     for (var e in effects) {
-      if (e.type == effect) return true;
+      if (e.id == effect) return true;
     }
 
     return false;

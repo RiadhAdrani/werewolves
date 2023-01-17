@@ -53,15 +53,15 @@ void main() {
       test('isJudged effect should have correct property values', () {
         Effect effect = JudgedEffect(Judge(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isJudged);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isJudged);
       });
 
       test('wasJudged effect should have correct property values', () {
         Effect effect = WasJudgedEffect(Judge(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.wasJudged);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.wasJudged);
       });
     });
 

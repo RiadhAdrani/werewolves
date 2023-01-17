@@ -59,8 +59,16 @@ class FatherOfWolves extends Werewolf {
 class InfectedEffect extends Effect {
   InfectedEffect(Role source) {
     this.source = source;
-    permanent = true;
-    type = EffectId.isInfected;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isInfected;
+  }
+
+  @override
+  bool get isPermanent {
+    return true;
   }
 }
 

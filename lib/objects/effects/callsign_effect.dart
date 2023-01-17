@@ -4,7 +4,15 @@ import 'package:werewolves/models/effect.dart';
 class HasCallSignEffect extends Effect {
   HasCallSignEffect(Role source) {
     this.source = source;
-    permanent = true;
-    type = EffectId.hasCallsign;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.hasCallsign;
+  }
+
+  @override
+  bool get isPermanent {
+    return true;
   }
 }

@@ -56,8 +56,11 @@ class Wolfpack extends RoleGroup {
 class DevouredEffect extends Effect {
   DevouredEffect(Role source) {
     this.source = source;
-    permanent = false;
-    type = EffectId.isDevoured;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isDevoured;
   }
 }
 

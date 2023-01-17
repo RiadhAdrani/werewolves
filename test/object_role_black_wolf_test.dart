@@ -54,15 +54,15 @@ void main() {
       test('isMuted effect should have correct property values', () {
         Effect effect = MutedEffect(Protector(Player('')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isMuted);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isMuted);
       });
 
       test('wasMuted effect should have correct property values', () {
         Effect effect = WasMutedEffect(Protector(Player('')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.wasMuted);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.wasMuted);
       });
     });
 

@@ -18,9 +18,15 @@ import 'package:werewolves/objects/roles/witch.dart';
 import 'package:werewolves/objects/roles/wolfpack.dart';
 
 abstract class Effect {
-  late EffectId type;
   late Role source;
-  late bool permanent;
+
+  EffectId get id {
+    throw 'Not implemented';
+  }
+
+  bool get isPermanent {
+    return false;
+  }
 }
 
 enum EffectId {
@@ -152,7 +158,7 @@ EffectHelperObject useEffectHelper(EffectId id) {
       return EffectHelperObject(
         'isServing',
         'description',
-        (source) => BeingServedEffect(source),
+        (source) => ServingEffect(source),
       );
     case EffectId.isJudged:
       return EffectHelperObject(

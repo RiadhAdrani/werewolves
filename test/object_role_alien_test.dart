@@ -179,8 +179,8 @@ void main() {
       test('isGuessedByAlien effect should have correct property values', () {
         Effect effect = GuessedByAlienEffect(Alien(Player('test')));
 
-        expect(effect.permanent, false);
-        expect(effect.type, EffectId.isGuessedByAlien);
+        expect(effect.isPermanent, false);
+        expect(effect.id, EffectId.isGuessedByAlien);
       });
     });
 

@@ -74,16 +74,32 @@ class Servant extends RoleSingular {
 class ServedEffect extends Effect {
   ServedEffect(Role source) {
     this.source = source;
-    permanent = true;
-    type = EffectId.isServed;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isServed;
+  }
+
+  @override
+  bool get isPermanent {
+    return true;
   }
 }
 
-class BeingServedEffect extends Effect {
-  BeingServedEffect(Role source) {
+class ServingEffect extends Effect {
+  ServingEffect(Role source) {
     this.source = source;
-    permanent = true;
-    type = EffectId.isServing;
+  }
+
+  @override
+  EffectId get id {
+    return EffectId.isServing;
+  }
+
+  @override
+  bool get isPermanent {
+    return true;
   }
 }
 
@@ -99,7 +115,7 @@ class ServantAbility extends Ability {
 
   @override
   void callOnTarget(Player target) {
-    (owner.controller as Player).addEffect(BeingServedEffect(owner));
+    (owner.controller as Player).addEffect(ServingEffect(owner));
     target.addEffect(ServedEffect(owner));
   }
 
