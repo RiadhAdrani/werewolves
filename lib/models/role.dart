@@ -58,6 +58,12 @@ const alienPriority = 7200;
 const judgePriority = 7500;
 const captainPriority = 8000;
 
+class ValidationWithEffect extends Validation {
+  void Function(BuildContext, Game) useEffect;
+
+  ValidationWithEffect(super.valid, this.useEffect, {super.msg});
+}
+
 abstract class Role<T> {
   late T controller;
 
@@ -143,6 +149,10 @@ abstract class Role<T> {
     return false;
   }
 
+  ValidationWithEffect onBeforeCalled(BuildContext context, Game game) {
+    return ValidationWithEffect(true, (ctx, game) {});
+  }
+
   /// Should the role be called during the night.
   bool shouldBeCalledAtNight(List<Role> roles, int turn);
 
@@ -170,13 +180,6 @@ abstract class Role<T> {
 
   /// Get the instructions ,advices and tips for the narrator.
   List<String> getAdvices(List<Role> roles);
-
-  /// Effects that will be executed
-  /// before the call of the player.
-  ///
-  /// Used mainly with a dead captain
-  /// chosen by the servant.
-  bool beforeCallEffect(BuildContext context, Game gameModel);
 
   /// Force the role into an obsolete state.
   void setObsolete();

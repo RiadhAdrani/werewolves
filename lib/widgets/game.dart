@@ -226,6 +226,10 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
 }
 
 Widget gameNightView(Game game, BuildContext context) {
+  void next() {
+    game.next(context);
+  }
+
   return scaffold(
     appBar: gameBar(
       context,
@@ -248,7 +252,7 @@ Widget gameNightView(Game game, BuildContext context) {
           gameNightViewAbilities(game, context),
           button(
             t(LKey.next),
-            game.next,
+            next,
             flat: true,
           ),
         ],

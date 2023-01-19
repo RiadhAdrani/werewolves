@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -17,8 +19,16 @@ List<Role> createGameList({
   return transformRolesFromPickedList(picked);
 }
 
+class MockBuildContext extends Mock implements BuildContext {}
+
 void main() {
   group('Game', () {
+    MockBuildContext context = MockBuildContext();
+
+    setUp(() {
+      context = MockBuildContext();
+    });
+
     group('nextIndex', () {
       List<Role> roles = [];
       List<Role> available = [];
@@ -220,18 +230,18 @@ void main() {
         test('should throw when current role is null', () {
           model.currentIndex = -1;
 
-          expect(() => model.next(), throwsA('currentRole is null.'));
+          expect(() => model.next(context), throwsA('currentRole is null.'));
         });
 
         test('should throw when game state is not GameState.night', () {
           model.state = GameState.day;
 
-          expect(() => model.next(),
+          expect(() => model.next(context),
               throwsA('Unexpected game state : ${model.state} .'));
         });
 
         test('should not skip to next when a mandatory ability is pending', () {
-          model.next();
+          model.next(context);
 
           expect(model.called, []);
         });
@@ -240,13 +250,15 @@ void main() {
           model.currentRole!.abilities[0]
               .use([model.playersList[0]], model.currentTurn);
 
-          model.next();
+          model.next(context);
 
           expect(model.called[0].id, RoleId.protector);
           expect(model.currentRole!.id, RoleId.wolfpack);
           expect(model.called.length, 1);
           expect(model.available.length, 5);
         });
+
+        // TODO : onBeforeCall effect to be called when validation is false;
 
         test('should switch to day state when all roles are called', () {
           while (model.currentRole != null) {
@@ -255,7 +267,7 @@ void main() {
                   .use([model.playersList[0]], model.currentTurn);
             }
 
-            model.next();
+            model.next(context);
           }
 
           expect(model.state, GameState.day);

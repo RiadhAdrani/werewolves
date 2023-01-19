@@ -192,7 +192,7 @@ class Game extends ChangeNotifier {
     notifyListeners();
   }
 
-  void next() {
+  void next(BuildContext context) {
     if (state != GameState.night) {
       throw 'Unexpected game state : $state .';
     }
@@ -223,6 +223,7 @@ class Game extends ChangeNotifier {
       // TODO check for pending roles
       // TODO transition to day phase
       state = GameState.day;
+      notifyListeners();
     } else {
       Role $new = available[index];
 
@@ -230,9 +231,15 @@ class Game extends ChangeNotifier {
       available.remove(currentRole);
 
       currentIndex = available.indexOf($new);
-    }
+      notifyListeners();
 
-    notifyListeners();
+      ValidationWithEffect valEffect =
+          currentRole!.onBeforeCalled(context, this);
+
+      if (!valEffect.valid) {
+        valEffect.useEffect(context, this);
+      }
+    }
   }
 
   void nextNight() {
