@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/distribution.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/utils.dart';
+
+import 'utils.dart';
 
 List<Role> createGameList({
   List<RoleId>? roles,
@@ -270,6 +273,90 @@ void main() {
             model.next(context);
           }
 
+          expect(model.state, GameState.day);
+        });
+
+        test('should call roles again', () {
+          model = Game();
+          model.init(createGameList(roles: [
+            RoleId.protector,
+            RoleId.werewolf,
+            RoleId.captain,
+            RoleId.villager,
+            RoleId.seer,
+            RoleId.hunter,
+            RoleId.witch
+          ]));
+
+          model.start();
+          model.noContextMode = true;
+
+          var protector = findFirstRoleOfType(model.roles, RoleId.protector)!;
+          var wolves = findFirstRoleOfType(model.roles, RoleId.wolfpack)!;
+          var seer = findFirstRoleOfType(model.roles, RoleId.seer)!;
+          var witch = findFirstRoleOfType(model.roles, RoleId.witch)!;
+          var hunter = findFirstRoleOfType(model.roles, RoleId.hunter)!;
+          var captain = findFirstRoleOfType(model.roles, RoleId.captain)!;
+
+          // ? protector protects himself
+          model.next(context);
+          expect(model.currentRole!.id, RoleId.protector);
+          protector
+              .getAbilityOfType(AbilityId.protect)!
+              .use([protector.controller], model.currentTurn);
+
+          // ? wolves kills hunter
+          model.next(context);
+          expect(model.currentRole!.id, RoleId.wolfpack);
+          wolves
+              .getAbilityOfType(AbilityId.devour)!
+              .use([hunter.controller], model.currentTurn);
+
+          // ? witch skip
+          model.next(context);
+          expect(model.currentRole!.id, RoleId.witch);
+
+          // ? seer
+          model.next(context);
+          expect(model.currentRole!.id, RoleId.seer);
+          seer
+              .getAbilityOfType(AbilityId.clairvoyance)!
+              .use([protector.controller], model.currentTurn);
+
+          // ? hunter kills witch
+          model.next(context);
+          expect(model.currentRole!.id, RoleId.hunter);
+          hunter
+              .getAbilityOfType(AbilityId.hunt)!
+              .use([witch.controller], model.currentTurn);
+
+          // ? captain
+          model.next(context);
+          expect(model.currentRole!.id, RoleId.captain);
+          captain
+              .getAbilityOfType(AbilityId.talker)!
+              .use([protector.controller], model.currentTurn);
+
+          model.next(context);
+          expect(model.state, GameState.night);
+          expect(model.currentRole!.id, RoleId.witch);
+          witch
+              .getAbilityOfType(AbilityId.revive)!
+              .use([witch.controller], model.currentTurn);
+          witch
+              .getAbilityOfType(AbilityId.curse)!
+              .use([captain.controller], model.currentTurn);
+
+          model.next(context);
+          expect(model.currentRole!.id, RoleId.captain);
+          captain
+              .getAbilityOfType(AbilityId.inherit)!
+              .use([seer.controller], model.currentTurn);
+
+          model.roles.remove(captain);
+          model.graveyard.add(captain.controller);
+
+          model.next(context);
           expect(model.state, GameState.day);
         });
       });

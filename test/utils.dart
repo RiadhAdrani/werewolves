@@ -34,3 +34,10 @@ Role createRole({
 
   return role;
 }
+
+Role? findFirstRoleOfType(List<Role> roles, RoleId id) {
+  return roles.firstWhere(
+    (element) => element.id == id,
+    orElse: () => null as Role,
+  );
+}

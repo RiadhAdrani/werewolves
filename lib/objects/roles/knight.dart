@@ -1,5 +1,4 @@
 // ignore: implementation_imports
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/game.dart';
@@ -55,8 +54,8 @@ class Knight extends RoleSingular {
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, Game gameModel) {
-    return false;
+  bool shouldBeCalledAgainBeforeNightEnd(List<Role> roles, int turn) {
+    return isFatallyAffected && hasUnusedAbilityOfType(AbilityId.counter);
   }
 }
 
@@ -107,7 +106,7 @@ class CounterAbility extends Ability {
 
   @override
   bool isUnskippable() {
-    return owner.playerIsFatallyWounded();
+    return owner.isFatallyAffected;
   }
 
   @override

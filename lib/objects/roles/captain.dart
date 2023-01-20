@@ -1,5 +1,4 @@
 // ignore: implementation_imports
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -63,8 +62,8 @@ class Captain extends RoleSingular {
   }
 
   @override
-  bool beforeCallEffect(BuildContext context, Game gameModel) {
-    return false;
+  bool shouldBeCalledAgainBeforeNightEnd(List<Role> roles, int turn) {
+    return isFatallyAffected;
   }
 }
 
@@ -195,7 +194,7 @@ class InheritAbility extends Ability {
 
   @override
   bool isUnskippable() {
-    return owner.playerIsFatallyWounded();
+    return owner.isFatallyAffected;
   }
 
   @override

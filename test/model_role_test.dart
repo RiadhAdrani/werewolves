@@ -93,14 +93,14 @@ void main() {
       });
 
       test('should determine if player is fatally wounded', () {
-        expect(role.playerIsFatallyWounded(), false);
+        expect(role.isFatallyAffected, false);
         role.controller.addEffect(
           createEffectFromId(
             EffectId.isDevoured,
             Wolfpack([Player('source')]),
           ),
         );
-        expect(role.playerIsFatallyWounded(), true);
+        expect(role.isFatallyAffected, true);
         role.controller.removeEffectsOfType(EffectId.isDevoured);
       });
 
@@ -151,14 +151,14 @@ void main() {
       });
 
       test('should compute if role is fatally wounded', () {
-        expect(role.playerIsFatallyWounded(), false);
+        expect(role.isFatallyAffected, false);
         role.controller[0].addEffect(
           createEffectFromId(
             EffectId.isDevoured,
             Wolfpack([Player('source')]),
           ),
         );
-        expect(role.playerIsFatallyWounded(), false);
+        expect(role.isFatallyAffected, false);
 
         for (var member in role.controller) {
           member.addEffect(
@@ -168,7 +168,7 @@ void main() {
             ),
           );
         }
-        expect(role.playerIsFatallyWounded(), true);
+        expect(role.isFatallyAffected, true);
 
         for (var member in role.controller) {
           member.removeEffectsOfType(EffectId.isDevoured);

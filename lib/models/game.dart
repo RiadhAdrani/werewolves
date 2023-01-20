@@ -220,9 +220,21 @@ class Game extends ChangeNotifier {
     int index = nextIndex(currentRole, roles, available, called);
 
     if (index == -1) {
-      // TODO check for pending roles
-      // TODO transition to day phase
-      state = GameState.day;
+      List<Role> pending = roles
+          .where((role) =>
+              role.shouldBeCalledAgainBeforeNightEnd(roles, currentTurn))
+          .toList();
+
+      if (pending.isNotEmpty) {
+        available = [...pending];
+        called = [];
+
+        currentIndex = -1;
+        currentIndex = nextIndex(currentRole, roles, available, called);
+      } else {
+        state = GameState.day;
+      }
+
       notifyListeners();
     } else {
       Role $new = available[index];

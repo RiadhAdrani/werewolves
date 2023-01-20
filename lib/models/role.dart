@@ -117,6 +117,10 @@ abstract class Role<T> {
     return getRoleDescription(id);
   }
 
+  /// Check if the player has been affected by a fatal status effect.
+  /// Used to check is primarily dead during the night.
+  bool get isFatallyAffected;
+
   /// Return the first ability of the given type if it exists.
   Ability? getAbilityOfType(AbilityId ability) {
     for (int i = 0; i < abilities.length; i++) {
@@ -153,6 +157,11 @@ abstract class Role<T> {
     return ValidationWithEffect(true, (ctx, game) {});
   }
 
+  /// Should the role be called once again before the night end.
+  bool shouldBeCalledAgainBeforeNightEnd(List<Role> roles, int turn) {
+    return false;
+  }
+
   /// Should the role be called during the night.
   bool shouldBeCalledAtNight(List<Role> roles, int turn);
 
@@ -170,10 +179,6 @@ abstract class Role<T> {
 
   /// Override the associated player.
   void setPlayer(T player);
-
-  /// Check if the player has been affected by a fatal status effect.
-  /// Used to check is primarily dead during the night.
-  bool playerIsFatallyWounded();
 
   /// Get the informations that the role needs to know.
   List<String> getInformations(List<Role> roles);
@@ -212,7 +217,7 @@ abstract class RoleSingular extends Role<Player> {
   }
 
   @override
-  bool playerIsFatallyWounded() {
+  bool get isFatallyAffected {
     return controller.hasFatalEffect;
   }
 
@@ -260,7 +265,7 @@ abstract class RoleGroup extends Role<List<Player>> {
   }
 
   @override
-  bool playerIsFatallyWounded() {
+  bool get isFatallyAffected {
     bool result = true;
 
     for (var member in controller) {
