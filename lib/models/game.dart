@@ -25,7 +25,24 @@ enum GameState {
   day,
 }
 
-enum DayState { information, discussion, vote, execution, resolution }
+enum DayState {
+  information,
+  discussion,
+  vote,
+  execution,
+  resolution,
+}
+
+enum EventId {
+  death,
+  talkFirst,
+  transformed,
+  sheepDied,
+  sheepReturned,
+  seen,
+  judged,
+  muted,
+}
 
 class GameArguments {
   final List<Role> list;
@@ -37,14 +54,16 @@ class Event {
   late final String text;
   late final GameState period;
   late final int turn;
+  late final EventId effect;
 
-  Event(this.text, this.turn, this.period);
+  Event(this.text, this.turn, this.period, this.effect);
 
   static Event death(Player player, GameState period, int turn) {
     return Event(
       t(LKey.eventDeath, params: {'name': player.name}),
       turn,
       period,
+      EventId.death,
     );
   }
 
@@ -53,6 +72,7 @@ class Event {
       t(LKey.eventTalk, params: {'name': player.name}),
       turn,
       period,
+      EventId.talkFirst,
     );
   }
 
@@ -61,11 +81,17 @@ class Event {
       t(LKey.eventClairvoyance, params: {'name': getRoleName(role)}),
       turn,
       period,
+      EventId.seen,
     );
   }
 
   static Event servant(RoleId role, GameState period, int turn) {
-    return Event('The servant became ${getRoleName(role)}.', turn, period);
+    return Event(
+      'The servant became ${getRoleName(role)}.',
+      turn,
+      period,
+      EventId.transformed,
+    );
   }
 
   static Event judge(Player player, int turn) {
@@ -73,6 +99,7 @@ class Event {
       t(LKey.eventJudge, params: {'name': player.name}),
       turn,
       GameState.night,
+      EventId.judged,
     );
   }
 
@@ -81,6 +108,7 @@ class Event {
       t(LKey.eventMute, params: {'name': player.name}),
       turn,
       GameState.night,
+      EventId.muted,
     );
   }
 
@@ -89,6 +117,7 @@ class Event {
       t(killed ? LKey.eventSheepDead : LKey.eventSheepReturned),
       turn,
       GameState.night,
+      killed ? EventId.sheepDied : EventId.sheepReturned,
     );
   }
 }
@@ -217,20 +246,36 @@ class Game extends ChangeNotifier {
       return;
     }
 
-    int index = nextIndex(currentRole, roles, available, called);
+    int index = nextIndex(
+      currentRole,
+      roles,
+      available,
+      called,
+      test: (role) => role.shouldBeCalledAtNight(roles, currentTurn),
+    );
 
     if (index == -1) {
-      List<Role> pending = roles
+      var again = roles
           .where((role) =>
               role.shouldBeCalledAgainBeforeNightEnd(roles, currentTurn))
           .toList();
 
+      // var missed = calculateRolesWithMissingEffects();
+
+      List<Role> pending = <Role>{...again}.toList();
+
       if (pending.isNotEmpty) {
-        available = [...pending];
+        available = pending;
         called = [];
 
         currentIndex = -1;
-        currentIndex = nextIndex(currentRole, roles, available, called);
+        currentIndex = nextIndex(
+          currentRole,
+          roles,
+          available,
+          called,
+          test: (role) => role.shouldBeCalledAtNight(roles, currentTurn),
+        );
       } else {
         state = GameState.day;
       }
@@ -267,6 +312,27 @@ class Game extends ChangeNotifier {
 
   Role? getRole(RoleId id) {
     return getRoleInGame(id, roles);
+  }
+
+  List<Role> calculateRolesWithMissingEffects() {
+    if (state != GameState.night) {
+      throw 'Unexpected game state : $state .';
+    }
+
+    var players = usePlayerExtractor(roles);
+    List<EffectId> existing = [];
+    for (var element in players) {
+      existing.addAll(element.effects.map((e) => e.id));
+    }
+
+    var mandatory = calculateMandatoryEffects(roles, currentTurn);
+
+    List<Role> missing = mandatory
+        .where((item) => !existing.contains(item.id))
+        .map((e) => e.role)
+        .toList();
+
+    return missing;
   }
 
   void addPendingAbility(Ability ability) {
@@ -372,7 +438,7 @@ class Game extends ChangeNotifier {
               );
             });
       } else {
-        _eliminateDeadPlayers();
+        eliminateDeadPlayers();
 
         notifyListeners();
 
@@ -393,13 +459,8 @@ class Game extends ChangeNotifier {
     _addMemberToGroup(newMember, roleId);
   }
 
-  /// Replace the captain
-  void replaceCaptainPlayer(Player player) {
-    _replaceCaptainPlayer(player);
-  }
-
   /// Add a game info
-  void addGameInfo(Event info) {
+  void addGameEvent(Event info) {
     events.add(info);
   }
 
@@ -484,10 +545,6 @@ class Game extends ChangeNotifier {
     return output;
   }
 
-  // PRIVATE METHODS
-  // DO NOT EXPOSE DIRECTLY
-  // --------------------------------------------------------------------------
-
   /// We assume that the player `hasFatalEffect()`.
   /// we set the status of survivability to false,
   /// add the player to the graveyard (r.i.p)
@@ -495,14 +552,14 @@ class Game extends ChangeNotifier {
   void _killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
     graveyard.add(player);
-    addGameInfo(Event.death(player, state, currentTurn));
+    addGameEvent(Event.death(player, state, currentTurn));
   }
 
   /// Perform mass murder on the souls of the already dead players.
   /// Should be used on the list of alive players.
   ///
   /// uses `GameModel._killAndMovePlayerToGraveyard()`.
-  void _eliminateDeadPlayers() {
+  void eliminateDeadPlayers() {
     for (var player in playersList) {
       if (player.hasFatalEffect) {
         _killAndMovePlayerToGraveyard(player);
@@ -515,12 +572,11 @@ class Game extends ChangeNotifier {
   /// and eliminating dead souls.
   /// When everything is done, we transition into the day phase.
   void _performPostNightProcessing(BuildContext context) {
-    List<Event> infos = useNightEffectsResolver(playersList, currentTurn);
+    List<Event> infos = resolveNightEffects(playersList, currentTurn);
 
-    // TODO : process informations
     events.addAll(infos);
 
-    _eliminateDeadPlayers();
+    eliminateDeadPlayers();
 
     _gameOverCheck(context);
 
@@ -602,7 +658,7 @@ class Game extends ChangeNotifier {
   /// Replace the current captain with the provided one,
   /// and kill the old one.
   /// We assume that there is only one captain instance.
-  void _replaceCaptainPlayer(Player player) {
+  void replaceCaptainPlayer(Player player) {
     for (var role in roles) {
       if (role.id == RoleId.captain) {
         role as RoleSingular;
@@ -768,7 +824,7 @@ List<Player> getPlayersWithFatalEffect(List<Player> players) {
   return output;
 }
 
-List<Event> useNightEffectsResolver(
+List<Event> resolveNightEffects(
   List<Player> players,
   int currentTurn,
 ) {
@@ -897,6 +953,10 @@ List<Event> useNightEffectsResolver(
     }
   }
 
+  // TODO : process dead players
+
+  // TODO : process remove obsolete roles
+
   return infos;
 }
 
@@ -915,7 +975,7 @@ void useDayEffectsResolver(Game game) {
 
   for (var player in game.playersList) {
     if (player.hasFatalEffect) {
-      game.addGameInfo(Event.death(player, GameState.day, currentTurn));
+      game.addGameEvent(Event.death(player, GameState.day, currentTurn));
     }
   }
 }
@@ -1087,4 +1147,65 @@ int nextIndex(
   }
 
   return index;
+}
+
+class MandatoryEffect {
+  EffectId id;
+  Role role;
+
+  MandatoryEffect(this.id, this.role);
+}
+
+List<MandatoryEffect> calculateMandatoryEffects(List<Role> roles, int turn) {
+  List<MandatoryEffect> list = [];
+
+  for (var role in roles) {
+    switch (role.id) {
+      case RoleId.werewolf:
+      case RoleId.fatherOfWolves:
+      case RoleId.witch:
+      case RoleId.alien:
+      case RoleId.villager:
+      case RoleId.wolfpack:
+      case RoleId.servant:
+      case RoleId.knight:
+      case RoleId.shepherd:
+      case RoleId.hunter:
+        {
+          break;
+        }
+      case RoleId.protector:
+        {
+          list.add(MandatoryEffect(EffectId.isProtected, role));
+          break;
+        }
+      case RoleId.seer:
+        {
+          list.add(MandatoryEffect(EffectId.isSeen, role));
+          break;
+        }
+      case RoleId.captain:
+        {
+          list.add(MandatoryEffect(EffectId.shouldTalkFirst, role));
+          break;
+        }
+      case RoleId.judge:
+        {
+          list.add(MandatoryEffect(EffectId.isJudged, role));
+          break;
+        }
+      case RoleId.blackWolf:
+        {
+          list.add(MandatoryEffect(EffectId.isMuted, role));
+          break;
+        }
+      case RoleId.garrulousWolf:
+        {
+          list.add(MandatoryEffect(EffectId.hasWord, role));
+          break;
+        }
+    }
+  }
+
+  return list;
 }

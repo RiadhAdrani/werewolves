@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/distribution.dart';
+import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
@@ -189,6 +190,98 @@ void main() {
       });
     });
 
+    group('calculateMandatoryEffects', () {
+      test('should return isProtected effect', () {
+        var role = useRole(RoleId.protector).create([Player('test')]);
+        var roles = [role];
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res.map((e) => e.id).toList(), [EffectId.isProtected]);
+        expect(res.map((e) => e.role).toList(), [role]);
+      });
+
+      test('should return isSeen effect', () {
+        var role = useRole(RoleId.seer).create([Player('test')]);
+        var roles = [role];
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res.map((e) => e.id).toList(), [EffectId.isSeen]);
+        expect(res.map((e) => e.role).toList(), [role]);
+      });
+
+      test('should return shouldTalk effect', () {
+        var role = useRole(RoleId.captain).create([Player('test')]);
+        var roles = [role];
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res.map((e) => e.id).toList(), [EffectId.shouldTalkFirst]);
+        expect(res.map((e) => e.role).toList(), [role]);
+      });
+
+      test('should return isJudged effect', () {
+        var role = useRole(RoleId.judge).create([Player('test')]);
+        var roles = [role];
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res.map((e) => e.id).toList(), [EffectId.isJudged]);
+        expect(res.map((e) => e.role).toList(), [role]);
+      });
+
+      test('should return isMuted effect', () {
+        var role = useRole(RoleId.blackWolf).create([Player('test')]);
+        var roles = [role];
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res.map((e) => e.id).toList(), [EffectId.isMuted]);
+        expect(res.map((e) => e.role).toList(), [role]);
+      });
+
+      test('should return hasWord effect', () {
+        var role = useRole(RoleId.garrulousWolf).create([Player('test')]);
+        var roles = [role];
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res.map((e) => e.id).toList(), [EffectId.hasWord]);
+        expect(res.map((e) => e.role).toList(), [role]);
+      });
+
+      test('should return no effect', () {
+        var roles = (<RoleId>[
+          RoleId.werewolf,
+          RoleId.fatherOfWolves,
+          RoleId.witch,
+          RoleId.witch,
+          RoleId.alien,
+          RoleId.villager,
+          RoleId.wolfpack,
+          RoleId.knight,
+          RoleId.shepherd,
+          RoleId.hunter,
+        ]).map((e) => useRole(e).create([Player('test')])).toList();
+
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res, []);
+      });
+
+      test('should return expected effects', () {
+        var roles = RoleId.values
+            .map((e) => useRole(e).create([Player('test')]))
+            .toList();
+
+        var res = calculateMandatoryEffects(roles, 0);
+
+        expect(res.map((e) => e.id).toList(), [
+          EffectId.isProtected,
+          EffectId.isSeen,
+          EffectId.shouldTalkFirst,
+          EffectId.isJudged,
+          EffectId.isMuted,
+          EffectId.hasWord,
+        ]);
+      });
+    });
+
     group('Model', () {
       Game model = Game();
 
@@ -337,6 +430,7 @@ void main() {
               .getAbilityOfType(AbilityId.talker)!
               .use([protector.controller], model.currentTurn);
 
+          // ? witch, again
           model.next(context);
           expect(model.state, GameState.night);
           expect(model.currentRole!.id, RoleId.witch);
@@ -347,12 +441,15 @@ void main() {
               .getAbilityOfType(AbilityId.curse)!
               .use([captain.controller], model.currentTurn);
 
+          // ? captain, again
           model.next(context);
           expect(model.currentRole!.id, RoleId.captain);
           captain
               .getAbilityOfType(AbilityId.inherit)!
               .use([seer.controller], model.currentTurn);
 
+          // * we remove captain,
+          // * should happen naturally within the game
           model.roles.remove(captain);
           model.graveyard.add(captain.controller);
 
