@@ -103,11 +103,11 @@ void main() {
       });
 
       test('should only be able to target self', () {
-        expect(ability.isTarget(self), true);
+        expect(ability.isTarget(self, 1), true);
       });
 
       test('should NOT be able to target other players', () {
-        expect(ability.isTarget(createPlayer()), false);
+        expect(ability.isTarget(createPlayer(), 1), false);
       });
 
       test('should be applied surely to a devoured player', () {

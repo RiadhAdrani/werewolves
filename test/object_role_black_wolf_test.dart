@@ -85,11 +85,11 @@ void main() {
       });
 
       test('should be able to target a previously non-muted player', () {
-        expect(ability.isTarget(createPlayer(effects: [])), true);
+        expect(ability.isTarget(createPlayer(effects: []), 1), true);
       });
 
       test('should NOT be able to target a previously muted player', () {
-        expect(ability.isTarget(createPlayer(effects: [EffectId.wasMuted])),
+        expect(ability.isTarget(createPlayer(effects: [EffectId.wasMuted]), 1),
             false);
       });
 

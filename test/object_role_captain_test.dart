@@ -112,7 +112,7 @@ void main() {
         });
 
         test('should be able to target any player', () {
-          expect(ability.isTarget(createPlayer()), true);
+          expect(ability.isTarget(createPlayer(), 1), true);
         });
 
         test('should be applied surely at any case', () {
@@ -153,11 +153,12 @@ void main() {
         });
 
         test('should be able to target any non-fatally affected player', () {
-          expect(ability.isTarget(createPlayer()), true);
+          expect(ability.isTarget(createPlayer(), 1), true);
         });
 
         test('should NOT be able to target any fatally affected player', () {
-          expect(ability.isTarget(createPlayer(effects: [EffectId.isDevoured])),
+          expect(
+              ability.isTarget(createPlayer(effects: [EffectId.isDevoured]), 1),
               false);
         });
 
@@ -220,8 +221,8 @@ void main() {
           var self = createPlayer();
           var ability = SubstitueAbility(Captain(self));
 
-          expect(ability.isTarget(createPlayer()), true);
-          expect(ability.isTarget(self), false);
+          expect(ability.isTarget(createPlayer(), 1), true);
+          expect(ability.isTarget(self, 1), false);
         });
 
         test('should be applied surely at any case', () {
@@ -260,7 +261,7 @@ void main() {
         });
 
         test('should be able to target any player except self', () {
-          expect(ability.isTarget(createPlayer()), true);
+          expect(ability.isTarget(createPlayer(), 1), true);
         });
 
         test('should be applied surely at any case', () {

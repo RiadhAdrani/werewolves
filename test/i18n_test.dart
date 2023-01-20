@@ -3,12 +3,12 @@ import 'package:werewolves/i18n/en.dart';
 import 'package:werewolves/i18n/keys.dart';
 
 void main() {
-  void testLanguage(Map<LKey, String> lang) {
+  void testLanguage(Map<LK, String> lang) {
     test('should have same length', () {
-      expect(lang.values.length, LKey.values.length);
+      expect(lang.values.length, LK.values.length);
     });
 
-    for (var key in LKey.values) {
+    for (var key in LK.values) {
       test('should have valid key $key', () {
         expect(lang[key].runtimeType, String);
       });

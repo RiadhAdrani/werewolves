@@ -15,13 +15,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return scaffold(
-      appBar: appBar(t(LKey.home)),
+      appBar: appBar(t(LK.home)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             button(
-              t(LKey.newGame),
+              t(LK.newGame),
               () {
                 Navigator.pushNamed(
                   context,

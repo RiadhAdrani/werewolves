@@ -107,7 +107,7 @@ class ProtectAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return !target.hasEffect(EffectId.wasProtected);
   }
 

@@ -84,11 +84,15 @@ void main() {
       });
 
       test('should be able to target a previously non-protected player', () {
-        expect(ability.isTarget(createPlayer()), true);
+        expect(ability.isTarget(createPlayer(), 1), true);
       });
 
       test('should NOT be able to target a previously-protected player', () {
-        expect(ability.isTarget(createPlayer(effects: [EffectId.wasProtected])),
+        expect(
+            ability.isTarget(
+              createPlayer(effects: [EffectId.wasProtected]),
+              1,
+            ),
             false);
       });
 

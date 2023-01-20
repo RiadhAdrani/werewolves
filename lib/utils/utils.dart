@@ -52,7 +52,7 @@ Validation isSelectionValid(List<RoleId> roles) {
   if (roles.length < 7) {
     return Validation(
       false,
-      msg: t(LKey.selectPlayerCountLow),
+      msg: t(LK.selectPlayerCountLow),
     );
   }
 
@@ -66,14 +66,14 @@ Validation isSelectionValid(List<RoleId> roles) {
   if (wolvesCount == 0) {
     return Validation(
       false,
-      msg: t(LKey.selectAtLeastOneWolf),
+      msg: t(LK.selectAtLeastOneWolf),
     );
   }
 
   if (wolvesCount >= villagersCount) {
     return Validation(
       false,
-      msg: t(LKey.selectWolvesCountHigherVillagers),
+      msg: t(LK.selectWolvesCountHigherVillagers),
     );
   }
 
@@ -83,14 +83,14 @@ Validation isSelectionValid(List<RoleId> roles) {
   if (solosCount >= villagersCount) {
     return Validation(
       false,
-      msg: t(LKey.selectSolosCountHigherVillagers),
+      msg: t(LK.selectSolosCountHigherVillagers),
     );
   }
 
   if (solosCount >= wolvesCount) {
     return Validation(
       false,
-      msg: t(LKey.selectSolosCountHigherWolves),
+      msg: t(LK.selectSolosCountHigherWolves),
     );
   }
 

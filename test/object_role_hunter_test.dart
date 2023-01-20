@@ -108,14 +108,14 @@ void main() {
         });
 
         test('should NOT be able to target other players', () {
-          expect(ability.isTarget(createPlayer()), false);
+          expect(ability.isTarget(createPlayer(), 1), false);
         });
 
         test('should be able to target self', () {
           var player = createPlayer();
           var ability = CallSignAbility(Hunter(player));
 
-          expect(ability.isTarget(player), true);
+          expect(ability.isTarget(player, 1), true);
         });
 
         test('should be applied surely at any case', () {
@@ -210,14 +210,14 @@ void main() {
         });
 
         test('should be able to target other players', () {
-          expect(ability.isTarget(createPlayer()), true);
+          expect(ability.isTarget(createPlayer(), 1), true);
         });
 
         test('should NOT be able to target self', () {
           var player = createPlayer();
           var ability = createAbilityFromId(AbilityId.hunt, Hunter(player));
 
-          expect(ability.isTarget(player), false);
+          expect(ability.isTarget(player, 1), false);
         });
 
         test('should be applied surely at any case', () {

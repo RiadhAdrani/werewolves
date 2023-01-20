@@ -21,9 +21,9 @@ Widget gamePreView(Game game, BuildContext context) {
         crossAlignment: CrossAxisAlignment.center,
         mainAlignment: MainAxisAlignment.center,
         children: [
-          padding([8], title(t(LKey.gameReady))),
+          padding([8], title(t(LK.gameReady))),
           divider(),
-          button(t(LKey.start), game.start, flat: true),
+          button(t(LK.start), game.start, flat: true),
         ],
       ),
     ),
@@ -60,9 +60,9 @@ AppBar gameBar(
     bgColor: bgColor,
     txtColor: txtColor,
     actions: [
-      AppBarButton(t(LKey.gameDebug), showDebug),
-      AppBarButton(t(LKey.gameWrite), showWrite),
-      AppBarButton(t(LKey.gameLeave), showExit),
+      AppBarButton(t(LK.gameDebug), showDebug),
+      AppBarButton(t(LK.gameWrite), showWrite),
+      AppBarButton(t(LK.gameLeave), showExit),
     ],
   );
 }
@@ -125,12 +125,12 @@ Widget gameNightViewInfos(BuildContext context, List<String> infoList) {
     showDialog(
       context: context,
       builder: (context) => dialog(
-        title: t(LKey.help),
+        title: t(LK.help),
         content: column(children: [
           padding(
             [0, 0, 4, 0],
             titleWithIcon(
-              t(LKey.gameNightImportantInfos),
+              t(LK.gameNightImportantInfos),
               Icons.announcement_outlined,
             ),
           ),
@@ -163,7 +163,7 @@ Widget gameNightViewInfos(BuildContext context, List<String> infoList) {
                 icon(Icons.help_outlined, size: 40),
                 padding(
                   [0, 8],
-                  text(t(LKey.gameShowRoleHelp)),
+                  text(t(LK.gameShowRoleHelp)),
                 ),
               ],
             ),
@@ -191,7 +191,7 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
             padding(
               [0, 0, 8, 0],
               titleWithIcon(
-                t(LKey.gameRemainingAbilities),
+                t(LK.gameRemainingAbilities),
                 Icons.list_alt_outlined,
                 alignment: MainAxisAlignment.center,
               ),
@@ -233,7 +233,7 @@ Widget gameNightView(Game game, BuildContext context) {
   return scaffold(
     appBar: gameBar(
       context,
-      t(LKey.gameNight, params: {'count': game.currentTurn}),
+      t(LK.gameNight, params: {'count': game.currentTurn}),
       game,
     ),
     body: padding(
@@ -251,7 +251,7 @@ Widget gameNightView(Game game, BuildContext context) {
           divider(spacing: [2, 0]),
           gameNightViewAbilities(game, context),
           button(
-            t(LKey.next),
+            t(LK.next),
             next,
             flat: true,
           ),
@@ -301,43 +301,43 @@ Widget gameDayGuide(
       [8],
       column(children: [
         guideSection(
-          t(LKey.gameDayGuideNightEvents),
+          t(LK.gameDayGuideNightEvents),
           Icons.nightlight_outlined,
           nightInfos,
           expanded: true,
         ),
         guideSection(
-          t(LKey.gameDayGuideDayEvents),
+          t(LK.gameDayGuideDayEvents),
           Icons.wb_sunny_outlined,
           dayInfos,
         ),
         guideSection(
-          t(LKey.gameDayGuideAlive),
+          t(LK.gameDayGuideAlive),
           Icons.group_outlined,
           alivePlayers,
         ),
         guideSection(
-          t(LKey.gameDayGuideDead),
+          t(LK.gameDayGuideDead),
           Icons.no_accounts_outlined,
           deadPlayers,
         ),
         guideSection(
-          t(LKey.gameDayGuidePhase1),
+          t(LK.gameDayGuidePhase1),
           Icons.message_outlined,
           discussionSteps,
         ),
         guideSection(
-          t(LKey.gameDayGuidePhase2),
+          t(LK.gameDayGuidePhase2),
           Icons.how_to_vote_outlined,
           voteSteps,
         ),
         guideSection(
-          t(LKey.gameDayGuidePhase3),
+          t(LK.gameDayGuidePhase3),
           Icons.shield_outlined,
           defenseSteps,
         ),
         guideSection(
-          t(LKey.gameDayGuidePhase4),
+          t(LK.gameDayGuidePhase4),
           Icons.cancel_outlined,
           executionSteps,
         ),
@@ -356,7 +356,7 @@ Widget gameDayView(Game game, BuildContext context) {
   List<String> alivePlayers = game.playersList
       .map(
         (player) => t(
-          LKey.gameDayPlayerAs,
+          LK.gameDayPlayerAs,
           params: {
             'name': player.name,
             'role': player.mainRole.name,
@@ -371,8 +371,8 @@ Widget gameDayView(Game game, BuildContext context) {
   void startNight() {
     showConfirm(
       context,
-      t(LKey.gameDayEndTitle),
-      t(LKey.gameDayEndText),
+      t(LK.gameDayEndTitle),
+      t(LK.gameDayEndText),
       () {
         dismiss(context)();
         game.nextNight();
@@ -383,8 +383,8 @@ Widget gameDayView(Game game, BuildContext context) {
   void onAbilityClicked(Ability ability) {
     showConfirm(
       context,
-      t(LKey.gameDayAbilityUseTitle),
-      t(LKey.gameDayAbilityUseText),
+      t(LK.gameDayAbilityUseTitle),
+      t(LK.gameDayAbilityUseText),
       () {
         dismiss(context)();
         game.showUseAbilityDialog(
@@ -402,7 +402,7 @@ Widget gameDayView(Game game, BuildContext context) {
   return scaffold(
     appBar: gameBar(
       context,
-      t(LKey.gameDay, params: {'count': game.currentTurn}),
+      t(LK.gameDay, params: {'count': game.currentTurn}),
       game,
     ),
     body: padding(
@@ -415,7 +415,7 @@ Widget gameDayView(Game game, BuildContext context) {
             child: padding(
               [8],
               titleWithIcon(
-                t(LKey.gameDayGuide),
+                t(LK.gameDayGuide),
                 Icons.help,
               ),
             ),
@@ -434,7 +434,7 @@ Widget gameDayView(Game game, BuildContext context) {
             child: padding(
               [8],
               titleWithIcon(
-                  t(LKey.gameDayUsableAbilities), Icons.subject_rounded),
+                  t(LK.gameDayUsableAbilities), Icons.subject_rounded),
             ),
           ),
           Flexible(
@@ -453,7 +453,7 @@ Widget gameDayView(Game game, BuildContext context) {
               ),
             ),
           ),
-          button(t(LKey.gameNightStart), startNight, flat: true)
+          button(t(LK.gameNightStart), startNight, flat: true)
         ],
       ),
     ),
@@ -463,8 +463,8 @@ Widget gameDayView(Game game, BuildContext context) {
 Widget confirmQuitDialog(BuildContext context) {
   return confirm(
     context,
-    t(LKey.gameExitTitle),
-    t(LKey.gameExitText),
+    t(LK.gameExitTitle),
+    t(LK.gameExitText),
     () {
       Navigator.popUntil(context, ModalRoute.withName(Screen.home.path));
     },
@@ -474,7 +474,7 @@ Widget confirmQuitDialog(BuildContext context) {
 Widget appliedDialog(BuildContext context, String message) {
   return confirm(
     context,
-    t(LKey.gameAbilityUsed),
+    t(LK.gameAbilityUsed),
     message,
     dismiss(context),
   );
@@ -482,13 +482,13 @@ Widget appliedDialog(BuildContext context, String message) {
 
 Widget debugDialog(BuildContext context, Game game) {
   List<String> simple = [
-    t(LKey.gameDebugAlive, params: {'count': game.playersList.length}),
-    t(LKey.gameDebugDead, params: {'count': game.deadPlayers.length}),
-    t(LKey.gameDebugVillagers,
+    t(LK.gameDebugAlive, params: {'count': game.playersList.length}),
+    t(LK.gameDebugDead, params: {'count': game.deadPlayers.length}),
+    t(LK.gameDebugVillagers,
         params: {'count': calculateVillagers(game.playersList)}),
-    t(LKey.gameDebugWerewolves,
+    t(LK.gameDebugWerewolves,
         params: {'count': calculateWolves(game.playersList)}),
-    t(LKey.gameDebugSolos, params: {'count': calculateSolos(game.playersList)}),
+    t(LK.gameDebugSolos, params: {'count': calculateSolos(game.playersList)}),
   ];
 
   Widget dataView(String data, {IconData icon = Icons.info_outline}) {
@@ -520,7 +520,7 @@ Widget debugDialog(BuildContext context, Game game) {
             ]),
             divider(),
             titleWithIcon(
-              t(role.isObsolete ? LKey.obsolete : LKey.playing),
+              t(role.isObsolete ? LK.obsolete : LK.playing),
               role.isObsolete ? Icons.error_outline : Icons.done,
               alignment: MainAxisAlignment.start,
             ),
@@ -569,7 +569,7 @@ Widget debugDialog(BuildContext context, Game game) {
   return dialog(
     context: context,
     iconName: Icons.list_alt,
-    title: t(LKey.gameDebugTitle),
+    title: t(LK.gameDebugTitle),
     dismissible: false,
     content: SizedBox(
       width: 500,
@@ -580,7 +580,7 @@ Widget debugDialog(BuildContext context, Game game) {
           children: [
             padding(
               [8, 0],
-              subTitle(t(LKey.stats)),
+              subTitle(t(LK.stats)),
             ),
             column(
               crossAlignment: CrossAxisAlignment.stretch,
@@ -589,7 +589,7 @@ Widget debugDialog(BuildContext context, Game game) {
             divider(),
             padding(
               [8, 0],
-              subTitle(t(LKey.roles)),
+              subTitle(t(LK.roles)),
             ),
             column(
               crossAlignment: CrossAxisAlignment.stretch,
@@ -608,17 +608,17 @@ Widget writeDialog(BuildContext context) {
   return dialog(
     context: context,
     iconName: Icons.message,
-    title: t(LKey.gameWrite),
+    title: t(LK.gameWrite),
     dismissible: false,
     content: SizedBox(
       width: 400,
       child: column(
         mainSize: MainAxisSize.min,
         children: [
-          paragraph(t(LKey.gameWriteHelp)),
+          paragraph(t(LK.gameWriteHelp)),
           input(
             TextEditingController(),
-            placeholder: t(LKey.gameWritePlaceholder),
+            placeholder: t(LK.gameWritePlaceholder),
             size: 45,
           ),
         ],
@@ -635,8 +635,8 @@ Widget abilityCard(
   bool should = ability.isUnskippable();
 
   String skipText = t(ability.isUnskippable()
-      ? LKey.gameAbilityShouldBeUsed
-      : LKey.gameAbilityOptional);
+      ? LK.gameAbilityShouldBeUsed
+      : LK.gameAbilityOptional);
 
   Color skipColor =
       ability.isUnskippable() ? BaseColors.blond : BaseColors.textSecondary;
@@ -694,7 +694,7 @@ Widget stepAlert(String title, String text, List<String> items,
       ),
       actions: [
         button(
-          t(LKey.done),
+          t(LK.done),
           () {
             dismiss(context)();
             onNext();

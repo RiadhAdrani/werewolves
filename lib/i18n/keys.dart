@@ -1,4 +1,4 @@
-enum LKey {
+enum LK {
   // * App --------------------------------------------------------------------
   appTitle,
   reset,
@@ -98,6 +98,8 @@ enum LKey {
 
   gameExitTitle,
   gameExitText,
+
+  // * Roles, Abilities and Effects -------------------------------------------
 
   protector,
   protectorDescription,
@@ -238,6 +240,8 @@ enum LKey {
 
   hasWord,
   hasWordDescription,
+
+  // * Events -----------------------------------------------------------------
 
   eventDeath,
   eventClairvoyance,

@@ -120,7 +120,7 @@ class ServantAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return target != owner.controller;
   }
 

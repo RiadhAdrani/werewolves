@@ -120,8 +120,8 @@ abstract class Ability {
     return turnsUsedIn.contains(turn);
   }
 
-  List<Player> createListOfTargets(List<Player> players) {
-    return players.where((player) => isTarget(player)).toList();
+  List<Player> createListOfTargets(List<Player> players, int turn) {
+    return players.where((player) => isTarget(player, turn)).toList();
   }
 
   /// Return the appropriate message according to the number of affected players (target).
@@ -130,7 +130,7 @@ abstract class Ability {
   }
 
   /// Check if the given target is valid or not.
-  bool isTarget(Player target);
+  bool isTarget(Player target, int turn);
 
   /// Used as a last check
   /// that will confirm the application of the status effect
@@ -174,64 +174,64 @@ AbilityHelperObject useAbilityHelper(AbilityId id) {
   switch (id) {
     case AbilityId.protect:
       return AbilityHelperObject(
-        t(LKey.protectorProtect),
-        t(LKey.protectorProtectDescription),
+        t(LK.protectorProtect),
+        t(LK.protectorProtectDescription),
         (owner) => ProtectAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.devour:
       return AbilityHelperObject(
-        t(LKey.wolfpackDevour),
-        t(LKey.wolfpackDevourDescription),
+        t(LK.wolfpackDevour),
+        t(LK.wolfpackDevourDescription),
         (owner) => DevourAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.infect:
       return AbilityHelperObject(
-        t(LKey.fatherWolfInfect),
-        t(LKey.fatherWolfInfect),
+        t(LK.fatherWolfInfect),
+        t(LK.fatherWolfInfect),
         (owner) => InfectAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.clairvoyance:
       return AbilityHelperObject(
-        t(LKey.seerClairvoyance),
-        t(LKey.seerClairvoyanceDescription),
+        t(LK.seerClairvoyance),
+        t(LK.seerClairvoyanceDescription),
         (owner) => ClairvoyanceAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.revive:
       return AbilityHelperObject(
-        t(LKey.witchRevive),
-        t(LKey.witchReviveDescription),
+        t(LK.witchRevive),
+        t(LK.witchReviveDescription),
         (owner) => ReviveAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.curse:
       return AbilityHelperObject(
-        t(LKey.witchCurse),
-        t(LKey.witchCurseDescription),
+        t(LK.witchCurse),
+        t(LK.witchCurseDescription),
         (owner) => CurseAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.counter:
       return AbilityHelperObject(
-        t(LKey.knightCounter),
-        t(LKey.knightCounterDescription),
+        t(LK.knightCounter),
+        t(LK.knightCounterDescription),
         (owner) => CounterAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.hunt:
       return AbilityHelperObject(
-        t(LKey.hunterHunt),
-        t(LKey.hunterHuntDescription),
+        t(LK.hunterHunt),
+        t(LK.hunterHuntDescription),
         (owner) => HuntAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.callsign:
       return AbilityHelperObject(
-        t(LKey.commonCallsign),
-        t(LKey.commonCallsignDescription),
+        t(LK.commonCallsign),
+        t(LK.commonCallsignDescription),
         (owner) => CallSignAbility(owner),
         (targets) => 'Ability Applied',
       );
@@ -244,50 +244,50 @@ AbilityHelperObject useAbilityHelper(AbilityId id) {
       );
     case AbilityId.judgement:
       return AbilityHelperObject(
-        t(LKey.judgeJudgement),
-        t(LKey.judgeJudgementDescription),
+        t(LK.judgeJudgement),
+        t(LK.judgeJudgementDescription),
         (owner) => JudgementAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.mute:
       return AbilityHelperObject(
-        t(LKey.blackWolfMute),
-        t(LKey.blackWolfMuteDescription),
+        t(LK.blackWolfMute),
+        t(LK.blackWolfMuteDescription),
         (owner) => MuteAbility(owner),
         (targets) => 'Ability Applied',
       );
     case AbilityId.word:
       return AbilityHelperObject(
-        t(LKey.garrulousWolfWord),
-        t(LKey.garrulousWolfWordDescription),
+        t(LK.garrulousWolfWord),
+        t(LK.garrulousWolfWordDescription),
         (owner) => GarrulousAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.sheeps:
       return AbilityHelperObject(
-        t(LKey.shepherdSheeps),
-        t(LKey.shepherdSheepsDescription),
+        t(LK.shepherdSheeps),
+        t(LK.shepherdSheepsDescription),
         (owner) => ShepherdAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.guess:
       return AbilityHelperObject(
-        t(LKey.alienGuess),
-        t(LKey.alienGuessDescription),
+        t(LK.alienGuess),
+        t(LK.alienGuessDescription),
         (owner) => GuessAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.talker:
       return AbilityHelperObject(
-        t(LKey.captainTalker),
-        t(LKey.captainTalkerDescription),
+        t(LK.captainTalker),
+        t(LK.captainTalkerDescription),
         (owner) => TalkerAbility(owner),
         (targets) => 'Effect Applied',
       );
     case AbilityId.execute:
       return AbilityHelperObject(
-        t(LKey.captainExecute),
-        t(LKey.captainExecuteDescription),
+        t(LK.captainExecute),
+        t(LK.captainExecuteDescription),
         (owner) => ExecuteAbility(owner),
         (targets) => 'Effect Applied',
       );
@@ -300,8 +300,8 @@ AbilityHelperObject useAbilityHelper(AbilityId id) {
       );
     case AbilityId.inherit:
       return AbilityHelperObject(
-        t(LKey.captainInherit),
-        t(LKey.captainInheritDescription),
+        t(LK.captainInherit),
+        t(LK.captainInheritDescription),
         (owner) => InheritAbility(owner),
         (targets) => 'Effect Applied',
       );

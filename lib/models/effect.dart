@@ -90,56 +90,56 @@ EffectHelperObject useEffectHelper(EffectId id) {
   switch (id) {
     case EffectId.isProtected:
       return EffectHelperObject(
-        t(LKey.isProtected),
-        t(LKey.isProtectedDescription),
+        t(LK.isProtected),
+        t(LK.isProtectedDescription),
         (source) => ProtectedEffect(source),
       );
     case EffectId.isDevoured:
       return EffectHelperObject(
-        t(LKey.isDevoured),
-        t(LKey.isDevouredDescription),
+        t(LK.isDevoured),
+        t(LK.isDevouredDescription),
         (source) => DevouredEffect(source),
       );
     case EffectId.isInfected:
       return EffectHelperObject(
-        t(LKey.isInfected),
-        t(LKey.isInfectedDescription),
+        t(LK.isInfected),
+        t(LK.isInfectedDescription),
         (source) => InfectedEffect(source),
       );
     case EffectId.isCursed:
       return EffectHelperObject(
-        t(LKey.isCursed),
-        t(LKey.isCursedDescription),
+        t(LK.isCursed),
+        t(LK.isCursedDescription),
         (source) => CursedEffect(source),
       );
     case EffectId.isRevived:
       return EffectHelperObject(
-        t(LKey.isRevived),
-        t(LKey.isRevivedDescription),
+        t(LK.isRevived),
+        t(LK.isRevivedDescription),
         (source) => RevivedEffect(source),
       );
     case EffectId.isSeen:
       return EffectHelperObject(
-        t(LKey.isSeen),
-        t(LKey.isSeenDescription),
+        t(LK.isSeen),
+        t(LK.isSeenDescription),
         (source) => ClairvoyanceEffect(source),
       );
     case EffectId.isCountered:
       return EffectHelperObject(
-        t(LKey.isCountered),
-        t(LKey.isCounteredDescription),
+        t(LK.isCountered),
+        t(LK.isCounteredDescription),
         (source) => CounteredEffect(source),
       );
     case EffectId.isHunted:
       return EffectHelperObject(
-        t(LKey.isHunted),
-        t(LKey.isHuntedDescription),
+        t(LK.isHunted),
+        t(LK.isHuntedDescription),
         (source) => HuntedEffect(source),
       );
     case EffectId.isExecuted:
       return EffectHelperObject(
-        t(LKey.isExecuted),
-        t(LKey.isExecutedDescription),
+        t(LK.isExecuted),
+        t(LK.isExecutedDescription),
         (source) => ExecutedEffect(source),
       );
     case EffectId.isSubstitue:
@@ -162,68 +162,68 @@ EffectHelperObject useEffectHelper(EffectId id) {
       );
     case EffectId.isJudged:
       return EffectHelperObject(
-        t(LKey.isJudged),
-        t(LKey.isJudgedDescription),
+        t(LK.isJudged),
+        t(LK.isJudgedDescription),
         (source) => JudgedEffect(source),
       );
     case EffectId.isMuted:
       return EffectHelperObject(
-        t(LKey.isMuted),
-        t(LKey.isMutedDescription),
+        t(LK.isMuted),
+        t(LK.isMutedDescription),
         (source) => MutedEffect(source),
       );
     case EffectId.isGuessedByAlien:
       return EffectHelperObject(
-        t(LKey.isGuessedByAlien),
-        t(LKey.isGuessedByAlienDescription),
+        t(LK.isGuessedByAlien),
+        t(LK.isGuessedByAlienDescription),
         (source) => GuessedByAlienEffect(source),
       );
     case EffectId.wasMuted:
       return EffectHelperObject(
-        t(LKey.wasMuted),
-        t(LKey.wasMutedDescription),
+        t(LK.wasMuted),
+        t(LK.wasMutedDescription),
         (source) => WasMutedEffect(source),
       );
     case EffectId.wasProtected:
       return EffectHelperObject(
-        t(LKey.wasProtected),
-        t(LKey.wasProtectedDescription),
+        t(LK.wasProtected),
+        t(LK.wasProtectedDescription),
         (source) => WasProtectedEffect(source),
       );
     case EffectId.wasJudged:
       return EffectHelperObject(
-        t(LKey.wasJudged),
-        t(LKey.wasJudgedDescription),
+        t(LK.wasJudged),
+        t(LK.wasJudgedDescription),
         (source) => WasJudgedEffect(source),
       );
     case EffectId.hasCallsign:
       return EffectHelperObject(
-        t(LKey.hasCallsign),
-        t(LKey.hasCallsignDescription),
+        t(LK.hasCallsign),
+        t(LK.hasCallsignDescription),
         (source) => HasCallSignEffect(source),
       );
     case EffectId.hasInheritedCaptaincy:
       return EffectHelperObject(
-        t(LKey.hasInheritedCaptaincy),
-        t(LKey.hasInheritedCaptaincyDescription),
+        t(LK.hasInheritedCaptaincy),
+        t(LK.hasInheritedCaptaincyDescription),
         (source) => InheritedCaptaincyEffect(source),
       );
     case EffectId.hasSheep:
       return EffectHelperObject(
-        t(LKey.hasSheep),
-        t(LKey.hasSheepDescription),
+        t(LK.hasSheep),
+        t(LK.hasSheepDescription),
         (source) => HasSheepEffect(source),
       );
     case EffectId.shouldTalkFirst:
       return EffectHelperObject(
-        t(LKey.shouldTalkFirst),
-        t(LKey.shouldTalkFirstDescription),
+        t(LK.shouldTalkFirst),
+        t(LK.shouldTalkFirstDescription),
         (source) => ShouldTalkFirstEffect(source),
       );
     case EffectId.hasWord:
       return EffectHelperObject(
-        t(LKey.hasWord),
-        t(LKey.hasWordDescription),
+        t(LK.hasWord),
+        t(LK.hasWordDescription),
         (source) => HasWordEffect(source),
       );
   }

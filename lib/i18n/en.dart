@@ -1,207 +1,207 @@
 import 'package:werewolves/i18n/keys.dart';
 
-const Map<LKey, String> en = {
-  LKey.appTitle: "Werewolves",
-  LKey.reset: 'Reset',
-  LKey.ok: 'Ok',
-  LKey.done: 'Done',
-  LKey.cancel: 'Cancel',
-  LKey.start: 'Start',
-  LKey.loading: 'Loading...',
-  LKey.next: 'Next',
-  LKey.help: 'Help',
-  LKey.roles: 'Roles',
-  LKey.stats: 'Stats',
-  LKey.obsolete: 'Obsolete',
-  LKey.playing: 'Playing',
-  LKey.options: 'Options',
-  LKey.guess: 'guess',
-  LKey.newGame: "New game",
-  LKey.home: 'Home',
-  LKey.selectTitle: 'Selected roles ({count})',
-  LKey.selectAtLeastOneWolf: 'At least one wolf should be present.',
-  LKey.selectPlayerCountLow: 'Players count is too low.',
-  LKey.selectSolosCountHigherVillagers:
+const Map<LK, String> en = {
+  LK.appTitle: "Werewolves",
+  LK.reset: 'Reset',
+  LK.ok: 'Ok',
+  LK.done: 'Done',
+  LK.cancel: 'Cancel',
+  LK.start: 'Start',
+  LK.loading: 'Loading...',
+  LK.next: 'Next',
+  LK.help: 'Help',
+  LK.roles: 'Roles',
+  LK.stats: 'Stats',
+  LK.obsolete: 'Obsolete',
+  LK.playing: 'Playing',
+  LK.options: 'Options',
+  LK.guess: 'guess',
+  LK.newGame: "New game",
+  LK.home: 'Home',
+  LK.selectTitle: 'Selected roles ({count})',
+  LK.selectAtLeastOneWolf: 'At least one wolf should be present.',
+  LK.selectPlayerCountLow: 'Players count is too low.',
+  LK.selectSolosCountHigherVillagers:
       'Solos count is higher than the villagers count.',
-  LKey.selectSolosCountHigherWolves:
+  LK.selectSolosCountHigherWolves:
       'Solos count is higher than the wolves count.',
-  LKey.selectWolvesCountHigherVillagers:
+  LK.selectWolvesCountHigherVillagers:
       'Wolves count is higher than the villagers count.',
-  LKey.distribute: 'Distribute',
-  LKey.distributeTapToPick: 'Tap to pick.',
-  LKey.distributeAllPicked: 'All roles are picked!',
-  LKey.distributeUnassignableName:
+  LK.distribute: 'Distribute',
+  LK.distributeTapToPick: 'Tap to pick.',
+  LK.distributeAllPicked: 'All roles are picked!',
+  LK.distributeUnassignableName:
       'Unable to assign role to player ! Name is invalid or already exists !',
-  LKey.distributePickName: 'Pick a name',
-  LKey.distributePlayerNamePlaceholder: 'Player name',
-  LKey.distributeReview: 'Review players list ({count})',
-  LKey.gameReady: 'Everything is ready !',
-  LKey.gameConfirmUse: 'Confirm ability use',
-  LKey.gameConfirmUseIssueTitle: 'Cannot proceed',
-  LKey.gameConfirmUseIssueText:
+  LK.distributePickName: 'Pick a name',
+  LK.distributePlayerNamePlaceholder: 'Player name',
+  LK.distributeReview: 'Review players list ({count})',
+  LK.gameReady: 'Everything is ready !',
+  LK.gameConfirmUse: 'Confirm ability use',
+  LK.gameConfirmUseIssueTitle: 'Cannot proceed',
+  LK.gameConfirmUseIssueText:
       'You are trying to use an ability without a single selected target while it needs at least ({count}).',
-  LKey.gameConfirmUseDoneTitle: 'Confirm changes.',
-  LKey.gameConfirmUseDoneText:
+  LK.gameConfirmUseDoneTitle: 'Confirm changes.',
+  LK.gameConfirmUseDoneText:
       'Committing these changes is irreversible, make sure you selected the correct target.',
-  LKey.gameAbilityGuessCurrentTry: 'Guess : {guess}',
-  LKey.gameAbilityGuessTitle: '{ability} : {role}',
-  LKey.gameAbilityGuessText: '',
-  LKey.gameNight: 'Night ({count})',
-  LKey.gameNightImportantInfos: 'Important informations',
-  LKey.gameNightControllerName: '({name})',
-  LKey.gameNightMandatoryAbilityNotUsed:
+  LK.gameAbilityGuessCurrentTry: 'Guess : {guess}',
+  LK.gameAbilityGuessTitle: '{ability} : {role}',
+  LK.gameAbilityGuessText: '',
+  LK.gameNight: 'Night ({count})',
+  LK.gameNightImportantInfos: 'Important informations',
+  LK.gameNightControllerName: '({name})',
+  LK.gameNightMandatoryAbilityNotUsed:
       'At least one mandatory ability was not used.',
-  LKey.gameNightStart: 'Start night',
-  LKey.gameDebug: 'Debug',
-  LKey.gameDebugTitle: 'Debug Infos',
-  LKey.gameDebugAlive: 'Alive : {count}',
-  LKey.gameDebugDead: 'Dead : {count}',
-  LKey.gameDebugVillagers: 'Villagers : {count}',
-  LKey.gameDebugWerewolves: 'Werewolves : {count}',
-  LKey.gameDebugSolos: 'Solos : {count}',
-  LKey.gameWrite: 'Write',
-  LKey.gameWriteHelp:
+  LK.gameNightStart: 'Start night',
+  LK.gameDebug: 'Debug',
+  LK.gameDebugTitle: 'Debug Infos',
+  LK.gameDebugAlive: 'Alive : {count}',
+  LK.gameDebugDead: 'Dead : {count}',
+  LK.gameDebugVillagers: 'Villagers : {count}',
+  LK.gameDebugWerewolves: 'Werewolves : {count}',
+  LK.gameDebugSolos: 'Solos : {count}',
+  LK.gameWrite: 'Write',
+  LK.gameWriteHelp:
       'You can write something here and show it to the player in case there is some problems.',
-  LKey.gameWritePlaceholder: 'Anything...',
-  LKey.gameLeave: 'Leave',
-  LKey.gameRemainingAbilities: 'Remaining abilities',
-  LKey.gameShowRoleHelp: 'Open help dialog',
-  LKey.gameAbilityShouldBeUsed: 'This ability is mandatory and should be used.',
-  LKey.gameAbilityDialogParagraph:
+  LK.gameWritePlaceholder: 'Anything...',
+  LK.gameLeave: 'Leave',
+  LK.gameRemainingAbilities: 'Remaining abilities',
+  LK.gameShowRoleHelp: 'Open help dialog',
+  LK.gameAbilityShouldBeUsed: 'This ability is mandatory and should be used.',
+  LK.gameAbilityDialogParagraph:
       'You have chosen {count}/{needed} required target(s) out of {targetCount} possible option(s).',
-  LKey.gameAbilityOptional: 'Optional.',
-  LKey.gameAbilityUsed: "Ability used.",
-  LKey.gameExitTitle: 'Game in progress',
-  LKey.gameExitText: 'Are you sure you want to quit the game?',
-  LKey.gameDayUsableAbilities: 'Usable abilities',
-  LKey.gameDay: 'Day ({count})',
-  LKey.gameDayPlayerAs: '{name} (as {role})',
-  LKey.gameDayGuide: 'Guide',
-  LKey.gameDayGuideNightEvents: 'Night Players',
-  LKey.gameDayGuideDayEvents: 'Day Players',
-  LKey.gameDayGuideAlive: 'Alive Players',
-  LKey.gameDayGuideDead: 'Dead Players',
-  LKey.gameDayGuidePhase1: 'Phase 1 : Discussion',
-  LKey.gameDayGuidePhase2: 'Phase 2 : Vote',
-  LKey.gameDayGuidePhase3: 'Phase 3 : Defense',
-  LKey.gameDayGuidePhase4: 'Phase 4 : Execution',
-  LKey.gameDayAbilityUseTitle: 'Before using the ability',
-  LKey.gameDayAbilityUseText: 'Make sure everyone else is asleep',
-  LKey.gameDayAbilityTriggeredTitle: 'Ability triggered',
-  LKey.gameDayAbilityTriggeredText:
+  LK.gameAbilityOptional: 'Optional.',
+  LK.gameAbilityUsed: "Ability used.",
+  LK.gameExitTitle: 'Game in progress',
+  LK.gameExitText: 'Are you sure you want to quit the game?',
+  LK.gameDayUsableAbilities: 'Usable abilities',
+  LK.gameDay: 'Day ({count})',
+  LK.gameDayPlayerAs: '{name} (as {role})',
+  LK.gameDayGuide: 'Guide',
+  LK.gameDayGuideNightEvents: 'Night events',
+  LK.gameDayGuideDayEvents: 'Day events',
+  LK.gameDayGuideAlive: 'Alive players',
+  LK.gameDayGuideDead: 'Dead players',
+  LK.gameDayGuidePhase1: 'Phase 1 : Discussion',
+  LK.gameDayGuidePhase2: 'Phase 2 : Vote',
+  LK.gameDayGuidePhase3: 'Phase 3 : Defense',
+  LK.gameDayGuidePhase4: 'Phase 4 : Execution',
+  LK.gameDayAbilityUseTitle: 'Before using the ability',
+  LK.gameDayAbilityUseText: 'Make sure everyone else is asleep',
+  LK.gameDayAbilityTriggeredTitle: 'Ability triggered',
+  LK.gameDayAbilityTriggeredText:
       '{name} should use his ability, Make sure everyone else is asleep!',
-  LKey.gameDayEndTitle: 'End of day',
-  LKey.gameDayEndText:
+  LK.gameDayEndTitle: 'End of day',
+  LK.gameDayEndText:
       'You are about to start the night phase, are you sure you completed all the steps ?',
-  LKey.protector: 'Protector',
-  LKey.protectorDescription: 'TODO', // TODO description
-  LKey.protectorProtect: 'Protect',
-  LKey.protectorProtectDescription: 'TODO', // TODO description
-  LKey.wolfpack: "Wolfpack",
-  LKey.wolfpackDescription: "TODO", // TODO description
-  LKey.wolfpackDevour: "Devour",
-  LKey.wolfpackDevourDescription: "TODO", // TODO description
-  LKey.werewolf: 'Werewolf',
-  LKey.werewolfDescription: 'TODO', // TODO description
-  LKey.villager: 'Villager',
-  LKey.villagerDescription: 'TODO', // TODO description
-  LKey.fatherWolf: ' Father of Wolves',
-  LKey.fatherWolfDescription: 'TODO', // TODO description
-  LKey.fatherWolfInfect: 'Infect',
-  LKey.fatherWolfInfectDescription: 'TODO', // TODO description
-  LKey.seer: 'Seer',
-  LKey.seerDescription: 'TODO', // TODO description
-  LKey.seerClairvoyance: 'Clairvoyance',
-  LKey.seerClairvoyanceDescription: 'TODO', // TODO description
-  LKey.witch: 'Witch',
-  LKey.witchDescription: 'TODO', // TODO description
-  LKey.witchRevive: 'Revive',
-  LKey.witchReviveDescription: 'TODO', // TODO description
-  LKey.witchCurse: 'Curse',
-  LKey.witchCurseDescription: 'TODO', // TODO description
-  LKey.knight: 'Knight',
-  LKey.knightDescription: 'TODO', // TODO description
-  LKey.knightCounter: 'Counter',
-  LKey.knightCounterDescription: 'TODO', // TODO description
-  LKey.hunter: 'Hunter',
-  LKey.hunterDescription: 'TODO', // TODO description
-  LKey.hunterHunt: 'Hunt',
-  LKey.hunterHuntDescription: 'TODO', // TODO description
-  LKey.judge: 'Judge',
-  LKey.judgeDescription: 'TODO', // TODO description
-  LKey.judgeJudgement: 'Judgement',
-  LKey.judgeJudgementDescription: 'TODO', // TODO description
-  LKey.blackWolf: 'Black Wolf',
-  LKey.blackWolfDescription: 'TODO', // TODO description
-  LKey.blackWolfMute: 'Mute',
-  LKey.blackWolfMuteDescription: 'TODO', // TODO description
-  LKey.garrulousWolf: 'Garrulous Wolf',
-  LKey.garrulousWolfDescription: 'TODO', // TODO description
-  LKey.garrulousWolfWord: 'Garrulous Word',
-  LKey.garrulousWolfWordDescription: 'TODO', // TODO description
-  LKey.shepherd: 'Shepherd',
-  LKey.shepherdDescription: 'TODO', // TODO description
-  LKey.shepherdSheeps: 'Sheeps',
-  LKey.shepherdSheepsDescription: 'TODO', // TODO description
-  LKey.alien: 'Alien',
-  LKey.alienDescription: 'TODO', // TODO description
-  LKey.alienGuess: 'Alien Guess',
-  LKey.alienGuessDescription: 'TODO', // TODO description
-  LKey.captain: 'Captain',
-  LKey.captainDescription: 'TODO', // TODO description
-  LKey.captainTalker: 'Talker',
-  LKey.captainTalkerDescription: 'TODO', // TODO description
-  LKey.captainExecute: 'Execute',
-  LKey.captainExecuteDescription: 'TODO', // TODO description
-  LKey.captainInherit: 'Inherit',
-  LKey.captainInheritDescription: 'TODO', // TODO description
-  LKey.commonCallsign: 'Callsign',
-  LKey.commonCallsignDescription: 'TODO', // TODO description
-  LKey.isProtected: 'Protected',
-  LKey.isProtectedDescription: 'TODO', // TODO description
-  LKey.isDevoured: 'Devoured',
-  LKey.isDevouredDescription: 'TODO', // TODO description
-  LKey.isInfected: 'Infected',
-  LKey.isInfectedDescription: 'TODO', // TODO description
-  LKey.isCursed: 'Cursed',
-  LKey.isCursedDescription: 'TODO', // TODO description
-  LKey.isRevived: 'Revived',
-  LKey.isRevivedDescription: 'TODO', // TODO description
-  LKey.isSeen: 'Seen',
-  LKey.isSeenDescription: 'TODO', // TODO description
-  LKey.isCountered: 'Countered',
-  LKey.isCounteredDescription: 'TODO', // TODO description
-  LKey.isHunted: 'Hunted',
-  LKey.isHuntedDescription: 'TODO', // TODO description
-  LKey.isExecuted: 'Executed',
-  LKey.isExecutedDescription: 'TODO', // TODO description
-  LKey.isJudged: 'Judged',
-  LKey.isJudgedDescription: 'TODO', // TODO description
-  LKey.isMuted: 'Muted',
-  LKey.isMutedDescription: 'TODO', // TODO description
-  LKey.isGuessedByAlien: 'Guessed by the Alien',
-  LKey.isGuessedByAlienDescription: 'TODO', // TODO description
-  LKey.wasMuted: 'Was muted',
-  LKey.wasMutedDescription: 'TODO', // TODO description
-  LKey.wasProtected: 'Was protected',
-  LKey.wasProtectedDescription: 'TODO', // TODO description
-  LKey.wasJudged: 'was judged',
-  LKey.wasJudgedDescription: 'TODO', // TODO description
-  LKey.hasCallsign: 'Has callsign',
-  LKey.hasCallsignDescription: 'TODO', // TODO description
-  LKey.hasInheritedCaptaincy: 'Has inherited captaincy',
-  LKey.hasInheritedCaptaincyDescription: 'TODO', // TODO description
-  LKey.hasSheep: 'Has a sheep',
-  LKey.hasSheepDescription: 'TODO', // TODO description
-  LKey.shouldTalkFirst: 'Should talk first',
-  LKey.shouldTalkFirstDescription: 'TODO', // TODO description
-  LKey.hasWord: 'Has word',
-  LKey.hasWordDescription: 'TODO', // TODO description
-  LKey.eventDeath: '{name} died.',
-  LKey.eventTalk: '{name} starts the discussion.',
-  LKey.eventClairvoyance: 'The seer saw : {role}',
-  LKey.eventJudge: 'The judge protected {name}.',
-  LKey.eventMute: '{name} is muted.',
-  LKey.eventSheepDead: 'A sheep was killed',
-  LKey.eventSheepReturned: 'A sheep returned to the shepherd',
+  LK.protector: 'Protector',
+  LK.protectorDescription: 'TODO', // TODO description
+  LK.protectorProtect: 'Protect',
+  LK.protectorProtectDescription: 'TODO', // TODO description
+  LK.wolfpack: "Wolfpack",
+  LK.wolfpackDescription: "TODO", // TODO description
+  LK.wolfpackDevour: "Devour",
+  LK.wolfpackDevourDescription: "TODO", // TODO description
+  LK.werewolf: 'Werewolf',
+  LK.werewolfDescription: 'TODO', // TODO description
+  LK.villager: 'Villager',
+  LK.villagerDescription: 'TODO', // TODO description
+  LK.fatherWolf: ' Father of Wolves',
+  LK.fatherWolfDescription: 'TODO', // TODO description
+  LK.fatherWolfInfect: 'Infect',
+  LK.fatherWolfInfectDescription: 'TODO', // TODO description
+  LK.seer: 'Seer',
+  LK.seerDescription: 'TODO', // TODO description
+  LK.seerClairvoyance: 'Clairvoyance',
+  LK.seerClairvoyanceDescription: 'TODO', // TODO description
+  LK.witch: 'Witch',
+  LK.witchDescription: 'TODO', // TODO description
+  LK.witchRevive: 'Revive',
+  LK.witchReviveDescription: 'TODO', // TODO description
+  LK.witchCurse: 'Curse',
+  LK.witchCurseDescription: 'TODO', // TODO description
+  LK.knight: 'Knight',
+  LK.knightDescription: 'TODO', // TODO description
+  LK.knightCounter: 'Counter',
+  LK.knightCounterDescription: 'TODO', // TODO description
+  LK.hunter: 'Hunter',
+  LK.hunterDescription: 'TODO', // TODO description
+  LK.hunterHunt: 'Hunt',
+  LK.hunterHuntDescription: 'TODO', // TODO description
+  LK.judge: 'Judge',
+  LK.judgeDescription: 'TODO', // TODO description
+  LK.judgeJudgement: 'Judgement',
+  LK.judgeJudgementDescription: 'TODO', // TODO description
+  LK.blackWolf: 'Black Wolf',
+  LK.blackWolfDescription: 'TODO', // TODO description
+  LK.blackWolfMute: 'Mute',
+  LK.blackWolfMuteDescription: 'TODO', // TODO description
+  LK.garrulousWolf: 'Garrulous Wolf',
+  LK.garrulousWolfDescription: 'TODO', // TODO description
+  LK.garrulousWolfWord: 'Garrulous Word',
+  LK.garrulousWolfWordDescription: 'TODO', // TODO description
+  LK.shepherd: 'Shepherd',
+  LK.shepherdDescription: 'TODO', // TODO description
+  LK.shepherdSheeps: 'Sheeps',
+  LK.shepherdSheepsDescription: 'TODO', // TODO description
+  LK.alien: 'Alien',
+  LK.alienDescription: 'TODO', // TODO description
+  LK.alienGuess: 'Alien Guess',
+  LK.alienGuessDescription: 'TODO', // TODO description
+  LK.captain: 'Captain',
+  LK.captainDescription: 'TODO', // TODO description
+  LK.captainTalker: 'Talker',
+  LK.captainTalkerDescription: 'TODO', // TODO description
+  LK.captainExecute: 'Execute',
+  LK.captainExecuteDescription: 'TODO', // TODO description
+  LK.captainInherit: 'Inherit',
+  LK.captainInheritDescription: 'TODO', // TODO description
+  LK.commonCallsign: 'Callsign',
+  LK.commonCallsignDescription: 'TODO', // TODO description
+  LK.isProtected: 'Protected',
+  LK.isProtectedDescription: 'TODO', // TODO description
+  LK.isDevoured: 'Devoured',
+  LK.isDevouredDescription: 'TODO', // TODO description
+  LK.isInfected: 'Infected',
+  LK.isInfectedDescription: 'TODO', // TODO description
+  LK.isCursed: 'Cursed',
+  LK.isCursedDescription: 'TODO', // TODO description
+  LK.isRevived: 'Revived',
+  LK.isRevivedDescription: 'TODO', // TODO description
+  LK.isSeen: 'Seen',
+  LK.isSeenDescription: 'TODO', // TODO description
+  LK.isCountered: 'Countered',
+  LK.isCounteredDescription: 'TODO', // TODO description
+  LK.isHunted: 'Hunted',
+  LK.isHuntedDescription: 'TODO', // TODO description
+  LK.isExecuted: 'Executed',
+  LK.isExecutedDescription: 'TODO', // TODO description
+  LK.isJudged: 'Judged',
+  LK.isJudgedDescription: 'TODO', // TODO description
+  LK.isMuted: 'Muted',
+  LK.isMutedDescription: 'TODO', // TODO description
+  LK.isGuessedByAlien: 'Guessed by the Alien',
+  LK.isGuessedByAlienDescription: 'TODO', // TODO description
+  LK.wasMuted: 'Was muted',
+  LK.wasMutedDescription: 'TODO', // TODO description
+  LK.wasProtected: 'Was protected',
+  LK.wasProtectedDescription: 'TODO', // TODO description
+  LK.wasJudged: 'was judged',
+  LK.wasJudgedDescription: 'TODO', // TODO description
+  LK.hasCallsign: 'Has callsign',
+  LK.hasCallsignDescription: 'TODO', // TODO description
+  LK.hasInheritedCaptaincy: 'Has inherited captaincy',
+  LK.hasInheritedCaptaincyDescription: 'TODO', // TODO description
+  LK.hasSheep: 'Has a sheep',
+  LK.hasSheepDescription: 'TODO', // TODO description
+  LK.shouldTalkFirst: 'Should talk first',
+  LK.shouldTalkFirstDescription: 'TODO', // TODO description
+  LK.hasWord: 'Has word',
+  LK.hasWordDescription: 'TODO', // TODO description
+  LK.eventDeath: '{name} died.',
+  LK.eventTalk: '{name} starts the discussion.',
+  LK.eventClairvoyance: 'The seer saw : {role}',
+  LK.eventJudge: 'The judge protected {name}.',
+  LK.eventMute: '{name} is muted.',
+  LK.eventSheepDead: 'A sheep was killed',
+  LK.eventSheepReturned: 'A sheep returned to the shepherd',
 };

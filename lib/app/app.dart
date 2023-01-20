@@ -9,7 +9,7 @@ import 'package:werewolves/i18n/keys.dart';
 import 'package:werewolves/i18n/locals.dart';
 import 'package:werewolves/models/selection.dart';
 
-String t(LKey key, {Map<String, dynamic> params = const {}}) {
+String t(LK key, {Map<String, dynamic> params = const {}}) {
   String? value;
 
   switch (App.instance.local) {
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: themeData,
-      title: t(LKey.appTitle),
+      title: t(LK.appTitle),
       initialRoute: Screen.home.path,
       routes: routes,
     );

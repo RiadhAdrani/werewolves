@@ -108,11 +108,14 @@ void main() {
       });
 
       test('should be able to target wolves', () {
-        expect(ability.isTarget(createPlayer(roles: [RoleId.werewolf])), true);
-        expect(ability.isTarget(createPlayer(roles: [RoleId.fatherOfWolves])),
+        expect(
+            ability.isTarget(createPlayer(roles: [RoleId.werewolf]), 1), true);
+        expect(
+            ability.isTarget(createPlayer(roles: [RoleId.fatherOfWolves]), 1),
             true);
-        expect(ability.isTarget(createPlayer(roles: [RoleId.blackWolf])), true);
-        expect(ability.isTarget(createPlayer(roles: [RoleId.garrulousWolf])),
+        expect(
+            ability.isTarget(createPlayer(roles: [RoleId.blackWolf]), 1), true);
+        expect(ability.isTarget(createPlayer(roles: [RoleId.garrulousWolf]), 1),
             true);
       });
     });

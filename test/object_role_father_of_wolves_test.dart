@@ -83,20 +83,24 @@ void main() {
       });
 
       test('should be able to target a devoured player', () {
-        expect(ability.isTarget(createPlayer(effects: [EffectId.isDevoured])),
+        expect(
+            ability.isTarget(createPlayer(effects: [EffectId.isDevoured]), 1),
             true);
       });
 
       test('should NOT be able to target a non-devoured player', () {
-        expect(ability.isTarget(createPlayer()), false);
+        expect(ability.isTarget(createPlayer(), 1), false);
       });
 
       test('should NOT be able to target a devoured wolf', () {
         expect(
-            ability.isTarget(createPlayer(
-              roles: [RoleId.werewolf],
-              effects: [EffectId.isDevoured],
-            )),
+            ability.isTarget(
+              createPlayer(
+                roles: [RoleId.werewolf],
+                effects: [EffectId.isDevoured],
+              ),
+              1,
+            ),
             false);
       });
 

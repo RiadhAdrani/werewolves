@@ -59,14 +59,14 @@ Widget abilityDialog(
     if (targets.length < ability.targetCount) {
       showAlert(
         context,
-        t(LKey.gameConfirmUseIssueTitle),
-        t(LKey.gameConfirmUseIssueText, params: {'count': ability.targetCount}),
+        t(LK.gameConfirmUseIssueTitle),
+        t(LK.gameConfirmUseIssueText, params: {'count': ability.targetCount}),
       );
     } else {
       showConfirm(
         context,
-        t(LKey.gameConfirmUseDoneTitle),
-        t(LKey.gameConfirmUseDoneText),
+        t(LK.gameConfirmUseDoneTitle),
+        t(LK.gameConfirmUseDoneText),
         () {
           onUsed(targets);
         },
@@ -91,7 +91,7 @@ Widget abilityDialog(
             padding(
               [16, 0],
               paragraph(
-                t(LKey.gameAbilityDialogParagraph, params: {
+                t(LK.gameAbilityDialogParagraph, params: {
                   'count': model.getSelected().length,
                   'needed': ability.targetCount,
                   'targetCount': targetList.length,
@@ -117,8 +117,8 @@ Widget abilityDialog(
             )
           ]),
       actions: [
-        if (dismissible) button(t(LKey.cancel), dismiss, flat: true),
-        button(t(LKey.done), use, flat: true)
+        if (dismissible) button(t(LK.cancel), dismiss, flat: true),
+        button(t(LK.done), use, flat: true)
       ]);
 }
 
@@ -146,7 +146,7 @@ Widget alienAbilityDialog(
       context: context,
       builder: (BuildContext context) {
         return dialog(
-          title: t(LKey.options),
+          title: t(LK.options),
           content: column(
             mainSize: MainAxisSize.min,
             children: [
@@ -218,7 +218,7 @@ Widget alienAbilityDialog(
                 text(item.player.name),
                 if (item.guess != null)
                   paragraph(
-                    t(LKey.gameAbilityGuessCurrentTry, params: {
+                    t(LK.gameAbilityGuessCurrentTry, params: {
                       'guess': getRoleName(item.guess!),
                     }),
                   ),
@@ -228,7 +228,7 @@ Widget alienAbilityDialog(
                 onPressed: () {
                   onItemPressed();
                 },
-                child: text(t(LKey.guess)))
+                child: text(t(LK.guess)))
           ],
         ),
       ),
@@ -236,7 +236,7 @@ Widget alienAbilityDialog(
   }
 
   return dialog(
-      title: t(LKey.gameAbilityGuessTitle, params: {
+      title: t(LK.gameAbilityGuessTitle, params: {
         'ability': ability.name,
         'role': ability.owner.name,
       }),
@@ -246,7 +246,7 @@ Widget alienAbilityDialog(
           children: [
             padding(
               [16, 0],
-              text(t(LKey.gameAbilityGuessText)),
+              text(t(LK.gameAbilityGuessText)),
             ),
             SizedBox(
               width: 300,
@@ -265,7 +265,7 @@ Widget alienAbilityDialog(
             )
           ]),
       actions: [
-        if (dismissible) button(t(LKey.cancel), dismiss, flat: true),
-        button(t(LKey.done), apply, flat: true)
+        if (dismissible) button(t(LK.cancel), dismiss, flat: true),
+        button(t(LK.done), apply, flat: true)
       ]);
 }

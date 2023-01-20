@@ -3,7 +3,9 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/hunter.dart';
 import 'package:werewolves/objects/roles/witch.dart';
+import 'package:werewolves/objects/roles/wolfpack.dart';
 
 import 'utils.dart';
 
@@ -89,7 +91,7 @@ void main() {
         });
 
         test('should be able to target any player', () {
-          expect(ability.isTarget(createPlayer()), true);
+          expect(ability.isTarget(createPlayer(), 1), true);
         });
 
         test('should be applied surely at any case', () {
@@ -131,12 +133,20 @@ void main() {
 
         test('should only target fatally affected players', () {
           for (var effect in fatalStatusEffects) {
-            expect(ability.isTarget(createPlayer(effects: [effect])), true);
+            expect(ability.isTarget(createPlayer(effects: [effect]), 1), true);
           }
         });
 
         test('should Not be able to target non-fatally affected players', () {
-          expect(ability.isTarget(createPlayer()), false);
+          expect(ability.isTarget(createPlayer(), 1), false);
+        });
+
+        test('should Not be able to target a suicidal barber', () {
+          var hunter = createRole(id: RoleId.hunter) as Hunter;
+          hunter.getAbilityOfType(AbilityId.hunt)!.use([Player('test')], 1);
+          hunter.controller.addEffect(DevouredEffect(hunter));
+
+          expect(ability.isTarget(hunter.controller, 1), false);
         });
 
         test('should be applied surely at any case', () {

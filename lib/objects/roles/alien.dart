@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
@@ -16,11 +15,6 @@ class Alien extends RoleSingular {
   @override
   RoleId get id {
     return RoleId.alien;
-  }
-
-  @override
-  bool beforeCallEffect(BuildContext context, Game gameModel) {
-    return false;
   }
 
   @override
@@ -126,7 +120,7 @@ class GuessAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return target != owner.controller;
   }
 
@@ -181,7 +175,7 @@ class AlienCallSignAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return target == owner.controller;
   }
 

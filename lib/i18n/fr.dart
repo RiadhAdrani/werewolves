@@ -1,34 +1,34 @@
 import 'package:werewolves/i18n/keys.dart';
 
-const Map<LKey, String> fr = {
+const Map<LK, String> fr = {
   // * App --------------------------------------------------------------------
-  LKey.appTitle: "Les Loups garous",
-  LKey.reset: 'Réinitialiser',
-  LKey.ok: 'Ok',
-  LKey.done: 'Fini',
-  LKey.cancel: 'Annuler',
+  LK.appTitle: "Les Loups garous",
+  LK.reset: 'Réinitialiser',
+  LK.ok: 'Ok',
+  LK.done: 'Fini',
+  LK.cancel: 'Annuler',
 
   // * Home Page --------------------------------------------------------------
-  LKey.newGame: "Nouvelle jeu",
-  LKey.home: 'Accueil',
+  LK.newGame: "Nouvelle jeu",
+  LK.home: 'Accueil',
 
   // * Selection Page ---------------------------------------------------------
-  LKey.selectTitle: 'Rôles sélectionnés ({count})',
-  LKey.selectAtLeastOneWolf: 'Au moins un loup doit être présent.',
-  LKey.selectPlayerCountLow: 'Le nombre de joueurs est trop faible.',
-  LKey.selectSolosCountHigherVillagers:
+  LK.selectTitle: 'Rôles sélectionnés ({count})',
+  LK.selectAtLeastOneWolf: 'Au moins un loup doit être présent.',
+  LK.selectPlayerCountLow: 'Le nombre de joueurs est trop faible.',
+  LK.selectSolosCountHigherVillagers:
       'Le nombre de solos est supérieur au nombre de villageois.',
-  LKey.selectSolosCountHigherWolves:
+  LK.selectSolosCountHigherWolves:
       'Le nombre de solos est supérieur au nombre de loups.',
-  LKey.selectWolvesCountHigherVillagers:
+  LK.selectWolvesCountHigherVillagers:
       'Le nombre de loups est supérieur au nombre de villageois.',
 
   // * Distribute Page --------------------------------------------------------
-  LKey.distribute: 'Distribuer',
-  LKey.distributeTapToPick: 'Appuyez pour choisir.',
-  LKey.distributeAllPicked: 'Tous les rôles sont choisis !',
-  LKey.distributeUnassignableName:
+  LK.distribute: 'Distribuer',
+  LK.distributeTapToPick: 'Appuyez pour choisir.',
+  LK.distributeAllPicked: 'Tous les rôles sont choisis !',
+  LK.distributeUnassignableName:
       'Impossible d\'attribuer un rôle au joueur ! Le nom est invalide ou existe déjà !',
-  LKey.distributePickName: 'choisissez un nom',
-  LKey.distributePlayerNamePlaceholder: 'Nom de joueur',
+  LK.distributePickName: 'choisissez un nom',
+  LK.distributePlayerNamePlaceholder: 'Nom de joueur',
 };

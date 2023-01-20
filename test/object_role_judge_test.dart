@@ -84,11 +84,11 @@ void main() {
       });
 
       test('should be able to target any player previously non-judged', () {
-        expect(ability.isTarget(createPlayer()), true);
+        expect(ability.isTarget(createPlayer(), 1), true);
       });
 
       test('should NOT be able to target any player previously judged', () {
-        expect(ability.isTarget(createPlayer(effects: [EffectId.wasJudged])),
+        expect(ability.isTarget(createPlayer(effects: [EffectId.wasJudged]), 1),
             false);
       });
 

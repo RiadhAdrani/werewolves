@@ -13,7 +13,7 @@ Widget confirmDistributedList(
 ) {
   return dialog(
     context: context,
-    title: t(LKey.distributeReview, params: {'count': list.length}),
+    title: t(LK.distributeReview, params: {'count': list.length}),
     content: SizedBox(
       width: 350,
       height: 450,

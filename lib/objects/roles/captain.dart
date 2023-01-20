@@ -127,7 +127,7 @@ class ExecuteAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return true;
   }
 
@@ -171,7 +171,7 @@ class InheritAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return !target.hasFatalEffect;
   }
 
@@ -219,7 +219,7 @@ class SubstitueAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return target != owner.controller;
   }
 
@@ -263,7 +263,7 @@ class TalkerAbility extends Ability {
   }
 
   @override
-  bool isTarget(Player target) {
+  bool isTarget(Player target, int turn) {
     return true;
   }
 

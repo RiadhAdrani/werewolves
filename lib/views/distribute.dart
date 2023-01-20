@@ -37,7 +37,7 @@ class _DistributePageState extends State<DistributePage> {
               int? index = model.pick();
 
               if (index == null) {
-                showToast(t(LKey.distributeAllPicked));
+                showToast(t(LK.distributeAllPicked));
                 return;
               }
 
@@ -51,7 +51,7 @@ class _DistributePageState extends State<DistributePage> {
                 if (assigned) {
                   dismiss(context)();
                 } else {
-                  showToast(t(LKey.distributeUnassignableName));
+                  showToast(t(LK.distributeUnassignableName));
                 }
               }
 
@@ -59,7 +59,7 @@ class _DistributePageState extends State<DistributePage> {
                 context: context,
                 builder: (context) {
                   return dialog(
-                      title: t(LKey.distributePickName),
+                      title: t(LK.distributePickName),
                       content: column(
                         children: [
                           row(
@@ -71,15 +71,14 @@ class _DistributePageState extends State<DistributePage> {
                           ),
                           input(
                             controller,
-                            placeholder:
-                                t(LKey.distributePlayerNamePlaceholder),
+                            placeholder: t(LK.distributePlayerNamePlaceholder),
                             max: 30,
                           )
                         ],
                       ),
                       actions: [
-                        button(t(LKey.done), assign, flat: true),
-                        button(t(LKey.cancel), dismiss(context), flat: true),
+                        button(t(LK.done), assign, flat: true),
+                        button(t(LK.cancel), dismiss(context), flat: true),
                       ]);
                 },
               );
@@ -106,7 +105,7 @@ class _DistributePageState extends State<DistributePage> {
 
             return scaffold(
               appBar: appBar(
-                t(LKey.distribute),
+                t(LK.distribute),
                 showReturnButton: true,
               ),
               fab: !model.done
@@ -131,7 +130,7 @@ class _DistributePageState extends State<DistributePage> {
                         padding(
                           [8],
                           subTitle(
-                            t(LKey.distributeTapToPick),
+                            t(LK.distributeTapToPick),
                             weight: FontWeight.normal,
                           ),
                         ),
@@ -143,7 +142,7 @@ class _DistributePageState extends State<DistributePage> {
                           ),
                         ),
                         button(
-                          t(LKey.reset),
+                          t(LK.reset),
                           model.reset,
                           bgColor: BaseColors.darkBlue,
                         ),

@@ -31,7 +31,7 @@ void showConfirm(
 }
 
 void showConfirmUse(BuildContext context, String message, Function onConfirm) {
-  showConfirm(context, t(LKey.gameConfirmUse), message, onConfirm);
+  showConfirm(context, t(LK.gameConfirmUse), message, onConfirm);
 }
 
 Function dismiss(BuildContext context) {

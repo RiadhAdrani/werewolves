@@ -90,7 +90,7 @@ void main() {
       });
 
       test('should be able to target any player', () {
-        expect(ability.isTarget(createPlayer()), true);
+        expect(ability.isTarget(createPlayer(), 1), true);
       });
 
       test('should be applied surely at any case', () {

@@ -60,7 +60,7 @@ class Event {
 
   static Event death(Player player, GameState period, int turn) {
     return Event(
-      t(LKey.eventDeath, params: {'name': player.name}),
+      t(LK.eventDeath, params: {'name': player.name}),
       turn,
       period,
       EventId.death,
@@ -69,7 +69,7 @@ class Event {
 
   static Event talk(Player player, GameState period, int turn) {
     return Event(
-      t(LKey.eventTalk, params: {'name': player.name}),
+      t(LK.eventTalk, params: {'name': player.name}),
       turn,
       period,
       EventId.talkFirst,
@@ -78,7 +78,7 @@ class Event {
 
   static Event clairvoyance(RoleId role, GameState period, int turn) {
     return Event(
-      t(LKey.eventClairvoyance, params: {'name': getRoleName(role)}),
+      t(LK.eventClairvoyance, params: {'name': getRoleName(role)}),
       turn,
       period,
       EventId.seen,
@@ -96,7 +96,7 @@ class Event {
 
   static Event judge(Player player, int turn) {
     return Event(
-      t(LKey.eventJudge, params: {'name': player.name}),
+      t(LK.eventJudge, params: {'name': player.name}),
       turn,
       GameState.night,
       EventId.judged,
@@ -105,7 +105,7 @@ class Event {
 
   static Event mute(Player player, int turn) {
     return Event(
-      t(LKey.eventMute, params: {'name': player.name}),
+      t(LK.eventMute, params: {'name': player.name}),
       turn,
       GameState.night,
       EventId.muted,
@@ -114,7 +114,7 @@ class Event {
 
   static Event sheep(bool killed, int turn) {
     return Event(
-      t(killed ? LKey.eventSheepDead : LKey.eventSheepReturned),
+      t(killed ? LK.eventSheepDead : LK.eventSheepReturned),
       turn,
       GameState.night,
       killed ? EventId.sheepDied : EventId.sheepReturned,
@@ -190,7 +190,7 @@ class Game extends ChangeNotifier {
   Widget useView(BuildContext context) {
     switch (state) {
       case GameState.empty:
-        return Text(t(LKey.loading));
+        return Text(t(LK.loading));
       case GameState.initialized:
         return gamePreView(this, context);
       case GameState.night:
@@ -233,14 +233,19 @@ class Game extends ChangeNotifier {
     bool mandatory = currentRole!.abilities.every((ability) {
       bool $used = ability.wasUsedInTurn(currentTurn);
       bool $unskippable = ability.isUnskippable();
-      bool $emptyTargets = ability.createListOfTargets(playersList).isNotEmpty;
+      bool $emptyTargets = ability
+          .createListOfTargets(
+            playersList,
+            currentTurn,
+          )
+          .isNotEmpty;
 
       return !$used && $unskippable && $emptyTargets;
     });
 
     if (mandatory) {
       if (!noContextMode) {
-        showToast(t(LKey.gameNightMandatoryAbilityNotUsed));
+        showToast(t(LK.gameNightMandatoryAbilityNotUsed));
       }
 
       return;
@@ -371,7 +376,7 @@ class Game extends ChangeNotifier {
 
     showAlert(
       context,
-      t(LKey.gameAbilityUsed),
+      t(LK.gameAbilityUsed),
       getAbilityAppliedMessage(ability, affected),
     );
   }
@@ -402,7 +407,9 @@ class Game extends ChangeNotifier {
 
         notifyListeners();
 
-        if (currentPendingAbility.createListOfTargets(playersList).isEmpty) {
+        if (currentPendingAbility
+            .createListOfTargets(playersList, currentTurn)
+            .isEmpty) {
           useNext();
           return;
         }
@@ -413,8 +420,8 @@ class Game extends ChangeNotifier {
               return WillPopScope(
                 onWillPop: () async => false,
                 child: stepAlert(
-                  t(LKey.gameDayAbilityTriggeredTitle),
-                  t(LKey.gameDayAbilityTriggeredText,
+                  t(LK.gameDayAbilityTriggeredTitle),
+                  t(LK.gameDayAbilityTriggeredText,
                       params: {'name': currentPendingAbility.owner.name}),
                   getCurrentDaySummary().map((item) => item.text).toList(),
                   context,
@@ -743,7 +750,10 @@ class Game extends ChangeNotifier {
   void showUseAbilityDialog(BuildContext context, Ability ability,
       Function(List<Player>) onAbilityUsed,
       {bool cancelable = true}) {
-    List<Player> targetList = ability.createListOfTargets(playersList);
+    List<Player> targetList = ability.createListOfTargets(
+      playersList,
+      currentTurn,
+    );
 
     switch (ability.ui) {
       case AbilityUI.normal:

@@ -98,14 +98,14 @@ void main() {
       });
 
       test('should be able to target any player', () {
-        expect(ability.isTarget(createPlayer()), true);
+        expect(ability.isTarget(createPlayer(), 1), true);
       });
 
       test('should NOT be able to target self', () {
         var self = createPlayer();
         var ability = CounterAbility(Knight(self));
 
-        expect(ability.isTarget(self), false);
+        expect(ability.isTarget(self, 1), false);
       });
 
       test('should be applied surely at any case', () {
