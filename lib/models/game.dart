@@ -150,10 +150,6 @@ class Game extends ChangeNotifier {
     return pendingAbilities.isNotEmpty;
   }
 
-  set currentTurnForTesting(int turn) {
-    currentTurn = turn;
-  }
-
   /// Return a list of alive players.
   /// Used for possible future role `Shaman`
   /// Add add them to the output list.
@@ -162,7 +158,6 @@ class Game extends ChangeNotifier {
 
     for (var role in roles) {
       if (!role.isGroup) {
-        role.controller as Player;
         if (!output.contains(role.controller)) {
           if (!(role.controller as Player).isDead) {
             output.add(role.controller);
@@ -187,6 +182,7 @@ class Game extends ChangeNotifier {
 
   /// Return the correct widget to be displayed
   /// during the current `state`.
+  /// TODO (test)
   Widget useView(BuildContext context) {
     switch (state) {
       case GameState.empty:
@@ -315,10 +311,12 @@ class Game extends ChangeNotifier {
     start();
   }
 
+  /// TODO (test)
   Role? getRole(RoleId id) {
     return getRoleInGame(id, roles);
   }
 
+  /// TODO (test)
   List<Role> calculateRolesWithMissingEffects() {
     if (state != GameState.night) {
       throw 'Unexpected game state : $state .';
@@ -340,26 +338,14 @@ class Game extends ChangeNotifier {
     return missing;
   }
 
+  /// TODO (test)
   void addPendingAbility(Ability ability) {
     pendingAbilities.add(ability);
   }
 
   /// Use to start a new turn.
   void startTurn() {
-    _gameTransitionToNight();
-  }
-
-  /// Check if the given ability is available at the current night.
-  bool isAbilityAvailableAtNight(Ability ability) {
-    return _isAbilityAvailableAtNight(ability);
-  }
-
-  /// Use the given ability against the provided targets.
-  List<Player> useAbility(
-    Ability ability,
-    List<Player> targets,
-  ) {
-    return _useAbility(ability, targets);
+    gameTransitionToNight();
   }
 
   /// Specific use case for [useAbility] during the night
@@ -389,13 +375,13 @@ class Game extends ChangeNotifier {
   ) {
     if (!ability.isForDay) return;
 
-    _useAbility(ability, targets);
+    useAbility(ability, targets);
 
     // Navigator.pop(context);
 
     notifyListeners();
 
-    _resolveRolesInteractionsAfterAbilityUsedInDay();
+    resolveRolesInteractionsAfterAbilityUsedInDay();
 
     _collectPendingAbilityInDay();
 
@@ -449,7 +435,7 @@ class Game extends ChangeNotifier {
 
         notifyListeners();
 
-        _gameOverCheck(context);
+        gameOverCheck(context);
       }
     }
 
@@ -459,11 +445,6 @@ class Game extends ChangeNotifier {
   /// Return the appropriate message depending on the affected list.
   String getAbilityAppliedMessage(Ability ability, List<Player> affected) {
     return ability.onAppliedMessage(affected);
-  }
-
-  /// Add a new member to a designed role group.
-  void addMemberToGroup(Player newMember, RoleId roleId) {
-    _addMemberToGroup(newMember, roleId);
   }
 
   /// Add a game info
@@ -556,7 +537,7 @@ class Game extends ChangeNotifier {
   /// we set the status of survivability to false,
   /// add the player to the graveyard (r.i.p)
   /// add a game info
-  void _killAndMovePlayerToGraveyard(Player player) {
+  void killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
     graveyard.add(player);
     addGameEvent(Event.death(player, state, currentTurn));
@@ -569,7 +550,7 @@ class Game extends ChangeNotifier {
   void eliminateDeadPlayers() {
     for (var player in playersList) {
       if (player.hasFatalEffect) {
-        _killAndMovePlayerToGraveyard(player);
+        killAndMovePlayerToGraveyard(player);
       }
     }
   }
@@ -578,20 +559,20 @@ class Game extends ChangeNotifier {
   /// resolving status effects
   /// and eliminating dead souls.
   /// When everything is done, we transition into the day phase.
-  void _performPostNightProcessing(BuildContext context) {
+  void performPostNightProcessing(BuildContext context) {
     List<Event> infos = resolveNightEffects(playersList, currentTurn);
 
     events.addAll(infos);
 
     eliminateDeadPlayers();
 
-    _gameOverCheck(context);
+    gameOverCheck(context);
 
-    _gameTransitionToDay();
+    gameTransitionToDay();
   }
 
   /// Find the index of the first role that should start the night.
-  void _initCurrentIndex() {
+  void initCurrentIndex() {
     if (roles.isEmpty) return;
 
     var min = 999999;
@@ -612,26 +593,26 @@ class Game extends ChangeNotifier {
   /// Start a new turn and transition into the night.
   /// Increment the current turn
   /// and initialize the current index.
-  void _gameTransitionToNight() {
-    _removeObsoleteRoles();
+  void gameTransitionToNight() {
+    removeObsoleteRoles();
 
     currentTurn = currentTurn + 1;
     state = GameState.night;
 
-    _initCurrentIndex();
+    initCurrentIndex();
 
     notifyListeners();
   }
 
   /// Transition into the day phase.
-  void _gameTransitionToDay() {
+  void gameTransitionToDay() {
     state = GameState.day;
 
     notifyListeners();
   }
 
   /// Check if the ability is available at the current night.
-  bool _isAbilityAvailableAtNight(Ability ability) {
+  bool isAbilityAvailableAtNight(Ability ability) {
     return ability.isForNight &&
         ability.useCount != AbilityUseCount.none &&
         !ability.wasUsedInTurn(currentTurn) &&
@@ -640,7 +621,7 @@ class Game extends ChangeNotifier {
 
   /// Use the ability against the given targets
   /// and apply its post effect if it exists.
-  List<Player> _useAbility(Ability ability, List<Player> targets) {
+  List<Player> useAbility(Ability ability, List<Player> targets) {
     List<Player> affected = ability.use(targets, currentTurn);
 
     ability.usePostEffect(this, affected);
@@ -653,7 +634,7 @@ class Game extends ChangeNotifier {
   /// Add a new member to the first group with the given `roleId`.
   /// We assume that the given roleId correspond to a `RoleGroup`
   /// and there is only one instance of that role in the list.
-  void _addMemberToGroup(Player newMember, RoleId roleId) {
+  void addMemberToGroup(Player newMember, RoleId roleId) {
     for (var role in roles) {
       if (role.id == roleId && role.isGroup) {
         (role as RoleGroup).setPlayer([...role.controller, newMember]);
@@ -672,7 +653,7 @@ class Game extends ChangeNotifier {
 
         /// Add the old captain to the graveyard due
         /// because he is the last to play.
-        _killAndMovePlayerToGraveyard(role.controller);
+        killAndMovePlayerToGraveyard(role.controller);
 
         /// Replace with the new captain.
         role.setPlayer(player);
@@ -685,7 +666,7 @@ class Game extends ChangeNotifier {
   /// after a day ability has been executed.
   ///
   /// If a lover is dead, make sure that the other lover is dead too.
-  void _resolveRolesInteractionsAfterAbilityUsedInDay() {
+  void resolveRolesInteractionsAfterAbilityUsedInDay() {
     if (state != GameState.day) return;
 
     for (var player in playersList) {
@@ -694,7 +675,7 @@ class Game extends ChangeNotifier {
     }
   }
 
-  void _collectPendingAbilityOfPlayer(Player player,
+  void collectPendingAbilityOfPlayer(Player player,
       {List<RoleId> ignored = const []}) {
     for (var role in player.roles) {
       if (ignored.contains(role.id)) continue;
@@ -715,12 +696,12 @@ class Game extends ChangeNotifier {
 
     for (var player in playersList) {
       if (player.hasFatalEffect) {
-        _collectPendingAbilityOfPlayer(player);
+        collectPendingAbilityOfPlayer(player);
       }
     }
   }
 
-  void _gameOverCheck(BuildContext context) {
+  void gameOverCheck(BuildContext context) {
     dynamic result = useTeamsBalanceChecker(playersList, roles);
 
     if (result is Team) {
@@ -733,7 +714,7 @@ class Game extends ChangeNotifier {
     }
   }
 
-  void _removeObsoleteRoles() {
+  void removeObsoleteRoles() {
     var toRemove = <Role>[];
 
     for (var role in roles) {
