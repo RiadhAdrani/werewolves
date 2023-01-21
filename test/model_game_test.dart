@@ -452,6 +452,139 @@ void main() {
       });
     });
 
+    group('extractPlayers', () {
+      test('should extract exact players', () {
+        var player1 = Player('test');
+        var role1 = useRole(RoleId.werewolf).create([player1]);
+
+        var player2 = Player('test');
+        var role2 = useRole(RoleId.villager).create([player2]);
+
+        var player3 = Player('test');
+        var role3 = useRole(RoleId.alien).create([player3]);
+
+        var roles = [role1, role2, role3];
+
+        var players = extractPlayers(roles);
+
+        expect(players, [player1, player2, player3]);
+      });
+
+      test('should not duplicate players', () {
+        var player1 = Player('test');
+        var role1 = useRole(RoleId.werewolf).create([player1]);
+
+        var player2 = Player('test');
+        var role2 = useRole(RoleId.villager).create([player2]);
+
+        var player3 = Player('test');
+        var role3 = useRole(RoleId.alien).create([player3]);
+
+        var role4 = useRole(RoleId.wolfpack).create([player1]);
+
+        var roles = [role1, role2, role3, role4];
+
+        var players = extractPlayers(roles);
+
+        expect(players, [player1, player2, player3]);
+      });
+
+      test('should not duplicate players with multiple roles', () {
+        var player1 = Player('test');
+        var player2 = Player('test');
+        var player3 = Player('test');
+        var player4 = Player('test');
+
+        var role1 = useRole(RoleId.werewolf).create([player1]);
+        var role2 = useRole(RoleId.villager).create([player2]);
+        var role3 = useRole(RoleId.alien).create([player3]);
+        var role4 = useRole(RoleId.wolfpack).create([player1, player4]);
+        var role5 = useRole(RoleId.captain).create([player2]);
+        var role6 = useRole(RoleId.witch).create([player4]);
+
+        var roles = [role1, role2, role3, role4, role5, role6];
+
+        var players = extractPlayers(roles);
+
+        expect(players, [player1, player2, player3, player4]);
+      });
+    });
+
+    group('calculateWolves', () {
+      test('should return the number of wolves', () {
+        var roles = createGameList(roles: [
+          RoleId.protector,
+          RoleId.werewolf,
+          RoleId.fatherOfWolves,
+          RoleId.blackWolf,
+          RoleId.captain,
+          RoleId.villager,
+          RoleId.seer,
+          RoleId.hunter,
+        ]);
+
+        var players = extractPlayers(roles);
+
+        expect(calculateWolves(players), 3);
+      });
+    });
+
+    group('calculateVillagers', () {
+      test('should return the number of villagers', () {
+        var roles = createGameList(roles: [
+          RoleId.protector,
+          RoleId.werewolf,
+          RoleId.fatherOfWolves,
+          RoleId.blackWolf,
+          RoleId.captain,
+          RoleId.villager,
+          RoleId.seer,
+          RoleId.hunter,
+        ]);
+
+        var players = extractPlayers(roles);
+
+        expect(calculateVillagers(players), 5);
+      });
+    });
+
+    group('calculateSolos', () {
+      test('should return 0 as the number of solos', () {
+        var roles = createGameList(roles: [
+          RoleId.protector,
+          RoleId.werewolf,
+          RoleId.fatherOfWolves,
+          RoleId.blackWolf,
+          RoleId.captain,
+          RoleId.villager,
+          RoleId.seer,
+          RoleId.hunter,
+        ]);
+
+        var players = extractPlayers(roles);
+
+        expect(calculateSolos(players), 0);
+      });
+
+      test('should return the number of solos', () {
+        var roles = createGameList(roles: [
+          RoleId.protector,
+          RoleId.werewolf,
+          RoleId.fatherOfWolves,
+          RoleId.blackWolf,
+          RoleId.captain,
+          RoleId.villager,
+          RoleId.seer,
+          RoleId.hunter,
+          RoleId.alien
+        ]);
+
+        var players = extractPlayers(roles);
+
+        expect(calculateSolos(players), 1);
+      });
+    });
+
     group('Model', () {
       Game model = Game();
 

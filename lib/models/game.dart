@@ -55,6 +55,7 @@ class Event {
   late final GameState period;
   late final int turn;
   late final EventId id;
+  final int time = DateTime.now().millisecond;
 
   Event(this.text, this.turn, this.period, this.id);
 
@@ -702,7 +703,7 @@ class Game extends ChangeNotifier {
   }
 
   void checkIsOver(BuildContext context) {
-    dynamic result = getWinningTeam(playersList, roles);
+    dynamic result = calculateWinningTeam(playersList, roles);
 
     if (result is Team) {
       isOver = true;
@@ -788,31 +789,13 @@ class Game extends ChangeNotifier {
 
 List<Player> getPlayersWithEffects(
     List<Player> players, List<EffectId> effects) {
-  final output = <Player>[];
-
-  for (var player in players) {
-    for (var effect in effects) {
-      if (!player.hasEffect(effect)) {
-        continue;
-      }
-    }
-
-    output.add(player);
-  }
-
-  return output;
+  return players
+      .where((player) => effects.any((effect) => player.hasEffect(effect)))
+      .toList();
 }
 
 List<Player> getPlayersWithFatalEffect(List<Player> players) {
-  final output = <Player>[];
-
-  for (var player in players) {
-    if (player.hasFatalEffect) {
-      output.add(player);
-    }
-  }
-
-  return output;
+  return players.where((player) => player.hasFatalEffect).toList();
 }
 
 List<Event> resolveNightEffects(
@@ -947,17 +930,7 @@ List<Event> resolveNightEffects(
   return infos;
 }
 
-/// generate a list of playable roles.
-List<Role> usePlayableRolesGenerator() {
-  List<RoleId> playable =
-      RoleId.values.where((id) => useRole(id).pickable).toList();
-
-  return playable
-      .map((id) => useRole(id).create([Player('Placeholder')]))
-      .toList();
-}
-
-void useDayEffectsResolver(Game game) {
+void resolveDayEffects(Game game) {
   int currentTurn = game.currentTurn;
 
   for (var player in game.playersList) {
@@ -1008,7 +981,7 @@ int calculateSolos(List<Player> players) {
 
 /// check if the current list of players is balanced,
 /// otherwise, it returns the winning team.
-dynamic getWinningTeam(List<Player> players, List<Role> roles) {
+dynamic calculateWinningTeam(List<Player> players, List<Role> roles) {
   int wolvesCount = calculateWolves(players);
   int villagersCount = calculateVillagers(players);
   int solosCount = calculateSolos(players);
