@@ -7,6 +7,15 @@ import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/game.dart';
 import 'package:werewolves/models/player.dart';
 import 'package:werewolves/models/role.dart';
+import 'package:werewolves/objects/roles/black_wolf.dart';
+import 'package:werewolves/objects/roles/captain.dart';
+import 'package:werewolves/objects/roles/garrulous_wolf.dart';
+import 'package:werewolves/objects/roles/judge.dart';
+import 'package:werewolves/objects/roles/protector.dart';
+import 'package:werewolves/objects/roles/seer.dart';
+import 'package:werewolves/objects/roles/shepherd.dart';
+import 'package:werewolves/objects/roles/villager.dart';
+import 'package:werewolves/objects/roles/wolfpack.dart';
 import 'package:werewolves/utils/utils.dart';
 
 import 'utils.dart';
@@ -279,6 +288,167 @@ void main() {
           EffectId.isMuted,
           EffectId.hasWord,
         ]);
+      });
+    });
+
+    group('resolveNightEffects', () {
+      test('should add wasProtected effect to a protected player', () {
+        var player = Player('test');
+        var source = useRole(RoleId.protector).create([Player('source')]);
+
+        player.addEffect(ProtectedEffect(source));
+
+        var res = resolveNightEffects([player], 1);
+
+        expect(player.hasEffect(EffectId.wasProtected), true);
+        expect(player.hasEffect(EffectId.isProtected), false);
+        expect(res, []);
+      });
+
+      test('should add wasMuted effect to a muted player', () {
+        var player = Player('test');
+        var source = useRole(RoleId.blackWolf).create([Player('source')]);
+
+        player.addEffect(MutedEffect(source));
+
+        var res = resolveNightEffects([player], 1);
+
+        expect(player.hasEffect(EffectId.wasMuted), true);
+        expect(player.hasEffect(EffectId.isMuted), false);
+        expect(res, []);
+      });
+
+      test('should return clairvoyance event', () {
+        var player = Player('test');
+        player.addRole(Villager(player));
+
+        var source = useRole(RoleId.seer).create([Player('source')]);
+
+        player.addEffect(ClairvoyanceEffect(source));
+
+        var res = resolveNightEffects([player], 1);
+
+        expect(res.length, 1);
+        expect(res[0].id, EventId.seen);
+      });
+
+      test('should not return clairvoyance event if seer is fatally affected',
+          () {
+        var player = Player('test');
+        player.addRole(Villager(player));
+
+        var sourcePlayer = Player('source');
+
+        var source = useRole(RoleId.seer).create([sourcePlayer]);
+        sourcePlayer.addEffect(DevouredEffect(source));
+
+        player.addEffect(ClairvoyanceEffect(source));
+
+        var res = resolveNightEffects([player], 1);
+
+        expect(res, []);
+      });
+
+      test('should add wasJudged effect to a judged player', () {
+        var player = Player('test');
+        var source = useRole(RoleId.judge).create([Player('source')]);
+
+        player.addEffect(JudgedEffect(source));
+
+        var res = resolveNightEffects([player], 1);
+
+        expect(player.hasEffect(EffectId.wasJudged), true);
+        expect(player.hasEffect(EffectId.isJudged), false);
+        expect(res.length, 1);
+        expect(res[0].id, EventId.judged);
+      });
+
+      test('should return talk event', () {
+        var player = Player('test');
+        var source = useRole(RoleId.captain).create([Player('source')]);
+
+        player.addEffect(ShouldTalkFirstEffect(source));
+
+        var res = resolveNightEffects([player], 1);
+
+        expect(player.hasEffect(EffectId.shouldTalkFirst), false);
+        expect(res.length, 1);
+        expect(res[0].id, EventId.talkFirst);
+      });
+
+      test('should return sheeps were killed', () {
+        var source = useRole(RoleId.shepherd).create([Player('source')]);
+
+        var player = Player('test');
+        useRole(RoleId.werewolf).create([player]);
+        player.addEffect(HasSheepEffect(source));
+
+        var player2 = Player('test');
+        useRole(RoleId.blackWolf).create([player2]);
+        player2.addEffect(HasSheepEffect(source));
+
+        var res = resolveNightEffects([player, player2], 1);
+
+        expect(player.hasEffect(EffectId.hasSheep), false);
+        expect(player2.hasEffect(EffectId.hasSheep), false);
+        expect(res.length, 2);
+        expect(res[0].id, EventId.sheepDied);
+        expect(res[1].id, EventId.sheepDied);
+        expect(source.getAbilityOfType(AbilityId.sheeps)!.targetCount, 0);
+      });
+
+      test('should return sheeps returned', () {
+        var source = useRole(RoleId.shepherd).create([Player('source')]);
+
+        var player = Player('test');
+        useRole(RoleId.villager).create([player]);
+        player.addEffect(HasSheepEffect(source));
+
+        var player2 = Player('test');
+        useRole(RoleId.protector).create([player2]);
+        player2.addEffect(HasSheepEffect(source));
+
+        var res = resolveNightEffects([player, player2], 1);
+
+        expect(player.hasEffect(EffectId.hasSheep), false);
+        expect(player2.hasEffect(EffectId.hasSheep), false);
+        expect(res.length, 2);
+        expect(res[0].id, EventId.sheepReturned);
+        expect(res[1].id, EventId.sheepReturned);
+        expect(source.getAbilityOfType(AbilityId.sheeps)!.targetCount, 2);
+      });
+
+      test('should return that one sheep returned and the other died', () {
+        var source = useRole(RoleId.shepherd).create([Player('source')]);
+
+        var player = Player('test');
+        useRole(RoleId.werewolf).create([player]);
+        player.addEffect(HasSheepEffect(source));
+
+        var player2 = Player('test');
+        useRole(RoleId.protector).create([player2]);
+        player2.addEffect(HasSheepEffect(source));
+
+        var res = resolveNightEffects([player, player2], 1);
+
+        expect(player.hasEffect(EffectId.hasSheep), false);
+        expect(player2.hasEffect(EffectId.hasSheep), false);
+        expect(res.length, 2);
+        expect(res[0].id, EventId.sheepDied);
+        expect(res[1].id, EventId.sheepReturned);
+        expect(source.getAbilityOfType(AbilityId.sheeps)!.targetCount, 1);
+      });
+
+      test('should remove hasWord effect', () {
+        var player = Player('test');
+        var source = useRole(RoleId.garrulousWolf).create([player]);
+
+        player.addEffect(HasWordEffect(source));
+
+        var res = resolveNightEffects([player], 1);
+
+        expect(player.hasEffect(EffectId.hasWord), false);
+        expect(res.length, 0);
       });
     });
 

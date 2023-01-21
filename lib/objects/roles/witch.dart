@@ -40,7 +40,7 @@ class Witch extends RoleSingular {
   List<String> getInformations(List<Role> roles) {
     final output = <String>[];
 
-    final wounded = getPlayersWithFatalEffect(usePlayerExtractor(roles));
+    final wounded = getPlayersWithFatalEffect(extractPlayers(roles));
 
     if (wounded.isEmpty) {
       output.add('(Nobody) was killed.');

@@ -45,7 +45,7 @@ class Protector extends RoleSingular {
     ];
 
     List<Player> protected = getPlayersWithEffects(
-      usePlayerExtractor(roles),
+      extractPlayers(roles),
       [EffectId.wasProtected],
     );
 

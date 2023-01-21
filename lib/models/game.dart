@@ -54,9 +54,9 @@ class Event {
   late final String text;
   late final GameState period;
   late final int turn;
-  late final EventId effect;
+  late final EventId id;
 
-  Event(this.text, this.turn, this.period, this.effect);
+  Event(this.text, this.turn, this.period, this.id);
 
   static Event death(Player player, GameState period, int turn) {
     return Event(
@@ -313,7 +313,7 @@ class Game extends ChangeNotifier {
 
   /// TODO (test)
   Role? getRole(RoleId id) {
-    return getRoleInGame(id, roles);
+    return getRoleFromList(id, roles);
   }
 
   /// TODO (test)
@@ -322,7 +322,7 @@ class Game extends ChangeNotifier {
       throw 'Unexpected game state : $state .';
     }
 
-    var players = usePlayerExtractor(roles);
+    var players = extractPlayers(roles);
     List<EffectId> existing = [];
     for (var element in players) {
       existing.addAll(element.effects.map((e) => e.id));
@@ -345,7 +345,7 @@ class Game extends ChangeNotifier {
 
   /// Use to start a new turn.
   void startTurn() {
-    gameTransitionToNight();
+    transitionToNight();
   }
 
   /// Specific use case for [useAbility] during the night
@@ -435,7 +435,7 @@ class Game extends ChangeNotifier {
 
         notifyListeners();
 
-        gameOverCheck(context);
+        checkIsOver(context);
       }
     }
 
@@ -448,7 +448,7 @@ class Game extends ChangeNotifier {
   }
 
   /// Add a game info
-  void addGameEvent(Event info) {
+  void addEvent(Event info) {
     events.add(info);
   }
 
@@ -540,7 +540,7 @@ class Game extends ChangeNotifier {
   void killAndMovePlayerToGraveyard(Player player) {
     player.isAlive = false;
     graveyard.add(player);
-    addGameEvent(Event.death(player, state, currentTurn));
+    addEvent(Event.death(player, state, currentTurn));
   }
 
   /// Perform mass murder on the souls of the already dead players.
@@ -566,9 +566,9 @@ class Game extends ChangeNotifier {
 
     eliminateDeadPlayers();
 
-    gameOverCheck(context);
+    checkIsOver(context);
 
-    gameTransitionToDay();
+    transitionToDay();
   }
 
   /// Find the index of the first role that should start the night.
@@ -593,7 +593,7 @@ class Game extends ChangeNotifier {
   /// Start a new turn and transition into the night.
   /// Increment the current turn
   /// and initialize the current index.
-  void gameTransitionToNight() {
+  void transitionToNight() {
     removeObsoleteRoles();
 
     currentTurn = currentTurn + 1;
@@ -605,7 +605,7 @@ class Game extends ChangeNotifier {
   }
 
   /// Transition into the day phase.
-  void gameTransitionToDay() {
+  void transitionToDay() {
     state = GameState.day;
 
     notifyListeners();
@@ -701,8 +701,8 @@ class Game extends ChangeNotifier {
     }
   }
 
-  void gameOverCheck(BuildContext context) {
-    dynamic result = useTeamsBalanceChecker(playersList, roles);
+  void checkIsOver(BuildContext context) {
+    dynamic result = getWinningTeam(playersList, roles);
 
     if (result is Team) {
       isOver = true;
@@ -944,10 +944,6 @@ List<Event> resolveNightEffects(
     }
   }
 
-  // TODO : process dead players
-
-  // TODO : process remove obsolete roles
-
   return infos;
 }
 
@@ -966,7 +962,7 @@ void useDayEffectsResolver(Game game) {
 
   for (var player in game.playersList) {
     if (player.hasFatalEffect) {
-      game.addGameEvent(Event.death(player, GameState.day, currentTurn));
+      game.addEvent(Event.death(player, GameState.day, currentTurn));
     }
   }
 }
@@ -1012,12 +1008,12 @@ int calculateSolos(List<Player> players) {
 
 /// check if the current list of players is balanced,
 /// otherwise, it returns the winning team.
-dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
+dynamic getWinningTeam(List<Player> players, List<Role> roles) {
   int wolvesCount = calculateWolves(players);
   int villagersCount = calculateVillagers(players);
   int solosCount = calculateSolos(players);
 
-  Role? alien = getRoleInGame(RoleId.alien, roles);
+  Role? alien = getRoleFromList(RoleId.alien, roles);
 
   if (players.isEmpty) {
     return Team.equality;
@@ -1044,9 +1040,9 @@ dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
   }
 
   if (villagersCount == wolvesCount) {
-    Role? protector = getRoleInGame(RoleId.protector, roles);
-    Role? witch = getRoleInGame(RoleId.witch, roles);
-    Role? knight = getRoleInGame(RoleId.knight, roles);
+    Role? protector = getRoleFromList(RoleId.protector, roles);
+    Role? witch = getRoleFromList(RoleId.witch, roles);
+    Role? knight = getRoleFromList(RoleId.knight, roles);
 
     bool protectorCanWinIt =
         protector != null && protector.controller.team == Team.village;
@@ -1075,7 +1071,7 @@ dynamic useTeamsBalanceChecker(List<Player> players, List<Role> roles) {
 }
 
 /// check if the given role is still active in the given list.
-Role? getRoleInGame(RoleId id, List<Role> roles) {
+Role? getRoleFromList(RoleId id, List<Role> roles) {
   for (var role in roles) {
     if (role.id == id && !role.isObsolete) {
       return role;
@@ -1086,7 +1082,7 @@ Role? getRoleInGame(RoleId id, List<Role> roles) {
 }
 
 /// extract the list of players from the given list of roles
-List<Player> usePlayerExtractor(List<Role> roles) {
+List<Player> extractPlayers(List<Role> roles) {
   List<Player> output = [];
 
   for (var role in roles) {
