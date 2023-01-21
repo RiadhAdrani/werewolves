@@ -315,7 +315,8 @@ void main() {
 
         expect(player.hasEffect(EffectId.wasMuted), true);
         expect(player.hasEffect(EffectId.isMuted), false);
-        expect(res, []);
+        expect(res.length, 1);
+        expect(res[0].id, EventId.muted);
       });
 
       test('should return clairvoyance event', () {

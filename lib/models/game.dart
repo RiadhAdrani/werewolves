@@ -384,7 +384,7 @@ class Game extends ChangeNotifier {
 
     resolveRolesInteractionsAfterAbilityUsedInDay();
 
-    _collectPendingAbilityInDay();
+    collectPendingAbilityInDay();
 
     void useNext() {
       if (pendingAbilities.isNotEmpty) {
@@ -692,7 +692,7 @@ class Game extends ChangeNotifier {
   }
 
   /// Collect pending abilities
-  void _collectPendingAbilityInDay() {
+  void collectPendingAbilityInDay() {
     if (state != GameState.day) return;
 
     for (var player in playersList) {
@@ -942,41 +942,19 @@ void resolveDayEffects(Game game) {
 
 /// returns the number of players within the wolf team.
 int calculateWolves(List<Player> players) {
-  int sum = 0;
-
-  for (var player in players) {
-    if (player.team == Team.wolves) {
-      sum++;
-    }
-  }
-
-  return sum;
+  return players.where((player) => player.team == Team.wolves).length;
 }
 
 /// returns the number of players within the village team.
 int calculateVillagers(List<Player> players) {
-  int sum = 0;
-
-  for (var player in players) {
-    if (player.team == Team.village) {
-      sum++;
-    }
-  }
-
-  return sum;
+  return players.where((player) => player.team == Team.village).length;
 }
 
 /// returns the number of solo players.
 int calculateSolos(List<Player> players) {
-  int sum = 0;
-
-  for (var player in players) {
-    if (![Team.village, Team.wolves].contains(player.team)) {
-      sum++;
-    }
-  }
-
-  return sum;
+  return players
+      .where((player) => ![Team.village, Team.wolves].contains(player.team))
+      .length;
 }
 
 /// check if the current list of players is balanced,
