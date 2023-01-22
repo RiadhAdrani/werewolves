@@ -11,6 +11,7 @@ import 'package:werewolves/models/use_ability_model.dart';
 import 'package:werewolves/models/use_alien_ability_model.dart';
 import 'package:werewolves/utils/dialogs.dart';
 import 'package:werewolves/utils/toast.dart';
+import 'package:werewolves/utils/utils.dart';
 import 'package:werewolves/widgets/ability.dart';
 import 'package:werewolves/widgets/game.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
@@ -703,9 +704,9 @@ class Game extends ChangeNotifier {
   }
 
   void checkIsOver(BuildContext context) {
-    dynamic result = calculateWinningTeam(playersList, roles);
+    Team result = calculateWinningTeam(roles);
 
-    if (result is Team) {
+    if (result != Team.none) {
       isOver = true;
       showConfirm(context, 'Game Over', 'The ${getTeamName(result)} Team won !',
           () {
@@ -957,9 +958,17 @@ int calculateSolos(List<Player> players) {
       .length;
 }
 
+class GameOverValidation extends Validation {
+  Team? winner;
+
+  GameOverValidation(super.valid, this.winner);
+}
+
 /// check if the current list of players is balanced,
 /// otherwise, it returns the winning team.
-dynamic calculateWinningTeam(List<Player> players, List<Role> roles) {
+Team calculateWinningTeam(List<Role> roles) {
+  var players = extractPlayers(roles);
+
   int wolvesCount = calculateWolves(players);
   int villagersCount = calculateVillagers(players);
   int solosCount = calculateSolos(players);
@@ -971,7 +980,8 @@ dynamic calculateWinningTeam(List<Player> players, List<Role> roles) {
   }
 
   /// In case only solos remained
-  if (solosCount == players.length) {
+  /// TODO (test)
+  if (solosCount == players.length && players.length != 1) {
     return Team.equality;
   }
 
@@ -986,11 +996,13 @@ dynamic calculateWinningTeam(List<Player> players, List<Role> roles) {
 
   /// Villager
   /// The village win if there is no werewolf remaining.
-  if (wolvesCount == 0) {
+  if (wolvesCount == 0 && solosCount == 0) {
     return Team.village;
   }
 
   if (villagersCount == wolvesCount) {
+    /// TODO : we didn't take into consideration solos.
+
     Role? protector = getRoleFromList(RoleId.protector, roles);
     Role? witch = getRoleFromList(RoleId.witch, roles);
     Role? knight = getRoleFromList(RoleId.knight, roles);
@@ -1018,7 +1030,7 @@ dynamic calculateWinningTeam(List<Player> players, List<Role> roles) {
     return Team.wolves;
   }
 
-  return true;
+  return Team.none;
 }
 
 /// check if the given role is still active in the given list.

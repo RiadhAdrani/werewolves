@@ -2,7 +2,7 @@ import 'package:werewolves/models/effect.dart';
 import 'package:werewolves/models/role.dart';
 import 'package:werewolves/utils/utils.dart';
 
-enum Team { equality, village, wolves, cupid, alien }
+enum Team { equality, village, wolves, cupid, alien, none }
 
 String getTeamName(Team team) {
   switch (team) {
@@ -15,7 +15,9 @@ String getTeamName(Team team) {
     case Team.alien:
       return 'Alien';
     case Team.equality:
-      return 'Null';
+      return 'Equality';
+    case Team.none:
+      return 'None';
   }
 }
 

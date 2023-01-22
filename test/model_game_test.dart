@@ -586,6 +586,177 @@ void main() {
       });
     });
 
+    group('calculateWinningTeam', () {
+      test("should return equality when no player is left", () {
+        expect(calculateWinningTeam([]), Team.equality);
+      });
+
+      test("should return alien as winner", () {
+        var roles = [
+          useRole(RoleId.alien).create([Player('test')]),
+          useRole(RoleId.villager).create([Player('test')]),
+        ];
+
+        expect(calculateWinningTeam(roles), Team.alien);
+      });
+
+      test(
+          "should not return alien as winner when there is more than 2 players",
+          () {
+        var roles = [
+          useRole(RoleId.alien).create([Player('test')]),
+          useRole(RoleId.villager).create([Player('test')]),
+          useRole(RoleId.captain).create([Player('test')]),
+        ];
+
+        expect(calculateWinningTeam(roles), Team.none);
+      });
+
+      test("should return village as winner when there is no solos/wolves", () {
+        var roles = [
+          useRole(RoleId.villager).create([Player('test')]),
+          useRole(RoleId.captain).create([Player('test')]),
+        ];
+
+        expect(calculateWinningTeam(roles), Team.village);
+      });
+
+      test("should return wolves as winner when number of villager = wolves",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.villager,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        expect(calculateWinningTeam(roles), Team.wolves);
+      });
+
+      test("should not return wolves if there is a non-infected protector", () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.protector,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        expect(calculateWinningTeam(roles), Team.none);
+      });
+
+      test(
+          "should not return wolves if there is a non-infected witch with at least one ability : curse or revive",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.witch,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        expect(calculateWinningTeam(roles), Team.none);
+      });
+
+      test(
+          "should not return wolves if there is a non-infected witch have curse ability",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.witch,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        getRoleFromList(RoleId.witch, roles)!
+            .getAbilityOfType(AbilityId.revive)!
+            .use([Player("target")], 1);
+
+        expect(calculateWinningTeam(roles), Team.none);
+      });
+
+      test(
+          "should not return wolves if there is a non-infected witch have revive ability",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.witch,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        getRoleFromList(RoleId.witch, roles)!
+            .getAbilityOfType(AbilityId.curse)!
+            .use([Player("target")], 1);
+
+        expect(calculateWinningTeam(roles), Team.none);
+      });
+
+      test(
+          "should return wolves even if there is a non-infected witch but with no abilities left",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.witch,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        getRoleFromList(RoleId.witch, roles)!
+            .getAbilityOfType(AbilityId.curse)!
+            .use([Player("target")], 1);
+
+        getRoleFromList(RoleId.witch, roles)!
+            .getAbilityOfType(AbilityId.revive)!
+            .use([Player("target")], 1);
+
+        expect(calculateWinningTeam(roles), Team.wolves);
+      });
+
+      test(
+          "should not return wolves if there is a non-infected knight with counter ability",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.knight,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        expect(calculateWinningTeam(roles), Team.none);
+      });
+
+      test(
+          "should return wolves even if there is a non-infected knight but without counter ability",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.captain,
+          RoleId.knight,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        getRoleFromList(RoleId.knight, roles)!
+            .getAbilityOfType(AbilityId.counter)!
+            .use([Player("target")], 1);
+
+        expect(calculateWinningTeam(roles), Team.wolves);
+      });
+
+      test(
+          "should return wolves as winner if number of villagers is less than wolves count",
+          () {
+        var roles = createGameList(roles: [
+          RoleId.knight,
+          RoleId.knight,
+          RoleId.werewolf,
+          RoleId.werewolf,
+          RoleId.werewolf,
+        ]);
+
+        expect(calculateWinningTeam(roles), Team.wolves);
+      });
+    });
+
     group('Model', () {
       Game model = Game();
 
