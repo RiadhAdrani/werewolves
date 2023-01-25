@@ -175,7 +175,8 @@ class ReviveAbility extends Ability {
 
   @override
   bool isUnskippable() {
-    return false;
+    return useCount != AbilityUseCount.none &&
+        (owner.controller as Player).hasFatalEffect;
   }
 
   @override

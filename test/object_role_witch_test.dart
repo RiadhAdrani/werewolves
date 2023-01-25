@@ -115,6 +115,10 @@ void main() {
       group('Revive', () {
         Ability ability = ReviveAbility(Witch(Player('test')));
 
+        setUp(() {
+          ability = ReviveAbility(Witch(Player('test')));
+        });
+
         test('ReviveAbility should have correct properties values', () {
           expect(ability.targetCount, 1);
           expect(ability.id, AbilityId.revive);
@@ -159,7 +163,35 @@ void main() {
           expect(ability.shouldBeAvailable(), true);
         });
 
-        test('should be unskippable', () {
+        test('should not be unskippable', () {
+          expect(ability.isUnskippable(), false);
+        });
+
+        test('should be unskippable when owner is fatally affected', () {
+          (ability.owner.controller as Player).addEffect(
+            DevouredEffect(
+              useRole(RoleId.wolfpack).create(
+                [Player('test')],
+              ),
+            ),
+          );
+
+          expect(ability.isUnskippable(), true);
+        });
+
+        test(
+            'should be not unskippable when owner is fatally affected and ability is exhausted',
+            () {
+          (ability.owner.controller as Player).addEffect(
+            DevouredEffect(
+              useRole(RoleId.wolfpack).create(
+                [Player('test')],
+              ),
+            ),
+          );
+
+          ability.use([Player('target')], 1);
+
           expect(ability.isUnskippable(), false);
         });
 
