@@ -313,7 +313,7 @@ class Game extends ChangeNotifier {
     start();
   }
 
-  /// TODO (test)
+  /// TODO : unused
   Role? getRole(RoleId id) {
     return getRoleFromList(id, roles);
   }
@@ -548,7 +548,7 @@ class Game extends ChangeNotifier {
   /// Perform mass murder on the souls of the already dead players.
   /// Should be used on the list of alive players.
   ///
-  /// uses `GameModel._killAndMovePlayerToGraveyard()`.
+  /// uses `GameModel.killAndMovePlayerToGraveyard()`.
   void eliminateDeadPlayers() {
     for (var player in playersList) {
       if (player.hasFatalEffect) {

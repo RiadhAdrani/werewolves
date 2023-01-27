@@ -797,6 +797,31 @@ void main() {
         });
       });
 
+      group('killAndMovePlayerToGraveyard', () {
+        test("should move player to graveyard", () {
+          model.init(createGameList());
+
+          var player = findFirstRoleOfType(model.roles, RoleId.villager)!
+              .controller as Player;
+
+          model.killAndMovePlayerToGraveyard(player);
+
+          expect(model.graveyard, [player]);
+        });
+
+        test("should add death event", () {
+          model.init(createGameList());
+
+          var player = findFirstRoleOfType(model.roles, RoleId.villager)!
+              .controller as Player;
+
+          model.killAndMovePlayerToGraveyard(player);
+
+          expect(model.events.length, 1);
+          expect(model.events[0].id, EventId.death);
+        });
+      });
+
       group('next()', () {
         test('should throw when current role is null', () {
           model.currentIndex = -1;
