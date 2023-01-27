@@ -798,9 +798,11 @@ void main() {
       });
 
       group('killAndMovePlayerToGraveyard', () {
-        test("should move player to graveyard", () {
+        setUp(() {
           model.init(createGameList());
+        });
 
+        test("should move player to graveyard", () {
           var player = findFirstRoleOfType(model.roles, RoleId.villager)!
               .controller as Player;
 
@@ -810,13 +812,32 @@ void main() {
         });
 
         test("should add death event", () {
-          model.init(createGameList());
-
           var player = findFirstRoleOfType(model.roles, RoleId.villager)!
               .controller as Player;
 
           model.killAndMovePlayerToGraveyard(player);
 
+          expect(model.events.length, 1);
+          expect(model.events[0].id, EventId.death);
+        });
+      });
+
+      group("eliminateDeadPlayers", () {
+        setUp(() {
+          model.init(createGameList());
+        });
+
+        test("should move fatally affected player to graveyard", () {
+          var player = findFirstRoleOfType(model.roles, RoleId.villager)!
+              .controller as Player;
+
+          player.addEffect(
+            DevouredEffect(useRole(RoleId.wolfpack).create([Player("home")])),
+          );
+
+          model.eliminateDeadPlayers();
+
+          expect(model.graveyard, [player]);
           expect(model.events.length, 1);
           expect(model.events[0].id, EventId.death);
         });
