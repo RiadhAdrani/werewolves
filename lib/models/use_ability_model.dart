@@ -3,36 +3,32 @@ import 'package:werewolves/models/ability.dart';
 import 'package:werewolves/models/player.dart';
 
 class UseAbilityModel extends ChangeNotifier {
-  final List<Player> _selected = [];
-  late final Ability _ability;
+  final List<Player> selected = [];
+  late final Ability ability;
 
-  UseAbilityModel(this._ability);
+  UseAbilityModel(this.ability);
 
-  List<Player> getSelected() {
-    return _selected;
-  }
-
-  void _addToSelected(Player target) {
-    if (_ability.targetCount == _selected.length) {
-      _selected.removeAt(0);
+  void add(Player target) {
+    if (ability.targetCount == selected.length) {
+      selected.removeAt(0);
     }
 
-    _selected.add(target);
+    selected.add(target);
   }
 
-  void _removeFromSelected(Player target) {
-    _selected.remove(target);
+  void remove(Player target) {
+    selected.remove(target);
   }
 
   bool isSelected(Player target) {
-    return _selected.contains(target);
+    return selected.contains(target);
   }
 
-  void toggleSelected(Player target) {
+  void toggle(Player target) {
     if (isSelected(target)) {
-      _removeFromSelected(target);
+      remove(target);
     } else {
-      _addToSelected(target);
+      add(target);
     }
 
     notifyListeners();

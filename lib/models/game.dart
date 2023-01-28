@@ -280,7 +280,7 @@ class Game extends ChangeNotifier {
           test: (role) => role.shouldBeCalledAtNight(roles, currentTurn),
         );
       } else {
-        state = GameState.day;
+        performPostNightProcessing(context);
       }
 
       notifyListeners();

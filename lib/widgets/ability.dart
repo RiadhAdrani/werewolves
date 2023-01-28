@@ -54,7 +54,7 @@ Widget abilityDialog(
   bool dismissible = true,
 }) {
   void use() {
-    final targets = model.getSelected();
+    final targets = model.selected;
 
     if (targets.length < ability.targetCount) {
       showAlert(
@@ -92,7 +92,7 @@ Widget abilityDialog(
               [16, 0],
               paragraph(
                 t(LK.gameAbilityDialogParagraph, params: {
-                  'count': model.getSelected().length,
+                  'count': model.selected.length,
                   'needed': ability.targetCount,
                   'targetCount': targetList.length,
                 }),
@@ -104,7 +104,7 @@ Widget abilityDialog(
               child: ListView(
                 children: targetList.map((target) {
                   void onClick() {
-                    model.toggleSelected(target);
+                    model.toggle(target);
                   }
 
                   return targetCard(
