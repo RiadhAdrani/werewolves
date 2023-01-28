@@ -19,7 +19,7 @@ class UseAlienAbilityModel extends ChangeNotifier {
     items = players.map((player) => AlienGuessItem(player)).toList();
   }
 
-  void toggleSelected(AlienGuessItem item) {
+  void toggle(AlienGuessItem item) {
     if (item.guess == null) {
       return;
     }
@@ -29,7 +29,7 @@ class UseAlienAbilityModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeGuess(AlienGuessItem item, RoleId? guess) {
+  void change(AlienGuessItem item, RoleId? guess) {
     item.guess = guess;
     item.selected = guess != null;
 

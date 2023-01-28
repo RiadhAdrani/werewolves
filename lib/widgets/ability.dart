@@ -138,7 +138,7 @@ Widget alienAbilityDialog(
     AlienGuessItem item,
   ) {
     void onSelected(RoleId option) {
-      model.changeGuess(item, option);
+      model.change(item, option);
       dismiss();
     }
 
@@ -255,7 +255,7 @@ Widget alienAbilityDialog(
                 children: model.items.map((item) {
                   return roleToGuessCard(
                     item,
-                    (item) => model.toggleSelected(item),
+                    (item) => model.toggle(item),
                     () {
                       showOptions(item);
                     },
