@@ -40,7 +40,7 @@ const Map<LK, String> en = {
   LK.gameConfirmUseIssueTitle: 'Cannot proceed',
   LK.gameConfirmUseIssueText:
       'You are trying to use an ability without a single selected target while it needs at least ({count}).',
-  LK.gameConfirmUseDoneTitle: 'Confirm changes.',
+  LK.gameConfirmUseDoneTitle: 'Confirm Action',
   LK.gameConfirmUseDoneText:
       'Committing these changes is irreversible, make sure you selected the correct target.',
   LK.gameAbilityGuessCurrentTry: 'Guess : {guess}',
@@ -105,7 +105,7 @@ const Map<LK, String> en = {
   LK.werewolfDescription: 'TODO', // TODO description
   LK.villager: 'Villager',
   LK.villagerDescription: 'TODO', // TODO description
-  LK.fatherWolf: ' Father of Wolves',
+  LK.fatherWolf: 'Father of Wolves',
   LK.fatherWolfDescription: 'TODO', // TODO description
   LK.fatherWolfInfect: 'Infect',
   LK.fatherWolfInfectDescription: 'TODO', // TODO description

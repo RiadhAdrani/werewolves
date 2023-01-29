@@ -74,44 +74,36 @@ Widget gameNightViewHeading(Role role) {
 
   return padding(
     [8, 0],
-    row(
+    column(
+      crossAlignment: CrossAxisAlignment.center,
       children: [
         image(
           role.icon,
-          height: 100,
-          width: 100,
+          height: 80,
+          width: 80,
           radius: [6],
         ),
-        Expanded(
-          child: padding(
-            [0, 0, 0, 10],
-            column(
-              mainAlignment: MainAxisAlignment.center,
-              children: [
-                padding(
-                  [4],
-                  text(
-                    role.name,
-                    size: 20,
-                    weight: FontWeight.bold,
-                  ),
-                ),
-                padding(
-                  [0],
-                  SizedBox(
-                    height: 30,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: controller
-                          .map(
-                            (member) => chip(member.name,
-                                max: 10, size: 11, spacing: [2]),
-                          )
-                          .toList(),
-                    ),
-                  ),
-                ),
-              ],
+        padding(
+          [14, 0, 8, 0],
+          text(
+            role.name,
+            size: 20,
+            weight: FontWeight.bold,
+          ),
+        ),
+        padding(
+          [8, 0],
+          SizedBox(
+            height: 28,
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: controller
+                  .map(
+                    (member) =>
+                        chip(member.name, max: 16, size: 12, spacing: [2]),
+                  )
+                  .toList(),
             ),
           ),
         ),
@@ -183,7 +175,7 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
   return Flexible(
       flex: 1,
       child: padding(
-        [8, 0],
+        [4, 0],
         column(
           mainAlignment: MainAxisAlignment.center,
           crossAlignment: CrossAxisAlignment.stretch,
@@ -198,7 +190,7 @@ Widget gameNightViewAbilities(Game game, BuildContext context) {
             ),
             Expanded(
               child: ListView.builder(
-                shrinkWrap: true,
+                // shrinkWrap: true,
                 itemCount: abilities.length,
                 itemBuilder: (context, index) {
                   final ability = abilities[index];
@@ -237,7 +229,7 @@ Widget gameNightView(Game game, BuildContext context) {
       game,
     ),
     body: padding(
-      [8, 12],
+      [8, 8],
       column(
         crossAlignment: CrossAxisAlignment.stretch,
         mainAlignment: MainAxisAlignment.start,
@@ -253,7 +245,7 @@ Widget gameNightView(Game game, BuildContext context) {
           button(
             t(LK.next),
             next,
-            flat: true,
+            bgColor: BaseColors.darkBlue,
           ),
         ],
       ),
@@ -282,7 +274,7 @@ Widget guideSection(
           (item) => card(
             child: padding(
               [8],
-              paragraph(item),
+              text(item),
             ),
           ),
         )
@@ -647,11 +639,6 @@ Widget abilityCard(
       crossAlignment: CrossAxisAlignment.start,
       children: [
         titleWithIcon(ability.name, Icons.dangerous, size: 15, spacing: []),
-        if (variant)
-          text(
-            ability.owner.getPlayerName(),
-            size: 12,
-          ),
         divider(spacing: [2, 0]),
         text(
           skipText,
@@ -671,7 +658,7 @@ Widget abilityCard(
   );
 
   return padding(
-    [4],
+    [4, 0],
     card(
       child: inkWell(
         onClick: () => onClick(),

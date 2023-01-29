@@ -174,6 +174,7 @@ abstract class Role<T> {
   /// Can the role use signs to communicate with the narrator during the day.
   bool canUseSignWithNarrator();
 
+  // TODO : refactor into getter
   /// Get the name of the player that will be displayed.
   String getPlayerName();
 
