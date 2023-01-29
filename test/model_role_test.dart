@@ -89,7 +89,7 @@ void main() {
       });
 
       test('should compute player name', () {
-        expect(role.getPlayerName(), 'test');
+        expect(role.controllerName, 'test');
       });
 
       test('should determine if player is fatally wounded', () {
@@ -147,7 +147,7 @@ void main() {
       });
 
       test('should format players name', () {
-        expect(role.getPlayerName(), '1 | 2 | 3');
+        expect(role.controllerName, '1 | 2 | 3');
       });
 
       test('should compute if role is fatally wounded', () {

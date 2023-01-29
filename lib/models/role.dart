@@ -121,6 +121,9 @@ abstract class Role<T> {
   /// Used to check is primarily dead during the night.
   bool get isFatallyAffected;
 
+  /// Get the name of the player that will be displayed.
+  String get controllerName;
+
   /// Return the first ability of the given type if it exists.
   Ability? getAbilityOfType(AbilityId ability) {
     for (int i = 0; i < abilities.length; i++) {
@@ -174,10 +177,6 @@ abstract class Role<T> {
   /// Can the role use signs to communicate with the narrator during the day.
   bool canUseSignWithNarrator();
 
-  // TODO : refactor into getter
-  /// Get the name of the player that will be displayed.
-  String getPlayerName();
-
   /// Override the associated player.
   void setPlayer(T player);
 
@@ -195,11 +194,6 @@ abstract class RoleSingular extends Role<Player> {
   RoleSingular(super.player);
 
   @override
-  String getPlayerName() {
-    return controller.name;
-  }
-
-  @override
   void setPlayer(Player player) {
     controller.removeRole(id);
 
@@ -210,6 +204,11 @@ abstract class RoleSingular extends Role<Player> {
     player.roles.add(this);
 
     controller = player;
+  }
+
+  @override
+  String get controllerName {
+    return controller.name;
   }
 
   @override
@@ -246,9 +245,7 @@ abstract class RoleGroup extends Role<List<Player>> {
   }
 
   @override
-  String getPlayerName() {
-    if (controller.isEmpty) return 'There is no one in this group.';
-
+  String get controllerName {
     return currentPlayers.map((player) => player.name).join(" | ");
   }
 
