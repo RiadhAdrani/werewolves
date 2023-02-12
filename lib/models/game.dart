@@ -340,7 +340,6 @@ class Game extends ChangeNotifier {
     return missing;
   }
 
-  /// TODO (test)
   void addPendingAbility(Ability ability) {
     pendingAbilities.add(ability);
   }
@@ -378,8 +377,6 @@ class Game extends ChangeNotifier {
     if (!ability.isForDay) return;
 
     useAbility(ability, targets);
-
-    // Navigator.pop(context);
 
     notifyListeners();
 
@@ -452,36 +449,6 @@ class Game extends ChangeNotifier {
   /// Add a game info
   void addEvent(Event info) {
     events.add(info);
-  }
-
-  /// Return a list of players with specific effects
-  List<Player> getPlayersWithEffects(List<EffectId> effects) {
-    final output = <Player>[];
-
-    for (var player in playersList) {
-      for (var effect in effects) {
-        if (!player.hasEffect(effect)) {
-          continue;
-        }
-      }
-
-      output.add(player);
-    }
-
-    return output;
-  }
-
-  /// Return a list of players with fatal effects
-  List<Player> getPlayersWithFatalEffects() {
-    final output = <Player>[];
-
-    for (var player in playersList) {
-      if (player.hasFatalEffect) {
-        output.add(player);
-      }
-    }
-
-    return output;
   }
 
   /// Return the list of the last night informations.
