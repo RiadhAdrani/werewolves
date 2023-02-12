@@ -1,6 +1,6 @@
 <h1 align="center">Werewolves</h1>
 <p align="center">
-<a href="https://github.com/RiadhAdrani/werewolves/actions"><img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FRiadhAdrani%2Frecursive%2Fbadge%3Fref%3Dmaster&style=flat"/></a></p>
+<a href="https://github.com/RiadhAdrani/werewolves/actions"><img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FRiadhAdrani%2Fwerewolves%2Fbadge%3Fref%3Dmaster&style=flat"/></a></p>
 
 ---
 
