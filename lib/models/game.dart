@@ -182,9 +182,24 @@ class Game extends ChangeNotifier {
     return available[currentIndex];
   }
 
+  /// Return the list of the last night informations.
+  List<Event> get currentTurnSummary {
+    return events
+        .where((item) =>
+            item.turn == currentTurn && item.period == GameState.night)
+        .toList();
+  }
+
+  /// Return the list of the current day informations.
+  List<Event> get currentDaySummary {
+    return events
+        .where(
+            (item) => item.turn == currentTurn && item.period == GameState.day)
+        .toList();
+  }
+
   /// Return the correct widget to be displayed
   /// during the current `state`.
-  /// TODO (test)
   Widget useView(BuildContext context) {
     switch (state) {
       case GameState.empty:
@@ -217,6 +232,50 @@ class Game extends ChangeNotifier {
         test: (role) => role.shouldBeCalledAtNight(roles, currentTurn));
 
     notifyListeners();
+  }
+
+  /// Specific use case for [useAbility] during the night
+  void useAbilityInNight(
+    Ability ability,
+    List<Player> targets,
+    BuildContext context,
+  ) {
+    if (!ability.isForNight) return;
+
+    var affected = useAbility(ability, targets);
+
+    Navigator.pop(context);
+
+    showAlert(
+      context,
+      t(LK.gameAbilityUsed),
+      getAbilityAppliedMessage(ability, affected),
+    );
+  }
+
+  /// Return the appropriate message depending on the affected list.
+  String getAbilityAppliedMessage(Ability ability, List<Player> affected) {
+    return ability.onAppliedMessage(affected);
+  }
+
+  /// Check if the ability is available at the current night.
+  bool isAbilityAvailableAtNight(Ability ability) {
+    return ability.isForNight &&
+        ability.useCount != AbilityUseCount.none &&
+        !ability.wasUsedInTurn(currentTurn) &&
+        ability.shouldBeAvailable();
+  }
+
+  /// Use the ability against the given targets
+  /// and apply its post effect if it exists.
+  List<Player> useAbility(Ability ability, List<Player> targets) {
+    List<Player> affected = ability.use(targets, currentTurn);
+
+    ability.usePostEffect(this, affected);
+
+    notifyListeners();
+
+    return affected;
   }
 
   void next(BuildContext context) {
@@ -302,70 +361,124 @@ class Game extends ChangeNotifier {
     }
   }
 
-  void nextNight() {
-    if (state != GameState.day) {
-      throw 'Unexpected game state : $state .';
+  /// Perform after night processes of
+  /// resolving status effects
+  /// and eliminating dead souls.
+  /// When everything is done, we transition into the day phase.
+  void performPostNightProcessing(BuildContext context) {
+    List<Event> infos = resolveNightEffects(playersList, currentTurn);
+
+    events.addAll(infos);
+
+    eliminateDeadPlayers();
+
+    var winner = calculateWinningTeam(roles);
+
+    if (winner != Team.none) {
+      onGameOver(context, winner);
+    } else {
+      transitionToDay();
+    }
+  }
+
+  /// Add a game info
+  void addEvent(Event info) {
+    events.add(info);
+  }
+
+  /// Perform mass murder on the souls of the already dead players.
+  /// Should be used on the list of alive players.
+  ///
+  /// uses `GameModel.killAndMovePlayerToGraveyard()`.
+  void eliminateDeadPlayers() {
+    for (var player in playersList) {
+      if (player.hasFatalEffect) {
+        killAndMovePlayerToGraveyard(player);
+      }
+    }
+  }
+
+  /// We assume that the player `hasFatalEffect()`.
+  /// we set the status of survivability to false,
+  /// add the player to the graveyard (r.i.p)
+  /// add a game info
+  void killAndMovePlayerToGraveyard(Player player) {
+    player.isAlive = false;
+    graveyard.add(player);
+    addEvent(Event.death(player, state, currentTurn));
+  }
+
+  /// Transition into the day phase.
+  void transitionToDay() {
+    state = GameState.day;
+
+    notifyListeners();
+  }
+
+  /// Add a new member to the first group with the given `roleId`.
+  /// We assume that the given roleId correspond to a `RoleGroup`
+  /// and there is only one instance of that role in the list.
+  void addMemberToGroup(Player newMember, RoleId roleId) {
+    for (var role in roles) {
+      if (role.id == roleId && role.isGroup) {
+        (role as RoleGroup).setPlayer([...role.controller, newMember]);
+        return;
+      }
+    }
+  }
+
+  /// Replace the current captain with the provided one,
+  /// and kill the old one.
+  /// We assume that there is only one captain instance.
+  void replaceCaptainPlayer(Player player) {
+    for (var role in roles) {
+      if (role.id == RoleId.captain) {
+        role as RoleSingular;
+
+        /// Add the old captain to the graveyard due
+        /// because he is the last to play.
+        killAndMovePlayerToGraveyard(role.controller);
+
+        /// Replace with the new captain.
+        role.setPlayer(player);
+        return;
+      }
+    }
+  }
+
+  /// Return the abilities that could be used, by sign callers or others during the day phase.
+  List<Ability> getDayAbilities() {
+    final output = <Ability>[];
+
+    /// Fetch role that can use abilities and has a callsign
+    for (var role in roles) {
+      if (role.isObsolete == false &&
+          role.canUseSignWithNarrator() &&
+          role.canUseAbilitiesDuringDay()) {
+        for (var ability in role.abilities) {
+          if (ability.isForDay && ability.isPlenty) {
+            output.add(ability);
+          }
+        }
+      }
     }
 
-    currentIndex = -1;
-    currentTurn += 1;
-
-    start();
-  }
-
-  /// TODO : unused
-  Role? getRole(RoleId id) {
-    return getRoleFromList(id, roles);
-  }
-
-  /// TODO (test)
-  List<Role> calculateRolesWithMissingEffects() {
-    if (state != GameState.night) {
-      throw 'Unexpected game state : $state .';
+    /// Add captain execution ability
+    for (var role in roles) {
+      /// We check the captain is obsolete.
+      /// kinda useless but
+      /// There should only be one instance of captain
+      /// within the list of roles.
+      if (role.isObsolete == false && role.id == RoleId.captain) {
+        for (var ability in role.abilities) {
+          if (ability.id == AbilityId.execute) {
+            output.add(ability);
+          }
+        }
+      }
     }
 
-    var players = extractPlayers(roles);
-    List<EffectId> existing = [];
-    for (var element in players) {
-      existing.addAll(element.effects.map((e) => e.id));
-    }
-
-    var mandatory = calculateMandatoryEffects(roles, currentTurn);
-
-    List<Role> missing = mandatory
-        .where((item) => !existing.contains(item.id))
-        .map((e) => e.role)
-        .toList();
-
-    return missing;
-  }
-
-  void addPendingAbility(Ability ability) {
-    pendingAbilities.add(ability);
-  }
-
-  /// Use to start a new turn.
-  void startTurn() {
-    transitionToNight();
-  }
-
-  /// Specific use case for [useAbility] during the night
-  void useAbilityInNight(
-    Ability ability,
-    List<Player> targets,
-    BuildContext context,
-  ) {
-    if (!ability.isForNight) return;
-
-    var affected = useAbility(ability, targets);
-
-    Navigator.pop(context);
-
-    showAlert(
-      context,
-      t(LK.gameAbilityUsed),
-      getAbilityAppliedMessage(ability, affected),
-    );
+    return output;
   }
 
   /// Specific use case for [useAbility] during the day
@@ -408,7 +521,7 @@ class Game extends ChangeNotifier {
                   t(LK.gameDayAbilityTriggeredTitle),
                   t(LK.gameDayAbilityTriggeredText,
                       params: {'name': currentPendingAbility.owner.name}),
-                  getCurrentDaySummary().map((item) => item.text).toList(),
+                  currentDaySummary.map((item) => item.text).toList(),
                   context,
                   () {
                     showUseAbilityDialog(
@@ -434,201 +547,15 @@ class Game extends ChangeNotifier {
 
         notifyListeners();
 
-        checkIsOver(context);
+        var winner = calculateWinningTeam(roles);
+
+        if (winner != Team.none) {
+          onGameOver(context, winner);
+        }
       }
     }
 
     useNext();
-  }
-
-  /// Return the appropriate message depending on the affected list.
-  String getAbilityAppliedMessage(Ability ability, List<Player> affected) {
-    return ability.onAppliedMessage(affected);
-  }
-
-  /// Add a game info
-  void addEvent(Event info) {
-    events.add(info);
-  }
-
-  /// Return the list of the last night informations.
-  List<Event> getCurrentTurnSummary() {
-    return events
-        .where((item) =>
-            item.turn == currentTurn && item.period == GameState.night)
-        .toList();
-  }
-
-  /// Return the list of the current day informations.
-  List<Event> getCurrentDaySummary() {
-    return events
-        .where(
-            (item) => item.turn == currentTurn && item.period == GameState.day)
-        .toList();
-  }
-
-  /// Return the abilities that could be used, by sign callers or others during the day phase.
-  List<Ability> getDayAbilities() {
-    final output = <Ability>[];
-
-    /// Fetch role that can use abilities and has a callsign
-    for (var role in roles) {
-      if (role.isObsolete == false &&
-          role.canUseSignWithNarrator() &&
-          role.canUseAbilitiesDuringDay()) {
-        for (var ability in role.abilities) {
-          if (ability.isForDay && ability.isPlenty) {
-            output.add(ability);
-          }
-        }
-      }
-    }
-
-    /// Add captain execution ability
-    for (var role in roles) {
-      /// We check the captain is obsolete.
-      /// kinda useless but
-      /// There should only be one instance of captain
-      /// within the list of roles.
-      if (role.isObsolete == false && role.id == RoleId.captain) {
-        for (var ability in role.abilities) {
-          if (ability.id == AbilityId.execute) {
-            output.add(ability);
-          }
-        }
-      }
-    }
-
-    return output;
-  }
-
-  /// We assume that the player `hasFatalEffect()`.
-  /// we set the status of survivability to false,
-  /// add the player to the graveyard (r.i.p)
-  /// add a game info
-  void killAndMovePlayerToGraveyard(Player player) {
-    player.isAlive = false;
-    graveyard.add(player);
-    addEvent(Event.death(player, state, currentTurn));
-  }
-
-  /// Perform mass murder on the souls of the already dead players.
-  /// Should be used on the list of alive players.
-  ///
-  /// uses `GameModel.killAndMovePlayerToGraveyard()`.
-  void eliminateDeadPlayers() {
-    for (var player in playersList) {
-      if (player.hasFatalEffect) {
-        killAndMovePlayerToGraveyard(player);
-      }
-    }
-  }
-
-  /// Perform after night processes of
-  /// resolving status effects
-  /// and eliminating dead souls.
-  /// When everything is done, we transition into the day phase.
-  void performPostNightProcessing(BuildContext context) {
-    List<Event> infos = resolveNightEffects(playersList, currentTurn);
-
-    events.addAll(infos);
-
-    eliminateDeadPlayers();
-
-    checkIsOver(context);
-
-    transitionToDay();
-  }
-
-  /// Find the index of the first role that should start the night.
-  void initCurrentIndex() {
-    if (roles.isEmpty) return;
-
-    var min = 999999;
-
-    for (var role in roles) {
-      if (role.callingPriority < min &&
-          role.callingPriority > -1 &&
-          role.shouldBeCalledAtNight(roles, currentTurn) &&
-          role.isObsolete == false) {
-        min = role.callingPriority;
-      }
-    }
-
-    currentIndex =
-        roles.indexWhere((element) => element.callingPriority == min);
-  }
-
-  /// Start a new turn and transition into the night.
-  /// Increment the current turn
-  /// and initialize the current index.
-  void transitionToNight() {
-    removeObsoleteRoles();
-
-    currentTurn = currentTurn + 1;
-    state = GameState.night;
-
-    initCurrentIndex();
-
-    notifyListeners();
-  }
-
-  /// Transition into the day phase.
-  void transitionToDay() {
-    state = GameState.day;
-
-    notifyListeners();
-  }
-
-  /// Check if the ability is available at the current night.
-  bool isAbilityAvailableAtNight(Ability ability) {
-    return ability.isForNight &&
-        ability.useCount != AbilityUseCount.none &&
-        !ability.wasUsedInTurn(currentTurn) &&
-        ability.shouldBeAvailable();
-  }
-
-  /// Use the ability against the given targets
-  /// and apply its post effect if it exists.
-  List<Player> useAbility(Ability ability, List<Player> targets) {
-    List<Player> affected = ability.use(targets, currentTurn);
-
-    ability.usePostEffect(this, affected);
-
-    notifyListeners();
-
-    return affected;
-  }
-
-  /// Add a new member to the first group with the given `roleId`.
-  /// We assume that the given roleId correspond to a `RoleGroup`
-  /// and there is only one instance of that role in the list.
-  void addMemberToGroup(Player newMember, RoleId roleId) {
-    for (var role in roles) {
-      if (role.id == roleId && role.isGroup) {
-        (role as RoleGroup).setPlayer([...role.controller, newMember]);
-        return;
-      }
-    }
-  }
-
-  /// Replace the current captain with the provided one,
-  /// and kill the old one.
-  /// We assume that there is only one captain instance.
-  void replaceCaptainPlayer(Player player) {
-    for (var role in roles) {
-      if (role.id == RoleId.captain) {
-        role as RoleSingular;
-
-        /// Add the old captain to the graveyard due
-        /// because he is the last to play.
-        killAndMovePlayerToGraveyard(role.controller);
-
-        /// Replace with the new captain.
-        role.setPlayer(player);
-        return;
-      }
-    }
   }
 
   /// Resolve specific roles interactions
@@ -670,31 +597,12 @@ class Game extends ChangeNotifier {
     }
   }
 
-  void checkIsOver(BuildContext context) {
-    Team result = calculateWinningTeam(roles);
-
-    if (result != Team.none) {
-      isOver = true;
-      showConfirm(context, 'Game Over', 'The ${getTeamName(result)} Team won !',
-          () {
-        dispose();
-        Navigator.popUntil(context, ModalRoute.withName(Screen.home.path));
-      });
-    }
-  }
-
-  void removeObsoleteRoles() {
-    var toRemove = <Role>[];
-
-    for (var role in roles) {
-      if (role.isObsolete) {
-        toRemove.add(role);
-      }
-    }
-
-    for (var role in toRemove) {
-      roles.remove(role);
-    }
+  void onGameOver(BuildContext context, Team team) {
+    showConfirm(context, 'Game Over', 'The ${getTeamName(team)} Team won !',
+        () {
+      dispose();
+      Navigator.popUntil(context, ModalRoute.withName(Screen.home.path));
+    });
   }
 
   void showUseAbilityDialog(BuildContext context, Ability ability,
@@ -753,6 +661,42 @@ class Game extends ChangeNotifier {
         }
     }
   }
+
+  List<Role> calculateRolesWithMissingEffects() {
+    if (state != GameState.night) {
+      throw 'Unexpected game state : $state .';
+    }
+
+    var players = extractPlayers(roles);
+    List<EffectId> existing = [];
+    for (var element in players) {
+      existing.addAll(element.effects.map((e) => e.id));
+    }
+
+    var mandatory = calculateMandatoryEffects(roles, currentTurn);
+
+    List<Role> missing = mandatory
+        .where((item) => !existing.contains(item.id))
+        .map((e) => e.role)
+        .toList();
+
+    return missing;
+  }
+
+  void addPendingAbility(Ability ability) {
+    pendingAbilities.add(ability);
+  }
+
+  void nextNight() {
+    if (state != GameState.day) {
+      throw 'Unexpected game state : $state .';
+    }
+
+    currentIndex = -1;
+    currentTurn += 1;
+
+    start();
+  }
 }
 
 List<Player> getPlayersWithEffects(
@@ -785,7 +729,6 @@ List<Event> resolveNightEffects(
       }
 
       switch (effect.id) {
-
         /// Protector -----------------------------------------------------
         case EffectId.isProtected:
 

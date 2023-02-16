@@ -340,10 +340,10 @@ Widget gameDayGuide(
 
 Widget gameDayView(Game game, BuildContext context) {
   List<String> nightInfos =
-      game.getCurrentTurnSummary().map((info) => info.text).toList();
+      game.currentTurnSummary.map((info) => info.text).toList();
 
   List<String> dayInfos =
-      game.getCurrentDaySummary().map((info) => info.text).toList();
+      game.currentDaySummary.map((info) => info.text).toList();
 
   List<String> alivePlayers = game.playersList
       .map(

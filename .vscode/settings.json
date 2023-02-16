@@ -1,6 +1,6 @@
 {
   "[dart]": {
-    "editor.tabSize": 2
+    "editor.rulers": [100]
   },
   "files.exclude": {
     "**/.git": true,
