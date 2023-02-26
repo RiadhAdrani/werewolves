@@ -978,6 +978,54 @@ void main() {
           expect(model.state, GameState.day);
         });
       });
+
+      group('getDayAbilities', () {
+        setUp(() {
+          model = Game();
+          model.init(createGameList());
+          model.start();
+          model.noContextMode = true;
+
+          model.state = GameState.day;
+        });
+
+        test('should throw when state is not GameState.day', () {
+          model.state = GameState.night;
+
+          expect(
+            () => model.getDayAbilities(),
+            throwsA(
+                'Unexpected State: cannot get day abilities in ${GameState.night}'),
+          );
+        });
+
+        test('should return captain execute', () {
+          List<AbilityId> abilities =
+              model.getDayAbilities().map((ability) => ability.id).toList();
+
+          expect(abilities.contains(AbilityId.execute), true);
+        });
+
+        test('should return hunter hunt', () {
+          List<AbilityId> abilities =
+              model.getDayAbilities().map((ability) => ability.id).toList();
+
+          expect(abilities.contains(AbilityId.hunt), true);
+        });
+
+        test('should return alien', () {
+          var player = model.getPlayersWithRole(RoleId.alien)[0];
+
+          player.mainRole
+              .getAbilityOfType(AbilityId.callsign)!
+              .use([player], model.currentTurn);
+
+          List<AbilityId> abilities =
+              model.getDayAbilities().map((ability) => ability.id).toList();
+
+          expect(abilities.contains(AbilityId.guess), true);
+        });
+      });
     });
   });
 }

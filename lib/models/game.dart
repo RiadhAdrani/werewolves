@@ -198,6 +198,28 @@ class Game extends ChangeNotifier {
         .toList();
   }
 
+  Role? getRole(RoleId id) {
+    for (var role in roles) {
+      if (role.id == id) {
+        return role;
+      }
+    }
+
+    return null;
+  }
+
+  List<Player> getPlayersWithRole(RoleId id) {
+    for (var role in roles) {
+      if (role.id == id) {
+        return role.isGroup
+            ? role.controller as List<Player>
+            : [role.controller as Player];
+      }
+    }
+
+    return [];
+  }
+
   /// Return the correct widget to be displayed
   /// during the current `state`.
   Widget useView(BuildContext context) {
@@ -448,6 +470,10 @@ class Game extends ChangeNotifier {
 
   /// Return the abilities that could be used, by sign callers or others during the day phase.
   List<Ability> getDayAbilities() {
+    if (state != GameState.day) {
+      throw 'Unexpected State: cannot get day abilities in $state';
+    }
+
     final output = <Ability>[];
 
     /// Fetch role that can use abilities and has a callsign
@@ -890,7 +916,6 @@ Team calculateWinningTeam(List<Role> roles) {
   }
 
   /// In case only solos remained
-  /// TODO (test)
   if (solosCount == players.length && players.length != 1) {
     return Team.equality;
   }
