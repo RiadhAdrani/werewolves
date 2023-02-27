@@ -10,6 +10,7 @@ import 'package:werewolves/models/role.dart';
 import 'package:werewolves/objects/roles/black_wolf.dart';
 import 'package:werewolves/objects/roles/captain.dart';
 import 'package:werewolves/objects/roles/garrulous_wolf.dart';
+import 'package:werewolves/objects/roles/hunter.dart';
 import 'package:werewolves/objects/roles/judge.dart';
 import 'package:werewolves/objects/roles/protector.dart';
 import 'package:werewolves/objects/roles/seer.dart';
@@ -1024,6 +1025,68 @@ void main() {
               model.getDayAbilities().map((ability) => ability.id).toList();
 
           expect(abilities.contains(AbilityId.guess), true);
+        });
+      });
+
+      group('collectPendingAbilityInDay', () {
+        setUp(() {
+          model = Game();
+          model.init(createGameList());
+          model.start();
+          model.noContextMode = true;
+
+          model.state = GameState.day;
+        });
+
+        test('should throw when state is not day', () {
+          model.state = GameState.night;
+
+          expect(
+              () => model.collectPendingAbilityInDay(),
+              throwsA(
+                  'Unexpected state: action not available in state (${GameState.night})'));
+        });
+
+        test('should collect dead captain inheritance', () {
+          var player = model.getPlayersWithRole(RoleId.captain)[0];
+
+          player.addEffect(HuntedEffect(Hunter(Player('hunter'))));
+
+          model.collectPendingAbilityInDay();
+
+          var abilities =
+              model.pendingAbilities.map((ability) => ability.id).toList();
+
+          expect(abilities.contains(AbilityId.inherit), true);
+        });
+
+        test('should collect dead hunter available hunt', () {
+          var player = model.getPlayersWithRole(RoleId.hunter)[0];
+
+          player.addEffect(HuntedEffect(Hunter(Player('hunter'))));
+
+          model.collectPendingAbilityInDay();
+
+          var abilities =
+              model.pendingAbilities.map((ability) => ability.id).toList();
+
+          expect(abilities.contains(AbilityId.hunt), true);
+        });
+
+        test('should not collect dead hunter with exhausted hunt', () {
+          var player = model.getPlayersWithRole(RoleId.hunter)[0];
+
+          player.mainRole.getAbilityOfType(AbilityId.hunt)!.useCount =
+              AbilityUseCount.none;
+
+          player.addEffect(HuntedEffect(Hunter(Player('hunter'))));
+
+          model.collectPendingAbilityInDay();
+
+          var abilities =
+              model.pendingAbilities.map((ability) => ability.id).toList();
+
+          expect(abilities.contains(AbilityId.hunt), false);
         });
       });
     });

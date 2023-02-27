@@ -614,7 +614,9 @@ class Game extends ChangeNotifier {
 
   /// Collect pending abilities
   void collectPendingAbilityInDay() {
-    if (state != GameState.day) return;
+    if (state != GameState.day) {
+      throw 'Unexpected state: action not available in state ($state)';
+    }
 
     for (var player in playersList) {
       if (player.hasFatalEffect) {
