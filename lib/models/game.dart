@@ -654,7 +654,12 @@ class Game extends ChangeNotifier {
                     final model = context.watch<UseAbilityModel>();
 
                     return abilityDialog(
-                        model, context, ability, targetList, onAbilityUsed);
+                      model,
+                      context,
+                      ability,
+                      targetList,
+                      onAbilityUsed,
+                    );
                   },
                 );
               });
@@ -869,14 +874,16 @@ List<Event> resolveNightEffects(
   return infos;
 }
 
-void resolveDayEffects(Game game) {
-  int currentTurn = game.currentTurn;
+List<Event> resolveDayEffects(int turn, List<Player> players) {
+  List<Event> out = [];
 
-  for (var player in game.playersList) {
+  for (var player in players) {
     if (player.hasFatalEffect) {
-      game.addEvent(Event.death(player, GameState.day, currentTurn));
+      out.add(Event.death(player, GameState.day, turn));
     }
   }
+
+  return out;
 }
 
 /// returns the number of players within the wolf team.

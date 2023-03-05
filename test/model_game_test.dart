@@ -1089,6 +1089,25 @@ void main() {
           expect(abilities.contains(AbilityId.hunt), false);
         });
       });
+
+      group('resolveDayEffects', () {
+        test('should add dead players events', () {
+          var player = Player('test');
+          var source = useRole(RoleId.hunter).create([Player('source')]);
+
+          player.addEffect(HuntedEffect(source));
+
+          var res = resolveDayEffects(1, [player]);
+
+          expect(res.length, 1);
+
+          var ev = res[0];
+
+          expect(ev.id, EventId.death);
+          expect(ev.period, GameState.day);
+          expect(ev.turn, 1);
+        });
+      });
     });
   });
 }
