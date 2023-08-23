@@ -315,7 +315,7 @@ Widget dialog({
         crossAlignment: CrossAxisAlignment.stretch,
         children: [
           decoratedBox(
-            img: Assets.get('effects/cloth.png'),
+            img: Assets.texture(Assets.cloth1),
             opacity: 0.75,
             color: BaseColors.red,
             child: padding(

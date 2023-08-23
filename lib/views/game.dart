@@ -25,8 +25,6 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  @override
-  GamePage get widget => super.widget;
 
   bool initialized = false;
 

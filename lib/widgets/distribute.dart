@@ -30,7 +30,7 @@ Widget confirmDistributedList(
                     column(
                       children: [
                         text(
-                          ellipsify(role.player, 20),
+                          ellipsify(role.player, 16),
                           overflow: false,
                           weight: FontWeight.bold,
                           italic: true,

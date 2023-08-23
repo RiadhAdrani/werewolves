@@ -80,7 +80,7 @@ class Event {
 
   static Event clairvoyance(RoleId role, GameState period, int turn) {
     return Event(
-      t(LK.eventClairvoyance, params: {'name': getRoleName(role)}),
+      t(LK.eventClairvoyance, params: {'role': getRoleName(role)}),
       turn,
       period,
       EventId.seen,
@@ -521,9 +521,13 @@ class Game extends ChangeNotifier {
 
     resolveRolesInteractionsAfterAbilityUsedInDay();
 
+    resolveDayEffects(currentTurn, playersList).forEach((ev) {
+      addEvent(ev);
+    });
+
     collectPendingAbilityInDay();
 
-    void useNext() {
+    void nextCallback() {
       if (pendingAbilities.isNotEmpty) {
         Ability currentPendingAbility = pendingAbilities[0];
 
@@ -534,7 +538,7 @@ class Game extends ChangeNotifier {
         if (currentPendingAbility
             .createListOfTargets(playersList, currentTurn)
             .isEmpty) {
-          useNext();
+          nextCallback();
           return;
         }
 
@@ -581,7 +585,7 @@ class Game extends ChangeNotifier {
       }
     }
 
-    useNext();
+    nextCallback();
   }
 
   /// Resolve specific roles interactions

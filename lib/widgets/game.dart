@@ -101,7 +101,7 @@ Widget gameNightViewHeading(Role role) {
               children: controller
                   .map(
                     (member) =>
-                        chip(member.name, max: 16, size: 12, spacing: [2]),
+                        chip(member.name, max: 16, size: 10, spacing: [2]),
                   )
                   .toList(),
             ),
@@ -302,16 +302,6 @@ Widget gameDayGuide(
           t(LK.gameDayGuideDayEvents),
           Icons.wb_sunny_outlined,
           dayInfos,
-        ),
-        guideSection(
-          t(LK.gameDayGuideAlive),
-          Icons.group_outlined,
-          alivePlayers,
-        ),
-        guideSection(
-          t(LK.gameDayGuideDead),
-          Icons.no_accounts_outlined,
-          deadPlayers,
         ),
         guideSection(
           t(LK.gameDayGuidePhase1),
@@ -529,7 +519,7 @@ Widget debugDialog(BuildContext context, Game game) {
                       crossAlignment: CrossAxisAlignment.stretch,
                       children: [
                         titleWithIcon(
-                          ellipsify((role.controller as Player).name, 25),
+                          ellipsify((role.controller as Player).name, 20),
                           Icons.person_outline,
                           alignment: MainAxisAlignment.start,
                           color: BaseColors.textSecondary,

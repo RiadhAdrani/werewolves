@@ -29,7 +29,7 @@ Widget targetCard(
           mainAlignment: MainAxisAlignment.spaceBetween,
           children: [
             titleWithIcon(
-              ellipsify(player.name, 20),
+              ellipsify(player.name, 15),
               Icons.person_outline,
               size: 14,
             ),
